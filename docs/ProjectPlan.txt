@@ -1,0 +1,77 @@
+Introduzione
+
+L'obiettivo principale del progetto è aiutare l'utente finale a comprendere meglio il funzionamento di un'Intelligenza Artificiale di base sviluppandone e allenandone una che possa giocare al classico gioco di Snake. Il risultato a cui bisogna ambire è lo sviluppo e l'interfacciamento di due moduli principali: il primo consiste nel gioco originale, mentre il secondo consiste nel "cervello" effettivo dell'AI.
+I responsabili sono: Davide Fiorentini, Manuela Fiorentini, Brian Gervasoni, Federico Magli.
+
+
+
+Modello di processo
+
+Si seguirà la metodologia SCRUM: Davide Fiorentini ricoprirà il ruolo di Scrum Master, Federico ricoprirà il ruolo di Product Owner. È stata creata una Kanban Board su Trello (https://trello.com/b/DpPiGUen/ing-del-software?completedInviteSignup=1). Ogni sabato è prevista una riunione di coordinamento e risoluzione di eventuali problemi che verranno sollevati in corso di sviluppo.
+Una sessione di Sprint durerà 2 settimane, e nel relativo sabato di chiusura dello Sprint si effettuerà lo Sprint Review e Sprint Retrospective.
+
+
+
+Standard, linee guida, procedure
+
+Verranno usate le convenzioni Java e interamente la lingua italiana; durante lo Sprint Review verrà analizzata e convalidata la documentazione prodotta.
+
+
+
+Attività di gestione
+
+///
+
+
+
+Rischi
+
+///
+
+
+
+Personale
+
+///
+
+
+
+Metodi e tecniche
+
+Verrà fatto utilizzo del linguaggio di programmazione Java e dell'IDE Eclipse. Il progetto verrà gestito interamente con Maven e Git (con repo GitHub).
+
+
+
+Garanzia di qualità
+
+///
+
+
+
+Pacchetti di lavoro
+
+Il progetto verrà diviso in due moduli principali: nel primo verrà sviluppato il cervello effettivo dell'AI con tutti i suoi requisiti e dettagli tecnici; nel secondo modulo verrà sviluppato il gioco Snake.
+
+
+
+Risorse
+
+///
+
+
+
+Budget
+
+///
+
+
+
+Cambiamenti
+
+///
+
+
+
+Consegna
+
+Il progetto sarà pronto da essere scaricato dal repository GitHub.
