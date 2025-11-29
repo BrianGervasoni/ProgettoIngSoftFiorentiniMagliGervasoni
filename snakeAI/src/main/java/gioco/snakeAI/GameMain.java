@@ -1,9 +1,13 @@
 package gioco.snakeAI;
 
+import boxes.*;
+
 public class GameMain {
 
 	
 	public static void initialize(Map map) {
+		
+		map.addSnakeBody();			// questo piazza la testa iniziale
 		
 	}
 	
@@ -19,14 +23,19 @@ public class GameMain {
 	
 	public static void visualize(Map map) {
 		
-		for(int i = 0; i < map.X; i++) {
-			for(int y = 0; y < map.Y; y++) {
+		for(int i = 0; i < map.X; i++) {			// i sono le righe		questo for fa passare le righe
+			for(int y = 0; y < map.Y; y++) {		// y sono le colonne	questo for fa passare le colonne
 				
 				if(y == 0 && i != 0) {
 					System.out.println();
 				}
 				
-				map.getBox(i, y).visual();
+				if(((y==0) && (i==0))||((y==0) && (i==map.X-1))||((y==map.Y-1) && (i==0))||((y==map.X-1) && (i==map.Y-1)))
+					System.out.print("+");
+				else if((i==0)||(i==map.Y-1))
+					System.out.print("--");
+				else
+					map.getBox(i, y).visual();
 				
 			}
 		}
@@ -38,9 +47,10 @@ public class GameMain {
 	public static void main(String[] args) {
 		
 		Map map = new Map();
-		visualize(map);
 		
-		//initialize(map);
+		
+		initialize(map);
+		visualize(map);
 		//gameLoop(map);
 		//close(map);
 

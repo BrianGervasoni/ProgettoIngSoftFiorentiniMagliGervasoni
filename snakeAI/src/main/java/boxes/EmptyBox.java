@@ -21,4 +21,9 @@ public class EmptyBox extends Box implements Visualize{
 		return this.element.getC();
 	}
 	
+	public MapElem getEnum() {
+		return element;
+	}
+	
+	
 }

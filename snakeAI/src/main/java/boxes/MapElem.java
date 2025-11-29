@@ -2,7 +2,7 @@ package boxes;
 
 public enum MapElem {
 
-	Empty (" "){
+	Empty ("  "){
 		
 		
 	}, 

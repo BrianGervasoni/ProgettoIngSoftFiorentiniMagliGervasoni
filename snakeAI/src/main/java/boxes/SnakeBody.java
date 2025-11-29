@@ -2,19 +2,49 @@ package boxes;
 
 public enum SnakeBody {
 
-	Head{
+	Head("O ", ""){
 		
 		
 	},
 	
-	Body{
+	Body("| " , "--"){
 		
 		
 	},
 	
-	Tail{
+	Tail("|" , "-"){
 		
 		
 	};
+	
+	private String verticalBody;
+	private String horizontalBody;
+		
+	
+	SnakeBody(String verticalBody, String horizontalBody){
+		this.verticalBody = verticalBody;
+		this.horizontalBody = horizontalBody;
+	}
+
+	
+	
+	
+		
+	public String getC() {
+		return this.verticalBody;
+	}
+	
+	public String getD() {
+		return this.horizontalBody;
+	}
+	
+	
+	public String getB() {
+		return this.horizontalBody;
+	}
+	
+	
+	
+	
 	
 }
