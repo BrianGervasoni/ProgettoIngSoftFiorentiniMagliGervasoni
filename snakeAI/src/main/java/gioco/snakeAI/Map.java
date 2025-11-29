@@ -3,8 +3,8 @@ import boxes.*;
 
 public class Map {
 	
-	 public static final int X = 11;
-	 public static final int Y = 11;
+	 public static final int X = 12;
+	 public static final int Y = 12;
 
 	private Box[][] box;
 	private Snake snake;
@@ -14,8 +14,8 @@ public class Map {
 		this.box = new Box[X][Y];
 
 		
-		for(int i = 0; i < X-1 ; i++) {
-			for(int k = 0; k < Y-1 ; k++) {
+		for(int i = 0; i < X ; i++) {
+			for(int k = 0; k < Y ; k++) {
 				if(i == 0 || i == X-1 || k == 0 || k == Y-1) {
 					this.box[i][k] = new EmptyBox(MapElem.Wall, i, k);
 					
