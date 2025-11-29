@@ -9,5 +9,11 @@ public class AppleBox extends Box {
 		super(Xcoordinate, Ycoordinate);
 		
 	}
+
+	@Override
+	public void visual() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

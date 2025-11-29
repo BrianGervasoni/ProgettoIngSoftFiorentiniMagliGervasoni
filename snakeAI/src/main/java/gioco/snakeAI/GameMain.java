@@ -17,13 +17,32 @@ public class GameMain {
 		
 	}
 	
+	public static void visualize(Map map) {
+		
+		for(int i = 0; i < map.X-1; i++) {
+			for(int y = 0; y < map.Y-1; y++) {
+				
+				if(y == 0 && i != 0) {
+					System.out.println();
+				}
+				
+				map.getBox(i, y).visual();
+				
+			}
+		}
+		
+	}
+	
+	
 	
 	public static void main(String[] args) {
 		
 		Map map = new Map();
-		initialize(map);
-		gameLoop(map);
-		close(map);
+		visualize(map);
+		
+		//initialize(map);
+		//gameLoop(map);
+		//close(map);
 
 	}
 	

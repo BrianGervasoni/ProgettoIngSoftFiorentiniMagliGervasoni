@@ -2,14 +2,23 @@ package boxes;
 
 public enum MapElem {
 
-	Empty{
+	Empty (" "){
 		
 		
 	}, 
 	
-	Wall{
+	Wall ("|"){
 		
 		
 	};
 	
+	private String pe;
+	
+	MapElem(String pe){
+		this.pe = pe;
+	}
+	
+	public String getC() {
+		return this.pe;
+	}
 }

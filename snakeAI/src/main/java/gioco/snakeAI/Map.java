@@ -2,21 +2,26 @@ package gioco.snakeAI;
 import boxes.*;
 
 public class Map {
+	
+	 public static final int X = 11;
+	 public static final int Y = 11;
 
 	private Box[][] box;
 	private Snake snake;
 	
 	
 	public Map() {
-		this.box = new Box[11][11];
+		this.box = new Box[X][Y];
+
 		
-		for(int i = 0; i < 10; i++) {
-			for(int k = 0; k < 10; k++) {
-				if(i == 0 || i == 10 || k == 0 || k == 10) {
-					this.box[i][k] = new EmptyBox(MapElem.Wall);
+		for(int i = 0; i < X-1 ; i++) {
+			for(int k = 0; k < Y-1 ; k++) {
+				if(i == 0 || i == X-1 || k == 0 || k == Y-1) {
+					this.box[i][k] = new EmptyBox(MapElem.Wall, i, k);
+					
 				}
 				else {
-					this.box[i][k] = new EmptyBox(MapElem.Empty);
+					this.box[i][k] = new EmptyBox(MapElem.Empty, i , k);
 				}
 			}
 		}
@@ -63,6 +68,35 @@ public class Map {
 	public void addSnakeBody() {
 		
 		
+	}
+
+	public Box getBox(int X, int Y) {
+		return this.box[X][Y];
+	}
+
+	public void setBox(Box box, int X, int Y) {
+		this.box[X][Y] = box;
+	}
+	
+	public void vis(int X, int Y) {
+		System.out.println(((EmptyBox) box[X][Y]).getElem());
+		
+	}
+
+	public Snake getSnake() {
+		return snake;
+	}
+
+	public void setSnake(Snake snake) {
+		this.snake = snake;
+	}
+
+	public static int getX() {
+		return X;
+	}
+
+	public static int getY() {
+		return Y;
 	}
 	
 	
