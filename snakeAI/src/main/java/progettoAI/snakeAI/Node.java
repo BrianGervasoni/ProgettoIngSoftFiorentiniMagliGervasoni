@@ -2,8 +2,8 @@ package progettoAI.snakeAI;
 import java.util.Random;
 
 public class Node {
-	private float bias;
-	private float activation;
+	private double bias;
+	private double activation;
 	
 	public Node(float bias) {
 		this.bias = bias;
@@ -17,7 +17,7 @@ public class Node {
 		this.activation = 0;
 	}
 
-	public float getBias() {
+	public double getBias() {
 		return bias;
 	}
 
@@ -25,7 +25,7 @@ public class Node {
 		this.bias = bias;
 	}
 
-	public float getActivation() {
+	public double getActivation() {
 		return activation;
 	}
 
