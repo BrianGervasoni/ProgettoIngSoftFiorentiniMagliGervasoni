@@ -67,23 +67,18 @@ public class Map {
 			appleX = rand.nextInt(1, Map.X-1);
 			appleY = rand.nextInt(1, Map.Y-1);	
 			
-			if(((appleX != 0)&&(appleX != 11))&&((appleY != 0)&&(appleY != 11)))
+			if(((appleX != 0)&&(appleX != 11))&&((appleY != 0)&&(appleY != 11))) {
+				nonTrovato = false;
+			}if(getBox(appleX, appleY) instanceof SnakeBox)
 				nonTrovato = true;
-			else if(getBox(appleX, appleY) instanceof SnakeBox)
-				nonTrovato = true;
-			else nonTrovato = false;
-								
+
 			
 		}while(nonTrovato);
 		
-		AppleBox apple = new AppleBox(appleX, appleY);
+		AppleBox apple = new AppleBox(Food.Apple, appleX, appleY);
 		setBox(apple, appleX, appleY);	
 		
-		
-		
-		
-		
-		return 0;
+		return true;
 	}
 	
 	public void changeBoxType() {

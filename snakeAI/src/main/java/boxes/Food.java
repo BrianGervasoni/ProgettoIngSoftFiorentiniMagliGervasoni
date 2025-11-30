@@ -3,13 +3,24 @@ package boxes;
 public enum Food {
 
 	
-	Apple("A"){
+	Apple("A "){
 		
 		
 	};
 
-	Food(String string) {
-		
+	
+	private String food;
+	
+	Food(String str) {
+		this.food = str;
 	}
+	
+	public String getFood() {
+		
+		return food;
+	}
+	
+	
+	
 	
 }

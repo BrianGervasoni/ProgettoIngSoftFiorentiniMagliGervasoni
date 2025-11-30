@@ -8,8 +8,7 @@ public class GameMain {
 	public static void initialize(Map map) {
 		
 		map.addSnakeBody();			// questo piazza la testa iniziale
-		if(map.setApple());
-		
+		map.setApple();
 	}
 	
 	public static void gameLoop(Map map) {

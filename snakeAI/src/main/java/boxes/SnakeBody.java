@@ -12,7 +12,7 @@ public enum SnakeBody {
 		
 	},
 	
-	Tail("|" , "-"){
+	Tail("| " , "--"){
 		
 		
 	};

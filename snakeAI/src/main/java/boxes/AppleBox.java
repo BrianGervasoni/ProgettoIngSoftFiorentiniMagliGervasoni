@@ -13,17 +13,17 @@ public class AppleBox extends Box {
 	 * 
 	 * 
 	 */
-	public AppleBox(int Xcoordinate, int Ycoordinate) {
+	public AppleBox(Food element, int Xcoordinate, int Ycoordinate) {
 		
 		super(Xcoordinate, Ycoordinate);
-		
+		this.element = element;
 	}
 
 
-	@Override
 	public void visual() {
-		// TODO Auto-generated method stub
 		
+		
+		System.out.print(element.getFood());
 	}
 	
 }
