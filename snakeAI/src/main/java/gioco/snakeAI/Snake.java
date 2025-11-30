@@ -11,6 +11,7 @@ public class Snake {
 	
 	private int length;
 	
+	private Direction direction;
 	
 	public Snake() {
 		
@@ -24,6 +25,13 @@ public class Snake {
 		body.add(box);
 		
 	}
+	
+	
+	public void setDirection(Direction dir) {
+		
+		this.direction = dir;
+	}
+	
 	
 	public void addPiece(SnakeBox piece) {
 		

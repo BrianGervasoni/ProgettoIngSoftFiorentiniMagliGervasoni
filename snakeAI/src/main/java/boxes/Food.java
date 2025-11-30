@@ -3,9 +3,13 @@ package boxes;
 public enum Food {
 
 	
-	Apple{
+	Apple("A"){
 		
 		
 	};
+
+	Food(String string) {
+		
+	}
 	
 }

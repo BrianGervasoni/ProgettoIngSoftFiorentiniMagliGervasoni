@@ -8,6 +8,7 @@ public class GameMain {
 	public static void initialize(Map map) {
 		
 		map.addSnakeBody();			// questo piazza la testa iniziale
+		if(map.setApple());
 		
 	}
 	
@@ -40,6 +41,30 @@ public class GameMain {
 			}
 		}
 		
+		/**			solo per scopo di debugging
+		System.out.println();
+		System.out.println();
+		
+		
+		for(int i = 0; i < map.X; i++) {
+			for(int y = 0; y < map.Y; y++) {
+				
+				if(map.getBox(i, y) instanceof EmptyBox) {
+					
+					if(((EmptyBox) map.getBox(i, y)).getEnum()  == MapElem.Wall)
+						System.out.print("W");
+					else System.out.print("E");
+					
+				}else if(map.getBox(i, y) instanceof SnakeBox)
+					System.out.print("S");
+			}
+			
+			System.out.println();
+			
+		}
+		**/
+		
+		
 	}
 	
 	
@@ -49,9 +74,16 @@ public class GameMain {
 		Map map = new Map();
 		
 		
-		initialize(map);
+		initialize(map);			// a posto!!!!!!!
 		visualize(map);
+		
+		
+		
 		//gameLoop(map);
+		
+		
+		
+		
 		//close(map);
 
 	}

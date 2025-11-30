@@ -55,7 +55,35 @@ public class Map {
 	
 	public boolean setApple() {
 		
-		return false;
+		Random rand = new Random();
+		
+		int appleX = 0;
+		int appleY = 0;
+
+		Boolean nonTrovato = false;
+		
+		do {
+			
+			appleX = rand.nextInt(1, Map.X-1);
+			appleY = rand.nextInt(1, Map.Y-1);	
+			
+			if(((appleX != 0)&&(appleX != 11))&&((appleY != 0)&&(appleY != 11)))
+				nonTrovato = true;
+			else if(getBox(appleX, appleY) instanceof SnakeBox)
+				nonTrovato = true;
+			else nonTrovato = false;
+								
+			
+		}while(nonTrovato);
+		
+		AppleBox apple = new AppleBox(appleX, appleY);
+		setBox(apple, appleX, appleY);	
+		
+		
+		
+		
+		
+		return 0;
 	}
 	
 	public void changeBoxType() {
@@ -115,6 +143,8 @@ public class Map {
 					nonTrovato = false;
 				}
 				
+				randA = rand.nextInt(1, 101);
+				
 			}while(nonTrovato);
 			
 			SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.Body, firstPieceX, firstPieceY, heead);
@@ -129,34 +159,42 @@ public class Map {
 			int secondPieceX = 0;
 			int secondPieceY = 0;
 			Boolean nonTrovato2 = true;
-			randA = rand.nextInt(1, 101);
 			
 			do {
-				if((randA <= 25) 	&& 				(( (EmptyBox) box[firstPieceX+1][firstPieceY]).getEnum() == MapElem.Empty )) {
+				randA = rand.nextInt(1, 101);
+				
+				if((randA <= 25)) {
 					secondPieceX = firstPieceX + 1;
 					secondPieceY = firstPieceY;
-					nonTrovato2 = false;
-				}else if((randA>25)&&(randA<=50) && (( (EmptyBox) box[firstPieceX-1][firstPieceY]).getEnum() == MapElem.Empty )){
+
+				}else if((randA>25)&&(randA<=50)){
 					secondPieceX = firstPieceX - 1;
 					secondPieceY = firstPieceY;
-					nonTrovato2 = false;
-				}else if((randA>50)&&(randA<=75) && (( (EmptyBox) box[firstPieceX][firstPieceY+1]).getEnum() == MapElem.Empty )){
+
+				}else if((randA>50)&&(randA<=75)){
 					secondPieceX = firstPieceX;
 					secondPieceY = firstPieceY + 1;
-					nonTrovato2 = false;
-				}else if((randA>75)&&(randA<=100) && (( (EmptyBox) box[firstPieceX+1][firstPieceY-1]).getEnum() == MapElem.Empty )){
+
+				}else if((randA>75)&&(randA<=100)){
 					secondPieceX = firstPieceX;
 					secondPieceY = firstPieceY - 1;
-					nonTrovato2 = false;
 				}
+				
+				if((secondPieceX == randX)&&( secondPieceY == randY))
+					nonTrovato2 = true;	
+				else if(((secondPieceX != 0)&&(secondPieceX != 11))&&((secondPieceY != 0)&&(secondPieceY != 11)))
+					nonTrovato2 = false;
+	
 				
 			}while(nonTrovato2);
 			
-			SnakeBox secondBodyPiece = new SnakeBox(SnakeBody.Body, secondPieceX, secondPieceY, firstBodyPiece);
+			
+			SnakeBox secondBodyPiece = new SnakeBox(SnakeBody.Tail, secondPieceX, secondPieceY, firstBodyPiece);
 			setBox(secondBodyPiece, secondPieceX, secondPieceY);
 			snake.addPiece(secondBodyPiece);
 			
 			
+			snake.setDirection(Direction.Straight);
 			
 			
 			
@@ -207,6 +245,23 @@ public class Map {
 
 	public static int getY() {
 		return Y;
+	}
+	
+	
+	public void gameLoop() {
+		
+		
+		/**
+		 * 
+		 * prima cosa: quando il serpente si muove, cambiare tutte le coordinate
+		 * seconda cosa: aggiornare il tipo di box verso cui e da cui lo snake si muove
+		 * terzo: ristampare il tutto aggiornato
+		 * 
+		 * 
+		 */
+		
+		
+		
 	}
 	
 	
