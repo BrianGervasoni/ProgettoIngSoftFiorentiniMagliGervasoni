@@ -1,9 +1,7 @@
 package progettoAI.snakeAI;
 
 import java.util.ArrayList;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.linear.SingularValueDecomposition;
+import org.apache.commons.math3.linear.*;
 
 public abstract class Layer {
 	private ArrayList<Node> nodes;
@@ -53,6 +51,10 @@ public abstract class Layer {
 
 	public void setDerivateWeights(RealMatrix derivateWeights) {
 		this.derivateWeights = derivateWeights;
+	}
+	
+	public RealVector preActivationCalculus() {
+		return weights.preMultiply(MatrixUtils.createRealVector(Tools.getArrayActivationFromNodes(nodes)));
 	}
 	
 	
