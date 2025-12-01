@@ -8,10 +8,11 @@ import progettoAI.snakeAI.tools.Tools;
 
 public abstract class Layer {
 	private RealVector bias;
+	private RealVector preActivation;
 	private RealVector activation;
-	private RealVector derivateActivation;
+	private RealVector derivatoFromActivationToPreActivation;
 	private RealMatrix weights;
-	private RealMatrix derivateWeights;
+	private RealVector derivateFromPreActivationToWeights;
 	
 	public Layer(double[] bias , double[][] weights) {
 		this.bias = MatrixUtils.createRealVector(bias);
@@ -19,7 +20,7 @@ public abstract class Layer {
 	}
 	
 	/**
-	 * create layer whit the specificate number of node and random value for bias and weights from -10 to 10
+	 * create layer with the specificate number of node and random value for bias and weights from -10 to 10
 	 * @param lenLayer
 	 * @param lenNextLayer
 	 */
@@ -37,14 +38,20 @@ public abstract class Layer {
 		this.weights = MatrixUtils.createRealMatrix(tmpWeights);
 	}
 
-	
-	
 	public RealVector getBias() {
 		return bias;
 	}
 
 	public void setBias(RealVector bias) {
 		this.bias = bias;
+	}
+
+	public RealVector getPreActivation() {
+		return preActivation;
+	}
+
+	public void setPreActivation(RealVector preActivation) {
+		this.preActivation = preActivation;
 	}
 
 	public RealVector getActivation() {
@@ -55,12 +62,12 @@ public abstract class Layer {
 		this.activation = activation;
 	}
 
-	public RealVector getDerivateActivation() {
-		return derivateActivation;
+	public RealVector getDerivatoFromActivationToPreActivation() {
+		return derivatoFromActivationToPreActivation;
 	}
 
-	public void setDerivateActivation(RealVector derivateActivation) {
-		this.derivateActivation = derivateActivation;
+	public void setDerivatoFromActivationToPreActivation(RealVector derivatoFromActivationToPreActivation) {
+		this.derivatoFromActivationToPreActivation = derivatoFromActivationToPreActivation;
 	}
 
 	public RealMatrix getWeights() {
@@ -71,12 +78,12 @@ public abstract class Layer {
 		this.weights = weights;
 	}
 
-	public RealMatrix getDerivateWeights() {
-		return derivateWeights;
+	public RealVector getDerivateFromPreActivationToWeights() {
+		return derivateFromPreActivationToWeights;
 	}
 
-	public void setDerivateWeights(RealMatrix derivateWeights) {
-		this.derivateWeights = derivateWeights;
+	public void setDerivateFromPreActivationToWeights(RealVector derivateFromPreActivationToWeights) {
+		this.derivateFromPreActivationToWeights = derivateFromPreActivationToWeights;
 	}
 
 	/**
@@ -84,8 +91,8 @@ public abstract class Layer {
 	 * @param backLayer
 	 * @return
 	 */
-	public RealVector preActivationCalculus(Layer backLayer) {
-		return backLayer.getWeights().preMultiply(backLayer.activation).add(this.bias);
+	public void preActivationCalculus(Layer backLayer) {
+		this.preActivation = backLayer.getWeights().preMultiply(backLayer.activation).add(this.bias);
 	}
 	
 	/**
@@ -93,8 +100,10 @@ public abstract class Layer {
 	 * @param backLayer
 	 * @return
 	 */
-	public RealVector derivateWeightsCalculus(Layer backLayer) {
-		return backLayer.getActivation();
+	public void derivateFromPreActivationToWeightsCalculus(Layer backLayer) {
+		derivateFromPreActivationToWeights = backLayer.getActivation();
 	}
 	
+	public abstract void activationCalculus();
+	public abstract void derivateFromActivationToPreActivation();
 }
