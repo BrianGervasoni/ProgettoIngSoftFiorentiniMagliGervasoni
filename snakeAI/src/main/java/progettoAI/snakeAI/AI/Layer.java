@@ -121,8 +121,14 @@ public abstract class Layer {
 		return this.getWeights();
 	}
 	
+	/**
+	 * calculate derivates from loss to parameters, add the cumulative derivates for the next stochastic calculus
+	 */
 	public void derivateCalculus() {
+		RealMatrix tmp = Tools.outerProduct(this.derivateFromActivationToPreActivation(), this.derivateFromLossToActivation);//calculus from loss to weigths
+		this.derivateFromLossToWeights.add(this.getDerivateFromLossToWeights().multiply(tmp));
 		
+		this.derivatoFromLossToBias.add(this.derivateFromActivationToPreActivation().ebeMultiply(this.derivateFromLossToActivation));//calculus from loss to bias
 	}
 	
 	public abstract void activationCalculus();

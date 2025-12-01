@@ -26,4 +26,20 @@ public final class Tools {
 		}
 		return MatrixUtils.createRealMatrix(tmp);
 	}
+	
+	public static RealMatrix outerProduct(RealVector u, RealVector v) {
+        // Passo 1: Converti u in una matrice colonna (M x 1)
+        // MatrixUtils.createColumnFieldMatrix crea una matrice con una singola colonna
+        RealMatrix colMatrix = MatrixUtils.createColumnRealMatrix(u.toArray());
+
+        // Passo 2: Converti v in una matrice riga (1 x N)
+        // Array2DRowRealMatrix(double[][]) dove il primo array è la singola riga
+        double[][] vData = new double[1][v.getDimension()];
+        vData[0] = v.toArray();
+        RealMatrix rowMatrix = new Array2DRowRealMatrix(vData);
+
+        // Passo 3: Moltiplica le due matrici (M x 1) * (1 x N) = (M x N)
+        // Il metodo multiply() esegue la moltiplicazione standard tra matrici
+        return colMatrix.multiply(rowMatrix);
+    }
 }
