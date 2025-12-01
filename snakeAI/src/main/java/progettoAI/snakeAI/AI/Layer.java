@@ -80,13 +80,21 @@ public abstract class Layer {
 	}
 
 	/**
-	 * calculate the activation function of this layer from the previus layer
+	 * calculate the pre activation function of this layer from the previus layer
 	 * @param backLayer
 	 * @return
 	 */
-	public RealVector ActivationCalculus(Layer backLayer) {
+	public RealVector preActivationCalculus(Layer backLayer) {
 		return backLayer.getWeights().preMultiply(backLayer.activation).add(this.bias);
 	}
 	
+	/**
+	 * get the derivate of the pre activation function in respect of the weights
+	 * @param backLayer
+	 * @return
+	 */
+	public RealVector derivateWeightsCalculus(Layer backLayer) {
+		return backLayer.getActivation();
+	}
 	
 }
