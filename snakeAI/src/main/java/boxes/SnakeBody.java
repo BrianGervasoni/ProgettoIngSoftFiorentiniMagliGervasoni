@@ -26,9 +26,6 @@ public enum SnakeBody {
 		this.horizontalBody = horizontalBody;
 	}
 
-	
-	
-	
 		
 	public String getC() {
 		return this.verticalBody;
@@ -37,14 +34,6 @@ public enum SnakeBody {
 	public String getD() {
 		return this.horizontalBody;
 	}
-	
-	
-	public String getB() {
-		return this.horizontalBody;
-	}
-	
-	
-	
 	
 	
 }

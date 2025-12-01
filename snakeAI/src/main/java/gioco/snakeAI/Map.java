@@ -15,7 +15,7 @@ public class Map {
 	public Map() {
 		this.box = new Box[X][Y];
 
-		snake = new Snake();
+		this.snake = new Snake();
 		
 		for(int i = 0; i < X ; i++) {
 			for(int k = 0; k < Y ; k++) {
@@ -31,8 +31,9 @@ public class Map {
 		
 	}
 	
-	public void updateState(Direction dir) {
+	public void updateStateHead(Direction dir) {
 		
+		this.snake.setDirection(dir);	
 		
 	}
 	
@@ -53,6 +54,19 @@ public class Map {
 		return true;
 	}
 	
+	
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @return
+	 */
 	public boolean setApple() {
 		
 		Random rand = new Random();
@@ -150,7 +164,7 @@ public class Map {
 			
 			// e ora inizializziamo il secondo pezzo di corpo
 			
-			
+		/**	
 			int secondPieceX = 0;
 			int secondPieceY = 0;
 			Boolean nonTrovato2 = true;
@@ -191,11 +205,12 @@ public class Map {
 			
 			snake.setDirection(Direction.Straight);
 			
-			
+			*/
 			
 			
 			
 		}else // vuol dire che ha mangiato una mela
+			
 		{
 			
 			
@@ -205,16 +220,82 @@ public class Map {
 		
 		
 	}
+	
 
-	public Box getBox(int X, int Y) {
-		return this.box[X][Y];
-	}
-
-	public void setBox(Box box, int X, int Y) {
-		this.box[X][Y] = box;
+	public void gameLoop() {
+		
+		
+		/**
+		 * 
+		 * prima cosa: quando il serpente si muove, cambiare tutte le coordinate
+		 * seconda cosa: aggiornare il tipo di box verso cui e da cui lo snake si muove
+		 * terzo: ristampare il tutto aggiornato
+		 * 
+		 * 
+		 * 
+		 * 
+		 * testa = 1
+		 * CORPO = 2
+		 * 
+		 * if(x1 - x2 == 1)
+		 * 
+		 * 
+		 * if(x1- x2 == -1)
+		 * 
+		 * if(y1 - y2 == 1)
+		 * 
+		 * 
+		 * if(y1 - y2 == -1)
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 */
+		
+		
+		Direction dir = Direction.Left;
+		
+		snake.move(dir);
+		resetSnakeBoxes();
+		insertSnakeBoxes();
+		GameMain.visualize(this);
+		
+		//dobbiamo ancora trattare le collisioni con le pareti e se stesso
+		//dobbiamo ancora trattare la collisione con la mela
+		
 	}
 	
+	public void resetSnakeBoxes() {
+		
+		for(int i = 1; i < X-1; i++) {
+			for (int k = 1; k < Y-1; k++) {
+				
+				if(box[i][k] instanceof SnakeBox) {
+					box[i][k] = new EmptyBox(MapElem.Empty, i, k);
+					
+				}
+				
+			}
+			
+		}
+		
+	}
 	
+	public void insertSnakeBoxes() {
+		
+		for(int i = 0; i < snake.getBody().size(); i++) {
+			
+			box[snake.getBodyPiece(i).getXcoordinate()][snake.getBodyPiece(i).getYcoordinate()] = snake.getBodyPiece(i);
+			
+		}
+	}
 	
 	public void vis(int X, int Y) {
 		
@@ -226,6 +307,11 @@ public class Map {
 		
 	}
 
+	
+	
+	
+	
+	
 	public Snake getSnake() {
 		return snake;
 	}
@@ -242,21 +328,12 @@ public class Map {
 		return Y;
 	}
 	
-	
-	public void gameLoop() {
-		
-		
-		/**
-		 * 
-		 * prima cosa: quando il serpente si muove, cambiare tutte le coordinate
-		 * seconda cosa: aggiornare il tipo di box verso cui e da cui lo snake si muove
-		 * terzo: ristampare il tutto aggiornato
-		 * 
-		 * 
-		 */
-		
-		
-		
+	public Box getBox(int X, int Y) {
+		return this.box[X][Y];
+	}
+
+	public void setBox(Box box, int X, int Y) {
+		this.box[X][Y] = box;
 	}
 	
 	

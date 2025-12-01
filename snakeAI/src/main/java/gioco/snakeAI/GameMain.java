@@ -12,7 +12,7 @@ public class GameMain {
 	}
 	
 	public static void gameLoop(Map map) {
-	
+		map.gameLoop();
 		
 	}
 	
@@ -40,7 +40,6 @@ public class GameMain {
 			}
 		}
 		
-		/**			solo per scopo di debugging
 		System.out.println();
 		System.out.println();
 		
@@ -61,7 +60,7 @@ public class GameMain {
 			System.out.println();
 			
 		}
-		**/
+		
 		
 		
 	}
@@ -75,10 +74,7 @@ public class GameMain {
 		
 		initialize(map);			// a posto!!!!!!!
 		visualize(map);
-		
-		
-		
-		//gameLoop(map);
+		gameLoop(map);
 		
 		
 		
