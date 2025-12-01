@@ -1,5 +1,9 @@
 package progettoAI.snakeAI.AI;
 
+import org.apache.commons.math3.linear.*;
+
+import progettoAI.snakeAI.tools.Tools;
+
 public class LayerReLu extends Layer {
 
 	public LayerReLu(double[] bias, double[][] weights) {
@@ -24,20 +28,21 @@ public class LayerReLu extends Layer {
 	}
 
 	/**
-	 * set the derivate froma activation to pre activation, 1 if the activation is greaten to 0, 0 if it's below
+	 * get the derivate froma activation to pre activation, 1 if the activation is greater to 0, 0 if it's below
 	 */
 	@Override
-	public void derivateFromActivationToPreActivation() {
-		this.setDerivatoFromActivationToPreActivation(this.getActivation());
+	public RealVector derivateFromActivationToPreActivation() {
+		RealVector tmp = this.getActivation().copy();
 		for(int i=0; i<this.getPreActivation().getDimension(); i++) {
 			
-			if(this.getDerivatoFromActivationToPreActivation().getEntry(i) > 0) {
-				this.getDerivatoFromActivationToPreActivation().setEntry(i, 1);
+			if(tmp.getEntry(i) > 0) {
+				tmp.setEntry(i, 1);
 			}else {
-				this.getDerivatoFromActivationToPreActivation().setEntry(i, 0);
+				tmp.setEntry(i, 0);
 			}
 			
 		}
+		return tmp;
 	}
 
 }

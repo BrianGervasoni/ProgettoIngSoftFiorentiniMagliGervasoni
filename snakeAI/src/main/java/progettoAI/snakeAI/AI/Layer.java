@@ -10,9 +10,10 @@ public abstract class Layer {
 	private RealVector bias;
 	private RealVector preActivation;
 	private RealVector activation;
-	private RealVector derivatoFromActivationToPreActivation;
+	private RealVector derivatoFromLossToBias;
 	private RealMatrix weights;
-	private RealVector derivateFromPreActivationToWeights;
+	private RealMatrix derivateFromLossToWeights;
+	private RealVector derivateFromLossToActivation;
 	
 	public Layer(double[] bias , double[][] weights) {
 		this.bias = MatrixUtils.createRealVector(bias);
@@ -62,12 +63,12 @@ public abstract class Layer {
 		this.activation = activation;
 	}
 
-	public RealVector getDerivatoFromActivationToPreActivation() {
-		return derivatoFromActivationToPreActivation;
+	public RealVector getDerivatoFromLossToBias() {
+		return derivatoFromLossToBias;
 	}
 
-	public void setDerivatoFromActivationToPreActivation(RealVector derivatoFromActivationToPreActivation) {
-		this.derivatoFromActivationToPreActivation = derivatoFromActivationToPreActivation;
+	public void setDerivatoFromLossToBias(RealVector derivatoFromLossToBias) {
+		this.derivatoFromLossToBias = derivatoFromLossToBias;
 	}
 
 	public RealMatrix getWeights() {
@@ -78,12 +79,20 @@ public abstract class Layer {
 		this.weights = weights;
 	}
 
-	public RealVector getDerivateFromPreActivationToWeights() {
-		return derivateFromPreActivationToWeights;
+	public RealMatrix getDerivateFromLossToWeights() {
+		return derivateFromLossToWeights;
 	}
 
-	public void setDerivateFromPreActivationToWeights(RealVector derivateFromPreActivationToWeights) {
-		this.derivateFromPreActivationToWeights = derivateFromPreActivationToWeights;
+	public void setDerivateFromLossToWeights(RealMatrix derivateFromLossToWeights) {
+		this.derivateFromLossToWeights = derivateFromLossToWeights;
+	}
+
+	public RealVector getDerivateFromLossToActivation() {
+		return derivateFromLossToActivation;
+	}
+
+	public void setDerivateFromLossToActivation(RealVector derivateFromLossToActivation) {
+		this.derivateFromLossToActivation = derivateFromLossToActivation;
 	}
 
 	/**
@@ -100,10 +109,22 @@ public abstract class Layer {
 	 * @param backLayer
 	 * @return
 	 */
-	public void derivateFromPreActivationToWeightsCalculus(Layer backLayer) {
-		derivateFromPreActivationToWeights = backLayer.getActivation();
+	public RealMatrix derivateFromPreActivationToWeightsCalculus() {
+		return Tools.createMatrixFromVector(activation, this.getWeights().getRowDimension());
+	}
+	
+	/**
+	 * get the derivate of the pre activation function in respect to the activation of the below layer
+	 * @return
+	 */
+	public RealMatrix derivateFromPreActivationToActivation() {
+		return this.getWeights();
+	}
+	
+	public void derivateCalculus() {
+		
 	}
 	
 	public abstract void activationCalculus();
-	public abstract void derivateFromActivationToPreActivation();
+	public abstract RealVector derivateFromActivationToPreActivation();
 }
