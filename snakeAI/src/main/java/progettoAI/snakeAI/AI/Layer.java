@@ -105,6 +105,17 @@ public abstract class Layer {
 	}
 	
 	/**
+	 * this method perform the same actions as the basic forwarding method but it memorize the preActivation and the activation
+	 * @param backLayerActivation: RealVector with the back layer activation value
+	 * @return RealVector with this layer activation value
+	 */
+	public RealVector backForwarding(RealVector backLayerActivation) {
+		this.setPreActivation(this.getWeights().preMultiply(backLayerActivation).add(this.bias));
+		this.setActivation(this.activationCalculus(this.getPreActivation()));
+		return this.getActivation();//sigma(W*A+B)
+	}
+	
+	/**
 	 * get the derivate of the pre activation function in respect of the weights
 	 * @return
 	 */
