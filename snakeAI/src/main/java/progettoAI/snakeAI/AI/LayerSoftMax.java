@@ -1,7 +1,7 @@
 package progettoAI.snakeAI.AI;
 
 import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.linear.*;8
+import org.apache.commons.math3.linear.*;
 import org.apache.commons.math3.util.FastMath;
 
 import progettoAI.snakeAI.tools.Tools;
