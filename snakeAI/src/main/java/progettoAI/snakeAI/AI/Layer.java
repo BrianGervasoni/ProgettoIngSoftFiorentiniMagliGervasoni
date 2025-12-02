@@ -160,6 +160,16 @@ public abstract class Layer {
 		this.setDerivateFromLossToWeights(new BlockRealMatrix(this.getWeights().getRowDimension(),this.getWeights().getColumnDimension()));
 		this.setDerivateFromLossToBias(new ArrayRealVector(this.getBias().getDimension()));
 	}
+	
+	/**
+	 * perform a step in the backPropagation phase
+	 * @param backLayer
+	 */
+	public void backPropagation(Layer backLayer) {
+		this.derivateCalculus();
+		if(backLayer != null)
+			this.derivateFromLossToActivationCalculus(backLayer);
+	}
 	/**
 	 * optimizes weight and bias parameters based on the selected mode
 	 * @param mode (ASCEND,DESCEND)
