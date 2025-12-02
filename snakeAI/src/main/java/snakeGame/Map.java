@@ -3,8 +3,8 @@ package snakeGame;
 import java.util.Random;
 
 public class Map {
-	static int r; //row
-	static int c; //column
+	static int r = 10; //row
+	static int c = 10; //column
 	Box[][] Map;
 	
 	public Map() {
@@ -27,18 +27,27 @@ public class Map {
 			for(int j=0; j<c; j++) {
 				if(i == x_snake && j == y_snake){
 					
-					this.Map[i][j] = new SnakeBox();
+					this.Map[i][j] = new SnakeBox(i,j);
 					
 				}else if(i == x_apple && j == y_apple){
 					
-					this.Map[i][j] = new AppleBox();
+					this.Map[i][j] = new AppleBox(i,j);
 					
 				}else {
 					
-					this.Map[i][j] = new EmptyBox();
+					this.Map[i][j] = new EmptyBox(i,j);
 					
 				}
 			}
 		}
 	}
+
+	public Box[][] getMap() {
+		return Map;
+	}
+
+	public void setMap(Box[][] map) {
+		Map = map;
+	}
+	
 }
