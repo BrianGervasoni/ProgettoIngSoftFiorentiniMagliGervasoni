@@ -2,7 +2,7 @@ package snakeGame;
 
 public class AppleBox extends Box{
 	
-	public AppleBox() {
-		super();
+	public AppleBox(int x, int y) {
+		super(x, y);
 	}
 }

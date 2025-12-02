@@ -29,8 +29,13 @@ public class ThreadAgent extends Thread{
 	
 	public double[] mapConversion(Map map) {
 		
-		return null;
+		for(int i=0; i<map.getMap().length; i++) { //i get the length of the rows
+			for(int j=0; j<map.getMap()[0].length; j++) { //i get the length of the columns
+				//if(map.getMap()[i][j] instanceof Snake && (Snake)map.getMap()[i][j])
+			}
+		}
 		
+		return null;
 	}
 	
 	public Direction moveConversion(int index) {
