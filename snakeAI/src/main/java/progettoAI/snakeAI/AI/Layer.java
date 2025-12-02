@@ -162,17 +162,17 @@ public abstract class Layer {
 	}
 	/**
 	 * optimizes weight and bias parameters based on the selected mode
-	 * @param mode
+	 * @param mode (ASCEND,DESCEND)
 	 */
 	public void optimization(TypeGradientUpdate mode) {
 		switch(mode){
 		case ASCEND:
-			this.setWeights(this.getWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW)));
-			this.setBias(this.getBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB)));
+			this.setWeights(this.getWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche)));
+			this.setBias(this.getBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche)));
 			break;
 		case DESCEND:
-			this.setWeights(this.getWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW)));
-			this.setBias(this.getBias().subtract(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB)));
+			this.setWeights(this.getWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche)));
+			this.setBias(this.getBias().subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche)));
 			break;
 			default:
 				break;
