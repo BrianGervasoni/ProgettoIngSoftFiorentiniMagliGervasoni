@@ -1,5 +1,7 @@
 package snakeGame;
 
+import enumSnake.BoxType;
+
 public abstract class Box {
 	
 	int x;
@@ -21,4 +23,8 @@ public abstract class Box {
 	public void setY(int y) {
 		this.y = y;
 	}
+	
+	public abstract BoxType getElementType(); 
+	public abstract void setElementType(BoxType boxType); 
+	
 }

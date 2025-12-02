@@ -1,22 +1,26 @@
 package snakeGame;
 
-import java.util.List;
+import enumSnake.BoxType;
+import enumSnake.Snake;
 
 public class SnakeBox extends Box{
 	
-	List<Snake> snake; 
+	private Snake elementType; 
 	
 	public SnakeBox(int x, int y) {
 		
 		super(x, y);
-		snake.add(Snake.Head);
+		this.setElementType(Snake.Head);
+	}
+	
+	@Override
+	public BoxType getElementType() {
+		// TODO Auto-generated method stub
+		return elementType;
 	}
 
-	public List<Snake> getSnake() {
-		return snake;
-	}
-
-	public void setSnake(List<Snake> snake) {
-		this.snake = snake;
+	@Override
+	public void setElementType(BoxType boxType) {
+		this.elementType = (Snake)boxType;
 	}
 }
