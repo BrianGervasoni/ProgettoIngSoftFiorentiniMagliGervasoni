@@ -19,10 +19,24 @@ public final class Tools {
 	 * @param nRow
 	 * @return
 	 */
-	public static RealMatrix createMatrixFromVector(RealVector v, int nRow) {
+	public static RealMatrix createRowMatrixFromVector(RealVector v, int nRow) {
+		if(nRow == 1) {
+			return MatrixUtils.createRowRealMatrix(v.toArray());
+		}
 		double [][] tmp = new double[nRow][v.getDimension()];
 		for(int i=0;i<nRow;i++) {
 			tmp[i] = v.toArray();
+		}
+		return MatrixUtils.createRealMatrix(tmp);
+	}
+	
+	public static RealMatrix createColumnMatrixFromVector(RealVector v, int nCol) {
+		if(nCol == 1) {
+			return MatrixUtils.createColumnRealMatrix(v.toArray());
+		}
+		double [][] tmp = new double[v.getDimension()][nCol];
+		for(int i=0;i<nCol;i++) {
+			tmp[0][i] = v.getEntry(i);
 		}
 		return MatrixUtils.createRealMatrix(tmp);
 	}

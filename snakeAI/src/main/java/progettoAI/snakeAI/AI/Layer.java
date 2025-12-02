@@ -120,8 +120,8 @@ public abstract class Layer {
 	 * get the derivate of the pre activation function in respect of the weights
 	 * @return
 	 */
-	public RealMatrix derivateFromPreActivationToWeightsCalculus() {
-		return Tools.createMatrixFromVector(activation, this.getWeights().getRowDimension());
+	public RealVector derivateFromPreActivationToWeightsCalculus() {
+		return activation;
 	}
 	
 	/**
@@ -137,11 +137,10 @@ public abstract class Layer {
 	 * @param backLayer
 	 */
 	public void derivateCalculus() {
-		RealVector tmpDAct = this.derivateFromActivationToPreActivation();
-		RealMatrix tmp = Tools.outerProduct(tmpDAct, this.getDerivateFromLossToActivation());//calculus derivate from loss to weigths
-		this.derivateFromLossToWeights.add(this.derivateFromPreActivationToWeightsCalculus().multiply(tmp));
+		RealMatrix tmpDAct = this.derivateFromActivationToPreActivation();
+		this.derivateFromLossToWeights.add( Tools.createColumnMatrixFromVector(this.derivateFromPreActivationToWeightsCalculus(),1).multiply(tmpDAct));
 		
-		this.derivateFromLossToBias.add(tmpDAct.ebeMultiply(this.getDerivateFromLossToActivation()));//calculus derivate from loss to bias
+		this.derivateFromLossToBias.add(tmpDAct.operate(this.getDerivateFromLossToActivation()));//calculus derivate from loss to bias
 	}
 	
 	/**
@@ -151,7 +150,7 @@ public abstract class Layer {
 	public void derivateFromLossToActivationCalculus(Layer backLayer) {//TODO
 		backLayer.setDerivateFromLossToActivation(
 				this.derivateFromPreActivationToActivation().operate(
-						this.derivateFromActivationToPreActivation().ebeMultiply(this.getDerivateFromLossToActivation())));
+						this.derivateFromActivationToPreActivation().operate(this.getDerivateFromLossToActivation())));
 	}
 	
 	/**
@@ -180,6 +179,16 @@ public abstract class Layer {
 		}
 	}
 	
+	/**
+	 * calculate activation from the preActivation
+	 * @param preActivation
+	 * @return activation
+	 */
 	public abstract RealVector activationCalculus(RealVector preActivation);
-	public abstract RealVector derivateFromActivationToPreActivation();
+	
+	/**
+	 * calculate derivate of the activation function to the preActivation
+	 * @return derivate matrix (1XN)
+	 */
+	public abstract RealMatrix derivateFromActivationToPreActivation();
 }
