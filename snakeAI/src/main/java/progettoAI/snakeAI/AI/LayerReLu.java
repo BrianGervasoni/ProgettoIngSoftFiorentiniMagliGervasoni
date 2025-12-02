@@ -28,11 +28,8 @@ public class LayerReLu extends Layer {
 		return activation;
 	}
 
-	/**
-	 * get the derivate froma activation to pre activation, 1 if the activation is greater to 0, 0 if it's below
-	 */
 	@Override
-	public RealMatrix derivateFromActivationToPreActivation() {
+	public RealMatrix derivateFromLossToPreActivation() {
 		RealVector tmp = this.getActivation().copy();
 		for(int i=0; i<this.getPreActivation().getDimension(); i++) {
 			

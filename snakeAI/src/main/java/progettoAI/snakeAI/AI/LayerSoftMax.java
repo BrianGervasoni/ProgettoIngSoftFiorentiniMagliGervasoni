@@ -49,7 +49,7 @@ public class LayerSoftMax extends Layer {
 	}
 
 	@Override
-	public RealMatrix derivateFromActivationToPreActivation() {
+	public RealMatrix derivateFromLossToPreActivation() {
 		int N = this.getActivation().getDimension();
         // Initialize the NxN Jacobian matrix to zeros
         RealMatrix jacobian = MatrixUtils.createRealMatrix(N, N);

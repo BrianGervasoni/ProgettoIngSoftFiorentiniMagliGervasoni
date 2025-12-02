@@ -22,12 +22,9 @@ public class LayerIdentityFunction extends Layer {
 		return preActivation;
 	}
 
-	/**
-	 * calculate derivate of the activation function to the preActivation, in this case is always 1 and therefore is the 1XN preActivation matrix
-	 */
 	@Override
-	public RealMatrix derivateFromActivationToPreActivation() {
-		return MatrixUtils.createRowRealMatrix(this.getPreActivation().toArray());
+	public RealMatrix derivateFromLossToPreActivation() {
+		return MatrixUtils.createRowRealMatrix(this.getDerivateFromLossToActivation().ebeMultiply(this.getPreActivation()).toArray());
 	}
 
 }
