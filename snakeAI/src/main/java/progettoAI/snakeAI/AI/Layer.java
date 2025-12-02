@@ -147,7 +147,7 @@ public abstract class Layer {
 	 * calculate the derivate from loss to activation of the below layer
 	 * @param backLayer
 	 */
-	public void derivateFromLossToActivationCalculus(Layer backLayer) {//TODO
+	public void derivateFromLossToActivationCalculus(Layer backLayer) {
 		backLayer.setDerivateFromLossToActivation(
 				this.derivateFromPreActivationToActivation().operate(
 						this.derivateFromLossToPreActivation().operate(this.getDerivateFromLossToActivation())));
