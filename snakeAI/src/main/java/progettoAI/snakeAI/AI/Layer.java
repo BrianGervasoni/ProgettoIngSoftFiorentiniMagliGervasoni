@@ -96,12 +96,12 @@ public abstract class Layer {
 	}
 
 	/**
-	 * calculate the pre activation function of this layer from the previus layer
-	 * @param backLayer
-	 * @return
+	 * calculate the activation function of this layer from the previus layer activation
+	 * @param backLayerActivation: RealVector with the back layer activation value
+	 * @return RealVector with this layer activation value
 	 */
-	public void forwarding(RealVector backLayerActivation) {
-		this.preActivation = this.getWeights().preMultiply(backLayerActivation).add(this.bias);
+	public RealVector forwarding(RealVector backLayerActivation) {
+		return this.activationCalculus(this.getWeights().preMultiply(backLayerActivation).add(this.bias));//sigma(W*A+B)
 	}
 	
 	/**
@@ -136,6 +136,6 @@ public abstract class Layer {
 		
 	}
 	
-	public abstract void activationCalculus();
+	public abstract RealVector activationCalculus(RealVector preActivation);
 	public abstract RealVector derivateFromActivationToPreActivation();
 }
