@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import org.apache.commons.math3.linear.*;
 
 import progettoAI.snakeAI.tools.Tools;
+import progettoAI.snakeAI.hyperparameters.*;
 
 
 public abstract class Layer {
 	private RealVector bias;
 	private RealVector preActivation;
 	private RealVector activation;
-	private RealVector derivatoFromLossToBias;
+	private RealVector derivateFromLossToBias;
 	private RealMatrix weights;
 	private RealMatrix derivateFromLossToWeights;
 	private RealVector derivateFromLossToActivation;
@@ -63,12 +64,12 @@ public abstract class Layer {
 		this.activation = activation;
 	}
 
-	public RealVector getDerivatoFromLossToBias() {
-		return derivatoFromLossToBias;
+	public RealVector getDerivateFromLossToBias() {
+		return derivateFromLossToBias;
 	}
 
-	public void setDerivatoFromLossToBias(RealVector derivatoFromLossToBias) {
-		this.derivatoFromLossToBias = derivatoFromLossToBias;
+	public void setDerivateFromLossToBias(RealVector derivateFromLossToBias) {
+		this.derivateFromLossToBias = derivateFromLossToBias;
 	}
 
 	public RealMatrix getWeights() {
@@ -140,7 +141,7 @@ public abstract class Layer {
 		RealMatrix tmp = Tools.outerProduct(tmpDAct, this.getDerivateFromLossToActivation());//calculus derivate from loss to weigths
 		this.derivateFromLossToWeights.add(this.derivateFromPreActivationToWeightsCalculus().multiply(tmp));
 		
-		this.derivatoFromLossToBias.add(tmpDAct.ebeMultiply(this.getDerivateFromLossToActivation()));//calculus derivate from loss to bias
+		this.derivateFromLossToBias.add(tmpDAct.ebeMultiply(this.getDerivateFromLossToActivation()));//calculus derivate from loss to bias
 	}
 	
 	/**
@@ -151,6 +152,32 @@ public abstract class Layer {
 		backLayer.setDerivateFromLossToActivation(
 				this.derivateFromPreActivationToActivation().operate(
 						this.derivateFromActivationToPreActivation().ebeMultiply(this.getDerivateFromLossToActivation())));
+	}
+	
+	/**
+	 * initializzate the final derivate Weights and Bias to 0
+	 */
+	public void initBackPropagation() {
+		this.setDerivateFromLossToWeights(new BlockRealMatrix(this.getWeights().getRowDimension(),this.getWeights().getColumnDimension()));
+		this.setDerivateFromLossToBias(new ArrayRealVector(this.getBias().getDimension()));
+	}
+	/**
+	 * optimizes weight and bias parameters based on the selected mode
+	 * @param mode
+	 */
+	public void optimization(TypeGradientUpdate mode) {
+		switch(mode){
+		case ASCEND:
+			this.setWeights(this.getWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW)));
+			this.setBias(this.getBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB)));
+			break;
+		case DESCEND:
+			this.setWeights(this.getWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW)));
+			this.setBias(this.getBias().subtract(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB)));
+			break;
+			default:
+				break;
+		}
 	}
 	
 	public abstract RealVector activationCalculus(RealVector preActivation);
