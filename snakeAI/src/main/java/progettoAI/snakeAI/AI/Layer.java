@@ -25,13 +25,13 @@ public abstract class Layer {
 	 * @param lenLayer
 	 * @param lenNextLayer
 	 */
-	public Layer(int lenLayer, int lenNextLayer) {
+	public Layer(int lenLayer, int lenBackLayer) {
 		double [] tmpBias = new double[lenLayer];
-		double[][] tmpWeights = new double[lenNextLayer][lenLayer];
+		double[][] tmpWeights = new double[lenLayer][lenBackLayer];
 		for(int i=0;i<lenLayer;i++) {
 			tmpBias[i] = Tools.pickRandom(-10, 10);
-			for(int j=0;j<lenNextLayer;j++) {
-				tmpWeights[j][i] = Tools.pickRandom(-10, 10);
+			for(int j=0;j<lenBackLayer;j++) {
+				tmpWeights[i][j] = Tools.pickRandom(-10, 10);
 			}
 		}
 		
@@ -100,8 +100,8 @@ public abstract class Layer {
 	 * @param backLayer
 	 * @return
 	 */
-	public void preActivationCalculus(Layer backLayer) {
-		this.preActivation = backLayer.getWeights().preMultiply(backLayer.activation).add(this.bias);
+	public void forwarding(RealVector backLayerActivation) {
+		this.preActivation = this.getWeights().preMultiply(backLayerActivation).add(this.bias);
 	}
 	
 	/**
@@ -124,10 +124,10 @@ public abstract class Layer {
 	 * calculate derivates from loss to parameters, add the cumulative derivates for the next stochastic calculus
 	 * @param backLayer
 	 */
-	public void derivateCalculus(Layer backLayer) {
+	public void derivateCalculus() {
 		RealVector tmpDAct = this.derivateFromActivationToPreActivation();
 		RealMatrix tmp = Tools.outerProduct(tmpDAct, this.derivateFromLossToActivation);//calculus derivate from loss to weigths
-		backLayer.derivateFromLossToWeights.add(backLayer.derivateFromPreActivationToWeightsCalculus().multiply(tmp));
+		this.derivateFromLossToWeights.add(this.derivateFromPreActivationToWeightsCalculus().multiply(tmp));
 		
 		this.derivatoFromLossToBias.add(tmpDAct.ebeMultiply(this.derivateFromLossToActivation));//calculus derivate from loss to bias
 	}
