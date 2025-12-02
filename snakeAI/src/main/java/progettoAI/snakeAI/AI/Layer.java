@@ -137,14 +137,20 @@ public abstract class Layer {
 	 */
 	public void derivateCalculus() {
 		RealVector tmpDAct = this.derivateFromActivationToPreActivation();
-		RealMatrix tmp = Tools.outerProduct(tmpDAct, this.derivateFromLossToActivation);//calculus derivate from loss to weigths
+		RealMatrix tmp = Tools.outerProduct(tmpDAct, this.getDerivateFromLossToActivation());//calculus derivate from loss to weigths
 		this.derivateFromLossToWeights.add(this.derivateFromPreActivationToWeightsCalculus().multiply(tmp));
 		
-		this.derivatoFromLossToBias.add(tmpDAct.ebeMultiply(this.derivateFromLossToActivation));//calculus derivate from loss to bias
+		this.derivatoFromLossToBias.add(tmpDAct.ebeMultiply(this.getDerivateFromLossToActivation()));//calculus derivate from loss to bias
 	}
 	
-	public void derivateFromLossToActivationCalculus() {//TODO
-		
+	/**
+	 * calculate the derivate from loss to activation of the below layer
+	 * @param backLayer
+	 */
+	public void derivateFromLossToActivationCalculus(Layer backLayer) {//TODO
+		backLayer.setDerivateFromLossToActivation(
+				this.derivateFromPreActivationToActivation().operate(
+						this.derivateFromActivationToPreActivation().ebeMultiply(this.getDerivateFromLossToActivation())));
 	}
 	
 	public abstract RealVector activationCalculus(RealVector preActivation);
