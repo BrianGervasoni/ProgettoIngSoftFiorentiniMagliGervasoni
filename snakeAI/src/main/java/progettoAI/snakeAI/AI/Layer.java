@@ -1,6 +1,5 @@
 package progettoAI.snakeAI.AI;
 
-import java.util.ArrayList;
 import org.apache.commons.math3.linear.*;
 
 import progettoAI.snakeAI.tools.Tools;
