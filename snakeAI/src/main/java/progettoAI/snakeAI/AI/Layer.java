@@ -47,7 +47,7 @@ public abstract class Layer {
 	}
 
 	public void setBias(RealVector bias) {
-		this.bias = bias;
+		this.bias = bias.copy();
 	}
 
 	public RealVector getPreActivation() {
@@ -55,7 +55,7 @@ public abstract class Layer {
 	}
 
 	public void setPreActivation(RealVector preActivation) {
-		this.preActivation = preActivation;
+		this.preActivation = preActivation.copy();
 	}
 
 	public RealVector getActivation() {
@@ -63,7 +63,7 @@ public abstract class Layer {
 	}
 
 	public void setActivation(RealVector activation) {
-		this.activation = activation;
+		this.activation = activation.copy();
 	}
 
 	public RealVector getDerivateFromLossToBias() {
@@ -71,7 +71,7 @@ public abstract class Layer {
 	}
 
 	public void setDerivateFromLossToBias(RealVector derivateFromLossToBias) {
-		this.derivateFromLossToBias = derivateFromLossToBias;
+		this.derivateFromLossToBias = derivateFromLossToBias.copy();
 	}
 
 	public RealMatrix getWeights() {
@@ -79,7 +79,7 @@ public abstract class Layer {
 	}
 
 	public void setWeights(RealMatrix weights) {
-		this.weights = weights;
+		this.weights = weights.copy();
 	}
 
 	public RealMatrix getDerivateFromLossToWeights() {
@@ -87,7 +87,7 @@ public abstract class Layer {
 	}
 
 	public void setDerivateFromLossToWeights(RealMatrix derivateFromLossToWeights) {
-		this.derivateFromLossToWeights = derivateFromLossToWeights;
+		this.derivateFromLossToWeights = derivateFromLossToWeights.copy();
 	}
 
 	public RealVector getDerivateFromLossToActivation() {
@@ -95,7 +95,23 @@ public abstract class Layer {
 	}
 
 	public void setDerivateFromLossToActivation(RealVector derivateFromLossToActivation) {
-		this.derivateFromLossToActivation = derivateFromLossToActivation;
+		this.derivateFromLossToActivation = derivateFromLossToActivation.copy();
+	}
+
+	public RealVector getTmpBias() {
+		return tmpBias;
+	}
+
+	public void setTmpBias(RealVector tmpBias) {
+		this.tmpBias = tmpBias.copy();
+	}
+
+	public RealMatrix getTmpWeights() {
+		return tmpWeights;
+	}
+
+	public void setTmpWeights(RealMatrix tmpWeights) {
+		this.tmpWeights = tmpWeights.copy();
 	}
 
 	/**
@@ -156,13 +172,13 @@ public abstract class Layer {
 	}
 	
 	/**
-	 * initialize the final derivate Weights and Bias to 0
+	 * initialize the final derivate Weights and Bias to 0 and set the tmp parameters to the actual value
 	 */
 	public void initBackPropagation() {
 		this.setDerivateFromLossToWeights(new BlockRealMatrix(this.getWeights().getRowDimension(),this.getWeights().getColumnDimension()));
 		this.setDerivateFromLossToBias(new ArrayRealVector(this.getBias().getDimension()));
-		this.tmpBias = this.getBias().copy();
-		this.tmpWeights = this.getWeights().copy();
+		this.setTmpBias(this.getBias());
+		this.setTmpWeights(this.getWeights());
 	}
 	
 	/**
@@ -191,12 +207,12 @@ public abstract class Layer {
 	public void tmpOptimization(TypeGradientUpdate mode) {
 		switch(mode){
 		case ASCEND:
-			this.tmpWeights = this.tmpWeights.add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche));
-			this.tmpBias = this.tmpBias.add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche));
+			this.setTmpWeights(this.getTmpWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche)));
+			this.setTmpBias(this.getTmpBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche)));
 			break;
 		case DESCEND:
-			this.tmpWeights = this.tmpWeights.subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche));
-			this.tmpBias = this.tmpBias.subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche));
+			this.setTmpWeights(this.getTmpWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche)));
+			this.setTmpBias(this.getTmpBias().subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche)));
 			break;
 			default:
 				break;
