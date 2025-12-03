@@ -21,7 +21,7 @@ public class AI {
 	public AI(int[] lenLayer) {
 		try {
 			layers = new ArrayList<Layer>(lenLayer.length);
-			if(layers.size() > 0) {//the first layer dosn't have a back layer
+			if(layers.size() > 0) {//the first layer dosn't have a back layer, only the activation of the input layer
 				layers.add(new LayerReLu(lenLayer[0],0));
 			}
 			for(int i=0; i<lenLayer.length-2;i++) {//create layer with the corresponding weights and bias matrix dimension
