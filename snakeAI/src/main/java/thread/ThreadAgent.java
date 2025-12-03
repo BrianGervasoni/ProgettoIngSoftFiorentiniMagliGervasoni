@@ -28,23 +28,88 @@ public class ThreadAgent extends Thread{
 		
 	}
 	
+	
+	/**
+	 * 
+	 * @param k
+	 * @param h
+	 * @param map
+	 * @param snakeHead
+	 * @param startDegree
+	 * @param endDegree
+	 * @return if the object collides with one of the line of the head it will return true, else false
+	 */
+	public boolean objectCollide(int k, int h, Map map, SnakeBox snakeHead, double startDegree, double endDegree) {
+		
+		int deltaX = map.getMap()[k][h].getX() - snakeHead.getX();
+		int deltaY = map.getMap()[k][h].getY() - snakeHead.getY();
+				
+		//the angle between the head and the object, it's in rad and it's range its [- pi, +pi]
+		double alpha = Math.atan2(deltaY, deltaX);
+		
+		//conversion [-180; 180] to the usual convention [0; 360] in rad
+		if(alpha < 0) {
+			alpha = alpha + 2 * Math.PI;
+		}
+				
+		double alphaDegree = Math.toDegrees(alpha); //transform in degree
+				
+		if(alphaDegree > startDegree && alphaDegree < endDegree) {
+			return true;
+		}
+	
+		return false;
+	}
+	
+	
+	public double calculateDistance(Box box, SnakeBox snakeHead, double startDegree, double endDegree) {
+		
+		double x = Math.abs(snakeHead.getX() - box.getX());
+		double y = Math.abs(snakeHead.getY() - box.getY());
+		double distance = Math.sqrt((x*x)+(y*y));
+		
+		return distance;
+	}
+	
+	
 	/**
 	 * 
 	 * @param map
-	 * @return
+	 * @return normalization of the distance of the snake's head and the elements
 	 */
 	public double[] mapConversion(Map map) {
 		
 		for(int i=0; i<map.getMap().length; i++) { //i get the length of the rows
 			for(int j=0; j<map.getMap()[0].length; j++) { //i get the length of the columns
+				
 				if((map.getMap()[i][j] instanceof SnakeBox) && ((Snake) map.getMap()[i][j].getElementType() == Snake.Head)) {
-					/*
-					 * una volta ottenuta la testa e le sue coordinate calcola il fascio di rette 
-					 * che parte da li e si scontra con gli altri elementi della mappa
-					 * formula fascio di rette y - y0 = m(x - x0)
-					 * il fascio sarà composto da rette che vanno da -90° a +90° in senso orario
-					 * numero di rette è 60, ogni retta piazzata con una fase che differisce di 3°
-					 */
+					
+					SnakeBox snakeHead = (SnakeBox) map.getMap()[i][j];
+					SnakeBox snakeFirstBodyBox = snakeHead.getNext(1);
+
+					//i calculate the direction of the snake
+					if(snakeHead.getX() - snakeFirstBodyBox.getX() < 0) {
+						//head left and body right
+						//range from 270° to 90° CLOCKWISE
+						for(int k=0; k<map.getMap().length; k++) {
+							for(int h=0; h<map.getMap()[0].length; h++) {
+								//INSERIRE OBJECT COLLIDE E CALCULATE DISTANCE
+							}
+						}
+						
+					} else if(snakeHead.getX() - snakeFirstBodyBox.getX() > 0) {
+						//head right and body left
+						//range from 90° to 270° CLOCKWISE
+						
+					} else if(snakeHead.getY() - snakeFirstBodyBox.getY() < 0) {
+						//head down and body up
+						//range from 360° to 180° CLOCKWISE
+						
+					} else {
+						//head up and body down
+						//range from 180° to 0° CLOCKWISE
+						
+					}
 				}
 			}
 		}
