@@ -1,6 +1,7 @@
 package gioco.snakeAI;
 import boxes.*;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Map {
@@ -10,10 +11,11 @@ public class Map {
 
 	private Box[][] box;
 	private Snake snake;
-	
+	private AppleBox apple;
 	
 	public Map() {
 		this.box = new Box[X][Y];
+		this.apple = null;
 
 		this.snake = new Snake();
 		
@@ -89,7 +91,7 @@ public class Map {
 			
 		}while(nonTrovato);
 		
-		AppleBox apple = new AppleBox(Food.Apple, appleX, appleY);
+		this.apple = new AppleBox(Food.Apple, appleX, appleY);
 		setBox(apple, appleX, appleY);	
 		
 		return true;
@@ -260,12 +262,23 @@ public class Map {
 		 */
 		
 		
-		Direction dir = Direction.Left;
+		ArrayList<Direction> dir2 = new ArrayList();
+		dir2.add(Direction.Right);
+		dir2.add(Direction.Straight);
+		dir2.add(Direction.Left);
+		Random rand = new Random();
 		
-		snake.move(dir);
-		resetSnakeBoxes();
-		insertSnakeBoxes();
-		GameMain.visualize(this);
+		
+		
+		while(snake.move(dir2.get(rand.nextInt(3))) == true) {
+			
+			resetSnakeBoxes();
+			insertSnakeBoxes();
+			GameMain.visualize(this);
+			
+			
+		}
+		
 		
 		//dobbiamo ancora trattare le collisioni con le pareti e se stesso
 		//dobbiamo ancora trattare la collisione con la mela

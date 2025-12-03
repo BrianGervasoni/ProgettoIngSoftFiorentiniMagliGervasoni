@@ -43,7 +43,7 @@ public class GameMain {
 		System.out.println();
 		System.out.println();
 		
-		
+		/**
 		for(int i = 0; i < map.X; i++) {
 			for(int y = 0; y < map.Y; y++) {
 				
@@ -60,7 +60,7 @@ public class GameMain {
 			System.out.println();
 			
 		}
-		
+		*/
 		
 		
 	}

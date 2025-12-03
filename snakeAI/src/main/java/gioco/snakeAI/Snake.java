@@ -69,13 +69,15 @@ public class Snake {
 
 
 
-	public void move(Direction dir) {
+	public Boolean move(Direction dir) {
 		
 		int NCoordX = 0;
 		int NCoordY = 0;
 		
 		int X = this.body.get(0).getXcoordinate();
 		int Y = this.body.get(0).getYcoordinate();
+		
+		//controllo dove si stia muovendo al testa
 		
 		//si stava muovendo verso il basso
 		if(X - this.body.get(1).getXcoordinate() == 1) {
@@ -171,6 +173,9 @@ public class Snake {
 			
 		}
 		
+		
+		//controllo dove si stia muovendo il resto del corpo
+		
 		int A = 0;
 		int B = 0;
 		
@@ -186,9 +191,13 @@ public class Snake {
 			Y = B;
 		}
 		
+		if(body.get(0).getXcoordinate()==0 || body.get(0).getXcoordinate()==11 ||body.get(0).getYcoordinate()==0 || body.get(0).getYcoordinate()==11) {
+			
+			return false;
+			
+		}
 		
-		
-		
+		return true;
 		
 	}
 	
