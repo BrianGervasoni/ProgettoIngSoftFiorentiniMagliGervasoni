@@ -9,10 +9,12 @@ import progettoAI.snakeAI.hyperparameters.*;
 
 public abstract class Layer {
 	private RealVector bias;
+	private RealVector tmpBias;
 	private RealVector preActivation;
 	private RealVector activation;
 	private RealVector derivateFromLossToBias;
 	private RealMatrix weights;
+	private RealMatrix tmpWeights;
 	private RealMatrix derivateFromLossToWeights;
 	private RealVector derivateFromLossToActivation;
 	
@@ -154,11 +156,13 @@ public abstract class Layer {
 	}
 	
 	/**
-	 * initializzate the final derivate Weights and Bias to 0
+	 * initialize the final derivate Weights and Bias to 0
 	 */
 	public void initBackPropagation() {
 		this.setDerivateFromLossToWeights(new BlockRealMatrix(this.getWeights().getRowDimension(),this.getWeights().getColumnDimension()));
 		this.setDerivateFromLossToBias(new ArrayRealVector(this.getBias().getDimension()));
+		this.tmpBias = this.getBias().copy();
+		this.tmpWeights = this.getWeights().copy();
 	}
 	
 	/**
@@ -170,19 +174,29 @@ public abstract class Layer {
 		if(backLayer != null)
 			this.derivateFromLossToActivationCalculus(backLayer);
 	}
+	
 	/**
-	 * optimizes weight and bias parameters based on the selected mode
+	 * change the value of the weights and bias to the optimized one
+	 */
+	public void optimization() {
+		this.setWeights(tmpWeights.copy());
+		this.setBias(tmpBias.copy());
+	}
+	
+	/**
+	 * optimizes weight and bias parameters based on the selected mode, it dosn't change the true value used for the forwarding,
+	 * only the method @Layer.optimization change the true value of weights and bias
 	 * @param mode (ASCEND,DESCEND)
 	 */
-	public void optimization(TypeGradientUpdate mode) {
+	public void tmpOptimization(TypeGradientUpdate mode) {
 		switch(mode){
 		case ASCEND:
-			this.setWeights(this.getWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche)));
-			this.setBias(this.getBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche)));
+			this.tmpWeights = this.tmpWeights.add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche));
+			this.tmpBias = this.tmpBias.add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche));
 			break;
 		case DESCEND:
-			this.setWeights(this.getWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche)));
-			this.setBias(this.getBias().subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche)));
+			this.tmpWeights = this.tmpWeights.subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche));
+			this.tmpBias = this.tmpBias.subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche));
 			break;
 			default:
 				break;
