@@ -209,7 +209,7 @@ public interface Functions {
 	 * @param ray
 	 * @return change the value on the array of rays (food, walls and snake) and set the array[index] = distance , for every ray that is involved
 	 */
-	public default void function(Map map, SnakeBox snakeHead, String dir, int rephase, double[] food, double[] walls, double[] snake, int[] rays) {
+	public default void setValuesArrays(Map map, SnakeBox snakeHead, String dir, int rephase, double[] food, double[] walls, double[] snake, int[] rays) {
 		for(int k=0; k<map.getMap().length; k++) {
 			for(int h=0; h<map.getMap()[0].length; h++) {
 				
@@ -224,4 +224,27 @@ public interface Functions {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param a1
+	 * @param a2
+	 * @param a3
+	 * @return the fusion of the array inputs
+	 */
+	public default double[] mergeArrays(double[] a1, double[] a2, double[] a3) {
+		
+		double[] array = inizializeArray(a1.length + a2.length + a3.length);
+		int index = 0;
+		
+		System.arraycopy(a1, 0, array, index, a1.length);
+		index = index + a1.length;
+		
+		System.arraycopy(a2, 0, array, index, a2.length);
+		index = index + a2.length;
+		
+		System.arraycopy(a3, 0, array, index, a3.length);
+		index = index + a3.length;
+		
+		return array;
+	}
 }

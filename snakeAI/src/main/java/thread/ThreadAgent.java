@@ -28,7 +28,7 @@ public class ThreadAgent extends Thread implements Functions{
 		
 	}
 	
-	/**
+	/** DEVO NORMALIZZARE RISULTATO
 	 * array in the first 60 position will have FOOD, for the next 60 position WALLS and the last 60 SNAKE
 	 * 
 	 * @param map
@@ -56,42 +56,39 @@ public class ThreadAgent extends Thread implements Functions{
 						startingDegree = 90;
 						rays = rays(startingDegree, rephase, n);
 						
-						function(map, snakeHead, dir, rephase, food, walls, snake, rays);
+						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
 						
 					} else if(snakeHead.getX() - snakeFirstBodyBox.getX() > 0) {
 						//head right and body left
 						dir = "right";
 						startingDegree = -90;
-						
 						rays = rays(startingDegree, rephase, n);
 						
-						function(map, snakeHead, dir, rephase, food, walls, snake, rays);
+						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
 					} else if(snakeHead.getY() - snakeFirstBodyBox.getY() < 0) {
 						//head down and body up
 						dir = "down";
 						startingDegree = 180;
-						
 						rays = rays(startingDegree, rephase, n);
 						
-						function(map, snakeHead, dir, rephase, food, walls, snake, rays);
+						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
 					} else {
 						//head up and body down
 						dir = "up";
 						startingDegree = 0;
-						
 						rays = rays(startingDegree, rephase, n);
 						
-						function(map, snakeHead, dir, rephase, food, walls, snake, rays);
+						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
 					}
 				}
 			}
 		}
 		
-		return null;
+		return mergeArrays(food, walls, snake);
 	}
 	
 	public Direction moveConversion(int index) {
