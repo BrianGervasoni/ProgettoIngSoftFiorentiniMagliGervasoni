@@ -7,8 +7,11 @@ import java.util.stream.Collectors;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
-public class AI {
+import model.ActionRegister;
+
+public abstract class AI {
 	private ArrayList<Layer> layers;
+	private TypeGradientUpdate mode;
 	
 	public AI(Layer[] layers) {
 		this.layers = Arrays.stream(layers).collect(Collectors.toCollection(ArrayList::new));
@@ -35,24 +38,70 @@ public class AI {
 	}
 
 	public void setLayer(ArrayList<Layer> layer) {
-		this.layers = layer;
+		this.layers = (ArrayList<Layer>) layer.clone();	
 	}
 	
+	public TypeGradientUpdate getMode() {
+		return mode;
+	}
+
+	public void setMode(TypeGradientUpdate mode) {
+		this.mode = mode;
+	}
+
 	/**
-	 * return activation of the last layer in base of a date state
+	 * return activation of the last layer in base of a date state, it dons't save the activation of all layers
 	 * @param input
 	 * @return activation of the last layer
 	 */
-	public double[] feedForwarding(double[] input) {
-		return forwarding(input,0);
+	public double[] forwarding(double[] input) {
+		return feedForwarding(input,0,false);
 	}
 	
-	private double[] forwarding(double[] input,int i) {
+	/**
+	 * recursively goes through all the layers until the last one is activated, 
+	 * if saveActivation is set to true it also saves all the intermediate activation layers, used in the backPropagation
+	 * @param input
+	 * @param i
+	 * @param saveActivation
+	 * @return
+	 */
+	private double[] feedForwarding(double[] input,int i,boolean saveActivation) {
 		if(i<layers.size()) {//if we are at the last layer, return result
 			return input;
 		}
 		//continues forwarding on all layers
-		return this.forwarding(layers.get(i).forwarding(new ArrayRealVector(input)).toArray(),i+1);
+		if(saveActivation) {
+			return this.feedForwarding(layers.get(i).backForwarding(new ArrayRealVector(input)).toArray(),i+1,saveActivation);//in this case it's also saving the intermediates activation
+		}else {
+			return this.feedForwarding(layers.get(i).forwarding(new ArrayRealVector(input)).toArray(),i+1,saveActivation);//in this case it's not saving the intermediates activation
+		}
+		
 	}
+	
+	public void initBackPropagation() {
+		layers.forEach(e ->{
+			e.initBackPropagation();
+		});
+		layers.get(layers.size()-1).setDerivateFromLossToActivation(this.derivateLoss());
+	}
+	
+	public void tmpOptimize() {
+		layers.forEach(e ->{
+			e.tmpOptimization(this.getMode());
+		});
+	}
+	
+	public void optimize() {
+		layers.forEach(e ->{
+			e.optimization();
+		});
+	}
+	
+	public void backPropagation(ActionRegister r) {//TODO
+		
+	}
+	public abstract RealVector lossCalculation();
+	public abstract RealVector derivateLoss();
 	
 }
