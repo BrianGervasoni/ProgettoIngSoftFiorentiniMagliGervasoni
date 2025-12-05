@@ -1,5 +1,7 @@
 package thread;
 
+import enumSnake.Food;
+import enumSnake.MapElem;
 import enumSnake.Snake;
 import model.*;
 import snakeGame.*;
@@ -36,8 +38,11 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double[] mapConversion(Map map) {
 		
-		double[] food, walls, snake;
-						
+		int indexFood = 0, indexWalls = 0, idexSnake = 0, startingDegree, rephase = 3, n = 60, ray;	
+		String dir;
+		int[] rays;
+		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n);
+		double distance;
 		
 		for(int i=0; i<map.getMap().length; i++) { //i get the length of the rows
 			for(int j=0; j<map.getMap()[0].length; j++) { //i get the length of the columns
@@ -46,11 +51,6 @@ public class ThreadAgent extends Thread implements Functions{
 					
 					SnakeBox snakeHead = (SnakeBox) map.getMap()[i][j];
 					SnakeBox snakeFirstBodyBox = snakeHead.getNext(1);
-
-					String dir;
-					int startingDegree, rephase = 3, n = 60, ray;
-					int[] rays;
-					double distance;
 					
 					//i calculate the direction of the snake
 					if(snakeHead.getX() - snakeFirstBodyBox.getX() < 0) {
@@ -62,9 +62,11 @@ public class ThreadAgent extends Thread implements Functions{
 						for(int k=0; k<map.getMap().length; k++) {
 							for(int h=0; h<map.getMap()[0].length; h++) {
 								
-								//CALCOLA DISTANZA VEDE CHE TIPO è L'OGGETTO E LO AGGIUNGE A RAGGI MURO O RAGGI MELA O RAGGI CORPO
 								distance = calculateDistance(map.getMap()[k][h], snakeHead);
+								
 								ray = calculateRay(map.getMap()[k][h], snakeHead, dir, rephase);
+								
+								indexFood = foundRayPosition(rays,ray);
 								
 							}
 						}

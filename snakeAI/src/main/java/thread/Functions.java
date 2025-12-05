@@ -1,9 +1,28 @@
 package thread;
 
+import enumSnake.Food;
+import enumSnake.MapElem;
+import enumSnake.Snake;
 import snakeGame.Box;
 import snakeGame.SnakeBox;
 
 public interface Functions {
+	
+	/**
+	 * 
+	 * @param array
+	 * @param n
+	 */
+	public default double[] inizializeArray(int n) {
+		
+		double[] array = new double[n];
+		
+		for(int i = 0; i<array.length; i++) {
+			array[i] = 0;
+		}
+		
+		return array;
+	}
 	
 	/**
 	 * 
@@ -123,6 +142,54 @@ public interface Functions {
 		}
 		
 		return 361;
+	}
+	
+	/**
+	 * 
+	 * @param rays
+	 * @param ray
+	 * @return the index of the ray from the 60 rays (of food or walls or snake)
+	 */
+	public default int foundRayPosition(int[] rays, int ray) {
+		
+		for(int i=0; i<rays.length; i++) {
+			
+			if(rays[i] == ray) {
+				return i;
+			}
+			
+		}
+		
+		return -1;
+	}
+	
+	/**
+	 * 
+	 * @param box
+	 * @param distance
+	 * @param food
+	 * @param walls
+	 * @param snake
+	 * @param indexFood
+	 * @param indexWall
+	 * @param indexSnake
+	 * @return to every distance calculate between the object and the head of the snake we assign a ray
+	 */
+	public default void distanceAssignedToRay(Box box,  double distance, double[] food, double[] walls, double[] snake, int indexFood, int indexWall, int indexSnake) {
+		
+		if(box.getElementType() == Food.Apple) {
+			
+			food[indexFood] = distance;
+			
+		}else if(box.getElementType() == MapElem.Wall) {
+			
+			walls[indexWall] = distance;
+			
+		}else if(box.getElementType() == Snake.Body || box.getElementType() == Snake.Tail) {
+			
+			snake[indexFood] = distance;
+			
+		}
 	}
 	
 }
