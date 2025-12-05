@@ -2,17 +2,17 @@ package boxes;
 
 public enum Direction {
 	
-	Straight{
+	Straight{ //il serpente si muove frontalmente
 		
 		
 	},
 	
-	Left{
+	Left{ //il serpente si gira alla sua sinistra
 		
 		
 	}, 
 	
-	Right{
+	Right{//il serpente si gira alla sua destra
 		
 		
 	};
