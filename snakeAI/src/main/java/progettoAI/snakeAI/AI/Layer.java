@@ -174,8 +174,7 @@ public abstract class Layer {
 	 * initialize the final derivate Weights and Bias to 0 and set the tmp parameters to the actual value
 	 */
 	public void initBackPropagation() {
-		this.setDerivateFromLossToWeights(new BlockRealMatrix(this.getWeights().getRowDimension(),this.getWeights().getColumnDimension()));
-		this.setDerivateFromLossToBias(new ArrayRealVector(this.getBias().getDimension()));
+		this.derivateReset();
 		this.setTmpBias(this.getBias());
 		this.setTmpWeights(this.getWeights());
 	}
@@ -216,6 +215,10 @@ public abstract class Layer {
 			default:
 				break;
 		}
+		this.derivateReset();
+	}
+	
+	private void derivateReset() {
 		this.setDerivateFromLossToWeights(new BlockRealMatrix(this.getWeights().getRowDimension(),this.getWeights().getColumnDimension()));//reset derivates to 0
 		this.setDerivateFromLossToBias(new ArrayRealVector(this.getBias().getDimension()));
 	}
