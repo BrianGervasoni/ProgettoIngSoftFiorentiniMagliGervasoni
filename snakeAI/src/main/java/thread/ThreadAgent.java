@@ -38,7 +38,7 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double[] mapConversion(Map map) {
 		
-		int indexFood = 0, indexWalls = 0, idexSnake = 0, startingDegree, rephase = 3, n = 60, ray;	
+		int indexFood = 0, indexWall = 0, indexSnake = 0, startingDegree, rephase = 3, n = 60, ray;	
 		String dir;
 		int[] rays;
 		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n);
@@ -67,6 +67,8 @@ public class ThreadAgent extends Thread implements Functions{
 								ray = calculateRay(map.getMap()[k][h], snakeHead, dir, rephase);
 								
 								indexFood = foundRayPosition(rays,ray);
+								
+								distanceAssignedToRay(map.getMap()[k][h], distance, food, indexFood);
 								
 							}
 						}

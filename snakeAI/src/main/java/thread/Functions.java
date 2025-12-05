@@ -167,27 +167,23 @@ public interface Functions {
 	 * 
 	 * @param box
 	 * @param distance
-	 * @param food
-	 * @param walls
-	 * @param snake
-	 * @param indexFood
-	 * @param indexWall
-	 * @param indexSnake
+	 * @param rays
+	 * @param index
 	 * @return to every distance calculate between the object and the head of the snake we assign a ray
 	 */
-	public default void distanceAssignedToRay(Box box,  double distance, double[] food, double[] walls, double[] snake, int indexFood, int indexWall, int indexSnake) {
+	public default void distanceAssignedToRay(Box box,  double distance, double[] rays, int index) {
 		
 		if(box.getElementType() == Food.Apple) {
 			
-			food[indexFood] = distance;
+			rays[index] = distance;
 			
 		}else if(box.getElementType() == MapElem.Wall) {
 			
-			walls[indexWall] = distance;
+			rays[index] = distance;
 			
 		}else if(box.getElementType() == Snake.Body || box.getElementType() == Snake.Tail) {
 			
-			snake[indexFood] = distance;
+			rays[index] = distance;
 			
 		}
 	}
