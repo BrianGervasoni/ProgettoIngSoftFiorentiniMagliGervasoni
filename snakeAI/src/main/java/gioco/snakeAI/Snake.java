@@ -19,6 +19,8 @@ public class Snake {
 	//direction del serpente
 	private Direction direction;
 	
+	private int stretchbody = 0;
+	
 	/**
 	 * costruttore della classe Snake
 	 * 
@@ -240,18 +242,24 @@ public class Snake {
 			Y = B;
 		}
 		
+		if(stretchbody == 1) {
+			
+			SnakeBox newLast = new SnakeBox(SnakeBody.Tail, X, Y, body.get(body.size() -1));
+			body.get(body.size()-1).setBodyType(SnakeBody.Body);		
+			body.add(newLast);
+			map.setBox(newLast, X, Y);
+			
+			map.setApple();
+			
+			stretchbody--;
+		}
 		
 		//controllo collisione con la mela
 		appleEaten = map.checkAppleCollision();	
 		
 		if(appleEaten == true) {
-		
-			SnakeBox newLast = new SnakeBox(SnakeBody.Tail, X, Y, body.get(body.size() -1));
-			body.add(newLast);
-			map.setBox(newLast, X, Y);
+			stretchbody++;
 			appleEaten = false;
-			
-			map.setApple();
 		}
 		
 		//controllo collisione con le pareti della mappa
