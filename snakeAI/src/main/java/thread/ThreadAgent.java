@@ -62,13 +62,14 @@ public class ThreadAgent extends Thread implements Functions{
 						for(int k=0; k<map.getMap().length; k++) {
 							for(int h=0; h<map.getMap()[0].length; h++) {
 								
+								
 								distance = calculateDistance(map.getMap()[k][h], snakeHead);
 								
 								ray = calculateRay(map.getMap()[k][h], snakeHead, dir, rephase);
 								
 								indexFood = foundRayPosition(rays,ray);
 								
-								distanceAssignedToRay(map.getMap()[k][h], distance, food, indexFood);
+								distanceAssignedToRay(map.getMap()[k][h], distance, food, walls, snake, indexFood, indexWall, indexSnake);
 								
 							}
 						}
