@@ -204,18 +204,20 @@ public abstract class Layer {
 	 * @param mode (ASCEND,DESCEND)
 	 */
 	public void tmpOptimization(TypeGradientUpdate mode) {
-		switch(mode){
+		switch(mode){//add change to the tmpParameters
 		case ASCEND:
-			this.setTmpWeights(this.getTmpWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche)));
-			this.setTmpBias(this.getTmpBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche)));
+			this.setTmpWeights(this.getTmpWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.K)));
+			this.setTmpBias(this.getTmpBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.K)));
 			break;
 		case DESCEND:
-			this.setTmpWeights(this.getTmpWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche)));
-			this.setTmpBias(this.getTmpBias().subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche)));
+			this.setTmpWeights(this.getTmpWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.K)));
+			this.setTmpBias(this.getTmpBias().subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.K)));
 			break;
 			default:
 				break;
 		}
+		this.setDerivateFromLossToWeights(new BlockRealMatrix(this.getWeights().getRowDimension(),this.getWeights().getColumnDimension()));//reset derivates to 0
+		this.setDerivateFromLossToBias(new ArrayRealVector(this.getBias().getDimension()));
 	}
 	
 	/**

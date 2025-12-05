@@ -83,7 +83,7 @@ public abstract class AI {
 		layers.forEach(e ->{
 			e.initBackPropagation();
 		});
-		layers.get(layers.size()-1).setDerivateFromLossToActivation(this.derivateLoss());
+		
 	}
 	
 	public void tmpOptimize() {
@@ -98,10 +98,25 @@ public abstract class AI {
 		});
 	}
 	
+	/**
+	 * perform a step in the backPropagation
+	 * @param r
+	 */
 	public void backPropagation(ActionRegister r) {//TODO
-		
+		/*
+		double[] newProb = this.FeedForwarding(r.state,0,true);
+		layers.get(layers.size()-1).setDerivateFromLossToActivation(this.derivateLoss(r,newPorb));
+		for(int i=layers.size()-1; i>=0; i--){
+			
+			if(i > 0)
+				layers.get(i).backPropagation(layers.get(i-1));
+			else
+				layers.get(i).backPropagation(null);
+		}
+		*/
 	}
-	public abstract RealVector lossCalculation();
-	public abstract RealVector derivateLoss();
+	
+	public abstract RealVector lossCalculation(ActionRegister r,double[] newProb);
+	public abstract RealVector derivateLoss(ActionRegister r,double[] newProb);
 	
 }
