@@ -120,11 +120,8 @@ public class Map {
 		
 	}
 	
-	public void addSnakeBody() {
+	public void initSnakeBody() {
 		
-		if(snake.getLength() == 0) {					// inizializziamo
-			
-			
 			//qui inizializziamo la testa
 			Random rand = new Random();
 			
@@ -224,13 +221,7 @@ public class Map {
 			
 			
 			
-		}else // vuol dire che ha mangiato una mela
-			
-		{
-			
-			
-			
-		}
+		
 		
 		
 		
@@ -252,6 +243,9 @@ public class Map {
 		dir2.add(Direction.Straight);
 		dir2.add(Direction.Left);
 		Random rand = new Random();
+		
+		
+		
 		
 		
 		

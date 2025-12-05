@@ -35,5 +35,10 @@ public class SnakeBox extends Box implements Visualize{
 	}
 	
 	
+	public void setNext(SnakeBox next) {
+		
+		this.next = next;
+	}
+	
 	
 }

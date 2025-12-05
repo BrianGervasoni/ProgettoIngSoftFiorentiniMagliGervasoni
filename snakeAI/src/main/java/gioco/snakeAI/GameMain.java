@@ -7,7 +7,7 @@ public class GameMain {
 	
 	public static void initialize(Map map) {
 		
-		map.addSnakeBody();			// questo piazza la testa iniziale
+		map.initSnakeBody();			// questo piazza la testa iniziale
 		map.setApple();
 	}
 	

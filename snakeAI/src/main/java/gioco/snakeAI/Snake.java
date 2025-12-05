@@ -77,6 +77,8 @@ public class Snake {
 		int NCoordX = 0;
 		int NCoordY = 0;
 		
+		Boolean appleEaten = false;
+		
 		int X = this.body.get(0).getXcoordinate();
 		int Y = this.body.get(0).getYcoordinate();
 		
@@ -174,6 +176,7 @@ public class Snake {
 		if(this.body.get(0).getXcoordinate() == map.getXapple() && this.body.get(0).getYcoordinate() == map.getYapple()){
 			
 			length++;
+			appleEaten = true;
 		}
 		
 				
@@ -195,6 +198,20 @@ public class Snake {
 			X = A;
 			Y = B;
 		}
+		
+		
+		
+		
+		if(appleEaten == true) {
+		
+			SnakeBox newLast = new SnakeBox(SnakeBody.Tail, X, Y, body.get(body.size() -1));
+			body.add(newLast);
+			map.setBox(newLast, X, Y);
+			appleEaten = false;
+			
+			map.setApple();
+		}
+		
 		
 		if(body.get(0).getXcoordinate()==0 || body.get(0).getXcoordinate()==11 ||body.get(0).getYcoordinate()==0 || body.get(0).getYcoordinate()==11) {
 			
