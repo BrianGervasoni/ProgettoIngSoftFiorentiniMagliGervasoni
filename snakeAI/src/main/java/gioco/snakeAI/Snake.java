@@ -61,7 +61,10 @@ public class Snake {
 	public int getLength() {
 		return length;
 	}
-
+	
+	public void addLength() {
+		this.length++;
+	}
 
 
 
@@ -171,17 +174,8 @@ public class Snake {
 			
 		}
 		
-		//controlliamo qua mela
-		
-		if(this.body.get(0).getXcoordinate() == map.getXapple() && this.body.get(0).getYcoordinate() == map.getYapple()){
-			
-			length++;
-			appleEaten = true;
-		}
-		
-				
-				
-				
+		appleEaten = map.checkAppleCollision();	
+					
 		//controllo dove si stia muovendo il resto del corpo
 		
 		int A = 0;
@@ -213,7 +207,7 @@ public class Snake {
 		}
 		
 		
-		if(body.get(0).getXcoordinate()==0 || body.get(0).getXcoordinate()==11 ||body.get(0).getYcoordinate()==0 || body.get(0).getYcoordinate()==11) {
+		if(body.get(0).getXcoordinate() == 0 || body.get(0).getXcoordinate() == Map.X-1 ||body.get(0).getYcoordinate() == 0 || body.get(0).getYcoordinate() == Map.Y-1) {
 			
 			return false;
 			

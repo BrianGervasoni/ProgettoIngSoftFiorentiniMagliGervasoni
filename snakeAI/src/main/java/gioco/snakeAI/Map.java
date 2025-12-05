@@ -7,13 +7,19 @@ import java.util.concurrent.TimeUnit;
 
 public class Map {
 	
-	 public static final int X = 12;
-	 public static final int Y = 12;
+	 public static final int X = 12; // grandezza massima del campo di gioco (righe)
+	 public static final int Y = 12; // grandezza massima del campo di gioco (colonne)
 
+	 //il campo di gioco è una matrice X * Y
 	private Box[][] box;
-	private Snake snake;
-	private AppleBox apple;
+	private Snake snake; // il serpente da muovere nel campo di gioco
+	private AppleBox apple; // la mela che il serpente deve consumare
 	
+	
+	/**
+	 * costruttore della classe Map
+	 * 
+	 */
 	public Map() {
 		this.box = new Box[X][Y];
 		this.apple = null;
@@ -34,24 +40,47 @@ public class Map {
 		
 	}
 	
+	/**
+	 * metodo usato per assegnare la direzione al serpente(alla testa del serpente)
+	 * 
+	 * @param dir direzione da assegnare al serpente(alla testa del serpente)
+	 */
 	public void updateStateHead(Direction dir) {
 		
 		this.snake.setDirection(dir);	
 		
 	}
 	
+	/**
+	 * metodo che controlla la collisione con la mela
+	 * @return true(collisione) o false(no collisione)
+	 */
 	public boolean checkAppleCollision() {
 		
+		//controlliamo qua la mela
 		
-		return true;
+				if(snake.getBodyPiece(0).getXcoordinate() == this.getXapple() && snake.getBodyPiece(0).getYcoordinate() == this.getYapple()){
+					
+					snake.addLength();
+					return true;
+				}
+		
+		return false;
 		
 	}
-	
+	/**
+	 * metodo per la vittoria
+	 * @return
+	 */
 	public boolean checkVictory() {
 		
 		return true;
 	}
 	
+	/**
+	 * metodo per sconfitta
+	 * @return
+	 */
 	public boolean checkDefeat() {
 		
 		return true;
@@ -61,14 +90,9 @@ public class Map {
 	
 	/**
 	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * @return
+	 *metodo per la creazione della mela nella mappa
+	 *
+	 * @return true o false
 	 */
 	public boolean setApple() {
 		
@@ -84,7 +108,7 @@ public class Map {
 			appleX = rand.nextInt(1, Map.X-1);
 			appleY = rand.nextInt(1, Map.Y-1);	
 			
-			if(((appleX != 0)&&(appleX != 11))&&((appleY != 0)&&(appleY != 11))) {
+			if(((appleX != 0)&&(appleX != Map.X-1))&&((appleY != 0)&&(appleY != Map.Y-1))) {
 				nonTrovato = false;
 			}if(getBox(appleX, appleY) instanceof SnakeBox)
 				nonTrovato = true;
@@ -98,29 +122,46 @@ public class Map {
 		return true;
 	}
 	
-	
+	/**
+	 * metodo per il recupero della coordinata X della mela
+	 * @return la coordinata X della mela
+	 */
 	public int getXapple() {
 		
 		return apple.getXcoordinate();
 	}
 	
+	/**
+	 * metodo per il recupero della coordinata Y della mela
+	 * @return la coordinata Y della mela
+	 */
 	public int getYapple() {
 		
 		return apple.getYcoordinate();
 	}
 	
 	
-	
+	/**
 	public void changeBoxType() {
 		
 		
 	}
+	*/
 	
+	
+	/**
 	public void reset() {
-		
+		Map map = new Map();
+		Snake snake = new Snake();
 		
 	}
+	*/
 	
+	
+	/**
+	 * metodo che inizializza il serpente (la testa e la prima parte del corpo)
+	 * 
+	 */
 	public void initSnakeBody() {
 		
 			//qui inizializziamo la testa
@@ -134,7 +175,7 @@ public class Map {
 			this.setBox(heead, randX, randY);
 			snake.setHead(heead);
 			
-			snake.setLength(snake.getLength() + 1);
+			snake.addLength();
 			
 			
 			//ora inizializziamo il primo pezzo di corpo
@@ -172,63 +213,15 @@ public class Map {
 			SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.Body, firstPieceX, firstPieceY, heead);
 			setBox(firstBodyPiece, firstPieceX, firstPieceY);
 			snake.addPiece(firstBodyPiece);
-			
-			
-			
-			// e ora inizializziamo il secondo pezzo di corpo
-			
-		/**	
-			int secondPieceX = 0;
-			int secondPieceY = 0;
-			Boolean nonTrovato2 = true;
-			
-			do {
-				randA = rand.nextInt(1, 101);
-				
-				if((randA <= 25)) {
-					secondPieceX = firstPieceX + 1;
-					secondPieceY = firstPieceY;
-
-				}else if((randA>25)&&(randA<=50)){
-					secondPieceX = firstPieceX - 1;
-					secondPieceY = firstPieceY;
-
-				}else if((randA>50)&&(randA<=75)){
-					secondPieceX = firstPieceX;
-					secondPieceY = firstPieceY + 1;
-
-				}else if((randA>75)&&(randA<=100)){
-					secondPieceX = firstPieceX;
-					secondPieceY = firstPieceY - 1;
-				}
-				
-				if((secondPieceX == randX)&&( secondPieceY == randY))
-					nonTrovato2 = true;	
-				else if(((secondPieceX != 0)&&(secondPieceX != 11))&&((secondPieceY != 0)&&(secondPieceY != 11)))
-					nonTrovato2 = false;
-	
-				
-			}while(nonTrovato2);
-			
-			
-			SnakeBox secondBodyPiece = new SnakeBox(SnakeBody.Tail, secondPieceX, secondPieceY, firstBodyPiece);
-			setBox(secondBodyPiece, secondPieceX, secondPieceY);
-			snake.addPiece(secondBodyPiece);
-			
-			
-			snake.setDirection(Direction.Straight);
-			
-			*/
-			
-			
-			
-		
-		
+			snake.addLength();
 		
 		
 	}
 	
-
+	/**
+	 * metodo di goco che si ripete  fino alla collisione del serpente con se stesso o i muri
+	 * 
+	 */
 	public void gameLoop() {
 		
 		
@@ -254,7 +247,7 @@ public class Map {
 	
 		int ddd = 0;
 		
-		
+		//per muovere il serpente a scelta si deve aggiungere un break point alla riga "int ddd = 0"
 		
 		Boolean ok = true;
 		Direction miao = Direction.Straight;
@@ -289,12 +282,13 @@ public class Map {
 		}**/
 		
 		
-		
-
-		//dobbiamo ancora trattare la collisione con la mela
-		
 	}
 	
+	
+	/**
+	 * metodo che resetta tutte le Box della mappa e le rende EmptyBox
+	 * 
+	 */
 	public void resetSnakeBoxes() {
 		
 		for(int i = 1; i < X-1; i++) {
@@ -311,6 +305,11 @@ public class Map {
 		
 	}
 	
+	
+	/**
+	 * metodo che cambia le EmptyBox in SnakeBox sulla base delle coordiante del body
+	 * 
+	 */
 	public void insertSnakeBoxes() {
 		
 		for(int i = 0; i < snake.getBody().size(); i++) {
@@ -320,21 +319,8 @@ public class Map {
 		}
 	}
 	
-	public void vis(int X, int Y) {
-		
-		if(getBox(X, Y) instanceof EmptyBox)
-			System.out.println("true");
-		
-		
-		System.out.println(((EmptyBox) box[X][Y]).getElem());
-		
-	}
-
 	
-	
-	
-	
-	
+	//metodi get e set dei parametri della classe Map
 	public Snake getSnake() {
 		return snake;
 	}
