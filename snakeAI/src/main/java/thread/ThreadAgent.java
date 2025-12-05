@@ -1,7 +1,5 @@
 package thread;
 
-import enumSnake.Food;
-import enumSnake.MapElem;
 import enumSnake.Snake;
 import model.*;
 import snakeGame.*;
@@ -38,11 +36,10 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double[] mapConversion(Map map) {
 		
-		int indexFood = 0, indexWall = 0, indexSnake = 0, startingDegree, rephase = 3, n = 60, ray;	
+		int startingDegree, rephase = 3, n = 60;	
 		String dir;
 		int[] rays;
 		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n);
-		double distance;
 		
 		for(int i=0; i<map.getMap().length; i++) { //i get the length of the rows
 			for(int j=0; j<map.getMap()[0].length; j++) { //i get the length of the columns
@@ -59,20 +56,8 @@ public class ThreadAgent extends Thread implements Functions{
 						startingDegree = 90;
 						rays = rays(startingDegree, rephase, n);
 						
-						for(int k=0; k<map.getMap().length; k++) {
-							for(int h=0; h<map.getMap()[0].length; h++) {
-								
-								
-								distance = calculateDistance(map.getMap()[k][h], snakeHead);
-								
-								ray = calculateRay(map.getMap()[k][h], snakeHead, dir, rephase);
-								
-								indexFood = foundRayPosition(rays,ray);
-								
-								distanceAssignedToRay(map.getMap()[k][h], distance, food, walls, snake, indexFood, indexWall, indexSnake);
-								
-							}
-						}
+						function(map, snakeHead, dir, rephase, food, walls, snake, rays);
+						
 						
 					} else if(snakeHead.getX() - snakeFirstBodyBox.getX() > 0) {
 						//head right and body left
@@ -81,6 +66,8 @@ public class ThreadAgent extends Thread implements Functions{
 						
 						rays = rays(startingDegree, rephase, n);
 						
+						function(map, snakeHead, dir, rephase, food, walls, snake, rays);
+						
 					} else if(snakeHead.getY() - snakeFirstBodyBox.getY() < 0) {
 						//head down and body up
 						dir = "down";
@@ -88,12 +75,16 @@ public class ThreadAgent extends Thread implements Functions{
 						
 						rays = rays(startingDegree, rephase, n);
 						
+						function(map, snakeHead, dir, rephase, food, walls, snake, rays);
+						
 					} else {
 						//head up and body down
 						dir = "up";
 						startingDegree = 0;
 						
 						rays = rays(startingDegree, rephase, n);
+						
+						function(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
 					}
 				}

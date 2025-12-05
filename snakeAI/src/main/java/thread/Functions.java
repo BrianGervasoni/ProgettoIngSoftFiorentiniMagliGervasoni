@@ -4,6 +4,7 @@ import enumSnake.Food;
 import enumSnake.MapElem;
 import enumSnake.Snake;
 import snakeGame.Box;
+import snakeGame.Map;
 import snakeGame.SnakeBox;
 
 public interface Functions {
@@ -18,7 +19,7 @@ public interface Functions {
 		double[] array = new double[n];
 		
 		for(int i = 0; i<array.length; i++) {
-			array[i] = 0;
+			array[i] = -1;
 		}
 		
 		return array;
@@ -175,20 +176,51 @@ public interface Functions {
 	 * @param indexSnake
 	 * @return to every distance calculate between the object and the head of the snake we assign a ray
 	 */
-	public default void distanceAssignedToRay(Box box,  double distance, double[] food, double[] walls, double[] snake, int indexFood, int indexWall, int indexSnake) {
+	public default void distanceAssignedToRay(Box box,  double distance, double[] food, double[] walls, double[] snake, int[] rays, int ray) {
+		
+		int index = foundRayPosition(rays, ray);
 		
 		if(box.getElementType() == Food.Apple) {
 			
-			food[indexFood] = distance;
+			food[index] = distance;
 			
 		}else if(box.getElementType() == MapElem.Wall) {
 			
-			walls[indexWall] = distance;
+			walls[index] = distance;
 			
 		}else if(box.getElementType() == Snake.Body || box.getElementType() == Snake.Tail) {
 			
-			snake[indexFood] = distance;
+			snake[index] = distance;
 			
+		}
+	}
+	
+	/**
+	 * 
+	 * @param map
+	 * @param snakeHead
+	 * @param dir
+	 * @param rephase
+	 * @param distance
+	 * @param food
+	 * @param walls
+	 * @param snake
+	 * @param rays
+	 * @param ray
+	 * @return change the value on the array of rays (food, walls and snake) and set the array[index] = distance , for every ray that is involved
+	 */
+	public default void function(Map map, SnakeBox snakeHead, String dir, int rephase, double[] food, double[] walls, double[] snake, int[] rays) {
+		for(int k=0; k<map.getMap().length; k++) {
+			for(int h=0; h<map.getMap()[0].length; h++) {
+				
+				
+				double distance = calculateDistance(map.getMap()[k][h], snakeHead);
+				
+				int ray = calculateRay(map.getMap()[k][h], snakeHead, dir, rephase);
+				
+				distanceAssignedToRay(map.getMap()[k][h], distance, food, walls, snake, rays, ray);
+				
+			}
 		}
 	}
 	
