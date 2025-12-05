@@ -174,8 +174,7 @@ public abstract class Layer {
 	 * initialize the final derivate Weights and Bias to 0 and set the tmp parameters to the actual value
 	 */
 	public void initBackPropagation() {
-		this.setDerivateFromLossToWeights(new BlockRealMatrix(this.getWeights().getRowDimension(),this.getWeights().getColumnDimension()));
-		this.setDerivateFromLossToBias(new ArrayRealVector(this.getBias().getDimension()));
+		this.derivateReset();
 		this.setTmpBias(this.getBias());
 		this.setTmpWeights(this.getWeights());
 	}
@@ -204,18 +203,24 @@ public abstract class Layer {
 	 * @param mode (ASCEND,DESCEND)
 	 */
 	public void tmpOptimization(TypeGradientUpdate mode) {
-		switch(mode){
+		switch(mode){//add change to the tmpParameters
 		case ASCEND:
-			this.setTmpWeights(this.getTmpWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche)));
-			this.setTmpBias(this.getTmpBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche)));
+			this.setTmpWeights(this.getTmpWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.minibacthSize)));
+			this.setTmpBias(this.getTmpBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.minibacthSize)));
 			break;
 		case DESCEND:
-			this.setTmpWeights(this.getTmpWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.epoche)));
-			this.setTmpBias(this.getTmpBias().subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.epoche)));
+			this.setTmpWeights(this.getTmpWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.minibacthSize)));
+			this.setTmpBias(this.getTmpBias().subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.minibacthSize)));
 			break;
 			default:
 				break;
 		}
+		this.derivateReset();
+	}
+	
+	private void derivateReset() {
+		this.setDerivateFromLossToWeights(new BlockRealMatrix(this.getWeights().getRowDimension(),this.getWeights().getColumnDimension()));//reset derivates to 0
+		this.setDerivateFromLossToBias(new ArrayRealVector(this.getBias().getDimension()));
 	}
 	
 	/**
