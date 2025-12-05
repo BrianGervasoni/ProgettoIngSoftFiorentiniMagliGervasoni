@@ -7,14 +7,23 @@ import boxes.*;
 
 public class Snake {
 	
+	//parti del corpo del serpente
 	private List<SnakeBox> body;
 	
+	//lunghezza del serpente
 	private int length;
 	
+	//mappa di gioco
 	private Map map;
 	
+	//direction del serpente
 	private Direction direction;
 	
+	/**
+	 * costruttore della classe Snake
+	 * 
+	 * @param map mappa di gioco
+	 */
 	public Snake(Map map) {
 		
 		this.body = new ArrayList<SnakeBox>();
@@ -24,12 +33,20 @@ public class Snake {
 		
 	}
 	
-	
+	/**
+	 * metodo usato per l'aggiunta della testa nell'Array body
+	 * @param box casella in cui è stat creata la tesat del serpente
+	 */
 	public void setHead(SnakeBox box) {
 		
 		body.add(box);
 		
 	}
+	/**
+	 * metodo usato per restituire l'array body del serpente
+	 * 
+	 * @return l'array body
+	 */
 	
 	public List getBody() {
 		
@@ -37,19 +54,32 @@ public class Snake {
 		
 	}
 	
-	
+	/**
+	 * metodo per assegnare una direzione alla testa del serpente
+	 * 
+	 * @param dir direzione da assegnare alla testa del serpente
+	 */
 	public void setDirection(Direction dir) {
 		
 		this.direction = dir;
 	}
 	
-	
+	/**
+	 * metodo che aggiunge un pezzo del corpo al serpente
+	 * 
+	 * @param piece pezzo da aggiungere all'array body del serpente
+	 */
 	public void addPiece(SnakeBox piece) {
 		
 		body.add(piece);
 	}
 
-	
+	/**
+	 * metodo usato per recuperare la parte del corpo del serpente alla posizione i dell'array body
+	 * 
+	 * @param i posizione i
+	 * @return la parte del corpo
+	 */
 	public SnakeBox getBodyPiece(int i) {
 		
 		return body.get(i);
@@ -57,24 +87,41 @@ public class Snake {
 	}
 
 	
-	
+	/**
+	 * metodo per ritornare la lunghezza del serpente
+	 * 
+	 * @return la lunghezza del serpente
+	 */
 	public int getLength() {
 		return length;
 	}
 	
+	
+	/**
+	 * metodo per allungare il serpente
+	 */
 	public void addLength() {
 		this.length++;
 	}
 
 
-
+	/**
+	 * metodo che ritorna la lunghezza attuale del serpente
+	 * 
+	 * @param length lunghezza attuale del serpente
+	 */
 	public void setLength(int length) {
 		this.length = length;
 	}
 
 
 
-
+	/**
+	 * metodo usato per muovere il serpente lungo la mappa
+	 * 
+	 * @param dir direzione del movimento
+	 * @return true(no collisioni) o false(si collisioni)
+	 */
 	public Boolean move(Direction dir) {
 		
 		int NCoordX = 0;
@@ -174,7 +221,7 @@ public class Snake {
 			
 		}
 		
-		appleEaten = map.checkAppleCollision();	
+		
 					
 		//controllo dove si stia muovendo il resto del corpo
 		
@@ -194,7 +241,8 @@ public class Snake {
 		}
 		
 		
-		
+		//controllo collisione con la mela
+		appleEaten = map.checkAppleCollision();	
 		
 		if(appleEaten == true) {
 		
@@ -206,13 +254,14 @@ public class Snake {
 			map.setApple();
 		}
 		
-		
+		//controllo collisione con le pareti della mappa
 		if(body.get(0).getXcoordinate() == 0 || body.get(0).getXcoordinate() == Map.X-1 ||body.get(0).getYcoordinate() == 0 || body.get(0).getYcoordinate() == Map.Y-1) {
 			
 			return false;
 			
 		}
 		
+		//controllo collisione con se stesso
 		for(int i = 1; i < body.size(); i ++) {
 			
 			if(body.get(0).getXcoordinate() == body.get(i).getXcoordinate() && body.get(0).getYcoordinate() == body.get(i).getYcoordinate()) {
@@ -227,15 +276,14 @@ public class Snake {
 		
 	}
 	
-	
+	/**
+	 * metodo per fare reset del serpente
+	 */
 	public void reset() {
 		
 		
 	}
 
-	
-	
-	
 	
 	
 	
