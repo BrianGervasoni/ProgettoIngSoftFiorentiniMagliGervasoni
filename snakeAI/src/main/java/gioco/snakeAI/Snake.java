@@ -11,13 +11,16 @@ public class Snake {
 	
 	private int length;
 	
+	private Map map;
+	
 	private Direction direction;
 	
-	public Snake() {
+	public Snake(Map map) {
 		
 		this.body = new ArrayList<SnakeBox>();
 		this.length = 0;
 		this.direction = Direction.Straight;
+		this.map = map;
 		
 	}
 	
@@ -85,14 +88,13 @@ public class Snake {
 			if(dir == Direction.Right) {
 			
 				NCoordY = this.body.get(0).getYcoordinate() - 1;
-			
 				this.body.get(0).setYcoordinate(NCoordY);
 			
 			}else if(dir == Direction.Left) {
 				
 				NCoordY = this.body.get(0).getYcoordinate() + 1;
-				
 				this.body.get(0).setYcoordinate(NCoordY);
+				
 			}else {
 				
 				NCoordX = this.body.get(0).getXcoordinate() + 1;
@@ -108,13 +110,11 @@ public class Snake {
 			if(dir == Direction.Right) {
 			
 				NCoordY = this.body.get(0).getYcoordinate() + 1;
-			
 				this.body.get(0).setYcoordinate(NCoordY);
 			
 			}else if(dir == Direction.Left) {
 				
 				NCoordY = this.body.get(0).getYcoordinate() - 1;
-				
 				this.body.get(0).setYcoordinate(NCoordY);
 			}else {
 				
@@ -131,13 +131,11 @@ public class Snake {
 			if(dir == Direction.Right) {
 			
 				NCoordX = this.body.get(0).getXcoordinate() + 1;
-			
 				this.body.get(0).setXcoordinate(NCoordX);
 			
 			}else if(dir == Direction.Left) {
 				
 				NCoordX = this.body.get(0).getXcoordinate() - 1;
-				
 				this.body.get(0).setXcoordinate(NCoordX);
 				
 			}else {
@@ -155,13 +153,11 @@ public class Snake {
 			if(dir == Direction.Right) {
 			
 				NCoordX = this.body.get(0).getXcoordinate() - 1;
-			
 				this.body.get(0).setXcoordinate(NCoordX);
 			
 			}else if(dir == Direction.Left) {
 				
 				NCoordX = this.body.get(0).getXcoordinate() + 1;
-				
 				this.body.get(0).setXcoordinate(NCoordX);
 				
 			}else {
@@ -173,7 +169,16 @@ public class Snake {
 			
 		}
 		
+		//controlliamo qua mela
 		
+		if(this.body.get(0).getXcoordinate() == map.getXapple() && this.body.get(0).getYcoordinate() == map.getYapple()){
+			
+			length++;
+		}
+		
+				
+				
+				
 		//controllo dove si stia muovendo il resto del corpo
 		
 		int A = 0;

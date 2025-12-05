@@ -17,7 +17,7 @@ public class Map {
 		this.box = new Box[X][Y];
 		this.apple = null;
 
-		this.snake = new Snake();
+		this.snake = new Snake(this);
 		
 		for(int i = 0; i < X ; i++) {
 			for(int k = 0; k < Y ; k++) {
@@ -96,6 +96,19 @@ public class Map {
 		
 		return true;
 	}
+	
+	
+	public int getXapple() {
+		
+		return apple.getXcoordinate();
+	}
+	
+	public int getYapple() {
+		
+		return apple.getYcoordinate();
+	}
+	
+	
 	
 	public void changeBoxType() {
 		
@@ -227,38 +240,10 @@ public class Map {
 	public void gameLoop() {
 		
 		
-		/**
-		 * 
+		/** 
 		 * prima cosa: quando il serpente si muove, cambiare tutte le coordinate
 		 * seconda cosa: aggiornare il tipo di box verso cui e da cui lo snake si muove
-		 * terzo: ristampare il tutto aggiornato
-		 * 
-		 * 
-		 * 
-		 * 
-		 * testa = 1
-		 * CORPO = 2
-		 * 
-		 * if(x1 - x2 == 1)
-		 * 
-		 * 
-		 * if(x1- x2 == -1)
-		 * 
-		 * if(y1 - y2 == 1)
-		 * 
-		 * 
-		 * if(y1 - y2 == -1)
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
+		 * terzo: ristampare il tutto aggiornato 
 		 */
 		
 		
@@ -280,7 +265,7 @@ public class Map {
 		}
 		
 		
-		//dobbiamo ancora trattare le collisioni con le pareti e se stesso
+
 		//dobbiamo ancora trattare la collisione con la mela
 		
 	}
