@@ -1,7 +1,8 @@
 package boxes;
 
-public class AppleBox extends Box {
-
+public class AppleBox extends Box implements Visualize {
+	
+	//una AppleBox può contenere o no la mela
 	private Food element;
 	
 	/**
@@ -19,9 +20,12 @@ public class AppleBox extends Box {
 		this.element = element;
 	}
 
-
+	/**
+	 * Metodo che stampa l'enumerazione contenuta nella casella che chiama il metodo
+	 * Metodo ereditato dalla interface Visualize
+	 */
+	@Override
 	public void visual() {
-		
 		
 		System.out.print(element.getFood());
 	}
