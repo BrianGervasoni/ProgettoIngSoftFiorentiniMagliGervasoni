@@ -239,6 +239,23 @@ public class Snake {
 		
 	}
 
+	
+	
+	
+	
+	
+	
+	//SOLO PER FINI DI TESTING!!!!!
+	
+	public int getXcoordinateBodyPiece(int i) {
+		
+		return body.get(i).getXcoordinate();
+	}
+	
+	public int getYcoordinateBodyPiece(int i) {
+		
+		return body.get(i).getYcoordinate();
+	}
 
 	
 

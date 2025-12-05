@@ -3,6 +3,7 @@ import boxes.*;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Map {
 	
@@ -238,17 +239,46 @@ public class Map {
 		 */
 		
 		
+		/**
 		ArrayList<Direction> dir2 = new ArrayList();
 		dir2.add(Direction.Right);
 		dir2.add(Direction.Straight);
 		dir2.add(Direction.Left);
 		Random rand = new Random();
+		*/
+		
+		//0 straight
+		//1 left
+		//2 right
+		
+	
+		int ddd = 0;
 		
 		
 		
+		Boolean ok = true;
+		Direction miao = Direction.Straight;
+		
+		do {
+		
+			System.out.println("di homer da");
+			
+			if(ddd == 0) miao = Direction.Straight;
+			else if(ddd == 1) miao = Direction.Left;
+			else if(ddd == 2) miao = Direction.Right;
+			
+			
+			ok = snake.move(miao);
+			resetSnakeBoxes();
+			insertSnakeBoxes();
+			GameMain.visualize(this);
+			
+			
+		}while(ok);
 		
 		
 		
+		/**
 		while(snake.move(dir2.get(rand.nextInt(3))) == true) {
 			
 			resetSnakeBoxes();
@@ -256,7 +286,8 @@ public class Map {
 			GameMain.visualize(this);
 			
 			
-		}
+		}**/
+		
 		
 		
 
