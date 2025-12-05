@@ -56,5 +56,15 @@ public class SnakeBox extends Box implements Visualize{
 		this.next = next;
 	}
 	
+	/**
+	 * metodo che altera l'enumerazione Snake Body della Box che chiama il metodo
+	 * @param element enumerazione di Snake Body
+	 */
+	public void setBodyType(SnakeBody element) {
+		
+		this.element = element;
+		
+	}
+	
 	
 }
