@@ -4,23 +4,41 @@ import boxes.*;
 
 public class GameMain {
 
-	
+	/**
+	 * costruttore della classe GameMain
+	 * 
+	 * @param map mappa di gioco
+	 */
 	public static void initialize(Map map) {
 		
 		map.initSnakeBody();			// questo piazza la testa iniziale
 		map.setApple();
 	}
 	
+	/**
+	 * metodo per l'secuzione continua del gioco
+	 * 
+	 * @param map mappa di gioco
+	 */
 	public static void gameLoop(Map map) {
 		map.gameLoop();
 		
 	}
 	
+	/**
 	public static void close(Map map) {
 		
 		
 	}
 	
+	*/
+	
+	
+	/**
+	 * metodo per la visualizzazione della mappa nella console
+	 * 
+	 * @param map mappa di gioco
+	 */
 	public static void visualize(Map map) {
 		
 		for(int i = 0; i < map.X; i++) {			// i sono le righe		questo for fa passare le righe
@@ -66,7 +84,11 @@ public class GameMain {
 	}
 	
 	
-	
+	/**
+	 * Metodo principale per l'esecuzione del programma
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		
 		Map map = new Map();
