@@ -48,10 +48,12 @@ public class GameMain {
 					System.out.println();
 				}
 				
-				if(((y==0) && (i==0))||((y==0) && (i==map.X-1))||((y==map.Y-1) && (i==0))||((y==map.X-1) && (i==map.Y-1)))
+				if(((y==0) && (i==0))||((y==0) && (i==map.X-1))||((y==map.Y-1) && (i==0))||((i==map.X-1) && (y==map.Y-1)))
 					System.out.print("+");
-				else if((i==0)||(i==map.Y-1))
+				else if((i==0)||(i==map.X-1))
 					System.out.print("--");
+				else if((y==0)||(y==map.Y-1))
+					System.out.print("|");
 				else
 					map.getBox(i, y).visual();
 				

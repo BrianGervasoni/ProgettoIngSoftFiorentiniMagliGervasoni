@@ -253,8 +253,6 @@ public class Map {
 		Direction miao = Direction.Straight;
 		
 		do {
-		
-			System.out.println("di homer da");
 			
 			if(ddd == 0) miao = Direction.Straight;
 			else if(ddd == 1) miao = Direction.Left;
