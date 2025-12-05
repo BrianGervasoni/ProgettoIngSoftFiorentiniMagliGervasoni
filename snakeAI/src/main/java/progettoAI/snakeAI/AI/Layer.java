@@ -205,12 +205,12 @@ public abstract class Layer {
 	public void tmpOptimization(TypeGradientUpdate mode) {
 		switch(mode){//add change to the tmpParameters
 		case ASCEND:
-			this.setTmpWeights(this.getTmpWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.K)));
-			this.setTmpBias(this.getTmpBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.K)));
+			this.setTmpWeights(this.getTmpWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.minibacthSize)));
+			this.setTmpBias(this.getTmpBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.minibacthSize)));
 			break;
 		case DESCEND:
-			this.setTmpWeights(this.getTmpWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.K)));
-			this.setTmpBias(this.getTmpBias().subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.K)));
+			this.setTmpWeights(this.getTmpWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.minibacthSize)));
+			this.setTmpBias(this.getTmpBias().subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.minibacthSize)));
 			break;
 			default:
 				break;
