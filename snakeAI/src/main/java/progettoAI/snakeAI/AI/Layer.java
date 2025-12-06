@@ -137,7 +137,7 @@ public abstract class Layer {
 	 * get the derivate of the pre activation function in respect of the weights
 	 * @return
 	 */
-	public RealVector derivateFromPreActivationToWeights() {
+	private RealVector derivateFromPreActivationToWeights() {
 		return activation;
 	}
 	
@@ -145,7 +145,7 @@ public abstract class Layer {
 	 * get the derivate of the pre activation function in respect to the activation of the below layer
 	 * @return
 	 */
-	public RealMatrix derivateFromPreActivationToActivation() {
+	private RealMatrix derivateFromPreActivationToActivation() {
 		return this.getWeights();
 	}
 	
