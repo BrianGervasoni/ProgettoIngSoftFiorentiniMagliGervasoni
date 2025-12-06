@@ -1,7 +1,9 @@
 package thread;
 
+import boxes.Direction;
+import gioco.snakeAI.GameMain;
+import gioco.snakeAI.Map;
 import model.*;
-import snakeGame.*;
 
 public class ThreadAgent extends Thread{
 

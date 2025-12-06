@@ -1,10 +1,10 @@
 package thread;
 
-import enumSnake.Snake;
+import boxes.Direction;
+import boxes.SnakeBody;
+import boxes.SnakeBox;
 import model.ActionRegister;
-import snakeGame.Direction;
-import snakeGame.Map;
-import snakeGame.SnakeBox;
+import gioco.snakeAI.*;
 
 public class Intermediary implements Functions{
 	
@@ -28,16 +28,16 @@ public class Intermediary implements Functions{
 		int[] rays;
 		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n);
 		
-		for(int i=0; i<map.getMap().length; i++) { //i get the length of the rows
-			for(int j=0; j<map.getMap()[0].length; j++) { //i get the length of the columns
+		for(int i=0; i<map.X; i++) { //i get the length of the rows
+			for(int j=0; j<map.Y; j++) { //i get the length of the columns
 				
-				if((map.getMap()[i][j] instanceof SnakeBox) && ((Snake) map.getMap()[i][j].getElementType() == Snake.Head)) {
+				if((map.getBox(i, j).equals(SnakeBody.HEAD))) {
 					
-					SnakeBox snakeHead = (SnakeBox) map.getMap()[i][j];
-					SnakeBox snakeFirstBodyBox = snakeHead.getNext(1);
+					SnakeBox snakeHead = (SnakeBox) map.getBox(i, j);
+					SnakeBox snakeFirstBodyBox = map.getSnake().getBodyPiece(1);
 					
 					//i calculate the direction of the snake
-					if(snakeHead.getX() - snakeFirstBodyBox.getX() < 0) {
+					if(snakeHead.getXcoordinate() - snakeFirstBodyBox.getXcoordinate() < 0) {
 						//head left and body right
 						dir = "left";
 						startingDegree = 90;
@@ -46,7 +46,7 @@ public class Intermediary implements Functions{
 						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
 						
-					} else if(snakeHead.getX() - snakeFirstBodyBox.getX() > 0) {
+					} else if(snakeHead.getXcoordinate() - snakeFirstBodyBox.getXcoordinate() > 0) {
 						//head right and body left
 						dir = "right";
 						startingDegree = -90;
@@ -54,7 +54,7 @@ public class Intermediary implements Functions{
 						
 						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
-					} else if(snakeHead.getY() - snakeFirstBodyBox.getY() < 0) {
+					} else if(snakeHead.getYcoordinate()- snakeFirstBodyBox.getYcoordinate() < 0) {
 						//head down and body up
 						dir = "down";
 						startingDegree = 180;

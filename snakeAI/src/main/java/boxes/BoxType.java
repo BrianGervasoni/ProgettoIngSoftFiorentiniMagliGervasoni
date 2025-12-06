@@ -1,4 +1,4 @@
-package enumSnake;
+package boxes;
 
 public interface BoxType {
 

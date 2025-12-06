@@ -4,6 +4,22 @@ import boxes.*;
 
 public class GameMain {
 
+	Map map;
+	
+	public GameMain() {
+		
+		this.map = new Map();
+		
+	}
+	
+	public Map getMap() {
+		return map;
+	}
+
+	public void setMap(Map map) {
+		this.map = map;
+	}
+
 	/**
 	 * costruttore della classe GameMain
 	 * 

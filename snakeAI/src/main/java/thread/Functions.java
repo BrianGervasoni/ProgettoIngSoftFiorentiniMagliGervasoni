@@ -1,11 +1,7 @@
 package thread;
 
-import enumSnake.Food;
-import enumSnake.MapElem;
-import enumSnake.Snake;
-import snakeGame.Box;
-import snakeGame.Map;
-import snakeGame.SnakeBox;
+import boxes.*;
+import gioco.snakeAI.Map;
 
 public interface Functions {
 	
@@ -69,8 +65,8 @@ public interface Functions {
 	 */
 	public default double calculateAngle(Box box, SnakeBox snakeHead, String dir) {
 		
-		int deltaX = box.getX() - snakeHead.getX();
-		int deltaY = box.getY() - snakeHead.getY();
+		int deltaX = box.getXcoordinate() - snakeHead.getXcoordinate();
+		int deltaY = box.getYcoordinate() - snakeHead.getYcoordinate();
 				
 		//the angle between the head and the object, it's in radiant and it is in the range [- pi; +pi]
 		double alpha = Math.atan2(deltaY, deltaX);
@@ -105,8 +101,8 @@ public interface Functions {
 	 */
 	public default double calculateDistance(Box box, SnakeBox snakeHead) {
 		
-		double x = Math.abs(snakeHead.getX() - box.getX());
-		double y = Math.abs(snakeHead.getY() - box.getY());
+		double x = Math.abs(snakeHead.getXcoordinate() - box.getXcoordinate());
+		double y = Math.abs(snakeHead.getYcoordinate() - box.getYcoordinate());
 		double distance = Math.sqrt((x*x)+(y*y));
 		
 		return distance;
@@ -127,7 +123,7 @@ public interface Functions {
 		
 		int closest, ray;
 		
-		if(box.getX() != snakeHead.getX() && box.getY() != snakeHead.getY()) {
+		if(box.getXcoordinate() != snakeHead.getXcoordinate() && box.getYcoordinate() != snakeHead.getYcoordinate()) {
 			
 			double alpha = calculateAngle(box, snakeHead, dir);
 			
@@ -177,15 +173,15 @@ public interface Functions {
 		
 		int index = foundRayPosition(rays, ray);
 		
-		if(box.getElementType() == Food.Apple) {
+		if(box.getElementType() == Food.APPLE) {
 			
 			food[index] = distance;
 			
-		}else if(box.getElementType() == MapElem.Wall) {
+		}else if(box.getElementType() == MapElem.WALL) {
 			
 			walls[index] = distance;
 			
-		}else if(box.getElementType() == Snake.Body || box.getElementType() == Snake.Tail) {
+		}else if(box.getElementType() == SnakeBody.BODY || box.getElementType() == SnakeBody.TAIL) {
 			
 			snake[index] = distance;
 			
@@ -207,15 +203,15 @@ public interface Functions {
 	 * @return change the value on the array of rays (food, walls and snake) and set the array[index] = distance , for every ray that is involved
 	 */
 	public default void setValuesArrays(Map map, SnakeBox snakeHead, String dir, int rephase, double[] food, double[] walls, double[] snake, int[] rays) {
-		for(int k=0; k<map.getMap().length; k++) {
-			for(int h=0; h<map.getMap()[0].length; h++) {
+		for(int k=0; k<map.X; k++) {
+			for(int h=0; h<map.Y; h++) {
 				
-				int ray = calculateRay(map.getMap()[k][h], snakeHead, dir, rephase);
+				int ray = calculateRay(map.getBox(k, h), snakeHead, dir, rephase);
 				
 				if(ray != 361) {
 					
-					double distance = calculateDistance(map.getMap()[k][h], snakeHead);
-					distanceAssignedToRay(map.getMap()[k][h], distance, food, walls, snake, rays, ray);
+					double distance = calculateDistance(map.getBox(k, h), snakeHead);
+					distanceAssignedToRay(map.getBox(k, h), distance, food, walls, snake, rays, ray);
 					
 				}
 				

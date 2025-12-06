@@ -3,17 +3,15 @@ package thread;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import enumSnake.Food;
-import enumSnake.Snake;
-import snakeGame.*;
+import boxes.*;
 
 class IntermediaryTest {
 
 	int n = 5, x = 4, y = 5, rephase = 3;
 	int[] raysTest = new int[n];
 	Intermediary intermediary = new Intermediary();
-	Box apple = new AppleBox(x,y);
-	SnakeBox head= new SnakeBox(0,0);
+	Box apple = new AppleBox(Food.APPLE,x,y);
+	SnakeBox head= new SnakeBox(SnakeBody.HEAD,0,0,null);
 	String dir;
 	
 	
@@ -56,8 +54,6 @@ class IntermediaryTest {
 	//VERIFICATO CHE NEL ES. HEAD (0,0) VEDE APPLE (5,4) SE DIR è UP O RIGHT , SE è LEFT O DOWN NON LO VEDE
 	@Test
 	void calculateAngle() {
-		
-		head.setElementType(Snake.Head);
 		dir = "right";
 		double angle = intermediary.calculateAngle(apple, head, dir);
 		double angleTest = Math.toDegrees(Math.atan2(5, 4));
@@ -77,7 +73,6 @@ class IntermediaryTest {
 	@Test
 	void calculateRay() {
 		
-		head.setElementType(Snake.Head);
 		dir = "right";
 		int rayTest = 51;
 		int ray = intermediary.calculateRay(apple, head, dir, rephase);
@@ -102,8 +97,7 @@ class IntermediaryTest {
 	void distanceAssignedToRay(){
 		
 		int degree = 0;
-		Box apple1 = new AppleBox(2,0);
-		apple1.setElementType(Food.Apple);
+		Box apple1 = new AppleBox(Food.APPLE,2,0);
 		double distance = intermediary.calculateDistance(apple1, head); 
 		double[] food = intermediary.inizializeArray(n), walls = intermediary.inizializeArray(n), snake = intermediary.inizializeArray(n);
 		int[] rays = intermediary.rays(degree, rephase, n); 
