@@ -3,7 +3,7 @@ package thread;
 import model.*;
 import snakeGame.*;
 
-public class ThreadAgent extends Thread implements Functions{
+public class ThreadAgent extends Thread{
 
 	Model model;
 	ActionRegister[] actionRegister;
