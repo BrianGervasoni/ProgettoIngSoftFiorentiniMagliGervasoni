@@ -3,7 +3,7 @@ package boxes;
 public class EmptyBox extends Box implements Visualize{
 
 	//Una EmptyBox può essere vuota o contenere una parete del campo 
-	public MapElem element;
+	private MapElem element;
 	
 	/**
 	 * Questo è il costruttore della classe EmptyBox

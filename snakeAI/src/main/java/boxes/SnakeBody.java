@@ -2,17 +2,17 @@ package boxes;
 
 public enum SnakeBody {
 
-	Head("O ", ""){ //tesat del serpente
+	HEAD("O ", ""){ //tesat del serpente
 		
 		
 	},
 	
-	Body("| " , "--"){//corpo del serpente
+	BODY("| " , "--"){//corpo del serpente
 		
 		
 	},
 	
-	Tail("| " , "--"){//coda del serpente
+	TAIL("| " , "--"){//coda del serpente
 		
 		
 	};

@@ -2,12 +2,12 @@ package boxes;
 
 public enum MapElem {
 
-	Empty ("  "){ //casella vuota
+	EMPTY ("  "){ //casella vuota
 		
 		
 	}, 
 	
-	Wall ("|"){//muro della mappa
+	WALL ("|"){//muro della mappa
 		
 		
 	};

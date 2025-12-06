@@ -3,7 +3,7 @@ package boxes;
 public enum Food {
 
 	
-	Apple("A "){ //la mela obiettivo del serpente
+	APPLE("A "){ //la mela obiettivo del serpente
 		
 		
 	};

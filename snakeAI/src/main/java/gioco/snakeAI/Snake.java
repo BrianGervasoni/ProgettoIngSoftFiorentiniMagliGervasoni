@@ -30,7 +30,7 @@ public class Snake {
 		
 		this.body = new ArrayList<SnakeBox>();
 		this.length = 0;
-		this.direction = Direction.Straight;
+		this.direction = Direction.STRAIGHT;
 		this.map = map;
 		
 	}
@@ -139,12 +139,12 @@ public class Snake {
 		//si stava muovendo verso il basso
 		if(X - this.body.get(1).getXcoordinate() == 1) {
 			
-			if(dir == Direction.Right) {
+			if(dir == Direction.RIGHT) {
 			
 				NCoordY = this.body.get(0).getYcoordinate() - 1;
 				this.body.get(0).setYcoordinate(NCoordY);
 			
-			}else if(dir == Direction.Left) {
+			}else if(dir == Direction.LEFT) {
 				
 				NCoordY = this.body.get(0).getYcoordinate() + 1;
 				this.body.get(0).setYcoordinate(NCoordY);
@@ -161,12 +161,12 @@ public class Snake {
 		//si stava muovendo verso l'alto
 		if(X - this.body.get(1).getXcoordinate() == -1) {
 			
-			if(dir == Direction.Right) {
+			if(dir == Direction.RIGHT) {
 			
 				NCoordY = this.body.get(0).getYcoordinate() + 1;
 				this.body.get(0).setYcoordinate(NCoordY);
 			
-			}else if(dir == Direction.Left) {
+			}else if(dir == Direction.LEFT) {
 				
 				NCoordY = this.body.get(0).getYcoordinate() - 1;
 				this.body.get(0).setYcoordinate(NCoordY);
@@ -182,12 +182,12 @@ public class Snake {
 		//si stava muovendo verso la destra
 		if(Y - this.body.get(1).getYcoordinate() == 1) {
 			
-			if(dir == Direction.Right) {
+			if(dir == Direction.RIGHT) {
 			
 				NCoordX = this.body.get(0).getXcoordinate() + 1;
 				this.body.get(0).setXcoordinate(NCoordX);
 			
-			}else if(dir == Direction.Left) {
+			}else if(dir == Direction.LEFT) {
 				
 				NCoordX = this.body.get(0).getXcoordinate() - 1;
 				this.body.get(0).setXcoordinate(NCoordX);
@@ -204,12 +204,12 @@ public class Snake {
 		//si stava muovendo verso la sinistra
 		if(Y - this.body.get(1).getYcoordinate() == -1) {
 			
-			if(dir == Direction.Right) {
+			if(dir == Direction.RIGHT) {
 			
 				NCoordX = this.body.get(0).getXcoordinate() - 1;
 				this.body.get(0).setXcoordinate(NCoordX);
 			
-			}else if(dir == Direction.Left) {
+			}else if(dir == Direction.LEFT) {
 				
 				NCoordX = this.body.get(0).getXcoordinate() + 1;
 				this.body.get(0).setXcoordinate(NCoordX);
@@ -244,8 +244,8 @@ public class Snake {
 		
 		if(stretchbody == 1) {
 			
-			SnakeBox newLast = new SnakeBox(SnakeBody.Tail, X, Y, body.get(body.size() -1));
-			body.get(body.size()-1).setBodyType(SnakeBody.Body);		
+			SnakeBox newLast = new SnakeBox(SnakeBody.TAIL, X, Y, body.get(body.size() -1));
+			body.get(body.size()-1).setBodyType(SnakeBody.BODY);		
 			body.add(newLast);
 			map.setBox(newLast, X, Y);
 			
@@ -291,22 +291,6 @@ public class Snake {
 		
 		
 	}
-
-	
-	
-	
-	//SOLO PER FINI DI TESTING!!!!!
-	
-	public int getXcoordinateBodyPiece(int i) {
-		
-		return body.get(i).getXcoordinate();
-	}
-	
-	public int getYcoordinateBodyPiece(int i) {
-		
-		return body.get(i).getYcoordinate();
-	}
-
 	
 
 }

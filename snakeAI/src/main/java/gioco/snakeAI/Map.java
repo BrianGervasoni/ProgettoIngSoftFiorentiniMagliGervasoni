@@ -29,11 +29,11 @@ public class Map {
 		for(int i = 0; i < X ; i++) {
 			for(int k = 0; k < Y ; k++) {
 				if(i == 0 || i == X-1 || k == 0 || k == Y-1) {
-					this.box[i][k] = new EmptyBox(MapElem.Wall, i, k);
+					this.box[i][k] = new EmptyBox(MapElem.WALL, i, k);
 					
 				}
 				else {
-					this.box[i][k] = new EmptyBox(MapElem.Empty, i , k);
+					this.box[i][k] = new EmptyBox(MapElem.EMPTY, i , k);
 				}
 			}
 		}
@@ -116,7 +116,7 @@ public class Map {
 			
 		}while(nonTrovato);
 		
-		this.apple = new AppleBox(Food.Apple, appleX, appleY);
+		this.apple = new AppleBox(Food.APPLE, appleX, appleY);
 		setBox(apple, appleX, appleY);	
 		
 		return true;
@@ -170,7 +170,7 @@ public class Map {
 			int randX = rand.nextInt(1, Map.X-1);
 			int randY = rand.nextInt(1, Map.Y-1);
 			
-			SnakeBox heead = new SnakeBox(SnakeBody.Head, randX, randY, null);
+			SnakeBox heead = new SnakeBox(SnakeBody.HEAD, randX, randY, null);
 			
 			this.setBox(heead, randX, randY);
 			snake.setHead(heead);
@@ -188,19 +188,19 @@ public class Map {
 			Boolean nonTrovato = true;
 			
 			do {
-				if((randA <= 25) && (( (EmptyBox) box[randX+1][randY]).getEnum() == MapElem.Empty )) {
+				if((randA <= 25) && (( (EmptyBox) box[randX+1][randY]).getEnum() == MapElem.EMPTY )) {
 					firstPieceX = randX + 1;
 					firstPieceY = randY;
 					nonTrovato = false;
-				}else if((randA>25)&&(randA<=50) && (( (EmptyBox) box[randX-1][randY]).getEnum() == MapElem.Empty )){
+				}else if((randA>25)&&(randA<=50) && (( (EmptyBox) box[randX-1][randY]).getEnum() == MapElem.EMPTY )){
 					firstPieceX = randX - 1;
 					firstPieceY = randY;
 					nonTrovato = false;
-				}else if((randA>50)&&(randA<=75) && (( (EmptyBox) box[randX][randY+1]).getEnum() == MapElem.Empty )){
+				}else if((randA>50)&&(randA<=75) && (( (EmptyBox) box[randX][randY+1]).getEnum() == MapElem.EMPTY )){
 					firstPieceX = randX;
 					firstPieceY = randY + 1;
 					nonTrovato = false;
-				}else if((randA>75)&&(randA<=100) && (( (EmptyBox) box[randX+1][randY-1]).getEnum() == MapElem.Empty )){
+				}else if((randA>75)&&(randA<=100) && (( (EmptyBox) box[randX+1][randY-1]).getEnum() == MapElem.EMPTY )){
 					firstPieceX = randX;
 					firstPieceY = randY - 1;
 					nonTrovato = false;
@@ -210,7 +210,7 @@ public class Map {
 				
 			}while(nonTrovato);
 			
-			SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.Body, firstPieceX, firstPieceY, heead);
+			SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, firstPieceX, firstPieceY, heead);
 			setBox(firstBodyPiece, firstPieceX, firstPieceY);
 			snake.addPiece(firstBodyPiece);
 			snake.addLength();
@@ -250,13 +250,13 @@ public class Map {
 		//per muovere il serpente a scelta si deve aggiungere un break point alla riga "int ddd = 0"
 		
 		Boolean ok = true;
-		Direction miao = Direction.Straight;
+		Direction miao = Direction.STRAIGHT;
 		
 		do {
 			
-			if(ddd == 0) miao = Direction.Straight;
-			else if(ddd == 1) miao = Direction.Left;
-			else if(ddd == 2) miao = Direction.Right;
+			if(ddd == 0) miao = Direction.STRAIGHT;
+			else if(ddd == 1) miao = Direction.LEFT;
+			else if(ddd == 2) miao = Direction.RIGHT;
 			
 			
 			ok = snake.move(miao);
@@ -293,7 +293,7 @@ public class Map {
 			for (int k = 1; k < Y-1; k++) {
 				
 				if(box[i][k] instanceof SnakeBox) {
-					box[i][k] = new EmptyBox(MapElem.Empty, i, k);
+					box[i][k] = new EmptyBox(MapElem.EMPTY, i, k);
 					
 				}
 				
@@ -325,14 +325,6 @@ public class Map {
 
 	public void setSnake(Snake snake) {
 		this.snake = snake;
-	}
-
-	public static int getX() {
-		return X;
-	}
-
-	public static int getY() {
-		return Y;
 	}
 	
 	public Box getBox(int X, int Y) {
