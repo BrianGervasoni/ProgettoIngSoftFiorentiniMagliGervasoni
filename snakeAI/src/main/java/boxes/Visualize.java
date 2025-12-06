@@ -1,0 +1,8 @@
+package boxes;
+
+public interface Visualize {
+	
+	//metodo usato per ritornare l'enumerazione contenuta nella Box chiamante
+	public  void visual();
+	
+}
