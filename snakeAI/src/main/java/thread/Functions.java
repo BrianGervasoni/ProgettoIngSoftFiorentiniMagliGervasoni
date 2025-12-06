@@ -122,9 +122,6 @@ public interface Functions {
 	 * @param snakeHead
 	 * @param dir
 	 * @param rephase = 3 degree
-	 * COSI  PER ES. CON VISTA DA [0; 180] HO OGGETTO A (3,-5) E QUINDI ANGOLO 
-	 * CON ARCTAN(-5/3) +180, HO UN ANGOLO DI TIPO 151,36374671
-	 * DIVIDO PER 3 E OTTENGO 50,3333 E ARROTONDO PER AVERE 50, RIMOLTIPLICANDO *3 HO IL RAGGIO CHE SAREBBE 150!	
 	 */
 	public default int calculateRay(Box box, SnakeBox snakeHead, String dir, int rephase) {
 		
@@ -213,12 +210,14 @@ public interface Functions {
 		for(int k=0; k<map.getMap().length; k++) {
 			for(int h=0; h<map.getMap()[0].length; h++) {
 				
-				
-				double distance = calculateDistance(map.getMap()[k][h], snakeHead);
-				
 				int ray = calculateRay(map.getMap()[k][h], snakeHead, dir, rephase);
 				
-				distanceAssignedToRay(map.getMap()[k][h], distance, food, walls, snake, rays, ray);
+				if(ray != 361) {
+					
+					double distance = calculateDistance(map.getMap()[k][h], snakeHead);
+					distanceAssignedToRay(map.getMap()[k][h], distance, food, walls, snake, rays, ray);
+					
+				}
 				
 			}
 		}
