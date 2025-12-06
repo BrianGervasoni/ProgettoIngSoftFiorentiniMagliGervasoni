@@ -3,6 +3,7 @@ package thread;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import enumSnake.Food;
 import enumSnake.Snake;
 import model.Model;
 import snakeGame.*;
@@ -101,10 +102,49 @@ class ThreadAgentTest {
 
 	@Test 
 	void distanceAssignedToRay(){
+		
 		int degree = 0;
-		double distance = threadAgent.calculateDistance(apple, head); 
+		Box apple1 = new AppleBox(2,0);
+		apple1.setElementType(Food.Apple);
+		double distance = threadAgent.calculateDistance(apple1, head); 
 		double[] food = threadAgent.inizializeArray(n), walls = threadAgent.inizializeArray(n), snake = threadAgent.inizializeArray(n);
 		int[] rays = threadAgent.rays(degree, rephase, n); 
-		int ray;
+		int ray = 0;
+		
+		threadAgent.distanceAssignedToRay(apple1, distance, food, walls, snake, rays, ray);
+	
+		double[] foodTest = threadAgent.inizializeArray(n), wallsTest = threadAgent.inizializeArray(n), snakeTest = threadAgent.inizializeArray(n);
+		
+		foodTest[0] = 2;
+		foodTest[1] = -1;
+		foodTest[2] = -1;
+		foodTest[3] = -1;
+		foodTest[4] = -1;
+		
+		assertArrayEquals(foodTest, food);
+		assertArrayEquals(wallsTest, walls);
+		assertArrayEquals(snakeTest, snake);
+		
+		//TESTO ANCHE IL MERGEARRAY :
+		double[] mergeArray = threadAgent.mergeArrays(food, walls, snake);
+		double[] mATest = new double[n*3];
+		mATest[0] = 2;
+		mATest[1] = -1;
+		mATest[2] = -1;
+		mATest[3] = -1;
+		mATest[4] = -1;
+		mATest[5] = -1;
+		mATest[6] = -1;
+		mATest[7] = -1;
+		mATest[8] = -1;
+		mATest[9] = -1;
+		mATest[10] = -1;
+		mATest[11] = -1;
+		mATest[12] = -1;
+		mATest[13] = -1;
+		mATest[14] = -1;
+	
+		assertArrayEquals(mATest, mergeArray);
 	}
+	
 }
