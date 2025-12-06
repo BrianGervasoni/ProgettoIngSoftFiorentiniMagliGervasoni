@@ -31,9 +31,9 @@ public interface Functions {
 	 * @param snakeFirstBodyBox
 	 * @param startingDegree
 	 * @param rePhasing = 3 , every straight line is rephrase for a value of 3 degree
-	 * @param n = 60 , number of straight lines
+	 * @param n = 61 , number of straight lines
 	 * 
-	 * @return angle of the various 60 rays that represent the view of the head of the snake
+	 * @return angle of the various 61 rays that represent the view of the head of the snake
 	 */
 	public default int[] rays(int startingDegree, int rePhasing, int n) {
 		
@@ -114,7 +114,7 @@ public interface Functions {
 	
 	/**
 	 * 
-	 * @param rays (60 rays for food, 60 rays for walls or 60 rays for snake's body)
+	 * @param rays (61 rays for food, 61 rays for walls or 61 rays for snake's body)
 	 * @param boxtype (food, walls or snake)
 	 * @param map
 	 * @param snakeFirstBodyBox
@@ -146,7 +146,7 @@ public interface Functions {
 	 * 
 	 * @param rays
 	 * @param ray
-	 * @return the index of the ray from the 60 rays (of food or walls or snake)
+	 * @return the index of the ray from the 61 rays (of food or walls or snake)
 	 */
 	public default int foundRayPosition(int[] rays, int ray) {
 		

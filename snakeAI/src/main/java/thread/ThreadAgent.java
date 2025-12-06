@@ -30,14 +30,14 @@ public class ThreadAgent extends Thread implements Functions{
 	}
 	
 	/** DEVO NORMALIZZARE RISULTATO
-	 * array in the first 60 position will have FOOD, for the next 60 position WALLS and the last 60 SNAKE
+	 * array in the first 61 position will have FOOD, for the next 61 position WALLS and the last 61 SNAKE
 	 * 
 	 * @param map
 	 * @return normalization of the distance of the snake's head and the elements
 	 */
 	public double[] mapConversion(Map map) {
 		
-		int startingDegree, rephase = 3, n = 60;	
+		int startingDegree, rephase = 3, n = 61;	
 		String dir;
 		int[] rays;
 		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n);
