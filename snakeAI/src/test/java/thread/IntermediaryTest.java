@@ -5,15 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import enumSnake.Food;
 import enumSnake.Snake;
-import model.Model;
 import snakeGame.*;
 
-class ThreadAgentTest {
+class IntermediaryTest {
 
 	int n = 5, x = 4, y = 5, rephase = 3;
 	int[] raysTest = new int[n];
-	Model model = null;
-	ThreadAgent threadAgent = new ThreadAgent(model);
+	Intermediary intermediary = new Intermediary();
 	Box apple = new AppleBox(x,y);
 	SnakeBox head= new SnakeBox(0,0);
 	String dir;
@@ -26,7 +24,7 @@ class ThreadAgentTest {
 		int[] rays = new int[n];
 		int degree = 180;
 		
-		rays = threadAgent.rays(degree, rephase, n);
+		rays = intermediary.rays(degree, rephase, n);
 		
 		raysTest[0] = 180;
 		raysTest[1] = 183;
@@ -44,7 +42,7 @@ class ThreadAgentTest {
 		int[] rays = new int[n];
 		int degree = -180;
 			
-		rays = threadAgent.rays(degree, rephase, n);
+		rays = intermediary.rays(degree, rephase, n);
 			
 		raysTest[0] = 180;
 		raysTest[1] = 183;
@@ -61,7 +59,7 @@ class ThreadAgentTest {
 		
 		head.setElementType(Snake.Head);
 		dir = "right";
-		double angle = threadAgent.calculateAngle(apple, head, dir);
+		double angle = intermediary.calculateAngle(apple, head, dir);
 		double angleTest = Math.toDegrees(Math.atan2(5, 4));
 		
 		assertEquals(angleTest, angle);
@@ -82,7 +80,7 @@ class ThreadAgentTest {
 		head.setElementType(Snake.Head);
 		dir = "right";
 		int rayTest = 51;
-		int ray = threadAgent.calculateRay(apple, head, dir, rephase);
+		int ray = intermediary.calculateRay(apple, head, dir, rephase);
 		
 		assertEquals(rayTest, ray);
 	}
@@ -91,10 +89,10 @@ class ThreadAgentTest {
 	void foundRayPosition() {
 		
 		int degree = 0;
-		int[] rays = threadAgent.rays(degree, rephase, n);
+		int[] rays = intermediary.rays(degree, rephase, n);
 		int ray = 6;
 		
-		int index = threadAgent.foundRayPosition(rays, ray);
+		int index = intermediary.foundRayPosition(rays, ray);
 		int indexTest = 2;
 		
 		assertEquals(indexTest, index);
@@ -106,14 +104,14 @@ class ThreadAgentTest {
 		int degree = 0;
 		Box apple1 = new AppleBox(2,0);
 		apple1.setElementType(Food.Apple);
-		double distance = threadAgent.calculateDistance(apple1, head); 
-		double[] food = threadAgent.inizializeArray(n), walls = threadAgent.inizializeArray(n), snake = threadAgent.inizializeArray(n);
-		int[] rays = threadAgent.rays(degree, rephase, n); 
+		double distance = intermediary.calculateDistance(apple1, head); 
+		double[] food = intermediary.inizializeArray(n), walls = intermediary.inizializeArray(n), snake = intermediary.inizializeArray(n);
+		int[] rays = intermediary.rays(degree, rephase, n); 
 		int ray = 0;
 		
-		threadAgent.distanceAssignedToRay(apple1, distance, food, walls, snake, rays, ray);
+		intermediary.distanceAssignedToRay(apple1, distance, food, walls, snake, rays, ray);
 	
-		double[] foodTest = threadAgent.inizializeArray(n), wallsTest = threadAgent.inizializeArray(n), snakeTest = threadAgent.inizializeArray(n);
+		double[] foodTest = intermediary.inizializeArray(n), wallsTest = intermediary.inizializeArray(n), snakeTest = intermediary.inizializeArray(n);
 		
 		foodTest[0] = 2;
 		foodTest[1] = -1;
@@ -126,7 +124,7 @@ class ThreadAgentTest {
 		assertArrayEquals(snakeTest, snake);
 		
 		//TESTO ANCHE IL MERGEARRAY :
-		double[] mergeArray = threadAgent.mergeArrays(food, walls, snake);
+		double[] mergeArray = intermediary.mergeArrays(food, walls, snake);
 		double[] mATest = new double[n*3];
 		mATest[0] = 2;
 		mATest[1] = -1;
