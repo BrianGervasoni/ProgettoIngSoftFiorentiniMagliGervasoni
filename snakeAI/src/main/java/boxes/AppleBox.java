@@ -29,5 +29,19 @@ public class AppleBox extends Box implements Visualize {
 		
 		System.out.print(element.getFood());
 	}
+
+	@Override
+	public BoxType getElementType() {
+		
+		return this.element;
+		
+	}
+
+	@Override
+	public void setElementType(BoxType boxType) {
+		
+		this.element = (Food) boxType;
+		
+	}
 	
 }

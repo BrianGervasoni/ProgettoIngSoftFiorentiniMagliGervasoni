@@ -48,6 +48,16 @@ public class EmptyBox extends Box implements Visualize{
 	public MapElem getEnum() {
 		return element;
 	}
+
+	@Override
+	public BoxType getElementType() {
+		return this.element;
+	}
+
+	@Override
+	public void setElementType(BoxType boxType) {
+		this.element = (MapElem) boxType;
+	}
 	
 	
 }

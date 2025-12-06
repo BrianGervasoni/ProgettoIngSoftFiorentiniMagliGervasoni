@@ -66,5 +66,19 @@ public class SnakeBox extends Box implements Visualize{
 		
 	}
 	
+	@Override
+	public BoxType getElementType() {
+		
+		return this.element;
+		
+	}
+
+	@Override
+	public void setElementType(BoxType boxType) {
+		
+		this.element = (SnakeBody) boxType;
+		
+	}
+	
 	
 }

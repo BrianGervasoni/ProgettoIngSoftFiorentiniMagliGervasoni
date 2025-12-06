@@ -1,6 +1,6 @@
 package boxes;
 
-public enum Food {
+public enum Food implements BoxType{
 
 	
 	APPLE("A "){ //la mela obiettivo del serpente

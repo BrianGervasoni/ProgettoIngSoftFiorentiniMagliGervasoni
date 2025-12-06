@@ -1,6 +1,6 @@
 package boxes;
 
-public enum SnakeBody {
+public enum SnakeBody implements BoxType{
 
 	HEAD("O ", ""){ //tesat del serpente
 		

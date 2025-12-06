@@ -1,6 +1,6 @@
 package boxes;
 
-public enum MapElem {
+public enum MapElem implements BoxType{
 
 	EMPTY ("  "){ //casella vuota
 		
