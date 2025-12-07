@@ -79,6 +79,9 @@ public abstract class AI {
 		
 	}
 	
+	/**
+	 * initialize the derivates and tmp parameters for the backPropagation
+	 */
 	public void initBackPropagation() {
 		layers.forEach(e ->{
 			e.initBackPropagation();
@@ -110,10 +113,12 @@ public abstract class AI {
 	 * @param r
 	 */
 	public void backPropagation(ActionRegister r) {
-		
+		// perform the forwarding saving the intermediary state used for calculate the derivates
 		double[] newProb = this.feedForwarding(r.state,0,true);
+		// set the starting derivate from loss to activation
 		layers.get(layers.size()-1).setDerivateFromLossToActivation(this.derivateLoss(r,newProb));
-		for(int i=layers.size()-1; i>=0; i--){
+		
+		for(int i=layers.size()-1; i>=0; i--){//perform the backPropagation for every layer
 			
 			if(i > 0)
 				layers.get(i).backPropagation(layers.get(i-1));
