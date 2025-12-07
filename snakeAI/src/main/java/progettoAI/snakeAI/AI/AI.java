@@ -86,9 +86,9 @@ public abstract class AI {
 		
 	}
 	
-	public void tmpOptimize() {
+	public void tmpOptimize(int minibatchSize) {
 		layers.forEach(e ->{
-			e.tmpOptimization(this.getMode());
+			e.tmpOptimization(this.getMode(),minibatchSize);
 		});
 	}
 	
