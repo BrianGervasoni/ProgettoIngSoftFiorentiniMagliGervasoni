@@ -116,7 +116,20 @@ public abstract class AI {
 		
 	}
 	
+	/**
+	 * return the loss function for every outputs
+	 * @param r
+	 * @param newProb
+	 * @return
+	 */
 	public abstract RealVector lossCalculation(ActionRegister r,double[] newProb);
+	
+	/**
+	 * return the derivate from the loss function to the activation
+	 * @param r
+	 * @param newProb
+	 * @return
+	 */
 	public abstract RealVector derivateLoss(ActionRegister r,double[] newProb);
 	
 }
