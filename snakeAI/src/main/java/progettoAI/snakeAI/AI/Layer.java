@@ -155,7 +155,7 @@ public abstract class Layer {
 	 */
 	public void derivateCalculus() {
 		RealMatrix tmpDAct = this.derivateFromLossToPreActivation();
-		this.derivateFromLossToWeights.add( Tools.createColumnMatrixFromVector(this.derivateFromPreActivationToWeights(),1).multiply(tmpDAct));
+		this.derivateFromLossToWeights.add(MatrixUtils.createColumnRealMatrix(this.derivateFromPreActivationToWeights().toArray()).multiply(tmpDAct));
 		
 		this.derivateFromLossToBias.add(tmpDAct.operate(this.getDerivateFromLossToActivation()));//calculus derivate from loss to bias
 	}
