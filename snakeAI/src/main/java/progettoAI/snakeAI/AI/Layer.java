@@ -201,16 +201,17 @@ public abstract class Layer {
 	 * optimizes weight and bias parameters based on the selected mode, it dosn't change the true value used for the forwarding,
 	 * only the method @Layer.optimization change the true value of weights and bias
 	 * @param mode (ASCEND,DESCEND)
+	 * @param minibatchSize
 	 */
-	public void tmpOptimization(TypeGradientUpdate mode) {
+	public void tmpOptimization(TypeGradientUpdate mode,int minibacthSize) {
 		switch(mode){//add change to the tmpParameters
 		case ASCEND:
-			this.setTmpWeights(this.getTmpWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.minibacthSize)));
-			this.setTmpBias(this.getTmpBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.minibacthSize)));
+			this.setTmpWeights(this.getTmpWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/minibacthSize)));
+			this.setTmpBias(this.getTmpBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/minibacthSize)));
 			break;
 		case DESCEND:
-			this.setTmpWeights(this.getTmpWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.minibacthSize)));
-			this.setTmpBias(this.getTmpBias().subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.minibacthSize)));
+			this.setTmpWeights(this.getTmpWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/minibacthSize)));
+			this.setTmpBias(this.getTmpBias().subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/minibacthSize)));
 			break;
 			default:
 				break;
