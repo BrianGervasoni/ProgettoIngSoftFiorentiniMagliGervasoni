@@ -123,7 +123,7 @@ public abstract class AI {
 			if(i > 0)
 				layers.get(i).backPropagation(layers.get(i-1));
 			else
-				layers.get(i).backPropagation(null);//if it doesn't exist a back layer set it to null
+				layers.get(i).backPropagation(null);//if it doesn't exist a back layer don't perform the derivate form loss to activation
 		}
 		
 	}
