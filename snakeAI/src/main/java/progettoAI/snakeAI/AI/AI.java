@@ -86,12 +86,19 @@ public abstract class AI {
 		
 	}
 	
+	/**
+	 * optimize the tmp parameters, don't touch the true parameters
+	 * @param minibatchSize (number of samples used during backPropagation)
+	 */
 	public void tmpOptimize(int minibatchSize) {
 		layers.forEach(e ->{
 			e.tmpOptimization(this.getMode(),minibatchSize);
 		});
 	}
 	
+	/**
+	 * optimize the true value of the parameters using the tmp parameters optimized during backPropagation
+	 */
 	public void optimize() {
 		layers.forEach(e ->{
 			e.optimization();
