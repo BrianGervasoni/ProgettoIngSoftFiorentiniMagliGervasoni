@@ -56,4 +56,34 @@ public final class Tools {
         // Il metodo multiply() esegue la moltiplicazione standard tra matrici
         return colMatrix.multiply(rowMatrix);
     }
+	
+	/**
+	 * perform the clip function
+	 * @param x
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static double clip(double x, double a, double b) {
+		if(x<a)
+			return a;
+		if(x>b)
+			return b;
+		return x;
+	}
+	
+	/**
+	 * perform the derivate of the clip function
+	 * @param x
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static double derivateClip(double x, double a, double b) {
+		if(x<a)
+			return 0;
+		if(x>b)
+			return 0;
+		return 1;
+	}
 }

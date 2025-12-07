@@ -21,4 +21,8 @@ public class ActionRegister {
 		
 	}
 	
+	public double oldSelectAction() {
+		return this.actionsProb[this.indexAction];
+	}
+	
 }

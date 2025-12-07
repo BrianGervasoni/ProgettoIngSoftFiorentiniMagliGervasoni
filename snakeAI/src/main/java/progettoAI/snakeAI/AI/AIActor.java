@@ -1,0 +1,116 @@
+package progettoAI.snakeAI.AI;
+
+import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.RealVector;
+
+import model.ActionRegister;
+import progettoAI.snakeAI.tools.Tools;
+import progettoAI.snakeAI.hyperparameters.*;
+
+public class AIActor extends AI {
+
+	public AIActor(Layer[] layers,TypeGradientUpdate mode) {
+		super(layers);
+		this.setMode(mode);
+	}
+
+	public AIActor(int[] lenLayer,TypeGradientUpdate mode) {
+		super(lenLayer);
+		this.setMode(mode);
+	}
+
+	@Override
+	public RealVector lossCalculation(ActionRegister r, double[] newProb) {
+		RealVector l = entropy(newProb).mapMultiply(Hyperparameters.entropyContribution);
+
+		l.addToEntry(r.indexAction, lossClip(r,newProb));
+		return l;
+	}
+
+	@Override
+	public RealVector derivateLoss(ActionRegister r, double[] newProb) {
+		RealVector l = derivateEntropy(newProb).mapMultiply(Hyperparameters.entropyContribution);
+		l.addToEntry(r.indexAction, derivateLossClip(r,newProb));
+		return l;
+	}
+	
+	/**
+	 * calculate how much likely an action have change
+	 * @param newProb
+	 * @param oldProb
+	 * @return
+	 */
+	private double policyRatio(double newProb, double oldProb) {
+		return (2*(1+newProb)/(1+oldProb))-1; //avoid the n/0 problem
+	}
+	
+	/**
+	 * calculate the derivate of the policy ratio
+	 * @param oldProb
+	 * @return
+	 */
+	private double derivatePolicyRatio(double oldProb) {
+		return 2/(1+oldProb);
+	}
+	
+	/**
+	 * calculate the entropy of all actions
+	 * @param probs
+	 * @return
+	 */
+	private RealVector entropy(double[] probs) {
+		RealVector x= new ArrayRealVector(probs.length);
+		for(int i=0; i < probs.length; i++) {
+			x.addToEntry(i, -probs[i]*Math.log(probs[i]));
+		}
+		return x;
+	}
+	/**
+	 * calculate the derivate of the entropy term
+	 * @param probs
+	 * @return
+	 */
+	private RealVector derivateEntropy(double[] probs) {
+		RealVector x= new ArrayRealVector(probs.length);
+		for(int i=0; i < probs.length; i++) {
+			x.addToEntry(i, -(Math.log(probs[i])+1));
+		}
+		return x;
+	}
+	
+	/**
+	 * calculate the clip term of the loss function
+	 * @param r
+	 * @param newProb
+	 * @return
+	 */
+	private double lossClip(ActionRegister r, double[] newProb) {
+		return Math.min(policyRatio(newProb[r.indexAction],r.oldSelectAction()) * r.advantage,
+				Tools.clip(policyRatio(newProb[r.indexAction],r.oldSelectAction()),1-Hyperparameters.motivation,1+Hyperparameters.motivation) 
+				* r.advantage);
+	}
+	
+	/**
+	 * calculate the derivate of the loss clip
+	 * @param r
+	 * @param newProb
+	 * @return
+	 */
+	private double derivateLossClip(ActionRegister r, double[] newProb) {
+		if(r.advantage > 0) {
+			if(policyRatio(newProb[r.indexAction],r.oldSelectAction()) > 1+Hyperparameters.motivation) {
+				return 0;
+			}
+				
+		}else {
+			if(policyRatio(newProb[r.indexAction],r.oldSelectAction()) < 1-Hyperparameters.motivation) {
+				return 0;
+			}
+		}
+		
+		return r.advantage * derivatePolicyRatio(r.oldSelectAction());
+	}
+	
+	
+
+}

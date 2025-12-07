@@ -102,10 +102,10 @@ public abstract class AI {
 	 * perform a step in the backPropagation
 	 * @param r
 	 */
-	public void backPropagation(ActionRegister r) {//TODO
-		/*
-		double[] newProb = this.FeedForwarding(r.state,0,true);
-		layers.get(layers.size()-1).setDerivateFromLossToActivation(this.derivateLoss(r,newPorb));
+	public void backPropagation(ActionRegister r) {
+		
+		double[] newProb = this.feedForwarding(r.state,0,true);
+		layers.get(layers.size()-1).setDerivateFromLossToActivation(this.derivateLoss(r,newProb));
 		for(int i=layers.size()-1; i>=0; i--){
 			
 			if(i > 0)
@@ -113,7 +113,7 @@ public abstract class AI {
 			else
 				layers.get(i).backPropagation(null);
 		}
-		*/
+		
 	}
 	
 	public abstract RealVector lossCalculation(ActionRegister r,double[] newProb);

@@ -9,4 +9,5 @@ public final class Hyperparameters {
 	public static double gamma = 0.95; 
 	public static int timeStep = 30;
 	public static double motivation = 0.3;
+	public static double entropyContribution = 0.5;
 }
