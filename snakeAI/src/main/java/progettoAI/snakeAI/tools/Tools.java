@@ -14,10 +14,10 @@ public final class Tools {
 	}
 	
 	/**
-	 * copy the vector that rappresent a row of a matrix nRow time
+	 * copy the vector that rapresents a row of a matrix nRow time
 	 * @param v
 	 * @param nRow
-	 * @return
+	 * @return RealMatrix
 	 */
 	public static RealMatrix createRowMatrixFromVector(RealVector v, int nRow) {
 		if(nRow == 1) {
@@ -41,19 +41,22 @@ public final class Tools {
 		return MatrixUtils.createRealMatrix(tmp);
 	}
 	
+	/**
+	 * perform the outerProduct (u * v)
+	 * @param u (M X 1)
+	 * @param v (1 X N)
+	 * @return RealMatrix
+	 */
 	public static RealMatrix outerProduct(RealVector u, RealVector v) {
-        // Passo 1: Converti u in una matrice colonna (M x 1)
-        // MatrixUtils.createColumnFieldMatrix crea una matrice con una singola colonna
+        // Step 1: Convert u to a column matrix (M x 1)
         RealMatrix colMatrix = MatrixUtils.createColumnRealMatrix(u.toArray());
 
-        // Passo 2: Converti v in una matrice riga (1 x N)
-        // Array2DRowRealMatrix(double[][]) dove il primo array è la singola riga
+        // Step 2: Convert v to a row matrix (1 x N)
         double[][] vData = new double[1][v.getDimension()];
         vData[0] = v.toArray();
         RealMatrix rowMatrix = new Array2DRowRealMatrix(vData);
 
-        // Passo 3: Moltiplica le due matrici (M x 1) * (1 x N) = (M x N)
-        // Il metodo multiply() esegue la moltiplicazione standard tra matrici
+        // Step 3: Multiply the two matrices (M x 1) * (1 x N) = (M x N)
         return colMatrix.multiply(rowMatrix);
     }
 	
@@ -62,7 +65,7 @@ public final class Tools {
 	 * @param x
 	 * @param a
 	 * @param b
-	 * @return
+	 * @return double
 	 */
 	public static double clip(double x, double a, double b) {
 		if(x<a)
@@ -77,7 +80,7 @@ public final class Tools {
 	 * @param x
 	 * @param a
 	 * @param b
-	 * @return
+	 * @return double
 	 */
 	public static double derivateClip(double x, double a, double b) {
 		if(x<a)
