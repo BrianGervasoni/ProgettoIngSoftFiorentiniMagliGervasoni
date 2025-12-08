@@ -6,16 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import boxes.*;
 
-
 public class TestBox {
 
-	@Test
-	public void testCreateBox() {
-		
-		
-		
-		
-	}
+	//eh, volevi!
+	// come puoi testare una classe astratta? ;-)
 	
 	
 }

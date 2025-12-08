@@ -26,9 +26,9 @@ public class AppleBox extends Box implements Visualize, Equals {
 	 * @return 
 	 */
 	@Override
-	public String visual() {
+	public void visual() {
 		
-		return element.getFood();
+		// element.getFood();
 	}
 
 	@Override

@@ -13,12 +13,14 @@ public class EmptyBox extends Box implements Visualize, Equals{
 	 * @param Ycoordinate riceve in ingresso la coordinata Y della Box
 	 */
 	public EmptyBox(MapElem element, int Xcoordinate, int Ycoordinate) {
-		super(Xcoordinate, Xcoordinate);
+		super(Xcoordinate, Ycoordinate);
 		this.element = element;
 		
 		
 	}
 
+	
+	
 	/**
 	 * Metodo che stampa l'enumerazione contenuta nella casella che chiama il metodo
 	 * Metodo ereditato dalla interface Visualize
