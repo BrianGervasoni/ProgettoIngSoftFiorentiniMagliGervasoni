@@ -2,8 +2,11 @@ package progettoAI.snakeAI.AI;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 import model.ActionRegister;
+import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 
 public class AICritic extends AI {
 
@@ -16,17 +19,17 @@ public class AICritic extends AI {
 		super(lenLayer);
 		this.setMode(mode);
 	}
-
+	
 	@Override
-	public RealVector lossCalculation(ActionRegister r, double[] newProb) {
+	public INDArray singleLossCalculation(ActionRegister r,INDArray newProb) {
 		RealVector x = new ArrayRealVector();
-		return x.append(Math.pow(r.vEstimated-r.vTarget, 2));
+		return Nd4j.create(x.append(Math.pow(r.vEstimated-r.vTarget, 2)).toArray());
 	}
-
+	
 	@Override
-	public RealVector derivateLoss(ActionRegister r, double[] newProb) {
+	public INDArray singleDerivateLoss(ActionRegister r,INDArray newProb) {
 		RealVector x = new ArrayRealVector();
-		return x.append(2*(r.vEstimated-r.vTarget));
+		return Nd4j.create(x.append(2*(r.vEstimated-r.vTarget)).toArray());
 	}
 
 }

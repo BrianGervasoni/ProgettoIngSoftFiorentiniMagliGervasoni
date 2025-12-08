@@ -2,10 +2,16 @@ package progettoAI.snakeAI.AI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.math3.linear.ArrayRealVector;
-import org.apache.commons.math3.linear.RealVector;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.activations.*;
+import org.nd4j.linalg.activations.impl.*;
+import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.learning.config.Sgd; // Necessario per l'ottimizzatore
+import org.nd4j.common.primitives.Pair;
+import org.nd4j.linalg.api.*; // Per calcolare la media della Loss;
 
 import model.ActionRegister;
 
@@ -55,7 +61,7 @@ public abstract class AI {
 	 * @return activation of the last layer
 	 */
 	public double[] forwarding(double[] input) {
-		return feedForwarding(input,0,false);
+		return feedForwarding(Nd4j.create(input),0,false).toDoubleVector();
 	}
 	
 	/**
@@ -66,82 +72,102 @@ public abstract class AI {
 	 * @param saveActivation
 	 * @return
 	 */
-	private double[] feedForwarding(double[] input,int i,boolean saveActivation) {
+	private INDArray feedForwarding(INDArray input,int i,boolean saveActivation) {
 		if(i<layers.size()) {//if we are at the last layer, return result
 			return input;
 		}
 		//continues forwarding on all layers
 		if(saveActivation) {
-			return this.feedForwarding(layers.get(i).backForwarding(new ArrayRealVector(input)).toArray(),i+1,saveActivation);//in this case it's also saving the intermediates activation
+			return this.feedForwarding(layers.get(i).forwardPass(input),i+1,saveActivation);//in this case it's also saving the intermediates activation
 		}else {
-			return this.feedForwarding(layers.get(i).forwarding(new ArrayRealVector(input)).toArray(),i+1,saveActivation);//in this case it's not saving the intermediates activation
+			return this.feedForwarding(layers.get(i).forwarding(input),i+1,saveActivation);//in this case it's not saving the intermediates activation
 		}
 		
-	}
-	
-	/**
-	 * initialize the derivates and tmp parameters for the backPropagation
-	 */
-	public void initBackPropagation() {
-		layers.forEach(e ->{
-			e.initBackPropagation();
-		});
-		
-	}
-	
-	/**
-	 * optimize the tmp parameters, don't touch the true parameters
-	 * @param minibatchSize (number of samples used during backPropagation)
-	 */
-	public void tmpOptimize(int minibatchSize) {
-		layers.forEach(e ->{
-			e.tmpOptimization(this.getMode(),minibatchSize);
-		});
-	}
-	
-	/**
-	 * optimize the true value of the parameters using the tmp parameters optimized during backPropagation
-	 */
-	public void optimize() {
-		layers.forEach(e ->{
-			e.optimization();
-		});
 	}
 	
 	/**
 	 * perform a step in the backPropagation
 	 * @param r
 	 */
-	public void backPropagation(ActionRegister r) {
+	public void backPropagation(ActionRegister[] r) {
+		INDArray tmpR = copyStateIntoINDArray(r,r.length);
+		
 		// perform the forwarding saving the intermediary state used for calculate the derivates
-		double[] newProb = this.feedForwarding(r.state,0,true);
+		INDArray newProb = this.feedForwarding(tmpR,0,true);
+		
+		
 		// set the starting derivate from loss to activation
-		layers.get(layers.size()-1).setDerivateFromLossToActivation(this.derivateLoss(r,newProb));
+		INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb),this.getMode());
 		
-		for(int i=layers.size()-1; i>=0; i--){//perform the backPropagation for every layer
-			
-			if(i > 0)
-				layers.get(i).backPropagation(layers.get(i-1));
-			else
-				layers.get(i).backPropagation(null);//if it doesn't exist a back layer don't perform the derivate form loss to activation
+		for(int i=layers.size()-2; i>=0; i--){//perform the backPropagation for every layer
+				dLdA = layers.get(i).backPropagation(dLdA,this.getMode());
 		}
-		
 	}
 	
 	/**
-	 * return the loss function for every outputs
+	 * convert subArray in r state into a matrix (lengthState X minibatchSize)
 	 * @param r
-	 * @param newProb
-	 * @return
+	 * @param minibatchSize
+	 * @return matrix (lengthState X minibatchSize)
 	 */
-	public abstract RealVector lossCalculation(ActionRegister r,double[] newProb);
+	private INDArray copyStateIntoINDArray(ActionRegister[] r,int minibatchSize) {
+		int stateLength = r[0].state.length;
+		double[] tmp = new double[stateLength * minibatchSize];
+		int offset = 0;
+		
+		for (ActionRegister register : r) {
+		    System.arraycopy(register.state, 0, tmp, offset, stateLength);
+		    offset += stateLength;
+		}
+		
+		return Nd4j.create(tmp).reshape(stateLength,minibatchSize);
+	}
 	
 	/**
-	 * return the derivate from the loss function to the activation
+	 * return the aggregate loss function
 	 * @param r
 	 * @param newProb
 	 * @return
 	 */
-	public abstract RealVector derivateLoss(ActionRegister r,double[] newProb);
+	public INDArray lossCalculation(ActionRegister[] r,INDArray newProb) {
+		INDArray l = Nd4j.zeros(newProb.rows());
+		
+		for(int i=0; i<newProb.columns(); i++) {
+			l.addi(singleLossCalculation(r[i],newProb.getRow(i)));
+		}
+		
+		return l.mul(1/newProb.columns());
+	}
+	
+	/**
+	 * return the aggregate derivate loss function
+	 * @param r
+	 * @param newProb
+	 * @return
+	 */
+	public INDArray derivateLoss(ActionRegister[] r,INDArray newProb) {
+		INDArray l = Nd4j.zeros(newProb.rows());
+		for(int i=0; i<newProb.columns(); i++) {
+			l.addi(singleDerivateLoss(r[i],newProb.getRow(i)));
+		}
+		
+		return l.mul(1/newProb.columns());
+	}
+	
+	/**
+	 * perform a single loss calculation
+	 * @param r
+	 * @param newProb
+	 * @return
+	 */
+	public abstract INDArray singleLossCalculation(ActionRegister r,INDArray newProb);
+	
+	/**
+	 * perform a single derivate loss
+	 * @param r
+	 * @param newProb
+	 * @return
+	 */
+	public abstract INDArray singleDerivateLoss(ActionRegister r,INDArray newProb);
 	
 }

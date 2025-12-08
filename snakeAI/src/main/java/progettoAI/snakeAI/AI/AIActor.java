@@ -2,6 +2,9 @@ package progettoAI.snakeAI.AI;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.lossfunctions.impl.LossMCXENT;
 
 import model.ActionRegister;
 import progettoAI.snakeAI.tools.Tools;
@@ -18,20 +21,20 @@ public class AIActor extends AI {
 		super(lenLayer);
 		this.setMode(mode);
 	}
-
+	
 	@Override
-	public RealVector lossCalculation(ActionRegister r, double[] newProb) {
-		RealVector l = entropy(newProb).mapMultiply(Hyperparameters.entropyContribution);
-
-		l.addToEntry(r.indexAction, lossClip(r,newProb));
-		return l;
+	public INDArray singleLossCalculation(ActionRegister r,INDArray newProb) {
+		RealVector l = entropy(newProb.toDoubleVector()).mapMultiply(Hyperparameters.entropyContribution);
+		l.addToEntry(r.indexAction, lossClip(r,newProb.toDoubleVector()));
+		return Nd4j.create(l.toArray());
 	}
-
+	
 	@Override
-	public RealVector derivateLoss(ActionRegister r, double[] newProb) {
-		RealVector l = derivateEntropy(newProb).mapMultiply(Hyperparameters.entropyContribution);
-		l.addToEntry(r.indexAction, derivateLossClip(r,newProb));
-		return l;
+	public INDArray singleDerivateLoss(ActionRegister r,INDArray newProb) {
+		RealVector l = derivateEntropy(newProb.toDoubleVector()).mapMultiply(Hyperparameters.entropyContribution);
+		l.addToEntry(r.indexAction, derivateLossClip(r,newProb.toDoubleVector()));
+		
+		return Nd4j.create(l.toArray());
 	}
 	
 	/**
