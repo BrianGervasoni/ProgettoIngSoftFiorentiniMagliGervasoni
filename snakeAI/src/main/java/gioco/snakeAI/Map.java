@@ -222,7 +222,7 @@ public class Map {
 	 * metodo di goco che si ripete  fino alla collisione del serpente con se stesso o i muri
 	 * 
 	 */
-	public void gameLoop() {
+	public void makeSnakeMove(Direction dir) {
 		
 		
 		/** 
@@ -231,54 +231,11 @@ public class Map {
 		 * terzo: ristampare il tutto aggiornato 
 		 */
 		
-		
-		/**
-		ArrayList<Direction> dir2 = new ArrayList();
-		dir2.add(Direction.Right);
-		dir2.add(Direction.Straight);
-		dir2.add(Direction.Left);
-		Random rand = new Random();
-		*/
-		
-		//0 straight
-		//1 left
-		//2 right
-		
-	
-		int ddd = 0;
-		
-		//per muovere il serpente a scelta si deve aggiungere un break point alla riga "int ddd = 0"
-		
-		Boolean ok = true;
-		Direction miao = Direction.STRAIGHT;
-		
-		do {
-			
-			if(ddd == 0) miao = Direction.STRAIGHT;
-			else if(ddd == 1) miao = Direction.LEFT;
-			else if(ddd == 2) miao = Direction.RIGHT;
-			
-			
-			ok = snake.move(miao);
+
+			snake.move(dir);
 			resetSnakeBoxes();
 			insertSnakeBoxes();
 			GameMain.visualize(this);
-			
-			
-		}while(ok);
-		
-		
-		
-		/**
-		while(snake.move(dir2.get(rand.nextInt(3))) == true) {
-			
-			resetSnakeBoxes();
-			insertSnakeBoxes();
-			GameMain.visualize(this);
-			
-			
-		}**/
-		
 		
 	}
 	

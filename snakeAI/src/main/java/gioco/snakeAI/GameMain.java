@@ -6,6 +6,8 @@ public class GameMain {
 
 	Map map;
 	
+	
+	
 	public GameMain() {
 		
 		this.map = new Map();
@@ -31,23 +33,6 @@ public class GameMain {
 		map.setApple();
 	}
 	
-	/**
-	 * metodo per l'secuzione continua del gioco
-	 * 
-	 * @param map mappa di gioco
-	 */
-	public static void gameLoop(Map map) {
-		map.gameLoop();
-		
-	}
-	
-	/**
-	public static void close(Map map) {
-		
-		
-	}
-	
-	*/
 	
 	
 	/**
@@ -102,25 +87,9 @@ public class GameMain {
 	}
 	
 	
-	/**
-	 * Metodo principale per l'esecuzione del programma
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
+	public void giveDirections(Direction dir) {
 		
-		Map map = new Map();
-		
-		
-		initialize(map);			// a posto!!!!!!!
-		visualize(map);
-		gameLoop(map);
-		
-		
-		
-		
-		//close(map);
-
+		map.makeSnakeMove(dir);
 	}
 	
 	
