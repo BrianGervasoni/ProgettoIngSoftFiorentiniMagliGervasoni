@@ -2,16 +2,11 @@ package progettoAI.snakeAI.AI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.activations.*;
-import org.nd4j.linalg.activations.impl.*;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.learning.config.Sgd; // Necessario per l'ottimizzatore
-import org.nd4j.common.primitives.Pair;
-import org.nd4j.linalg.api.*; // Per calcolare la media della Loss;
+
 
 import model.ActionRegister;
 

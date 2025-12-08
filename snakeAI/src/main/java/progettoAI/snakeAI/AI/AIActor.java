@@ -4,7 +4,6 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.lossfunctions.impl.LossMCXENT;
 
 import model.ActionRegister;
 import progettoAI.snakeAI.tools.Tools;

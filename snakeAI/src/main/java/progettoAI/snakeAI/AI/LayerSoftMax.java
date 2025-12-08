@@ -1,12 +1,7 @@
 package progettoAI.snakeAI.AI;
 
-import org.apache.commons.math3.analysis.UnivariateFunction;
-import org.apache.commons.math3.linear.*;
-import org.apache.commons.math3.util.FastMath;
-import org.nd4j.linalg.activations.impl.ActivationIdentity;
 import org.nd4j.linalg.activations.impl.ActivationSoftmax;
 
-import progettoAI.snakeAI.tools.Tools;
 
 public class LayerSoftMax extends Layer {
 

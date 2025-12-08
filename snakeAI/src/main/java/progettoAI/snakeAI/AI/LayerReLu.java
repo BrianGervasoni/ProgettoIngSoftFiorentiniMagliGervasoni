@@ -1,9 +1,6 @@
 package progettoAI.snakeAI.AI;
 
-import org.apache.commons.math3.linear.*;
 import org.nd4j.linalg.activations.impl.ActivationLReLU;
-
-import progettoAI.snakeAI.tools.Tools;
 
 public class LayerReLu extends Layer {
 
