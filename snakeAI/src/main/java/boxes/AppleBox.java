@@ -1,6 +1,6 @@
 package boxes;
 
-public class AppleBox extends Box implements Visualize {
+public class AppleBox extends Box implements Visualize, Equals {
 	
 	//una AppleBox può contenere o no la mela
 	private Food element;
@@ -42,6 +42,11 @@ public class AppleBox extends Box implements Visualize {
 		
 		this.element = (Food) boxType;
 		
+	}
+	
+	@Override
+	public Food equals() {
+		return element;
 	}
 	
 }

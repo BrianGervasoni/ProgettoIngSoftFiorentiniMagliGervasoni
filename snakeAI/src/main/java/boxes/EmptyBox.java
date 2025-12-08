@@ -1,6 +1,6 @@
 package boxes;
 
-public class EmptyBox extends Box implements Visualize{
+public class EmptyBox extends Box implements Visualize, Equals{
 
 	//Una EmptyBox può essere vuota o contenere una parete del campo 
 	private MapElem element;
@@ -59,5 +59,9 @@ public class EmptyBox extends Box implements Visualize{
 		this.element = (MapElem) boxType;
 	}
 	
+	@Override
+	public MapElem equals() {
+		return element;
+	}
 	
 }
