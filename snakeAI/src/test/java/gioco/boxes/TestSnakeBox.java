@@ -1,4 +1,4 @@
-package gioco.gamemain;
+package gioco.boxes;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

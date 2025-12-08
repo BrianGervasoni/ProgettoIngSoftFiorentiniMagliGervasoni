@@ -289,7 +289,8 @@ public class Snake {
 	 */
 	public void reset() {
 		
-		
+		this.length = 0;
+		body = new ArrayList<SnakeBox>();
 	}
 	
 
