@@ -16,6 +16,8 @@ public class Map {
 	private AppleBox apple; // la mela che il serpente deve consumare
 	
 	
+	private Boolean endFlag = false; 
+	
 	/**
 	 * costruttore della classe Map
 	 * 
@@ -290,6 +292,12 @@ public class Map {
 
 	public void setBox(Box box, int X, int Y) {
 		this.box[X][Y] = box;
+	}
+	
+	
+	public void setFlag(Boolean fl) {
+		
+		this.endFlag = fl;
 	}
 	
 	

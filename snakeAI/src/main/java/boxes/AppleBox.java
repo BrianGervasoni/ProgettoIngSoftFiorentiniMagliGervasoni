@@ -23,11 +23,12 @@ public class AppleBox extends Box implements Visualize, Equals {
 	/**
 	 * Metodo che stampa l'enumerazione contenuta nella casella che chiama il metodo
 	 * Metodo ereditato dalla interface Visualize
+	 * @return 
 	 */
 	@Override
-	public void visual() {
+	public String visual() {
 		
-		System.out.print(element.getFood());
+		return element.getFood();
 	}
 
 	@Override
@@ -41,12 +42,12 @@ public class AppleBox extends Box implements Visualize, Equals {
 	public void setElementType(BoxType boxType) {
 		
 		this.element = (Food) boxType;
-		
 	}
 	
 	@Override
 	public Food equals() {
 		return element;
 	}
+	
 	
 }

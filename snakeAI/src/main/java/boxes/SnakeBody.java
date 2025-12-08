@@ -47,4 +47,5 @@ public enum SnakeBody implements BoxType{
 	}
 	
 	
+	
 }
