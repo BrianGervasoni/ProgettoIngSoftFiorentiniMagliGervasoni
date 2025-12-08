@@ -180,7 +180,7 @@ public abstract class Layer {
 	 * @param mode
 	 * @return dLdA
 	 */
-	public INDArray derivateCalculus(INDArray dLdA,TypeGradientUpdate mode) {
+	public INDArray derivateCalculus(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize) {
 		
 		//first term dL/dZ, second term dL/dW in respect to the activation
 		 Pair<INDArray, INDArray> gradientPair = this.activation.backprop(this.getPreActivation_cache(), dLdA);
@@ -189,7 +189,7 @@ public abstract class Layer {
 		 //(NXM) * (MXK) = (NXK)
 		 INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
 		 
-		 this.tmpOptimization(dLdW,dLdZ.sum(1),mode);//si prende solo una riga per il dLdB dal dLdZ (NX1)
+		 this.tmpOptimization(dLdW,dLdZ.sum(1),mode,minibatchSize);//si prende solo una riga per il dLdB dal dLdZ (NX1)
 		 
 		 // (KXN) * (NXM) = (KXM) 
 		 return this.getWeights().transpose().mmul(dLdW);
@@ -202,8 +202,8 @@ public abstract class Layer {
 	 * @param minibatchSize
 	 * @return dLdA
 	 */
-	public INDArray backPropagation(INDArray dLdA,TypeGradientUpdate mode) {
-		return this.derivateCalculus(dLdA, mode);
+	public INDArray backPropagation(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize) {
+		return this.derivateCalculus(dLdA, mode,minibatchSize);
 	}
 	
 	/**
@@ -220,15 +220,15 @@ public abstract class Layer {
 	 * @param dLdB
 	 * @param mode
 	 */
-	public void tmpOptimization(INDArray dLdW,INDArray dLdB,TypeGradientUpdate mode) {
+	public void tmpOptimization(INDArray dLdW,INDArray dLdB,TypeGradientUpdate mode,int minibatchSize) {
 		switch(mode){//add change to the tmpParameters
 		case ASCEND:
-			this.getTmpWeights().addi(dLdW.mul(Hyperparameters.alphaW));
-			this.getTmpBias().addi(dLdB.mul(Hyperparameters.alphaB));
+			this.getTmpWeights().addi(dLdW.mul(Hyperparameters.alphaW * (1/(double) minibatchSize)));
+			this.getTmpBias().addi(dLdB.mul(Hyperparameters.alphaB * (1/(double) minibatchSize)));
 			break;
 		case DESCEND:
-			this.getTmpWeights().subi(dLdW.mul(Hyperparameters.alphaW));
-			this.getTmpBias().subi(dLdB.mul(Hyperparameters.alphaB));
+			this.getTmpWeights().subi(dLdW.mul(Hyperparameters.alphaW * (1/(double) minibatchSize)));
+			this.getTmpBias().subi(dLdB.mul(Hyperparameters.alphaB * (1/(double) minibatchSize)));
 			break;
 			default:
 				break;

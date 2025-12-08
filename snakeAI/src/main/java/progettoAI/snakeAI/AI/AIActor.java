@@ -43,7 +43,8 @@ public class AIActor extends AI {
 	 * @return
 	 */
 	private double policyRatio(double newProb, double oldProb) {
-		return (2*(1+newProb)/(1+oldProb))-1; //avoid the n/0 problem
+		final double epsilon = 1e-8; // for avoid n/0 problem
+	    return newProb / (oldProb + epsilon);
 	}
 	
 	/**
@@ -52,7 +53,8 @@ public class AIActor extends AI {
 	 * @return
 	 */
 	private double derivatePolicyRatio(double oldProb) {
-		return 2/(1+oldProb);
+		final double epsilon = 1e-8;// for avoid n/0 problem
+		return 1/(oldProb+epsilon);
 	}
 	
 	/**
@@ -112,7 +114,5 @@ public class AIActor extends AI {
 		
 		return r.advantage * derivatePolicyRatio(r.oldSelectAction());
 	}
-	
-	
-
+		
 }

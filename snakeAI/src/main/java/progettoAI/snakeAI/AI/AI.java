@@ -9,6 +9,7 @@ import org.nd4j.linalg.factory.Nd4j;
 
 
 import model.ActionRegister;
+import progettoAI.snakeAI.tools.Tools;
 
 public abstract class AI {
 	private ArrayList<Layer> layers;
@@ -92,10 +93,10 @@ public abstract class AI {
 		
 		
 		// set the starting derivate from loss to activation
-		INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb),this.getMode());
+		INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb),this.getMode(),r.length);
 		
 		for(int i=layers.size()-2; i>=0; i--){//perform the backPropagation for every layer
-				dLdA = layers.get(i).backPropagation(dLdA,this.getMode());
+				dLdA = layers.get(i).backPropagation(dLdA,this.getMode(),r.length);
 		}
 	}
 	
@@ -121,32 +122,32 @@ public abstract class AI {
 	/**
 	 * return the aggregate loss function
 	 * @param r
-	 * @param newProb
-	 * @return
+	 * @param newProb [numberOut X minibatchSize]
+	 * @return NXM [numberOut X minibatchSize]
 	 */
 	public INDArray lossCalculation(ActionRegister[] r,INDArray newProb) {
-		INDArray l = Nd4j.zeros(newProb.rows());
+		INDArray l = null;
 		
 		for(int i=0; i<newProb.columns(); i++) {
-			l.addi(singleLossCalculation(r[i],newProb.getRow(i)));
+			l = Tools.appendRow(l, singleLossCalculation(r[i],newProb.getColumn(i)));
 		}
 		
-		return l.mul(1/newProb.columns());
+		return l;
 	}
 	
 	/**
 	 * return the aggregate derivate loss function
 	 * @param r
-	 * @param newProb
-	 * @return
+	 * @param newProb [numberOut X minibatchSize]
+	 * @return NXM [numberOut X minibatchSize]
 	 */
 	public INDArray derivateLoss(ActionRegister[] r,INDArray newProb) {
-		INDArray l = Nd4j.zeros(newProb.rows());
+		INDArray l = null;
 		for(int i=0; i<newProb.columns(); i++) {
-			l.addi(singleDerivateLoss(r[i],newProb.getRow(i)));
+			l = Tools.appendRow(l, singleDerivateLoss(r[i],newProb.getColumn(i)));
 		}
 		
-		return l.mul(1/newProb.columns());
+		return l;
 	}
 	
 	/**

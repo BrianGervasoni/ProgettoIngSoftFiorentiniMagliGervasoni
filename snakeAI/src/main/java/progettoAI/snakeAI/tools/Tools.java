@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.apache.commons.math3.linear.*;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 public final class Tools {
 	
@@ -89,4 +91,14 @@ public final class Tools {
 			return 0;
 		return 1;
 	}
+	
+	 public static INDArray appendRow(INDArray existingMatrix, INDArray newRow) {
+	        if (existingMatrix == null) {
+	            // If it is the first row, return it directly as the initial array
+	            return newRow;
+	        } else {
+	            // Concatenate along the 0-axis (vertical/row axis)
+	            return Nd4j.concat(0, existingMatrix, newRow);
+	        }
+	    }
 }
