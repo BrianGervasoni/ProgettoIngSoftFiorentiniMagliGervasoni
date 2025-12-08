@@ -14,6 +14,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
+    <nd4j.version>1.0.0-M2.1</nd4j.version> 
   </properties>
 
   <dependencyManagement>
@@ -46,6 +47,13 @@
     <version>3.6.1</version> <!-- Controlla la versione più recente -->
 </dependency>
 
+<!-- Backend ND4J CPU -->
+        <dependency>
+            <groupId>org.nd4j</groupId>
+            <artifactId>nd4j-native</artifactId>
+            <version>${nd4j.version}</version>
+        </dependency>
+        
   </dependencies>
 
   <build>
