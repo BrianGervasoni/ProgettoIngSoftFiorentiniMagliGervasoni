@@ -40,13 +40,13 @@ public abstract class Layer {
 	
 	/**
 	 * W [output X input]
-	 * @param bias
-	 * @param weights
+	 * @param bias [numberOfNodeInThisLayer]
+	 * @param weights [numberOfNodeInThisLayer, numberOfNodeInTheBackLayer]
 	 */
 	public Layer(double[] bias , double[][] weights) {
 		/*this.bias = MatrixUtils.createRealVector(bias);
 		this.weights = MatrixUtils.createRealMatrix(weights);*/
-		this.bias = Nd4j.create(bias).transpose();//NX1
+		this.bias = Nd4j.create(bias).reshape(bias.length,1);//NX1
 		this.weights = Nd4j.create(weights);//NXK
 		this.cumulativeDLdW = Nd4j.zerosLike(this.weights);
         this.cumulativeDLdW = Nd4j.zerosLike(this.bias);
@@ -68,7 +68,7 @@ public abstract class Layer {
 			}
 		}
 		
-		this.bias = Nd4j.create(tmpBias).transpose();//NX1
+		this.bias = Nd4j.create(tmpBias).reshape(tmpBias.length,1);//NX1
 		this.weights = Nd4j.create(tmpWeights);//NXK
 		this.cumulativeDLdW = Nd4j.zerosLike(this.weights);
         this.cumulativeDLdW = Nd4j.zerosLike(this.bias);
@@ -157,8 +157,8 @@ public abstract class Layer {
 	 * @return INDArray with this layer activation value
 	 */
 	public INDArray forwarding(INDArray backLayerActivation) {
-		//((NXK) * (KX1)) + (NX1) = (NX1)
-		return this.getActivation().getActivation(this.getWeights().mmul(backLayerActivation).add(this.getBias()), false);//sigma(W*A+B)
+		//((NXK) * (KX1)) + (NX1) = (NX1) but the activation function need (1XN) so we do the transpose
+		return this.getActivation().getActivation(this.getWeights().mmul(backLayerActivation).add(this.getBias()).transpose(), false);//sigma(W*A+B)
 	}
 	
 	/**
@@ -171,7 +171,8 @@ public abstract class Layer {
 		//((NXK) * (KXM)) + (NX1) = (NXM) use broadcasting for the bias
 		this.setPreActivation_cache(this.getWeights().mmul(backLayerActivation).add(this.getBias()));//W*A+B
 		
-		return this.getActivation().getActivation(this.getPreActivation_cache(), true);
+		//the activation need (MXN) so we do the transpose
+		return this.getActivation().getActivation(this.getPreActivation_cache().transpose(), true);
 	}
 	
 	/**
