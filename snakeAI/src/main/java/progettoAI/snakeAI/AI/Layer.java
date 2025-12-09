@@ -171,8 +171,8 @@ public abstract class Layer {
 		//((NXK) * (KXM)) + (NX1) = (NXM) use broadcasting for the bias
 		this.setPreActivation_cache(this.getWeights().mmul(backLayerActivation).add(this.getBias()));//W*A+B
 		
-		//the activation need (MXN) so we do the transpose
-		return this.getActivation().getActivation(this.getPreActivation_cache().transpose(), true);
+		//the activation need (MXN) so we do the transpose. Duplicate the array because we don't want it to change
+		return this.getActivation().getActivation(this.getPreActivation_cache().transpose().dup(), true);
 	}
 	
 	/**
