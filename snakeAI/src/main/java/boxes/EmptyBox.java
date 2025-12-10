@@ -62,8 +62,11 @@ public class EmptyBox extends Box implements Visualize, Equals{
 	}
 	
 	@Override
-	public MapElem equals() {
-		return element;
+	public boolean equals(Object object) {
+		if(this.element == (MapElem) object) {
+			return true;
+		}
+		return false;
 	}
 	
 }

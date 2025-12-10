@@ -45,8 +45,11 @@ public class AppleBox extends Box implements Visualize, Equals {
 	}
 	
 	@Override
-	public Food equals() {
-		return element;
+	public boolean equals(Object object) {
+		if(this.element == (Food) object) {
+			return true;
+		}
+		return false;
 	}
 	
 	

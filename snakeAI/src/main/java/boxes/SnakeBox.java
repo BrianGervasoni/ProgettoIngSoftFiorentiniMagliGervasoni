@@ -81,8 +81,11 @@ public class SnakeBox extends Box implements Visualize, Equals{
 	}
 	
 	@Override
-	public SnakeBody equals() {
-		return element;
+	public boolean equals(Object object) {
+		if(this.element == (SnakeBody) object) {
+			return true;
+		}
+		return false;
 	}
 	
 	
