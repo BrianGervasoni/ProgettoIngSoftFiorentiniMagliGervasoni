@@ -57,7 +57,7 @@ public abstract class AI {
 	 * @return activation of the last layer
 	 */
 	public double[] forwarding(double[] input) {
-		return feedForwarding(Nd4j.create(input),0,false).toDoubleVector();
+		return feedForwarding(Nd4j.create(input).reshape(input.length,1),0,false).toDoubleVector();
 	}
 	
 	/**
