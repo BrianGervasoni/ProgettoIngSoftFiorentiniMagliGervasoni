@@ -56,19 +56,19 @@ public class LayerTest {
 		};
 				
 		double[][] trueResultIdent = {
-				{21.0,40.0},
-				{9.0,16.0}
+				{21.0,9.0},
+				{40.0,16.0}
 		};
 		
 		
 		double[][] trueResultReLu= {
-				{21.0,40.0},
-				{9.0,16.0}
+				{21.0,9.0},
+				{40.0,16.0}
 		};
 		
 		double[][] trueResultSoftMax = {
-				{5.60279640614594E-9,0.9999999943972036},
-				{9.110511944006454E-4, 0.9990889488055994 }
+				{5.60279640614594E-9,9.110511944006454E-4},
+				{0.9999999943972036, 0.9990889488055994 }
 		};
 		
 		Layer identity = new LayerIdentityFunction(b,w);
@@ -82,13 +82,13 @@ public class LayerTest {
 		assertArrayEquals(trueResultReLu,resultReLu);
 		assertArrayEquals(trueResultSoftMax,resultSoftMax);
 		
-		assertArrayEquals(trueResultIdent, identity.getPreActivation_cache().transpose().toDoubleMatrix());
-		assertArrayEquals(trueResultIdent, relu.getPreActivation_cache().transpose().toDoubleMatrix());
-		assertArrayEquals(trueResultIdent, softMax.getPreActivation_cache().transpose().toDoubleMatrix());
+		assertArrayEquals(trueResultIdent, identity.getPreActivation_cache().toDoubleMatrix());
+		assertArrayEquals(trueResultIdent, relu.getPreActivation_cache().toDoubleMatrix());
+		assertArrayEquals(trueResultIdent, softMax.getPreActivation_cache().toDoubleMatrix());
 	}
 	
 	@Test
-	void testBackPropagation() {
+	void testBackPropagation() {//minibatch = 2, node=2, inputNode=3
 		double[] b = new double[] {1,2};
 		double[][] w = new double[2][3];
 		for(int i=0; i< w.length;i++) {
@@ -120,9 +120,9 @@ public class LayerTest {
 		};
 		
 		double[][] trueResultSoftMax = {
-				{0,0,0},
-				{-2.457654740529554E-5,   -2.457654740528811E-5,   -2.457654740528068E-5},
-				{-4.915309481059108E-5,   -4.915309481057622E-5,   -4.915309481056136E-5}
+				{-9.10221180121784E-4,-0.001820442360243568,-0.0027306635403653522},
+				{-9.102211801217415E-4,   -0.001820442360243483,   -0.0027306635403652247},
+				{-9.10221180121699E-4,   -0.001820442360243398,   -0.002730663540365097}
 		};
 		
 		double[] trueTmpBiasIde = new double[] {0.55 ,1.7};
@@ -137,10 +137,10 @@ public class LayerTest {
 				{0.10000000000000009,0.8,1.5}
 		};
 		
-		double[] trueTmpBiasSoftMax = new double[] {1,2};
+		double[] trueTmpBiasSoftMax = new double[] {0.9998634668229818,2.0001365331770184};
 		double[][] trueTmpWeightsSoftMax = {
-				{3.686482110794331E-6,1.0000036864821107,2.0000036864821107},
-				{1,2,3}
+				{-1.3653317701827397E-4,0.9997269336459634,1.999590400468945},
+				{1.0001365331770182,2.0002730663540365,3.000409599531055}
 		};
 		
 		

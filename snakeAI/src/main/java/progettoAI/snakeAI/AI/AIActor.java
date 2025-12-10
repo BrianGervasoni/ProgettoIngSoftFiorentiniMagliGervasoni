@@ -32,7 +32,6 @@ public class AIActor extends AI {
 	public INDArray singleDerivateLoss(ActionRegister r,INDArray newProb) {
 		RealVector l = derivateEntropy(newProb.toDoubleVector()).mapMultiply(Hyperparameters.entropyContribution);
 		l.addToEntry(r.indexAction, derivateLossClip(r,newProb.toDoubleVector()));
-		
 		return Nd4j.create(l.toArray());
 	}
 	

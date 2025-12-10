@@ -158,7 +158,7 @@ public abstract class Layer {
 	 */
 	public INDArray forwarding(INDArray backLayerActivation) {
 		//((NXK) * (KX1)) + (NX1) = (NX1) but the activation function need (1XN) so we do the transpose
-		return this.getActivation().getActivation(this.getWeights().mmul(backLayerActivation).add(this.getBias()).transpose(), false);//sigma(W*A+B)
+		return this.getActivation().getActivation(this.getWeights().mmul(backLayerActivation).add(this.getBias()).transpose(), false).transpose();//sigma(W*A+B)
 	}
 	
 	/**
@@ -169,10 +169,11 @@ public abstract class Layer {
 	public INDArray forwardPass(INDArray backLayerActivation) {
 		this.setBackLayerActivation_cache(backLayerActivation);//KXM
 		//((NXK) * (KXM)) + (NX1) = (NXM) use broadcasting for the bias
+	
 		this.setPreActivation_cache(this.getWeights().mmul(backLayerActivation).add(this.getBias()));//W*A+B
 		
 		//the activation need (MXN) so we do the transpose. Duplicate the array because we don't want it to change
-		return this.getActivation().getActivation(this.getPreActivation_cache().transpose().dup(), true);
+		return this.getActivation().getActivation(this.getPreActivation_cache().transpose().dup(), true).transpose();
 	}
 	
 	/**
@@ -182,13 +183,13 @@ public abstract class Layer {
 	 * @return dLdA
 	 */
 	public INDArray derivateCalculus(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize) {
-		
 		//first term dL/dZ, second term dL/dW in respect to the activation
-		 Pair<INDArray, INDArray> gradientPair = this.activation.backprop(this.getPreActivation_cache(), dLdA);
-		 
-		 INDArray dLdZ = gradientPair.getFirst();
+		 Pair<INDArray, INDArray> gradientPair = this.activation.backprop(this.getPreActivation_cache().transpose(), dLdA.transpose());
+		
+		 INDArray dLdZ = gradientPair.getFirst().transpose();
 		 //(NXM) * (MXK) = (NXK)
 		 INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
+		 
 		 
 		 
 		 this.tmpOptimization(dLdW,dLdZ.sum(1).reshape(dLdZ.rows(),1),mode,minibatchSize);//si prende solo una riga per il dLdB dal dLdZ (NX1)

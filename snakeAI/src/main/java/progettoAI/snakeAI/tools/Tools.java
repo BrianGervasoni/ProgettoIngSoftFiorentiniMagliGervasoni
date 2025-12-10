@@ -92,13 +92,13 @@ public final class Tools {
 		return 1;
 	}
 	
-	 public static INDArray appendRow(INDArray existingMatrix, INDArray newRow) {
+	 public static INDArray appendCol(INDArray existingMatrix, INDArray newCol) {
 	        if (existingMatrix == null) {
 	            // If it is the first row, return it directly as the initial array
-	            return newRow;
+	            return newCol.reshape(newCol.length(),1);
 	        } else {
-	            // Concatenate along the 0-axis (vertical/row axis)
-	            return Nd4j.concat(0, existingMatrix, newRow);
+	            // Concatenate along the 1-axis (column axis)
+	            return Nd4j.concat(1, existingMatrix, newCol);
 	        }
 	    }
 }

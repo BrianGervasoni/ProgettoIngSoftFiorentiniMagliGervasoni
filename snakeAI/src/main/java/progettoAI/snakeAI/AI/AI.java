@@ -63,13 +63,13 @@ public abstract class AI {
 	/**
 	 * recursively goes through all the layers until the last one is activated, 
 	 * if saveActivation is set to true it also saves all the intermediate activation layers, used in the backPropagation
-	 * @param input
+	 * @param input  [numberOfNeurons,minibatchSize]
 	 * @param i
 	 * @param saveActivation
-	 * @return
+	 * @return NXM [numberOfNeurons,minibatchSize]
 	 */
 	private INDArray feedForwarding(INDArray input,int i,boolean saveActivation) {
-		if(i<layers.size()) {//if we are at the last layer, return result
+		if(i>=layers.size()) {//if we are at the last layer, return result
 			return input;
 		}
 		//continues forwarding on all layers
@@ -82,6 +82,24 @@ public abstract class AI {
 	}
 	
 	/**
+	 * initializate internal variable for the backPropagation
+	 */
+	public void initBackPropagation() {
+		this.getLayer().forEach(e ->{
+			e.initBackProp();
+		});
+	}
+	
+	/**
+	 * optimize the parameters
+	 */
+	public void optimization() {
+		this.getLayer().forEach(e ->{
+			e.optimization();
+		});
+	}
+	
+	/**
 	 * perform a step in the backPropagation
 	 * @param r
 	 */
@@ -90,8 +108,6 @@ public abstract class AI {
 		
 		// perform the forwarding saving the intermediary state used for calculate the derivates
 		INDArray newProb = this.feedForwarding(tmpR,0,true);
-		
-		
 		// set the starting derivate from loss to activation
 		INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb),this.getMode(),r.length);
 		
@@ -128,8 +144,8 @@ public abstract class AI {
 	public INDArray lossCalculation(ActionRegister[] r,INDArray newProb) {
 		INDArray l = null;
 		
-		for(int i=0; i<newProb.columns(); i++) {
-			l = Tools.appendRow(l, singleLossCalculation(r[i],newProb.getColumn(i)));
+		for(int i=0; i<r.length; i++) {
+			l = Tools.appendCol(l, singleLossCalculation(r[i],newProb.getColumn(i)));
 		}
 		
 		return l;
@@ -143,8 +159,8 @@ public abstract class AI {
 	 */
 	public INDArray derivateLoss(ActionRegister[] r,INDArray newProb) {
 		INDArray l = null;
-		for(int i=0; i<newProb.columns(); i++) {
-			l = Tools.appendRow(l, singleDerivateLoss(r[i],newProb.getColumn(i)));
+		for(int i=0; i<r.length; i++) {
+			l = Tools.appendCol(l, singleDerivateLoss(r[i],newProb.getColumn(i)));
 		}
 		
 		return l;
