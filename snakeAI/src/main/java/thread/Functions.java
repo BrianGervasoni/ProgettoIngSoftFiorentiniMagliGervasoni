@@ -5,6 +5,7 @@ import gioco.snakeAI.Map;
 
 public interface Functions {
 	
+	
 	/**
 	 * 
 	 * @param array
