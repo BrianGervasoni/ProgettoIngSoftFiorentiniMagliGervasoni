@@ -190,7 +190,8 @@ public abstract class Layer {
 		 //(NXM) * (MXK) = (NXK)
 		 INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
 		 
-		 this.tmpOptimization(dLdW,dLdZ.sum(1),mode,minibatchSize);//si prende solo una riga per il dLdB dal dLdZ (NX1)
+		 
+		 this.tmpOptimization(dLdW,dLdZ.sum(1).reshape(dLdZ.rows(),1),mode,minibatchSize);//si prende solo una riga per il dLdB dal dLdZ (NX1)
 		 
 		 // (KXN) * (NXM) = (KXM) 
 		 return this.getWeights().transpose().mmul(dLdW);

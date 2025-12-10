@@ -86,4 +86,90 @@ public class LayerTest {
 		assertArrayEquals(trueResultIdent, relu.getPreActivation_cache().transpose().toDoubleMatrix());
 		assertArrayEquals(trueResultIdent, softMax.getPreActivation_cache().transpose().toDoubleMatrix());
 	}
+	
+	@Test
+	void testBackPropagation() {
+		double[] b = new double[] {1,2};
+		double[][] w = new double[2][3];
+		for(int i=0; i< w.length;i++) {
+			for(int j=0; j<w[0].length;j++) {//[0,1,2],[1,2,3]
+				w[i][j] = i+j;
+			}
+		}
+		
+		double[][] backLayerActivation = {
+				{5.0,6.0,7.0},
+				{1.0,2.0,3.0}
+		};
+		
+		double[][] loss = {
+				{1.0,2.0},
+				{1.0,1.0}
+		};
+		
+		double[][] trueResultIdent = {
+				{6.0,8.0,10.0},
+				{19.0,26.0,33.0},
+				{32.0,44.0,56.0}
+		};
+		
+		double[][] trueResultReLu = {
+				{6.0,8.0,10.0},
+				{19.0,26.0,33.0},
+				{32.0,44.0,56.0}
+		};
+		
+		double[][] trueResultSoftMax = {
+				{0,0,0},
+				{-2.457654740529554E-5,   -2.457654740528811E-5,   -2.457654740528068E-5},
+				{-4.915309481059108E-5,   -4.915309481057622E-5,   -4.915309481056136E-5}
+		};
+		
+		double[] trueTmpBiasIde = new double[] {0.55 ,1.7};
+		double[][] trueTmpWeightsIde = {
+				{-1.05,-0.5,0.050000000000000044},
+				{0.10000000000000009,0.8,1.5}
+		};
+		
+		double[] trueTmpBiasReLu = new double[] {0.55 ,1.7};
+		double[][] trueTmpWeightsReLu = {
+				{-1.05,-0.5,0.050000000000000044},
+				{0.10000000000000009,0.8,1.5}
+		};
+		
+		double[] trueTmpBiasSoftMax = new double[] {1,2};
+		double[][] trueTmpWeightsSoftMax = {
+				{3.686482110794331E-6,1.0000036864821107,2.0000036864821107},
+				{1,2,3}
+		};
+		
+		
+		Layer identity = new LayerIdentityFunction(b,w);
+		Layer relu = new LayerReLu(b,w);
+		Layer softMax = new LayerSoftMax(b,w);
+		identity.forwardPass(Nd4j.create(backLayerActivation).transpose());
+		relu.forwardPass(Nd4j.create(backLayerActivation).transpose());
+		softMax.forwardPass(Nd4j.create(backLayerActivation).transpose());
+		
+		identity.initBackProp();
+		relu.initBackProp();
+		softMax.initBackProp();
+		
+		double[][] resultIde = identity.backPropagation(Nd4j.create(loss),TypeGradientUpdate.DESCEND,2).toDoubleMatrix();
+		double[][] resultReLu = relu.backPropagation(Nd4j.create(loss),TypeGradientUpdate.DESCEND,2).toDoubleMatrix();
+		double[][] resultSoftMax = softMax.backPropagation(Nd4j.create(loss),TypeGradientUpdate.DESCEND,2).toDoubleMatrix();
+		
+		assertArrayEquals(trueResultIdent,resultIde);
+		assertArrayEquals(trueResultReLu,resultReLu);
+		assertArrayEquals(trueResultSoftMax,resultSoftMax);
+		
+		assertArrayEquals(trueTmpBiasIde,identity.getTmpBias().toDoubleVector());
+		assertArrayEquals(trueTmpWeightsIde,identity.getTmpWeights().toDoubleMatrix());
+		
+		assertArrayEquals(trueTmpBiasReLu,relu.getTmpBias().toDoubleVector());
+		assertArrayEquals(trueTmpWeightsReLu,relu.getTmpWeights().toDoubleMatrix());
+		
+		assertArrayEquals(trueTmpBiasSoftMax,softMax.getTmpBias().toDoubleVector());
+		assertArrayEquals(trueTmpWeightsSoftMax,softMax.getTmpWeights().toDoubleMatrix());
+	}
 }
