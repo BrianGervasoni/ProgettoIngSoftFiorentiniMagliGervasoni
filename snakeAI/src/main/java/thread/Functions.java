@@ -246,6 +246,11 @@ public interface Functions {
 		return array;
 	}
 	
+	/**
+	 * 
+	 * @param array
+	 * @return linear normalization, set the value of array[i] at its new linear normalized value (a value in this interval [0;1])
+	 */
 	public default double[] normalizeArray(double[] array) {
 		
 		double min = array[0];
@@ -265,8 +270,6 @@ public interface Functions {
 	
 		}
 		
-		//linear normalization 
-		//set the value of array[i] at its new linear normalized value (a value in this interval [0;1])
 		for(int i = 0; i<array.length; i++) {
 
 			xNormalizzato = (array[i] - min)/(max - min);
