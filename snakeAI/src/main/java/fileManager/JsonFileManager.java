@@ -31,7 +31,8 @@ public class JsonFileManager {
 		 try (FileReader reader = new FileReader(dirFile)) {
 	            return GSON.fromJson(reader, Model.class);
 	        } catch (FileNotFoundException e) {
-	           return new Model();
+	        	System.err.println("file non trovato: " + e.getMessage());
+	        	return new Model();
 	        } catch (IOException e) {
 	            System.err.println("Errore durante la lettura del file: " + e.getMessage());
 	            e.printStackTrace();
