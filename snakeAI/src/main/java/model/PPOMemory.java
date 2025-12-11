@@ -44,11 +44,15 @@ public class PPOMemory {
 	/**
 	 * prepare the data for the backPropagation
 	 */
-	private void prepareData() {
+	public void prepareData() {
 		oldR = (ArrayList<ActionRegister>) currR.clone();
 	}
 	
-	private ActionRegister[] getMiniBatch() {
+	/**
+	 * get a miniBatch from the old collected data
+	 * @return
+	 */
+	public ActionRegister[] getMiniBatch() {
 		if(oldR.isEmpty())
 			return null;
 		Collections.shuffle(oldR);
