@@ -4,15 +4,18 @@ import java.util.concurrent.CompletableFuture;
 
 import progettoAI.snakeAI.AI.AIActor;
 import progettoAI.snakeAI.AI.AICritic;
+import progettoAI.snakeAI.AI.TypeGradientUpdate;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 
 public class Model {
 	private AICritic critic;
 	private AIActor actor;
-	private PPOMemory memory;
+	private transient PPOMemory memory;
 	
 	public Model() {
 		memory = new PPOMemory();
+		critic = new AICritic(new int[] {126,126,126,4},TypeGradientUpdate.DESCEND);
+		actor = new AIActor(new int[] {256,256,256,4},TypeGradientUpdate.ASCEND);
 	}
 	
 	public Model(AICritic critic, AIActor actor) {

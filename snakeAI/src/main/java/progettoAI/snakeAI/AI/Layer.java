@@ -27,14 +27,14 @@ public abstract class Layer {
 	private INDArray bias;
 	private INDArray weights;
 	
-	private INDArray tmpBias;
-	private INDArray tmpWeights;
+	private transient INDArray tmpBias;
+	private transient INDArray tmpWeights;
 	
-	private INDArray backLayerActivation_cache;
-	private INDArray preActivation_cache;
+	private transient INDArray backLayerActivation_cache;
+	private transient INDArray preActivation_cache;
 	
-	private INDArray cumulativeDLdW;
-	private INDArray cumulativeDLdB;
+	private transient INDArray cumulativeDLdW;
+	private transient INDArray cumulativeDLdB;
 	
 	private IActivation activation;
 	
