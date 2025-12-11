@@ -12,9 +12,12 @@ public class Model {
 	private AIActor actor;
 	private transient PPOMemory memory;
 	
+	/**
+	 * setup the default configuration (critic: 3X126 actor: 3X256)
+	 */
 	public Model() {
 		memory = new PPOMemory();
-		critic = new AICritic(new int[] {126,126,126,4},TypeGradientUpdate.DESCEND);
+		critic = new AICritic(new int[] {126,126,126,1},TypeGradientUpdate.DESCEND);
 		actor = new AIActor(new int[] {256,256,256,4},TypeGradientUpdate.ASCEND);
 	}
 	
