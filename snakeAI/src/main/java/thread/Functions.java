@@ -1,5 +1,8 @@
 package thread;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import boxes.*;
 import gioco.snakeAI.Map;
 
@@ -239,6 +242,37 @@ public interface Functions {
 		
 		System.arraycopy(a3, 0, array, index, a3.length);
 		index = index + a3.length;
+		
+		return array;
+	}
+	
+	public default double[] normalizeArray(double[] array) {
+		
+		double min = array[0];
+		double max = array[0];
+		double xNormalizzato;
+		
+		//i get minimal value and maximal value
+		for(int i = 0; i<array.length; i++) {
+			
+			if(array[i]<min) {
+				min = array[i];
+			}
+			
+			if(array[i]>max) {
+				max = array[i];
+			}
+	
+		}
+		
+		//linear normalization 
+		//set the value of array[i] at its new linear normalized value (a value in this interval [0;1])
+		for(int i = 0; i<array.length; i++) {
+
+			xNormalizzato = (array[i] - min)/(max - min);
+			array[i] = xNormalizzato;
+			
+		}
 		
 		return array;
 	}

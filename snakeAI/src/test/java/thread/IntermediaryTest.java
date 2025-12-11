@@ -139,4 +139,21 @@ class IntermediaryTest {
 		assertArrayEquals(mATest, mergeArray);
 	}
 	
+	@Test 
+	void normalizeArray(){
+		
+		double[] arrayTest = new double[3];
+		arrayTest[0] = 50;
+		arrayTest[1] = 10;
+		arrayTest[2] = 80;
+		
+		double[] array = new double[3];
+		array[0] = 0.571428571428571429;
+		array[1] = 0.000000000000000000;
+		array[2] = 1.000000000000000000;
+		
+		arrayTest = intermediary.normalizeArray(arrayTest);
+		
+		assertArrayEquals(array, arrayTest);
+	}
 }
