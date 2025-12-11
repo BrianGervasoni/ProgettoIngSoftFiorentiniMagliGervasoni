@@ -7,7 +7,7 @@ public class ThreadModel extends Thread{
 	String dirFile; 
 	
 	public ThreadModel(String dir) {
-		
+		this.dirFile = dir;
 	}
 	
 	@Override
