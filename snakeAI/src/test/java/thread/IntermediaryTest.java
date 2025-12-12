@@ -93,7 +93,6 @@ class IntermediaryTest {
 		assertEquals(indexTest, index);
 	}
 
-	
 	@Test 
 	void distanceAssignedToRay(){
 		

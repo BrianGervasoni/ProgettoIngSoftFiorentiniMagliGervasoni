@@ -40,27 +40,5 @@ class TestSnake {
 		
 	}
 	
-	
-	@Test
-	void testMove() {
-		
-		Map mm = new Map();
-		
-		for(int i = 0; i < Map.X ; i++) {
-			for(int k = 0; k < Map.Y ; k++) {
-				if(i == 0 || i == Map.X-1 || k == 0 || k == Map.Y-1) {
-					this.box[i][k] = new EmptyBox(MapElem.WALL, i, k);
-					
-				}
-				else {
-					this.box[i][k] = new EmptyBox(MapElem.EMPTY, i , k);
-				}
-			}
-		}
-		
-		
-		
-	}
-	
 
 }
