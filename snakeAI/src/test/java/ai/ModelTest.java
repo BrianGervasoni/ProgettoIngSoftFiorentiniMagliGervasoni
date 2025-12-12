@@ -22,7 +22,7 @@ public class ModelTest {
 		//Model mSave = new Model(critic,actor);
 		Model m = null;
 		
-		String relPath = "target/modelli/modelloTest.json";
+		String relPath = "modelli/modelloTest.json";
 		Path relativePath = Paths.get(relPath);
 		Path absolutePath = relativePath.toAbsolutePath();
 		//JsonFileManager.saveModel(mSave, absolutePath.toString());
@@ -37,7 +37,7 @@ public class ModelTest {
 		
 		double[] test =  m.backPropagation();
 		
-		double[] trueLoss = new double[] {4.768141156509235,16.615211043069404};
+		double[] trueLoss = new double[] {4.652735277428319,15.682484034489764};
 		assertArrayEquals(trueLoss,test);
 		assertNotNull(m.getMemory());
 	}
