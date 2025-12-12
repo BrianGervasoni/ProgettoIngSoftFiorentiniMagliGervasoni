@@ -7,7 +7,6 @@ public class GameMain {
 	Map map;
 	
 	
-	
 	public GameMain() {
 		
 		this.map = new Map();
@@ -32,6 +31,7 @@ public class GameMain {
 		map.initSnakeBody();			// questo piazza la testa iniziale
 		map.setApple();
 	}
+	
 	
 	
 	
@@ -86,15 +86,55 @@ public class GameMain {
 		
 	}
 	
-	
+	/**
+	 * metodo che permette di vuovere il serpente secondo una direzione scelta
+	 * @param dir direzione da assegnare
+	 */
 	public void giveDirections(Direction dir) {
 		
 		map.makeSnakeMove(dir);
 	}
 	
-	
-	
+	/**
+	 * se ritorna false la partita è ancora in corso
+	 * se ritorna vero il serpente è entrato in collisione
+	 * @return
+	 */
+	public boolean finish() {
 		
+		return map.getEndFlag();
+	}
+	
+	/**
+	 * metoto per resettare la mappa 
+	 * 
+	 */
+	public void reset() {
+		
+		this.map = new Map();
+		initialize(map);
+		
+	}
+	
+	/**
+	 * metodo che ritorna l'identificativo in memoria della mappa
+	 * @return 
+	 */
+	public String toStringMap() {
+		
+		return map.toString();
+		
+	}
+	
+	/**
+	 * metodo che ritorna l'identificativo in memoria del GameMain
+	 * @return 
+	 */
+	public String toStringGameMain() {
+		
+		return this.toString();
+		
+	}
 	
 
 }

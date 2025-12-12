@@ -56,6 +56,13 @@ public class Snake {
 		
 	}
 	
+	public Map getMap() {
+		
+		
+		return map;
+	}
+	
+	
 	/**
 	 * metodo per assegnare una direzione alla testa del serpente
 	 * 
@@ -290,7 +297,7 @@ public class Snake {
 	public void reset() {
 		
 		this.length = 0;
-		body = new ArrayList<SnakeBox>();
+		this.body = new ArrayList<SnakeBox>();
 	}
 	
 

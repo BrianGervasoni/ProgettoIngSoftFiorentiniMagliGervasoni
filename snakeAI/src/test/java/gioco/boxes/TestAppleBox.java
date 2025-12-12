@@ -16,6 +16,12 @@ public class TestAppleBox {
 		assertEquals(Food.APPLE, apple.getElementType());
 	}
 	
+	@Test
+	public void testEquals() {
+		AppleBox apple = new AppleBox(Food.APPLE, 5, 5);
+		assertEquals(true, apple.equals(Food.APPLE));
+	}
+	
 	
 	
 	
