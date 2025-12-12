@@ -56,6 +56,10 @@ public class Snake {
 		
 	}
 	
+	/**
+	 * metodo che ritorna la mappa 
+	 * @return
+	 */
 	public Map getMap() {
 		
 		
@@ -119,7 +123,7 @@ public class Snake {
 	 * 
 	 * @param length lunghezza attuale del serpente
 	 */
-	public void setLength(int length) {
+	public void setLenght(int length) {
 		this.length = length;
 	}
 
@@ -298,6 +302,7 @@ public class Snake {
 		
 		this.length = 0;
 		this.body = new ArrayList<SnakeBox>();
+		stretchbody = 0;
 	}
 	
 
