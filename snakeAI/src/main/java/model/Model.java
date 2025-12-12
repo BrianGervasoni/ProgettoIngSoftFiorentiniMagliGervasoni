@@ -2,10 +2,13 @@ package model;
 
 import java.util.concurrent.CompletableFuture;
 
+import org.nd4j.linalg.api.ndarray.INDArray;
+
 import progettoAI.snakeAI.AI.AIActor;
 import progettoAI.snakeAI.AI.AICritic;
 import progettoAI.snakeAI.AI.TypeGradientUpdate;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
+import progettoAI.snakeAI.tools.Tools;
 
 public class Model {
 	private AICritic critic;
@@ -18,8 +21,8 @@ public class Model {
 	public Model() {
 		memory = new PPOMemory();
 		if(critic == null || actor == null) {
-			critic = new AICritic(new int[] {126,126,126,1},TypeGradientUpdate.DESCEND);
-			actor = new AIActor(new int[] {256,256,256,4},TypeGradientUpdate.ASCEND);
+			critic = new AICritic(new int[] {61*3,126,126,126,1},TypeGradientUpdate.DESCEND);
+			actor = new AIActor(new int[] {61*3,256,256,256,4},TypeGradientUpdate.ASCEND);
 		}
 	}
 	
@@ -95,28 +98,32 @@ public class Model {
 	
 	/**
 	 * perform the backPropagation for the critic and actor
+	 * @return [mean loss actor, mean loss critic]
 	 */
-	public void backPropagation() {
-		CompletableFuture<Void> procCritic = backPropCritic();
-		CompletableFuture<Void> procActor = backPropActor();
+	public double[] backPropagation() {
+		CompletableFuture<Double> procCritic = backPropCritic();
+		CompletableFuture<Double> procActor = backPropActor();
 		
-		procCritic.join();
-		procActor.join();
+		return new double[] {procActor.join(),procCritic.join()};
 	}
 	
-	private  CompletableFuture<Void> backPropCritic(){
-		return CompletableFuture.runAsync(()->{
+	private  CompletableFuture<Double> backPropCritic(){
+		return CompletableFuture.supplyAsync(()->{
+			INDArray mean = null;
 			for(int i=0; i<Hyperparameters.epoche; i++) {
-				critic.backPropagation(memory.getMiniBatch());
+				mean = Tools.appendCol(mean,critic.backPropagation(memory.getMiniBatch()));
 			}
+			return mean.sum(1).mul(1/(double)Hyperparameters.epoche).sum(0).toDoubleVector()[0];
 		});
 	}
 	
-	private  CompletableFuture<Void> backPropActor(){
-		return CompletableFuture.runAsync(()->{
+	private  CompletableFuture<Double> backPropActor(){
+		return CompletableFuture.supplyAsync(()->{
+			INDArray mean = null;
 			for(int i=0; i<Hyperparameters.epoche; i++) {
-				actor.backPropagation(memory.getMiniBatch());
+				mean = Tools.appendCol(mean,actor.backPropagation(memory.getMiniBatch()));
 			}
+			return mean.sum(1).mul(1/(double)Hyperparameters.epoche).sum(0).toDoubleVector()[0];
 		});
 	}
 	
