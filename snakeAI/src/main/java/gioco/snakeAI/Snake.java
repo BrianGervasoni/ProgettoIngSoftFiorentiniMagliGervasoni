@@ -101,7 +101,7 @@ public class Snake {
 	 * 
 	 * @return la lunghezza del serpente
 	 */
-	public int getLength() {
+	public int getLenght() {
 		return length;
 	}
 	
@@ -109,7 +109,7 @@ public class Snake {
 	/**
 	 * metodo per allungare il serpente
 	 */
-	public void addLength() {
+	public void addLenght() {
 		this.length++;
 	}
 

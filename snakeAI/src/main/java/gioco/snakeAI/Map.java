@@ -15,7 +15,10 @@ public class Map {
 	private Snake snake; // il serpente da muovere nel campo di gioco
 	private AppleBox apple; // la mela che il serpente deve consumare
 	
-	
+	/*
+	 * se è vero il serpente ha colliso con qualcosa
+	 * se è falso il gioco è ancora in fase di esecuzione
+	 */
 	private Boolean endFlag = false; 
 	
 	/**
@@ -89,7 +92,7 @@ public class Map {
 		
 				if(snake.getBodyPiece(0).getXcoordinate() == this.getXapple() && snake.getBodyPiece(0).getYcoordinate() == this.getYapple()){
 					
-					snake.addLength();
+					snake.addLenght();
 					return true;
 				}
 		
@@ -101,19 +104,40 @@ public class Map {
 	 * @return
 	 */
 	public boolean checkVictory() {
+		if(this.snake.getLenght() == (getRowLenght()-2)*(getColumnLenght()-2)){
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * metodo che ritona il numero di righe della mappa(comprese le pareti)
+	 * @return
+	 */
+	public int getRowLenght() {
 		
-		return true;
+		return X;
+	}
+	
+	/**
+	 * metodo che ritona il numero di colonne della mappa(comprese le pareti)
+	 * @return
+	 */
+	public int getColumnLenght() {
+		
+		return Y;
 	}
 	
 	/**
 	 * metodo per sconfitta
+	 * se la flag è falsa allora siamo ancora in gioco(we ball)
+	 * se la flag è true allora abbiamo colliso
 	 * @return
 	 */
 	public boolean checkDefeat() {
 		
-		return true;
+		return endFlag;
 	}
-	
 	
 	
 	/**
@@ -203,7 +227,7 @@ public class Map {
 			this.setBox(heead, randX, randY);
 			snake.setHead(heead);
 			
-			snake.addLength();
+			snake.addLenght();
 			
 			
 			//ora inizializziamo il primo pezzo di corpo
@@ -241,7 +265,7 @@ public class Map {
 			SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, firstPieceX, firstPieceY, heead);
 			setBox(firstBodyPiece, firstPieceX, firstPieceY);
 			snake.addPiece(firstBodyPiece);
-			snake.addLength();
+			snake.addLenght();
 		
 		
 	}
@@ -331,9 +355,18 @@ public class Map {
 		return endFlag;
 	}
 
-
 	public void setEndFlag(Boolean endFlag) {
 		this.endFlag = endFlag;
+	}
+	
+	/**
+	 * metodo che ritorna l'identificativo in memoria della mappa
+	 * @return 
+	 */
+	@Override
+	public String toString() {
+		return this.toString();
+		
 	}
 	
 	
