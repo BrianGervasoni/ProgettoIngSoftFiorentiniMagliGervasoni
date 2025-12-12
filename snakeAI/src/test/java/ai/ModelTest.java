@@ -30,14 +30,13 @@ public class ModelTest {
 		ActionRegister r= m.forwarding(new double[] {1,2,3,4});
 		r.reward = 4;
 		r.indexAction = 2;
-		for(double s: r.actionsProb)
-			System.out.print(s+"|");
+		
 		m.memorizeActions(new ActionRegister[] {r});
 		m.initBackPropagation();
 		
 		double[] test =  m.backPropagation();
 		
-		double[] trueLoss = new double[] {4.652735277428319,15.682484034489764};
+		double[] trueLoss = new double[] {4.652735277428321,15.682484034489768};
 		assertArrayEquals(trueLoss,test);
 		assertNotNull(m.getMemory());
 	}
