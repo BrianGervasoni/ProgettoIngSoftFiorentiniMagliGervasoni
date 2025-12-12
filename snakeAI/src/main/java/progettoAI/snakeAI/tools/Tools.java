@@ -5,19 +5,21 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.apache.commons.math3.linear.*;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 public final class Tools {
 	
-	public static double pickRandom(int min,int max) {
+	public static double pickRandom(double min,double max) {
 		Random rand = new Random();
-		return min * rand.nextDouble() * (max - min);
+		return  (rand.nextDouble() * (max - min))+min;
 	}
 	
 	/**
-	 * copy the vector that rappresent a row of a matrix nRow time
+	 * copy the vector that rapresents a row of a matrix nRow time
 	 * @param v
 	 * @param nRow
-	 * @return
+	 * @return RealMatrix
 	 */
 	public static RealMatrix createRowMatrixFromVector(RealVector v, int nRow) {
 		if(nRow == 1) {
@@ -41,19 +43,62 @@ public final class Tools {
 		return MatrixUtils.createRealMatrix(tmp);
 	}
 	
+	/**
+	 * perform the outerProduct (u * v)
+	 * @param u (M X 1)
+	 * @param v (1 X N)
+	 * @return RealMatrix
+	 */
 	public static RealMatrix outerProduct(RealVector u, RealVector v) {
-        // Passo 1: Converti u in una matrice colonna (M x 1)
-        // MatrixUtils.createColumnFieldMatrix crea una matrice con una singola colonna
+        // Step 1: Convert u to a column matrix (M x 1)
         RealMatrix colMatrix = MatrixUtils.createColumnRealMatrix(u.toArray());
 
-        // Passo 2: Converti v in una matrice riga (1 x N)
-        // Array2DRowRealMatrix(double[][]) dove il primo array è la singola riga
+        // Step 2: Convert v to a row matrix (1 x N)
         double[][] vData = new double[1][v.getDimension()];
         vData[0] = v.toArray();
         RealMatrix rowMatrix = new Array2DRowRealMatrix(vData);
 
-        // Passo 3: Moltiplica le due matrici (M x 1) * (1 x N) = (M x N)
-        // Il metodo multiply() esegue la moltiplicazione standard tra matrici
+        // Step 3: Multiply the two matrices (M x 1) * (1 x N) = (M x N)
         return colMatrix.multiply(rowMatrix);
     }
+	
+	/**
+	 * perform the clip function
+	 * @param x
+	 * @param a
+	 * @param b
+	 * @return double
+	 */
+	public static double clip(double x, double a, double b) {
+		if(x<a)
+			return a;
+		if(x>b)
+			return b;
+		return x;
+	}
+	
+	/**
+	 * perform the derivate of the clip function
+	 * @param x
+	 * @param a
+	 * @param b
+	 * @return double
+	 */
+	public static double derivateClip(double x, double a, double b) {
+		if(x<a)
+			return 0;
+		if(x>b)
+			return 0;
+		return 1;
+	}
+	
+	 public static INDArray appendCol(INDArray existingMatrix, INDArray newCol) {
+	        if (existingMatrix == null) {
+	            // If it is the first row, return it directly as the initial array
+	            return newCol.reshape(newCol.length(),1);
+	        } else {
+	            // Concatenate along the 1-axis (column axis)
+	            return Nd4j.concat(1, existingMatrix, newCol);
+	        }
+	    }
 }

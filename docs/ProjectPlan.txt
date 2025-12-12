@@ -1,0 +1,81 @@
+Introduzione
+
+L'obiettivo principale del progetto è aiutare l'utente finale a comprendere meglio il funzionamento di un'Intelligenza Artificiale di base sviluppandone e allenandone una che possa giocare al classico gioco di Snake.
+Si implementerà un' AI usando il metodo di allenamento ideato da openAI chiamato proximy policy optimizer (PPO), in particolare verrà implementata una versione che utilizza i thread per ottimizare il lavoro di allenamento.
+Il risultato a cui bisogna ambire è lo sviluppo e l'interfacciamento di due moduli principali: il primo consiste nel gioco originale, mentre il secondo consiste nel "cervello" effettivo dell'AI, complementandoli con
+un'interfaccia grafica che permetta il facile utilizzo anche per i non esperti.
+
+
+
+
+Modello di processo
+
+Si seguirà la metodologia SCRUM: Davide Fiorentini ricoprirà il ruolo di Scrum Master, Federico Magli ricoprirà il ruolo di Product Owner. È stata creata una Kanban Board su Trello (https://trello.com/b/DpPiGUen/ing-del-software?completedInviteSignup=1). Ogni sabato è prevista una riunione di coordinamento e risoluzione di eventuali problemi che verranno sollevati in corso di sviluppo.
+Una sessione di Sprint durerà 2 settimane, e nel relativo sabato di chiusura dello Sprint si effettuerà lo Sprint Review e Sprint Retrospective.
+
+
+
+Standard, linee guida, procedure
+
+Verranno usate le convenzioni Java e interamente la lingua inglese; durante lo Sprint Review verrà analizzata e convalidata la documentazione prodotta.
+
+
+
+Attività di gestione
+
+Verranno formati 2 gruppi di programmazione, uno si occuperà del modulo dell'intelligenza artificiale, l'altro si occuperà del modulo di snake e interfaccia.
+Ogni venerdi/sabato alle 14:00 ci sarà una riunione in cui i lavori dei 2 gruppi verranno controllati e uniti. I documenti sul design potranno essere pubblicati su gitHub solo durante la riunione.
+
+
+
+Rischi
+
+L'implementazione totale del codice potrebbe sfiorare i limiti di tempo imposti.
+
+
+
+Personale
+
+I responsabili sono: Davide Fiorentini e Manuela Fiorentini per il modulo dell'AI, Brian Gervasoni e Federico Magli per il modulo dell'interfaccia e snake.
+
+
+
+Metodi e tecniche
+
+Verrà fatto utilizzo del linguaggio di programmazione Java e dell'IDE Eclipse. Il progetto verrà gestito interamente con Maven e Git (con repo GitHub).
+
+
+
+Garanzia di qualità
+
+Verranno implementati gli standard della programmazione ad oggetti
+
+
+
+Pacchetti di lavoro
+
+Il progetto verrà diviso in due moduli principali: nel primo verrà sviluppato il cervello effettivo dell'AI con tutti i suoi requisiti e dettagli tecnici; nel secondo modulo verrà sviluppato il gioco Snake.
+
+
+
+Risorse
+
+///
+
+
+
+Budget
+
+///
+
+
+
+Cambiamenti
+
+///
+
+
+
+Consegna
+
+Il progetto sarà pronto per essere scaricato dal repository GitHub entro il 30/1/2026.

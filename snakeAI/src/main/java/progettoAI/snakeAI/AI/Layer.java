@@ -1,13 +1,21 @@
 package progettoAI.snakeAI.AI;
 
 import org.apache.commons.math3.linear.*;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.activations.*;
+import org.nd4j.linalg.activations.impl.*;
+import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.learning.config.Sgd; // Necessario per l'ottimizzatore
+import org.nd4j.common.primitives.Pair;
+import org.nd4j.linalg.api.*; // Per calcolare la media della Loss
+
 
 import progettoAI.snakeAI.tools.Tools;
 import progettoAI.snakeAI.hyperparameters.*;
 
 
 public abstract class Layer {
-	private RealVector bias;
+	/*private RealVector bias;
 	private RealVector tmpBias;
 	private RealVector preActivation;
 	private RealVector activation;
@@ -15,15 +23,38 @@ public abstract class Layer {
 	private RealMatrix weights;
 	private RealMatrix tmpWeights;
 	private RealMatrix derivateFromLossToWeights;
-	private RealVector derivateFromLossToActivation;
+	private RealVector derivateFromLossToActivation;*/
+	private INDArray bias;
+	private INDArray weights;
 	
+	private transient INDArray tmpBias;
+	private transient INDArray tmpWeights;
+	
+	private transient INDArray backLayerActivation_cache;
+	private transient INDArray preActivation_cache;
+	
+	private transient INDArray cumulativeDLdW;
+	private transient INDArray cumulativeDLdB;
+	
+	private IActivation activation;
+	
+	/**
+	 * W [output X input]
+	 * @param bias [numberOfNodeInThisLayer]
+	 * @param weights [numberOfNodeInThisLayer, numberOfNodeInTheBackLayer]
+	 */
 	public Layer(double[] bias , double[][] weights) {
-		this.bias = MatrixUtils.createRealVector(bias);
-		this.weights = MatrixUtils.createRealMatrix(weights);
+		/*this.bias = MatrixUtils.createRealVector(bias);
+		this.weights = MatrixUtils.createRealMatrix(weights);*/
+		this.bias = Nd4j.create(bias).reshape(bias.length,1);//NX1
+		this.weights = Nd4j.create(weights);//NXK
+		this.cumulativeDLdW = Nd4j.zerosLike(this.weights);
+        this.cumulativeDLdW = Nd4j.zerosLike(this.bias);
 	}
 	
 	/**
 	 * create layer with the specificate number of node and random value for bias and weights from -10 to 10
+	 * W [output X input]
 	 * @param lenLayer
 	 * @param lenNextLayer
 	 */
@@ -31,208 +62,189 @@ public abstract class Layer {
 		double [] tmpBias = new double[lenLayer];
 		double[][] tmpWeights = new double[lenLayer][lenBackLayer];
 		for(int i=0;i<lenLayer;i++) {
-			tmpBias[i] = Tools.pickRandom(-10, 10);
+			tmpBias[i] = Tools.pickRandom(-0.1, 0.1);
 			for(int j=0;j<lenBackLayer;j++) {
-				tmpWeights[i][j] = Tools.pickRandom(-10, 10);
+				tmpWeights[i][j] = Tools.pickRandom(-0.1, 0.1);
 			}
 		}
 		
-		this.bias = MatrixUtils.createRealVector(tmpBias);
-		this.weights = MatrixUtils.createRealMatrix(tmpWeights);
+		this.bias = Nd4j.create(tmpBias).reshape(tmpBias.length,1);//NX1
+		this.weights = Nd4j.create(tmpWeights);//NXK
+		this.cumulativeDLdW = Nd4j.zerosLike(this.weights);
+        this.cumulativeDLdW = Nd4j.zerosLike(this.bias);
 	}
+	
+	
 
-	public RealVector getBias() {
+	public INDArray getBias() {
 		return bias;
 	}
 
-	public void setBias(RealVector bias) {
-		this.bias = bias.copy();
+	public void setBias(INDArray bias) {
+		this.bias = bias.dup();
 	}
 
-	public RealVector getPreActivation() {
-		return preActivation;
-	}
-
-	public void setPreActivation(RealVector preActivation) {
-		this.preActivation = preActivation.copy();
-	}
-
-	public RealVector getActivation() {
-		return activation;
-	}
-
-	public void setActivation(RealVector activation) {
-		this.activation = activation.copy();
-	}
-
-	public RealVector getDerivateFromLossToBias() {
-		return derivateFromLossToBias;
-	}
-
-	public void setDerivateFromLossToBias(RealVector derivateFromLossToBias) {
-		this.derivateFromLossToBias = derivateFromLossToBias.copy();
-	}
-
-	public RealMatrix getWeights() {
+	public INDArray getWeights() {
 		return weights;
 	}
 
-	public void setWeights(RealMatrix weights) {
-		this.weights = weights.copy();
+	public void setWeights(INDArray weights) {
+		this.weights = weights.dup();
 	}
-
-	public RealMatrix getDerivateFromLossToWeights() {
-		return derivateFromLossToWeights;
-	}
-
-	public void setDerivateFromLossToWeights(RealMatrix derivateFromLossToWeights) {
-		this.derivateFromLossToWeights = derivateFromLossToWeights.copy();
-	}
-
-	public RealVector getDerivateFromLossToActivation() {
-		return derivateFromLossToActivation;
-	}
-
-	public void setDerivateFromLossToActivation(RealVector derivateFromLossToActivation) {
-		this.derivateFromLossToActivation = derivateFromLossToActivation.copy();
-	}
-
-	public RealVector getTmpBias() {
+	
+	
+	
+	public INDArray getTmpBias() {
 		return tmpBias;
 	}
 
-	public void setTmpBias(RealVector tmpBias) {
-		this.tmpBias = tmpBias.copy();
+	public void setTmpBias(INDArray tmpBias) {
+		this.tmpBias = tmpBias.dup();
 	}
 
-	public RealMatrix getTmpWeights() {
+	public INDArray getTmpWeights() {
 		return tmpWeights;
 	}
 
-	public void setTmpWeights(RealMatrix tmpWeights) {
-		this.tmpWeights = tmpWeights.copy();
+	public void setTmpWeights(INDArray tmpWeights) {
+		this.tmpWeights = tmpWeights.dup();
+	}
+
+	public INDArray getBackLayerActivation_cache() {
+		return backLayerActivation_cache;
+	}
+
+	public void setBackLayerActivation_cache(INDArray backLayerActivation_cache) {
+		this.backLayerActivation_cache = backLayerActivation_cache.dup();
+	}
+
+	public INDArray getPreActivation_cache() {
+		return preActivation_cache;
+	}
+
+	public void setPreActivation_cache(INDArray preActivation_cache) {
+		this.preActivation_cache = preActivation_cache.dup();
+	}
+
+	public INDArray getCumulativeDLdW() {
+		return cumulativeDLdW;
+	}
+
+	public void setCumulativeDLdW(INDArray cumulativeDLdW) {
+		this.cumulativeDLdW = cumulativeDLdW.dup();
+	}
+
+	public INDArray getCumulativeDLdB() {
+		return cumulativeDLdB;
+	}
+
+	public void setCumulativeDLdB(INDArray cumulativeDLdB) {
+		this.cumulativeDLdB = cumulativeDLdB.dup();;
+	}
+
+	public IActivation getActivation() {
+		return activation;
+	}
+
+	public void setActivation(IActivation activation) {
+		this.activation = activation;
 	}
 
 	/**
 	 * calculate the activation function of this layer from the previus layer activation
-	 * @param backLayerActivation: RealVector with the back layer activation value
-	 * @return RealVector with this layer activation value
+	 * @param backLayerActivation: INDArray with the back layer activation value
+	 * @param saveActivation: specificate if the layer save the intermediary values, usend during backPropagation
+	 * @return INDArray with this layer activation value
 	 */
-	public RealVector forwarding(RealVector backLayerActivation) {
-		return this.activationCalculus(this.getWeights().preMultiply(backLayerActivation).add(this.bias));//sigma(W*A+B)
+	public INDArray forwarding(INDArray backLayerActivation) {
+		//((NXK) * (KX1)) + (NX1) = (NX1) but the activation function need (1XN) so we do the transpose
+		return this.getActivation().getActivation(this.getWeights().mmul(backLayerActivation).add(this.getBias()).transpose(), false).transpose();//sigma(W*A+B)
 	}
 	
 	/**
-	 * this method perform the same actions as the basic forwarding method but it memorize the preActivation and the activation
-	 * @param backLayerActivation: RealVector with the back layer activation value
-	 * @return RealVector with this layer activation value
+	 * Performs Forward Propagation for an input minibatch
+	 * @param backLayerActivation: The input minibatch [backLayerActivationSize, BatchSize]
+	 * @return activation of this layer for the entire minibatch
 	 */
-	public RealVector backForwarding(RealVector backLayerActivation) {
-		this.setPreActivation(this.getWeights().preMultiply(backLayerActivation).add(this.bias));
-		this.setActivation(this.activationCalculus(this.getPreActivation()));
-		return this.getActivation();//sigma(W*A+B)
-	}
-	
-	/**
-	 * get the derivate of the pre activation function in respect of the weights
-	 * @return
-	 */
-	private RealVector derivateFromPreActivationToWeights() {
-		return activation;
-	}
-	
-	/**
-	 * get the derivate of the pre activation function in respect to the activation of the below layer
-	 * @return
-	 */
-	private RealMatrix derivateFromPreActivationToActivation() {
-		return this.getWeights();
+	public INDArray forwardPass(INDArray backLayerActivation) {
+		this.setBackLayerActivation_cache(backLayerActivation);//KXM
+		
+		//((NXK) * (KXM)) + (NX1) = (NXM) use broadcasting for the bias
+		this.setPreActivation_cache(this.getWeights().mmul(backLayerActivation).add(this.getBias()));//W*A+B
+		
+		//the activation need (MXN) so we do the transpose. Duplicate the array because we don't want it to change
+		return this.getActivation().getActivation(this.getPreActivation_cache().transpose().dup(), true).transpose();
 	}
 	
 	/**
 	 * calculate derivates from loss to parameters, add the cumulative derivates for the next stochastic calculus
-	 * @param backLayer
+	 * @param dLdA
+	 * @param mode
+	 * @return dLdA
 	 */
-	public void derivateCalculus() {
-		RealMatrix tmpDAct = this.derivateFromLossToPreActivation();
-		this.derivateFromLossToWeights.add( Tools.createColumnMatrixFromVector(this.derivateFromPreActivationToWeights(),1).multiply(tmpDAct));
+	public INDArray derivateCalculus(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize) {
+		 
+		 if (dLdA.isNaN().any()) {
+		        System.err.println("INSTABILITA RILEVATA: alcune derivate sono NaN.");
+		 }
+		//first term dL/dZ, second term dL/dW in respect to the activation
+		 Pair<INDArray, INDArray> gradientPair = this.activation.backprop(this.getPreActivation_cache().transpose(), dLdA.transpose());
 		
-		this.derivateFromLossToBias.add(tmpDAct.operate(this.getDerivateFromLossToActivation()));//calculus derivate from loss to bias
-	}
-	
-	/**
-	 * calculate the derivate from loss to activation of the below layer
-	 * @param backLayer
-	 */
-	public void derivateFromLossToActivationCalculus(Layer backLayer) {
-		backLayer.setDerivateFromLossToActivation(
-				this.derivateFromPreActivationToActivation().operate(
-						this.derivateFromLossToPreActivation().operate(this.getDerivateFromLossToActivation())));
-	}
-	
-	/**
-	 * initialize the final derivate Weights and Bias to 0 and set the tmp parameters to the actual value
-	 */
-	public void initBackPropagation() {
-		this.derivateReset();
-		this.setTmpBias(this.getBias());
-		this.setTmpWeights(this.getWeights());
+		 INDArray dLdZ = gradientPair.getFirst().transpose();
+		 
+		 //(NXM) * (MXK) = (NXK)
+		 INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
+		 
+		this.tmpOptimization(dLdW,dLdZ.sum(1).reshape(dLdZ.rows(),1),mode,minibatchSize);//si prende solo una riga per il dLdB dal dLdZ (NX1)
+		 // (KXN) * (NXM) = (KXM) 
+		 return this.getWeights().transpose().mmul(dLdZ);
 	}
 	
 	/**
 	 * perform a step in the backPropagation phase
-	 * @param backLayer
+	 * @param dLdA
+	 * @param mode
+	 * @param minibatchSize
+	 * @return dLdA
 	 */
-	public void backPropagation(Layer backLayer) {
-		this.derivateCalculus();
-		if(backLayer != null)
-			this.derivateFromLossToActivationCalculus(backLayer);
+	public INDArray backPropagation(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize) {
+		return this.derivateCalculus(dLdA, mode,minibatchSize);
 	}
 	
 	/**
-	 * change the value of the weights and bias to the optimized one
+	 * initialize the copy parameters to the true value of the parameters
 	 */
-	public void optimization() {
-		this.setWeights(tmpWeights.copy());
-		this.setBias(tmpBias.copy());
+	public void initBackProp() {
+		this.setTmpWeights(this.getWeights());
+		this.setTmpBias(this.getBias());
 	}
 	
 	/**
-	 * optimizes weight and bias parameters based on the selected mode, it dosn't change the true value used for the forwarding,
-	 * only the method @Layer.optimization change the true value of weights and bias
-	 * @param mode (ASCEND,DESCEND)
+	 * optimize the parameters without changing the true value
+	 * @param dLdW
+	 * @param dLdB
+	 * @param mode
 	 */
-	public void tmpOptimization(TypeGradientUpdate mode) {
+	public void tmpOptimization(INDArray dLdW,INDArray dLdB,TypeGradientUpdate mode,int minibatchSize) {
 		switch(mode){//add change to the tmpParameters
 		case ASCEND:
-			this.setTmpWeights(this.getTmpWeights().add(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.minibacthSize)));
-			this.setTmpBias(this.getTmpBias().add(this.getDerivateFromLossToBias().mapMultiply(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.minibacthSize)));
+			this.getTmpWeights().addi(dLdW.mul(Hyperparameters.alphaW * (1/(double) minibatchSize)));
+			this.getTmpBias().addi(dLdB.mul(Hyperparameters.alphaB * (1/(double) minibatchSize)));
 			break;
 		case DESCEND:
-			this.setTmpWeights(this.getTmpWeights().subtract(this.getDerivateFromLossToWeights().scalarMultiply(Hyperparameters.alphaW).scalarMultiply(1/Hyperparameters.minibacthSize)));
-			this.setTmpBias(this.getTmpBias().subtract(this.getDerivateFromLossToBias().mapMultiplyToSelf(Hyperparameters.alphaB).mapMultiplyToSelf(1/Hyperparameters.minibacthSize)));
+			this.getTmpWeights().subi(dLdW.mul(Hyperparameters.alphaW * (1/(double) minibatchSize)));
+			this.getTmpBias().subi(dLdB.mul(Hyperparameters.alphaB * (1/(double) minibatchSize)));
 			break;
 			default:
 				break;
 		}
-		this.derivateReset();
-	}
-	
-	private void derivateReset() {
-		this.setDerivateFromLossToWeights(new BlockRealMatrix(this.getWeights().getRowDimension(),this.getWeights().getColumnDimension()));//reset derivates to 0
-		this.setDerivateFromLossToBias(new ArrayRealVector(this.getBias().getDimension()));
 	}
 	
 	/**
-	 * calculate activation from the preActivation
-	 * @param preActivation
-	 * @return activation
+	 * change the parameters to the optimizated one
 	 */
-	public abstract RealVector activationCalculus(RealVector preActivation);
-	
-	/**
-	 * calculate derivate of the Loss function to the preActivation
-	 * @return derivate matrix (1XN)
-	 */
-	public abstract RealMatrix derivateFromLossToPreActivation();
+	public void optimization() {
+		this.setWeights(this.getTmpWeights());
+		this.setBias(this.getTmpBias());
+	}
 }

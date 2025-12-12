@@ -15,7 +15,7 @@ public class Intermediary implements Functions{
 		
 	}
 	
-	/** DEVO NORMALIZZARE RISULTATO
+	/** 
 	 * array in the first 61 position will have FOOD, for the next 61 position WALLS and the last 61 SNAKE
 	 * 
 	 * @param map
@@ -26,7 +26,7 @@ public class Intermediary implements Functions{
 		int startingDegree, rephase = 3, n = 61;	
 		String dir;
 		int[] rays;
-		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n);
+		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n), result = inizializeArray(n*3);
 		
 		for(int i=0; i<map.X; i++) { //i get the length of the rows
 			for(int j=0; j<map.Y; j++) { //i get the length of the columns
@@ -75,7 +75,9 @@ public class Intermediary implements Functions{
 			}
 		}
 		
-		return mergeArrays(food, walls, snake);
+		result = mergeArrays(food, walls, snake);
+		return normalizeArray(result);
+		
 	}
 	
 	private Direction moveConversion(int index) {
