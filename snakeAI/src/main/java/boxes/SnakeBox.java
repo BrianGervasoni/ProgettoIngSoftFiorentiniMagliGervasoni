@@ -48,12 +48,21 @@ public class SnakeBox extends Box implements Visualize, Equals{
 	}
 	
 	/**
-	 * Metodo usato per ritornare la parte successiva del serpente
-	 * @param next ritorna in uscita il pezzo successivo del serpente
+	 * Metodo usato per impostare la parte successiva del serpente
+	 * @param next indica il pezzo successivo del serpente
 	 */
 	public void setNext(SnakeBox next) {
 		
 		this.next = next;
+	}
+	
+	/**
+	 * Metodo usato per ritornare il pezzo successivo del serpente
+	 * 
+	 */
+	public SnakeBox getNext() {
+		
+		return this.next;
 	}
 	
 	/**
@@ -82,7 +91,7 @@ public class SnakeBox extends Box implements Visualize, Equals{
 	
 	@Override
 	public boolean equals(Object object) {
-		if(this.element == (SnakeBody) object) {
+		if(this.element == object) {
 			return true;
 		}
 		return false;

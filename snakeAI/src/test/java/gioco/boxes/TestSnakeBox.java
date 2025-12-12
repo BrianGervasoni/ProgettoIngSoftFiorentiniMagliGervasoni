@@ -42,28 +42,31 @@ public class TestSnakeBox {
 	@Test
 	public void testNext() {
 		
-		Map mm = null;
+		Map mm = new Map();
 		Snake sssss = new Snake(mm);
-		Box sn = new SnakeBox(SnakeBody.HEAD, 5, 5, null);
-		SnakeBox sn2 = new SnakeBox(SnakeBody.HEAD, 5, 6, null);
+		SnakeBox sn = new SnakeBox(SnakeBody.HEAD, 5, 5, null);
+		SnakeBox sn2 = new SnakeBox(SnakeBody.BODY, 5, 6, null);
 	
-		sn2.setNext((SnakeBox) sn);
+		sn2.setNext(sn);
 		
-		sssss.addPiece((SnakeBox)sn);
-		sssss.addPiece((SnakeBox)sn2);
+		sssss.addPiece(sn);
+		sssss.addPiece(sn2);
 		
-		assertEquals(sn2, sssss.getBodyPiece(1));
-	
-	
-	
+		System.out.println(sn);
+		System.out.println(sn2.getNext());
+		
+		assertEquals(sn, sn2.getNext());
+
 	}
 	
-	
+	//risulta un problema dovuto all'obverride del metodo equals nella classe SnakeBox
+	//se cambiato il nome del metodo non crea alcun prblema, ben ti sta Manu 🗿🗿(ti prego di non fucilarmi martedì mattina)
+	//abbiamo usato come prova il nome equalz nella classe SnakeBox(si, proprio con la z)🙀
 	@Test
 	public void testEquals(){
 			
 		SnakeBox sn = new SnakeBox(SnakeBody.HEAD, 5, 5, null);
-		assertEquals(SnakeBody.HEAD, sn.equals());
+		assertEquals(true, sn.equals(SnakeBody.HEAD));
 		
 			
 	}

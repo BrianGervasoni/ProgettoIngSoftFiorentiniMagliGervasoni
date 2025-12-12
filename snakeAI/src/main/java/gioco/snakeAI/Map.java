@@ -42,6 +42,32 @@ public class Map {
 		
 	}
 	
+	
+	public Map(Snake ss) {
+		this.box = new Box[X][Y];
+		this.apple = null;
+
+		this.snake = ss;
+		
+		for(int i = 0; i < X ; i++) {
+			for(int k = 0; k < Y ; k++) {
+				if(i == 0 || i == X-1 || k == 0 || k == Y-1) {
+					this.box[i][k] = new EmptyBox(MapElem.WALL, i, k);
+					
+				}
+				else {
+					this.box[i][k] = new EmptyBox(MapElem.EMPTY, i , k);
+				}
+			}
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * metodo usato per assegnare la direzione al serpente(alla testa del serpente)
 	 * 
@@ -299,7 +325,16 @@ public class Map {
 		
 		this.endFlag = fl;
 	}
-	
+
+
+	public Boolean getEndFlag() {
+		return endFlag;
+	}
+
+
+	public void setEndFlag(Boolean endFlag) {
+		this.endFlag = endFlag;
+	}
 	
 	
 }
