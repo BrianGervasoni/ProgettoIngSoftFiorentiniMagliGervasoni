@@ -1,6 +1,6 @@
 package boxes;
 
-public class AppleBox extends Box implements Visualize {
+public class AppleBox extends Box implements Visualize, Equals {
 	
 	//una AppleBox può contenere o no la mela
 	private Food element;
@@ -23,11 +23,12 @@ public class AppleBox extends Box implements Visualize {
 	/**
 	 * Metodo che stampa l'enumerazione contenuta nella casella che chiama il metodo
 	 * Metodo ereditato dalla interface Visualize
+	 * @return 
 	 */
 	@Override
 	public void visual() {
 		
-		System.out.print(element.getFood());
+		// element.getFood();
 	}
 
 	@Override
@@ -41,7 +42,15 @@ public class AppleBox extends Box implements Visualize {
 	public void setElementType(BoxType boxType) {
 		
 		this.element = (Food) boxType;
-		
 	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if(this.element == (Food) object) {
+			return true;
+		}
+		return false;
+	}
+	
 	
 }

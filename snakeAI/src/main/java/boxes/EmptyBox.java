@@ -1,6 +1,6 @@
 package boxes;
 
-public class EmptyBox extends Box implements Visualize{
+public class EmptyBox extends Box implements Visualize, Equals{
 
 	//Una EmptyBox può essere vuota o contenere una parete del campo 
 	private MapElem element;
@@ -13,12 +13,14 @@ public class EmptyBox extends Box implements Visualize{
 	 * @param Ycoordinate riceve in ingresso la coordinata Y della Box
 	 */
 	public EmptyBox(MapElem element, int Xcoordinate, int Ycoordinate) {
-		super(Xcoordinate, Xcoordinate);
+		super(Xcoordinate, Ycoordinate);
 		this.element = element;
 		
 		
 	}
 
+	
+	
 	/**
 	 * Metodo che stampa l'enumerazione contenuta nella casella che chiama il metodo
 	 * Metodo ereditato dalla interface Visualize
@@ -59,5 +61,12 @@ public class EmptyBox extends Box implements Visualize{
 		this.element = (MapElem) boxType;
 	}
 	
+	@Override
+	public boolean equals(Object object) {
+		if(this.element == (MapElem) object) {
+			return true;
+		}
+		return false;
+	}
 	
 }

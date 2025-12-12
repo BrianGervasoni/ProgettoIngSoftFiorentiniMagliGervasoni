@@ -124,7 +124,7 @@ public class Snake {
 	 * @param dir direzione del movimento
 	 * @return true(no collisioni) o false(si collisioni)
 	 */
-	public Boolean move(Direction dir) {
+	public void move(Direction dir) {
 		
 		int NCoordX = 0;
 		int NCoordY = 0;
@@ -265,7 +265,7 @@ public class Snake {
 		//controllo collisione con le pareti della mappa
 		if(body.get(0).getXcoordinate() == 0 || body.get(0).getXcoordinate() == Map.X-1 ||body.get(0).getYcoordinate() == 0 || body.get(0).getYcoordinate() == Map.Y-1) {
 			
-			return false;
+			map.setFlag(true);
 			
 		}
 		
@@ -273,14 +273,14 @@ public class Snake {
 		for(int i = 1; i < body.size(); i ++) {
 			
 			if(body.get(0).getXcoordinate() == body.get(i).getXcoordinate() && body.get(0).getYcoordinate() == body.get(i).getYcoordinate()) {
-				return false;
+				map.setFlag(true);
 			}
 				
 		}
 		
 		
 		
-		return true;
+		map.setFlag(false);
 		
 	}
 	
@@ -289,7 +289,8 @@ public class Snake {
 	 */
 	public void reset() {
 		
-		
+		this.length = 0;
+		body = new ArrayList<SnakeBox>();
 	}
 	
 
