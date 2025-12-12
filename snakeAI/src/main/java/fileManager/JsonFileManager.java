@@ -12,11 +12,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import model.Model;
+import progettoAI.snakeAI.AI.Layer;
 
 public class JsonFileManager {
 	// GsonBuilder is used to format JSON in a readable way (pretty printing)
     private static final Gson GSON = new GsonBuilder().registerTypeAdapter(INDArray.class, new INDArrayAdapter())
-    		.registerTypeAdapter(IActivation.class, new IActivationAdapter()).setPrettyPrinting().create();
+    		.registerTypeAdapter(IActivation.class, new IActivationAdapter()).
+    		registerTypeAdapter(Layer.class, new LayerAdapter()).setPrettyPrinting().create();
     
 	public static void saveModel(Model m,String dirFile) {
 		try (FileWriter writer = new FileWriter(dirFile)) {

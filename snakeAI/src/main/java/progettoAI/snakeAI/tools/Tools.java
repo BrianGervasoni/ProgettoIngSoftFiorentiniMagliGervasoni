@@ -10,9 +10,9 @@ import org.nd4j.linalg.factory.Nd4j;
 
 public final class Tools {
 	
-	public static double pickRandom(int min,int max) {
+	public static double pickRandom(double min,double max) {
 		Random rand = new Random();
-		return min * rand.nextDouble() * (max - min);
+		return  (rand.nextDouble() * (max - min))-Math.abs(max);
 	}
 	
 	/**

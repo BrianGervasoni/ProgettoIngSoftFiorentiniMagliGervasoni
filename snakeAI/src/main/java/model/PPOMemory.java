@@ -58,7 +58,7 @@ public class PPOMemory {
 		Collections.shuffle(oldR);
 		int lastIndex = (int) (oldR.size() * Hyperparameters.minibacthSize);
 		if(lastIndex > 0)
-			return (ActionRegister[]) oldR.subList(0,lastIndex).toArray();
-		return(ActionRegister[]) oldR.subList(0,1).toArray();
+			return oldR.subList(0,lastIndex).toArray(new ActionRegister[0]);
+		return oldR.subList(0,1).toArray(new ActionRegister[0]);
 	}
 }

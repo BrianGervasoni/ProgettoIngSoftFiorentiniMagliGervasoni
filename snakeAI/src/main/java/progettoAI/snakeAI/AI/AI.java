@@ -110,9 +110,8 @@ public abstract class AI {
 		INDArray newProb = this.feedForwarding(tmpR,0,true);
 		// set the starting derivate from loss to activation
 		INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb),this.getMode(),r.length);
-		
-		for(int i=layers.size()-2; i>=0; i--){//perform the backPropagation for every layer
-				dLdA = layers.get(i).backPropagation(dLdA,this.getMode(),r.length);
+		for(int i=layers.size()-2; i>-1; i--){//perform the backPropagation for every layer
+			dLdA = layers.get(i).backPropagation(dLdA,this.getMode(),r.length);
 		}
 	}
 	
@@ -162,7 +161,6 @@ public abstract class AI {
 		for(int i=0; i<r.length; i++) {
 			l = Tools.appendCol(l, singleDerivateLoss(r[i],newProb.getColumn(i)));
 		}
-		
 		return l;
 	}
 	

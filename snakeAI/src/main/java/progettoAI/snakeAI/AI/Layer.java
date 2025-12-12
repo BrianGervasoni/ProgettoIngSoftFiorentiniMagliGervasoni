@@ -62,9 +62,9 @@ public abstract class Layer {
 		double [] tmpBias = new double[lenLayer];
 		double[][] tmpWeights = new double[lenLayer][lenBackLayer];
 		for(int i=0;i<lenLayer;i++) {
-			tmpBias[i] = Tools.pickRandom(-10, 10);
+			tmpBias[i] = Tools.pickRandom(-0.1, 0.1);
 			for(int j=0;j<lenBackLayer;j++) {
-				tmpWeights[i][j] = Tools.pickRandom(-10, 10);
+				tmpWeights[i][j] = Tools.pickRandom(-0.1, 0.1);
 			}
 		}
 		
@@ -168,8 +168,8 @@ public abstract class Layer {
 	 */
 	public INDArray forwardPass(INDArray backLayerActivation) {
 		this.setBackLayerActivation_cache(backLayerActivation);//KXM
+		
 		//((NXK) * (KXM)) + (NX1) = (NXM) use broadcasting for the bias
-	
 		this.setPreActivation_cache(this.getWeights().mmul(backLayerActivation).add(this.getBias()));//W*A+B
 		
 		//the activation need (MXN) so we do the transpose. Duplicate the array because we don't want it to change
@@ -183,19 +183,21 @@ public abstract class Layer {
 	 * @return dLdA
 	 */
 	public INDArray derivateCalculus(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize) {
+		 
+		 if (dLdA.isNaN().any()) {
+		        System.err.println("INSTABILITA RILEVATA: alcune derivate sono NaN.");
+		 }
 		//first term dL/dZ, second term dL/dW in respect to the activation
 		 Pair<INDArray, INDArray> gradientPair = this.activation.backprop(this.getPreActivation_cache().transpose(), dLdA.transpose());
 		
 		 INDArray dLdZ = gradientPair.getFirst().transpose();
+		 
 		 //(NXM) * (MXK) = (NXK)
 		 INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
 		 
-		 
-		 
-		 this.tmpOptimization(dLdW,dLdZ.sum(1).reshape(dLdZ.rows(),1),mode,minibatchSize);//si prende solo una riga per il dLdB dal dLdZ (NX1)
-		 
+		this.tmpOptimization(dLdW,dLdZ.sum(1).reshape(dLdZ.rows(),1),mode,minibatchSize);//si prende solo una riga per il dLdB dal dLdZ (NX1)
 		 // (KXN) * (NXM) = (KXM) 
-		 return this.getWeights().transpose().mmul(dLdW);
+		 return this.getWeights().transpose().mmul(dLdZ);
 	}
 	
 	/**

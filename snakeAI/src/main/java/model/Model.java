@@ -17,8 +17,10 @@ public class Model {
 	 */
 	public Model() {
 		memory = new PPOMemory();
-		critic = new AICritic(new int[] {126,126,126,1},TypeGradientUpdate.DESCEND);
-		actor = new AIActor(new int[] {256,256,256,4},TypeGradientUpdate.ASCEND);
+		if(critic == null || actor == null) {
+			critic = new AICritic(new int[] {126,126,126,1},TypeGradientUpdate.DESCEND);
+			actor = new AIActor(new int[] {256,256,256,4},TypeGradientUpdate.ASCEND);
+		}
 	}
 	
 	public Model(AICritic critic, AIActor actor) {
@@ -65,7 +67,7 @@ public class Model {
 		
 		ActionRegister r = new ActionRegister();
 		r.actionsProb = resActor;
-		r.vTarget = resCritic[0];
+		r.vEstimated = resCritic[0];
 		r.state = input;
 		return r;
 	}
@@ -87,6 +89,8 @@ public class Model {
 	 */
 	public void initBackPropagation() {
 		memory.prepareData();
+		critic.initBackPropagation();
+		actor.initBackPropagation();
 	}
 	
 	/**
@@ -94,10 +98,10 @@ public class Model {
 	 */
 	public void backPropagation() {
 		CompletableFuture<Void> procCritic = backPropCritic();
-		CompletableFuture<Void> procActor = backPropActor();
+		//CompletableFuture<Void> procActor = backPropActor();
 		
 		procCritic.join();
-		procActor.join();
+		//procActor.join();
 	}
 	
 	private  CompletableFuture<Void> backPropCritic(){
@@ -124,4 +128,7 @@ public class Model {
 		actor.optimization();
 	}
 	
+	public void memorizeActions(ActionRegister[] r) {
+		memory.addNewActions(r);
+	}
 }
