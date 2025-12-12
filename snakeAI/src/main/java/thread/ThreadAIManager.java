@@ -5,8 +5,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 
-import fileManager.JsonFileManager;
-
 public class ThreadAIManager {
 
 	List<ThreadAgent> threadAgents;
@@ -39,11 +37,18 @@ public class ThreadAIManager {
 			}
 		}
 		
-		
-	
 	}
 	
 	public void startIstances(){
+		
+		for(int i = 0; i<this.threadsAgentNumber; i++) {
+			threadAgents.get(i).start();
+		}
+		
+		//MODELS DEVONO ATTIVARSI DOPO CHE TUTTI AGENTS HANNO FATTO SENDS ACTIONS
+		for(int i = 0; i<this.threadsModelNumber; i++) {
+			threadModels.get(i).start();
+		}
 		
 	}
 	

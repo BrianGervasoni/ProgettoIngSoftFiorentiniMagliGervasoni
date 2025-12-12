@@ -5,6 +5,7 @@ public class ThreadModel extends Thread{
 
 	Model model;
 	String dirFile; 
+	boolean ready; //DA AGGIUNGERE A UML
 	
 	public ThreadModel(String dir) {
 		this.dirFile = dir;
