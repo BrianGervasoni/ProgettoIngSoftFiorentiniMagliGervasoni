@@ -12,7 +12,7 @@ public final class Tools {
 	
 	public static double pickRandom(double min,double max) {
 		Random rand = new Random();
-		return  (rand.nextDouble() * (max - min))-Math.abs(max);
+		return  (rand.nextDouble() * (max - min))+min;
 	}
 	
 	/**

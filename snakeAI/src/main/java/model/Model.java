@@ -98,10 +98,10 @@ public class Model {
 	 */
 	public void backPropagation() {
 		CompletableFuture<Void> procCritic = backPropCritic();
-		//CompletableFuture<Void> procActor = backPropActor();
+		CompletableFuture<Void> procActor = backPropActor();
 		
 		procCritic.join();
-		//procActor.join();
+		procActor.join();
 	}
 	
 	private  CompletableFuture<Void> backPropCritic(){
