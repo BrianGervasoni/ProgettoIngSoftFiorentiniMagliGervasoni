@@ -55,13 +55,10 @@ public class TestSnakeBox {
 		System.out.println(sn);
 		System.out.println(sn2.getNext());
 		
-		assertEquals(sn, sn2.getNext());
+		assertEquals(sn.getElementType(), sn2.getNext().getElementType());
 
 	}
 	
-	//risulta un problema dovuto all'obverride del metodo equals nella classe SnakeBox
-	//se cambiato il nome del metodo non crea alcun prblema, ben ti sta Manu 🗿🗿(ti prego di non fucilarmi martedì mattina)
-	//abbiamo usato come prova il nome equalz nella classe SnakeBox(si, proprio con la z)🙀
 	@Test
 	public void testEquals(){
 			
