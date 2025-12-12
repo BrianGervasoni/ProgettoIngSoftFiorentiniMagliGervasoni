@@ -10,26 +10,16 @@ public class ThreadAgent extends Thread{
 	Model model;
 	Intermediary intermediary;
 	GameMain game;
-	boolean ready; //DA AGGIUNGERE A UML it tells if the thread action is ready to execute or not
+	ThreadAIManager AIManager; //DA AGG UML
 
 	public ThreadAgent(Model model) {
 		this.model = model;
-		this.ready = true;
 	}
 	
 	@Override
 	public void run() {
 		
 		while(true) {
-			
-			do {
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}while(ready == false);
 			
 			intermediary.mapConversion(game.getMap());
 			/*
@@ -54,9 +44,11 @@ public class ThreadAgent extends Thread{
 				/**
 				 * SEND ACTIONS
 				 */
-				ready = false;
+				
+				this.getAIManager().threadAgentReportThatItHasFinished();
 				
 			}
+			
 		}
 	}
 	
@@ -82,8 +74,12 @@ public class ThreadAgent extends Thread{
 		
 	}
 	
-	public void setStart(boolean start) {
-		this.ready = start;
+	public void setAIManager(ThreadAIManager aIManager) {
+		AIManager = aIManager;
+	}
+	
+	public ThreadAIManager getAIManager() {
+		return AIManager;
 	}
 	
 }

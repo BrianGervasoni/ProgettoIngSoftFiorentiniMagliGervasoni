@@ -1,11 +1,12 @@
 package thread;
+
 import model.Model;
 
 public class ThreadModel extends Thread{
 
 	Model model;
 	String dirFile; 
-	boolean ready; //DA AGGIUNGERE A UML
+	ThreadAIManager AIManager; //DA AGG UML
 	
 	public ThreadModel(String dir) {
 		this.dirFile = dir;
@@ -14,6 +15,27 @@ public class ThreadModel extends Thread{
 	@Override
 	public void run() {
 		
+		while(true) {
+			
+			this.getAIManager().threadsModelWaitForThreadsAgentToFinish();
+			
+			this.model.initBackPropagation();
+			
+			this.getAIManager().threadModelReportsThatItHasFinishedBackProp();
+			
+			/*
+			 * CONTINUA ALTRE OPERZIONI
+			 */
+			
+		}
+	}
+
+	public ThreadAIManager getAIManager() {
+		return AIManager;
+	}
+
+	public void setAIManager(ThreadAIManager aIManager) {
+		AIManager = aIManager;
 	}
 	
 	public void update() {
