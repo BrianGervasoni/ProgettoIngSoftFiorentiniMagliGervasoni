@@ -19,7 +19,7 @@ class TestSnake {
 		
 		assertEquals(3, ss.getLength());
 		
-		ss.setLength(999);
+		ss.setLenght(999);
 		assertEquals(999, ss.getLength());
 	}
 	

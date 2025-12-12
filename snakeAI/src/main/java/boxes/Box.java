@@ -52,4 +52,7 @@ public abstract class Box implements Visualize{
     
 	public abstract BoxType getElementType(); 
 	public abstract void setElementType(BoxType boxType); 
+	
+	@Override
+	public abstract boolean equals(Object object);
 }
