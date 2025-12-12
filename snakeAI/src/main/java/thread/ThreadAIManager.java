@@ -1,6 +1,10 @@
 package thread;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+
+import fileManager.JsonFileManager;
 
 public class ThreadAIManager {
 
@@ -15,10 +19,14 @@ public class ThreadAIManager {
 	}
 	
 	public void createIstance(){
+	
+		String relPath = "target/modelli/";
+		Path relativePath = Paths.get(relPath);
+		Path absolutePath = relativePath.toAbsolutePath();
 		
 		for(int i = 0; i<this.threadsModelNumber; i++) {
 			
-			ThreadModel threadModel = new ThreadModel("../modelli/modello.Json");
+			ThreadModel threadModel = new ThreadModel(absolutePath.toString());
 			threadModels.add(threadModel);
 			
 			for(int j = 0; j<this.threadsAgentNumber; j++) {
@@ -26,6 +34,8 @@ public class ThreadAIManager {
 				threadAgents.add(threadAgent);
 			}
 		}
+		
+		
 	
 	}
 	
