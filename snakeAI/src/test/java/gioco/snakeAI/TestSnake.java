@@ -13,29 +13,29 @@ class TestSnake {
 
 		Snake ss = new Snake(new Map());
 		
-		ss.addLength();
-		ss.addLength();
-		ss.addLength();
+		ss.addLenght();
+		ss.addLenght();
+		ss.addLenght();
 		
-		assertEquals(3, ss.getLength());
+		assertEquals(3, ss.getLenght());
 		
 		ss.setLenght(999);
-		assertEquals(999, ss.getLength());
+		assertEquals(999, ss.getLenght());
 	}
 	
 	@Test
 	void testReset() {
 		
 		Snake ss = new Snake(new Map());
-		ss.addLength();
-		ss.addLength();
-		ss.addLength();
+		ss.addLenght();
+		ss.addLenght();
+		ss.addLenght();
 		ss.addPiece(new SnakeBox(SnakeBody.BODY, 7 ,3, null));
 		ss.addPiece(new SnakeBox(SnakeBody.HEAD, 1 ,2, null));
 		
 		ss.reset();
 		
-		assertEquals(0, ss.getLength());
+		assertEquals(0, ss.getLenght());
 		assertEquals(0, ss.getBody().size());
 		
 	}
