@@ -1,6 +1,9 @@
 package model;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
 
@@ -14,6 +17,19 @@ public class Model {
 	private AICritic critic;
 	private AIActor actor;
 	private transient PPOMemory memory;
+	
+	//TODO
+	private transient int threadsAgentRunning = 0; //DA AGGIUNGERE A UML 
+	private transient int threadsModelRunning = 0; //DA AGGIUNGERE A UML 
+	private transient int threadsAgentWaiting = 0; //DA AGGIUNGERE A UML 
+	private transient int threadsModelWaiting= 0; //DA AGGIUNGERE A UML
+	private transient boolean initBackProp = true;
+	private transient boolean initOptimization = false;
+	
+	//TODO
+	final Lock lock = new ReentrantLock();
+	final Condition threadsAgent = lock.newCondition(); 
+	final Condition threadsModel = lock.newCondition();
 	
 	/**
 	 * setup the default configuration (critic: 3X126 actor: 3X256)
@@ -137,5 +153,132 @@ public class Model {
 	
 	public void memorizeActions(ActionRegister[] r) {
 		memory.addNewActions(r);
+	}
+	
+public void threadAgentReportThatItHasStarted() {
+		
+		lock.lock();
+        try {
+        	
+            // AGENTI SI METTONO IN WAITING 
+            while (this.threadsModelRunning > 0 && !initOptimization) {
+            	threadsAgentWaiting ++;
+                threadsAgent.await();
+                threadsAgentWaiting--;
+            }
+            
+            threadsAgentRunning++;
+            
+        } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			lock.unlock();
+		}
+        
+	}
+
+	public void threadAgentReportThatItHasFinished() {
+		
+		lock.lock();
+        try {
+        	
+        	threadsAgentRunning--;
+        	threadsModel.signalAll(); 
+        	
+        	while (!initBackProp) {
+            	threadsAgentWaiting ++;
+                threadsAgent.await();
+                threadsAgentWaiting--;
+            }
+            
+        } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			lock.unlock();
+		}
+	}
+	
+	public void threadModelReportsThatItHasStartedInizitBackProp() {
+
+		lock.lock();
+		try {
+			
+			initBackProp = true;
+			
+            while(this.threadsAgentRunning > 0) {
+            	threadsModelWaiting ++;
+                threadsModel.await();
+                threadsModelWaiting--;
+            }
+            
+            threadsModelRunning++;
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			lock.unlock();
+		}
+		
+	}
+	
+	public void threadModelReportsThatItHasFinishedInizitBackProp() {
+		
+		lock.lock();
+        try {
+        	
+        	threadsModelRunning--;
+        	
+        	initBackProp = false;
+        	initOptimization = true;
+        	
+        	threadsAgent.signalAll(); 
+        	
+        } finally {
+			lock.unlock();
+		}
+		
+	}
+	
+	public void threadModelReportsThatItHasStartedOptimization() {
+
+		lock.lock();
+		try {
+			
+            while(this.threadsAgentRunning > 0) {
+            	threadsModelWaiting ++;
+                threadsModel.await();
+                threadsModelWaiting--;
+            }
+            
+            threadsModelRunning++;
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			lock.unlock();
+		}
+		
+	}
+	
+	public void threadModelReportsThatItHasFinishedInizitOptimization() {
+		
+		lock.lock();
+        try {
+        	
+        	threadsModelRunning--;
+        	
+        	initOptimization = false;
+        	initBackProp = true;
+        	
+        	threadsAgent.signalAll(); 
+	
+        } finally {
+			lock.unlock();
+		}
+		
 	}
 }

@@ -6,10 +6,11 @@ public class ThreadModel extends Thread{
 
 	Model model;
 	String dirFile; 
-	ThreadAIManager AIManager; //DA AGG UML
+	int nThreadsAgent; //TODO UML
 	
-	public ThreadModel(String dir) {
+	public ThreadModel(String dir, int nTA) { //TODO UML
 		this.dirFile = dir;
+		this.nThreadsAgent = nTA;
 	}
 	
 	@Override
@@ -17,25 +18,54 @@ public class ThreadModel extends Thread{
 		
 		while(true) {
 			
-			this.getAIManager().threadsModelWaitForThreadsAgentToFinish();
+			System.out.println("thread model è in attesa che gli agents finiscano");
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			this.model.threadModelReportsThatItHasStartedInizitBackProp();
 			
-			this.model.initBackPropagation();
+			System.out.println("thread model sta inizializza back propagation");
 			
-			this.getAIManager().threadModelReportsThatItHasFinishedBackProp();
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//this.model.initBackPropagation();
+			System.out.println("thread model ha finito inizializza back prop");
 			
+		
+			this.model.threadModelReportsThatItHasFinishedInizitBackProp();
 			/*
-			 * CONTINUA ALTRE OPERZIONI
+			 * CONTINUA ALTRE OPERZIONI BACK PROPAGATION
 			 */
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("CONCURRENT TIME thread model sta facendo back prop");
 			
+			this.model.threadModelReportsThatItHasStartedOptimization();
+			
+			System.out.println("thread model sta iniziando optimization");
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("thread model ha finito optimization");
+			/*
+			 * OPERZIONI OPTIMIZATION
+			 */
+			this.model.threadModelReportsThatItHasFinishedInizitOptimization() ;
 		}
-	}
-
-	public ThreadAIManager getAIManager() {
-		return AIManager;
-	}
-
-	public void setAIManager(ThreadAIManager aIManager) {
-		AIManager = aIManager;
 	}
 	
 	public void update() {
@@ -46,8 +76,8 @@ public class ThreadModel extends Thread{
 		
 	}
 	
-	public void load() {
-		
+	public Model load() {//TODO UML 
+		return null;
 	}
 	
 	public int forwading(double[] input) {

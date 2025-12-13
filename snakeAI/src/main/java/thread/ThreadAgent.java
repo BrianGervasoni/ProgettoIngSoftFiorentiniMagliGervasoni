@@ -21,7 +21,8 @@ public class ThreadAgent extends Thread{
 		
 		while(true) {
 			
-			intermediary.mapConversion(game.getMap());
+			this.model.threadAgentReportThatItHasStarted();
+			//intermediary.mapConversion(game.getMap());
 			/*
 			 * intermediary
 			 * MAP CONVERTION
@@ -38,16 +39,30 @@ public class ThreadAgent extends Thread{
 			 * 			REPEAT FROM MAP CONVERTION
 			 */
 			
-			if(game.finish() == true) {
-				
-				intermediary.finishEpisode();
+			System.out.println("thread agent sta eseguendo");
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//if(game.finish() == true) {
+			
+				//intermediary.finishEpisode();
 				/**
 				 * SEND ACTIONS
 				 */
+				System.out.println("thread agent ha finito");
+			
+				this.model.threadAgentReportThatItHasFinished();
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
-				this.getAIManager().threadAgentReportThatItHasFinished();
-				
-			}
+			//}
 			
 		}
 	}
