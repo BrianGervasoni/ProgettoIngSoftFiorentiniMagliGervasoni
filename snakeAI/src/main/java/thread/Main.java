@@ -1,6 +1,39 @@
 package thread;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Model;
+
 public class Main {
 
-	
+	public static void main(String[] args) {
+		
+		//SOLO PER QUESTIONI DI TEST !!!!
+		Model model = new Model();
+		ThreadAIManager manager = new ThreadAIManager(2,1);
+		
+		List<ThreadAgent> threadAgents = new ArrayList<>();
+		List<ThreadModel> threadModels = new ArrayList<>();
+		
+		for(int i = 0; i<1; i++) {
+			
+			ThreadModel threadModel = new ThreadModel("hello",2);
+			threadModels.add(threadModel);
+			threadModel.setModel(model);
+			
+			for(int j = 0; j<2; j++) {
+				ThreadAgent threadAgent = new ThreadAgent(threadModel.model);
+				threadAgents.add(threadAgent);
+				threadAgent.setModel(model);
+			}
+		}
+		
+		manager.threadAgents = threadAgents;
+		manager.threadModels = threadModels;
+		
+		manager.startIstances();
+
+	}
+
 }
