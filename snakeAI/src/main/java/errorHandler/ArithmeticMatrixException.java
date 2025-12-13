@@ -7,6 +7,11 @@ public class ArithmeticMatrixException extends Exception{
 		
 	}
 	
+	public ArithmeticMatrixException(String message, Throwable cause) {
+		super(message, cause);
+		
+	}
+	
 	/**
 	 * metodo che ritorna la stringa dell'errore verificatosi durante l'esecuzione
 	 */
