@@ -17,7 +17,7 @@ public class ThreadCreationException extends Exception{
 	@Override
 	public String toString() {
 		
-		return "Si è verificato un errore nella creazione del thread \nNuovo Tentativo in corso";
+		return "Si è verificato un errore nella creazione del thread";
 	}
 
 }

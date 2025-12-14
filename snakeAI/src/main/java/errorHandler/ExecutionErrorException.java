@@ -18,7 +18,7 @@ public class ExecutionErrorException extends Exception{
 	@Override
 	public String toString() {
 		
-		return "Si è verificato un errore durante l'esecuzione del gioco Snake \nNuovo Tentativo in corso";
+		return "Si è verificato un errore durante l'esecuzione del gioco Snake";
 	}
 	
 }

@@ -18,6 +18,6 @@ public class ArithmeticMatrixException extends Exception{
 	@Override
 	public String toString() {
 		
-		return "Si è verificato un errore durante la sessione di calcolo dell'AI \nNuovo Tentativo in corso";
+		return "Si è verificato un errore durante la sessione di calcolo dell'AI";
 	}
 }

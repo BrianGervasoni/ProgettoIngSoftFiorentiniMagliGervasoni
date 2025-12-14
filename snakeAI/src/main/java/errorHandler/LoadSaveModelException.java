@@ -18,6 +18,6 @@ public class LoadSaveModelException extends Exception{
 	@Override
 	public String toString() {
 		
-		return "Si è verificato un errore durante il salvataggio del modello \nNuovo Tentativo in corso";
+		return "Si è verificato un errore durante il salvataggio del modello";
 	}
 }
