@@ -1,13 +1,8 @@
 package errorHandler;
 
-public class ArithmeticMatrixException extends Exception{
-
-	public ArithmeticMatrixException(String message) {
-		super(message);
-		
-	}
+public class ArithmeticException extends Exception{
 	
-	public ArithmeticMatrixException(String message, Throwable cause) {
+	public ArithmeticException(String message, Throwable cause) {
 		super(message, cause);
 		
 	}

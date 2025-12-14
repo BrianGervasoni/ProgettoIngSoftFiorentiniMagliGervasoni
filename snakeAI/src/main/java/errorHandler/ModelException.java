@@ -1,13 +1,8 @@
 package errorHandler;
 
-public class LoadSaveModelException extends Exception{
-
-	public LoadSaveModelException(String message) {
-		super(message);
-		
-	}
+public class ModelException extends Exception{
 	
-	public LoadSaveModelException(String message, Throwable cause) {
+	public ModelException(String message, Throwable cause) {
 		super(message, cause);
 		
 	}

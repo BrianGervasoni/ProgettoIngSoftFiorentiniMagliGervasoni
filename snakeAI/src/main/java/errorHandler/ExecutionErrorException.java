@@ -2,11 +2,6 @@ package errorHandler;
 
 public class ExecutionErrorException extends Exception{
 	
-	public ExecutionErrorException(String message) {
-		super(message);
-		
-	}
-	
 	public ExecutionErrorException(String message, Throwable cause) {
 		super(message, cause);
 		

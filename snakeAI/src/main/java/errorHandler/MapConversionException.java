@@ -1,11 +1,6 @@
 package errorHandler;
 
 public class MapConversionException extends Exception{
-
-	public MapConversionException(String message) {
-		super(message);
-		
-	}
 	
 	public MapConversionException(String message, Throwable cause) {
         super(message, cause);
