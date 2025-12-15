@@ -71,6 +71,14 @@ public class Model {
 	public void setMemory(PPOMemory memory) {
 		this.memory = memory;
 	}
+	
+	/**
+	 * return how many input node the model have
+	 * @return
+	 */
+	public int getInputLenght() {
+		return actor.getInputLenght();
+	}
 
 	/**
 	 * perform the forwarding for the critic and actor

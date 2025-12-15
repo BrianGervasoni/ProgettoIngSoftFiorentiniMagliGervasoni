@@ -50,6 +50,14 @@ public abstract class AI {
 	public void setMode(TypeGradientUpdate mode) {
 		this.mode = mode;
 	}
+	
+	/**
+	 * return how many input node the AI have
+	 * @return
+	 */
+	public int getInputLenght() {
+		return layers.get(0).getWeights().columns();
+	}
 
 	/**
 	 * return activation of the last layer in base of a date state, it dons't save the activation of all layers
