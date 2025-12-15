@@ -29,11 +29,10 @@ public class Intermediary implements Functions{
 			
 			nNonDivisibilePer3 = 3 * (int)(outputLenght/3);
 			delta = outputLenght - nNonDivisibilePer3;
-			n = nNonDivisibilePer3/3;
 			
-		}else {
-			n = outputLenght/3;
 		}
+		
+		n = (int)outputLenght/3;
 		
 		rephase = 180/n;
 		
