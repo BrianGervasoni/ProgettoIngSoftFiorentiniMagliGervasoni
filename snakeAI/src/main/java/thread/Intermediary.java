@@ -23,11 +23,23 @@ public class Intermediary implements Functions{
 	 */
 	public double[] mapConversion(Map map, int outputLenght) { 
 		//outputLenght it's given by threadAgent.getModel.getAiActor.getLenght (it's the length of the array output 61 *3 ))
+		int startingDegree, rephase, n, nNonDivisibilePer3 = 0, delta = 0;	
 		
-		int startingDegree, rephase = 3, n = outputLenght/rephase;	
+		if(outputLenght%3 != 0) {
+			
+			nNonDivisibilePer3 = 3 * (int)(outputLenght/3);
+			delta = outputLenght - nNonDivisibilePer3;
+			n = nNonDivisibilePer3/3;
+			
+		}else {
+			n = outputLenght/3;
+		}
+		
+		rephase = 180/n;
+		
 		String dir;
 		int[] rays;
-		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n), result = inizializeArray(n*3);
+		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n), arrayMerged = inizializeArray(n*3), result = inizializeArray(n*3 +  delta);
 		
 		for(int i=0; i<map.X; i++) { //i get the length of the rows
 			for(int j=0; j<map.Y; j++) { //i get the length of the columns
@@ -76,7 +88,23 @@ public class Intermediary implements Functions{
 			}
 		}
 		
-		result = mergeArrays(food, walls, snake);
+		if(nNonDivisibilePer3 != 0) {
+			
+			arrayMerged = mergeArrays(food, walls, snake);
+			
+			double[] array = new double[delta];
+			for(int i=0; i<array.length; i++) {
+				array[i] = 0;
+			}
+			
+			result = merge(arrayMerged,array);
+			
+		}else {
+			
+			result = mergeArrays(food, walls, snake);
+			
+		}
+		
 		return normalizeArray(result);
 		
 	}

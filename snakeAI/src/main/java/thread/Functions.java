@@ -246,6 +246,20 @@ public interface Functions {
 		return array;
 	}
 	
+	public default double[] merge(double[] a1, double[] a2) {
+		
+		double[] array = inizializeArray(a1.length + a2.length);
+		int index = 0;
+		
+		System.arraycopy(a1, 0, array, index, a1.length);
+		index = index + a1.length;
+		
+		System.arraycopy(a2, 0, array, index, a2.length);
+		index = index + a2.length;
+		
+		return array;
+	}
+	
 	/**
 	 * 
 	 * @param array
