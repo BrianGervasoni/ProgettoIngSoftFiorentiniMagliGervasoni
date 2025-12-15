@@ -21,9 +21,10 @@ public class Intermediary implements Functions{
 	 * @param map
 	 * @return normalization of the distance of the snake's head and the elements
 	 */
-	public double[] mapConversion(Map map) {
+	public double[] mapConversion(Map map, int outputLenght) { 
+		//outputLenght it's given by threadAgent.getModel.getAiActor.getLenght (it's the length of the array output 61 *3 ))
 		
-		int startingDegree, rephase = 3, n = 61;	
+		int startingDegree, rephase = 3, n = outputLenght/rephase;	
 		String dir;
 		int[] rays;
 		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n), result = inizializeArray(n*3);
