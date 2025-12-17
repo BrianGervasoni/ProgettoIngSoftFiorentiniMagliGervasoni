@@ -47,7 +47,11 @@ public class ModelTest {
 		String relPath = "iperparametri/iperparametriTest.json";
 		Path relativePath = Paths.get(relPath);
 		Path absolutePath = relativePath.toAbsolutePath();
+		Hyperparameters.alphaB = 0.1;
 		JsonFileManager.saveHyperparameters(absolutePath.toString());
+		Hyperparameters.alphaB = 0.3;
 		JsonFileManager.loadHyperparameters(absolutePath.toString());
+		
+		assertEquals(0.1,Hyperparameters.alphaB);
 	}
 }
