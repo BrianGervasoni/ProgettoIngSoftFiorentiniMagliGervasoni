@@ -1,5 +1,6 @@
 package gui.home;
 
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,13 +10,14 @@ public class ButtonModifyHyperParam extends JButton implements ActionListener {
 
 	public ButtonModifyHyperParam(String string) {
 		super(string);
+		addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		System.out.println("Adesso si modificano gli hyperparametri");
-
+		((CardLayout) this.getParent().getParent().getLayout()).next(this.getParent().getParent());
+		System.out.println("click");
 	}
 
 }
