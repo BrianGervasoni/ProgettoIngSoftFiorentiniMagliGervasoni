@@ -13,6 +13,7 @@ import fileManager.JsonFileManager;
 import model.ActionRegister;
 import model.Model;
 import progettoAI.snakeAI.AI.*;
+import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 public class ModelTest {
 
 	@Test
@@ -39,5 +40,14 @@ public class ModelTest {
 		double[] trueLoss = new double[] {4.652735277428321,15.682484034489768};
 		assertArrayEquals(trueLoss,test);
 		assertNotNull(m.getMemory());
+	}
+	
+	@Test
+	void testSaveAndLoadHyperparameters() {
+		String relPath = "iperparametri/iperparametriTest.json";
+		Path relativePath = Paths.get(relPath);
+		Path absolutePath = relativePath.toAbsolutePath();
+		JsonFileManager.saveHyperparameters(absolutePath.toString());
+		JsonFileManager.loadHyperparameters(absolutePath.toString());
 	}
 }

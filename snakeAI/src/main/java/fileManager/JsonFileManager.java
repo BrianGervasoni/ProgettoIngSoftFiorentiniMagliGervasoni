@@ -10,13 +10,16 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.lang.reflect.Modifier;
 
 import model.Model;
 import progettoAI.snakeAI.AI.Layer;
+import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 
 public class JsonFileManager {
 	// GsonBuilder is used to format JSON in a readable way (pretty printing)
-    private static final Gson GSON = new GsonBuilder().registerTypeAdapter(INDArray.class, new INDArrayAdapter())
+    private static final Gson GSON = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
+    		.registerTypeAdapter(INDArray.class, new INDArrayAdapter())
     		.registerTypeAdapter(IActivation.class, new IActivationAdapter()).
     		registerTypeAdapter(Layer.class, new LayerAdapter()).setPrettyPrinting().create();
     
@@ -39,6 +42,24 @@ public class JsonFileManager {
 	            System.err.println("Errore durante la lettura del file: " + e.getMessage());
 	            e.printStackTrace();
 	            return null;
+	        }
+	}
+	
+	public static void saveHyperparameters(String dirFile) {
+		try (FileWriter writer = new FileWriter(dirFile)) {
+            GSON.toJson(new Hyperparameters(), writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
+	public static void loadHyperparameters(String dirFile) {
+		 try (FileReader reader = new FileReader(dirFile)) {
+	            GSON.fromJson(reader, Hyperparameters.class);
+	        } catch (FileNotFoundException e) {
+	        	System.err.println("file con iperparametri non trovato: " + e.getMessage());
+	        } catch (IOException e) {
+	            System.err.println("Errore durante la lettura del file dei iperparametri: " + e.getMessage());
 	        }
 	}
 }

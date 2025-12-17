@@ -6,6 +6,7 @@ import org.nd4j.linalg.factory.Nd4j;
 
 import model.ActionRegister;
 import progettoAI.snakeAI.AI.*;
+import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 
 public class AITest {
 
