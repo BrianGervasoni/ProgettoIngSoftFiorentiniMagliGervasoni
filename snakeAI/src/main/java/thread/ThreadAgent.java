@@ -88,7 +88,7 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double calculateReward(Map map) {
 		
-		double rewardBasic = 4, rewardDistanceApple = 0, rewardGetApple = 50, rewardDead = -50;
+		double rewardBasic = 4, rewardDistanceApple, rewardGetApple = 50, rewardDead = -50;
 		double diagonal = Math.sqrt((map.X*map.X) + (map.Y*map.Y));
 		double distance;
 		
@@ -104,6 +104,8 @@ public class ThreadAgent extends Thread implements Functions{
 								
 								distance = this.calculateDistance(map.getBox(i, j), map.getBox(h, k));
 								rewardDistanceApple = this.normalizeRewardDistanceHeadApple(distance, 0, diagonal); 
+								rewardBasic = rewardBasic + rewardDistanceApple;
+								
 							}
 							
 						}
@@ -113,8 +115,6 @@ public class ThreadAgent extends Thread implements Functions{
 			}
 		}
 		
-		rewardBasic = rewardBasic + rewardDistanceApple;
-		
 		if(map.checkAppleCollision()) {
 			rewardBasic = rewardBasic + rewardGetApple;
 		}
@@ -122,7 +122,6 @@ public class ThreadAgent extends Thread implements Functions{
 		if(map.checkDefeat()) {
 			rewardBasic = rewardBasic + rewardDead;
 		}
-		
 		
 		return rewardBasic;
 	}
