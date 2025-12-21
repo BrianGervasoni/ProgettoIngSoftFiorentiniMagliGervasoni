@@ -35,7 +35,9 @@ public class ThreadAgent extends Thread implements Functions{
 			 * CHECK LIFE/DEATH
 			 * 		IF DEAD game.finish() == true
 			 * 			FINISH EPISODE
+			 * 			lock          !!!!!!!!!!!!!!!!
 			 * 			SEND ACTIONS
+			 *			unlock        !!!!!!!!!!!!!!!!
 			 * 		IF LIFE game.finish() == false
 			 * 			REPEAT FROM MAP CONVERTION
 			 */
