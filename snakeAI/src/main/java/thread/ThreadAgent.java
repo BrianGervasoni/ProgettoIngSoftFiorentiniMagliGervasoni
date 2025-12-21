@@ -10,6 +10,7 @@ public class ThreadAgent extends Thread{
 	Model model;
 	Intermediary intermediary;
 	GameMain game;
+
 	ThreadAIManager AIManager; //DA AGG UML
 
 	public ThreadAgent(Model model) {
@@ -86,8 +87,13 @@ public class ThreadAgent extends Thread{
 		
 	}
 	
+	/**
+	 * 
+	 * @param direction
+	 * @return use the chosen direction to make a move of the snake
+	 */
 	public void move(Direction direction) {
-		
+		this.getGame().giveDirections(direction);
 	}
 	
 	public void resetActionRegister() {
@@ -104,6 +110,14 @@ public class ThreadAgent extends Thread{
 	
 	public ThreadAIManager getAIManager() {
 		return AIManager;
+	}
+	
+	public GameMain getGame() {
+		return game;
+	}
+
+	public void setGame(GameMain game) {
+		this.game = game;
 	}
 	
 }

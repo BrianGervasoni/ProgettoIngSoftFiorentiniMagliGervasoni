@@ -1,6 +1,6 @@
 package boxes;
 
-public abstract class Box implements Visualize{
+public abstract class Box implements Visualize, Equals{
        
     private int Xcoordinate; //coordinata X della casella
     private int Ycoordinate; //coordinata Y della casella
@@ -52,4 +52,6 @@ public abstract class Box implements Visualize{
     
 	public abstract BoxType getElementType(); 
 	public abstract void setElementType(BoxType boxType); 
+	public abstract boolean equals(Object object);
+	
 }

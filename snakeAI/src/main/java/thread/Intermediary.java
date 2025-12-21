@@ -108,13 +108,58 @@ public class Intermediary implements Functions{
 		
 	}
 	
+	/**
+	 * 
+	 * @param index with a dim = 3 (0,1,2)
+	 * 0 = left
+	 * 1 = straight 
+	 * 2 = right
+	 * @return the corresponding direction
+	 */
 	private Direction moveConversion(int index) {
 		
-		return null;
+		switch(index) {
+		
+		case 0 :
+			return Direction.LEFT;
+		case 1 :
+			return Direction.STRAIGHT;
+		case 2 :
+			return Direction.RIGHT;
+		default :
+			return null;
+			
+		}
 		
 	}
 	
+	/**
+	 * 
+	 * @param input. An array with the probability of a certain action.
+	 * For example : an array of 3 (0 = left, 1 = straight, 2 = right) probability of the 3 actions (0.43 , 0.27 , 0.3)
+	 * So i will divide the probability in : 
+	 * (0 ; 0.43) for the first action
+	 * (0.44 ; 0.7) for the second one
+	 * (0.71 ; 1) for the third one
+	 * I will choose a random value from 0 and 1 and select the corresponding direction, 
+	 * example : random value = 0.2 and select the left direction (because 0 < 0.2 < 0.43)
+	 * 
+	 * More the AI will learn, more it will increase the probability of the correct action 
+	 * For example the probability can become : (0.8 , 0.1 , 0.1)
+	 */
 	public Direction moveSelection(double[] input) {
+		
+		double valore = Math.random(); //value from 0 to 1
+		double min = 0;
+		
+		for(int i=0; i<input.length; i++) {
+			
+			if(valore > min && valore <= input[i]) {
+				return moveConversion(i);
+			}
+			
+			min = input[i];
+		}
 		
 		return null;
 		

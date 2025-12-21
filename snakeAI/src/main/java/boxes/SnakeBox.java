@@ -1,6 +1,6 @@
 package boxes;
 
-public class SnakeBox extends Box implements Visualize, Equals{
+public class SnakeBox extends Box {
 
 	//Una SnakeBox può contenere la testa, il corpo o la coda del serpente
 	private SnakeBody element;
