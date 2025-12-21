@@ -1,8 +1,5 @@
 package thread;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import boxes.*;
 import gioco.snakeAI.Map;
 
@@ -97,15 +94,15 @@ public interface Functions {
 	/**
 	 * 
 	 * @param box
-	 * @param snakeHead
+	 * @param box1
 	 * @param startDegree
 	 * @param endDegree
 	 * @return the distance between an object and the head of the snake
 	 */
-	public default double calculateDistance(Box box, SnakeBox snakeHead) {
+	public default double calculateDistance(Box box, Box box1) {
 		
-		double x = Math.abs(snakeHead.getXcoordinate() - box.getXcoordinate());
-		double y = Math.abs(snakeHead.getYcoordinate() - box.getYcoordinate());
+		double x = Math.abs(box1.getXcoordinate() - box.getXcoordinate());
+		double y = Math.abs(box1.getYcoordinate() - box.getYcoordinate());
 		double distance = Math.sqrt((x*x)+(y*y));
 		
 		return distance;
@@ -293,4 +290,19 @@ public interface Functions {
 		
 		return array;
 	}
+	
+	/**
+	 * 
+	 * @param value of the distance
+	 * @param max = 0 (the best option is that the apple is in the same spot as the head)
+	 * @param min = the diagonal of the map (the worst is that the apple is in the opposite position of the head)
+	 * @return the normalization of the range (diagonal ; 0) into the range (-5 ; 5)
+	 */
+	public default double normalizeRewardDistanceHeadApple(double value, double max, double min) {
+		
+        double newMin = -5.0;
+        double newMax = 5.0;
+        
+        return (((value - min) * (newMax - newMin) / (max - min)) + newMin);
+    }
 }

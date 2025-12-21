@@ -1,11 +1,13 @@
 package thread;
 
 import boxes.Direction;
+import boxes.Food;
+import boxes.SnakeBody;
 import gioco.snakeAI.GameMain;
 import gioco.snakeAI.Map;
 import model.*;
 
-public class ThreadAgent extends Thread{
+public class ThreadAgent extends Thread implements Functions{
 
 	Model model;
 	Intermediary intermediary;
@@ -79,10 +81,50 @@ public class ThreadAgent extends Thread{
 		
 	}
 	
-	public float calculateReward(Map map) {
+	/**
+	 * 
+	 * @param map
+	 * @return
+	 */
+	public double calculateReward(Map map) {
 		
-		return 0;
+		double rewardBasic = 4, rewardDistanceApple = 0, rewardGetApple = 50, rewardDead = -50;
+		double diagonal = Math.sqrt((map.X*map.X) + (map.Y*map.Y));
+		double distance;
 		
+		for(int i=0; i<map.X; i++) {
+			for(int j=0; j<map.Y; j++) {
+				
+				if(map.getBox(i, j).equals(SnakeBody.HEAD)) {
+					
+					for(int k=0; k<map.X; k++) {
+						for(int h=0; h<map.Y; h++) {
+							
+							if(map.getBox(k, h).equals(Food.APPLE)) {
+								
+								distance = this.calculateDistance(map.getBox(i, j), map.getBox(h, k));
+								rewardDistanceApple = this.normalizeRewardDistanceHeadApple(distance, 0, diagonal); 
+							}
+							
+						}
+					}
+					
+				}
+			}
+		}
+		
+		rewardBasic = rewardBasic + rewardDistanceApple;
+		
+		if(map.checkAppleCollision()) {
+			rewardBasic = rewardBasic + rewardGetApple;
+		}
+		
+		if(map.checkDefeat()) {
+			rewardBasic = rewardBasic + rewardDead;
+		}
+		
+		
+		return rewardBasic;
 	}
 	
 	/**
