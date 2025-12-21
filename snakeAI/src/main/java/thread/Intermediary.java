@@ -9,7 +9,6 @@ import gioco.snakeAI.*;
 public class Intermediary implements Functions{
 	
 	ActionRegister[] actionRegister;
-	float[] rewards;
 	
 	public Intermediary() {
 		
@@ -165,15 +164,13 @@ public class Intermediary implements Functions{
 		
 	}
 	
+	/**
+	 * 
+	 * @param r
+	 * @return 
+	 */
 	public void addActionReward(float r) {
 		
 	}
 	
-	public void finishEpisode() {
-		
-	}
-	
-	private void calculateVTarget() {
-		
-	}
 }

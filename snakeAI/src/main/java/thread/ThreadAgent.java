@@ -11,8 +11,6 @@ public class ThreadAgent extends Thread{
 	Intermediary intermediary;
 	GameMain game;
 
-	ThreadAIManager AIManager; //DA AGG UML
-
 	public ThreadAgent(Model model) {
 		this.model = model;
 	}
@@ -102,14 +100,6 @@ public class ThreadAgent extends Thread{
 	
 	public void sendActions (ActionRegister actionRegister) {
 		
-	}
-	
-	public void setAIManager(ThreadAIManager aIManager) {
-		AIManager = aIManager;
-	}
-	
-	public ThreadAIManager getAIManager() {
-		return AIManager;
 	}
 	
 	public GameMain getGame() {
