@@ -8,8 +8,8 @@ public class ActionRegister {
 	public double vTarget;
 	public double vEstimated;
 	public double advantage;
-	public float reward;
-	
+	public double reward;
+
 	public ActionRegister() {
 		actionsProb = null;
 		indexAction = -1;
@@ -23,6 +23,14 @@ public class ActionRegister {
 	
 	public double oldSelectAction() {
 		return this.actionsProb[this.indexAction];
+	}
+	
+	public double getReward() {
+		return reward;
+	}
+
+	public void setReward(double reward) {
+		this.reward = reward;
 	}
 	
 }

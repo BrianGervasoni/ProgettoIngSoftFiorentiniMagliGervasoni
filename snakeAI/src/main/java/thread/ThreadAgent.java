@@ -84,11 +84,16 @@ public class ThreadAgent extends Thread implements Functions{
 	/**
 	 * 
 	 * @param map
-	 * @return
+	 * there are 4 type of reward :
+	 * - default reward = 4 
+	 * - reward based on the distance between the head and the apple which is a value between (-5 ; 5)
+	 * - reward if the snake got the apple = 50
+	 * - reward if the snake died = -50
+	 * @return the sum of the reward values, which says if the AI is doing good or not
 	 */
 	public double calculateReward(Map map) {
 		
-		double rewardBasic = 4, rewardDistanceApple, rewardGetApple = 50, rewardDead = -50;
+		double rewardDefault = 4, rewardDistanceApple, rewardGetApple = 50, rewardDead = -50;
 		double diagonal = Math.sqrt((map.X*map.X) + (map.Y*map.Y));
 		double distance;
 		
@@ -104,7 +109,7 @@ public class ThreadAgent extends Thread implements Functions{
 								
 								distance = this.calculateDistance(map.getBox(i, j), map.getBox(h, k));
 								rewardDistanceApple = this.normalizeRewardDistanceHeadApple(distance, 0, diagonal); 
-								rewardBasic = rewardBasic + rewardDistanceApple;
+								rewardDefault = rewardDefault + rewardDistanceApple;
 								
 							}
 							
@@ -116,14 +121,14 @@ public class ThreadAgent extends Thread implements Functions{
 		}
 		
 		if(map.checkAppleCollision()) {
-			rewardBasic = rewardBasic + rewardGetApple;
+			rewardDefault = rewardDefault + rewardGetApple;
 		}
 		
 		if(map.checkDefeat()) {
-			rewardBasic = rewardBasic + rewardDead;
+			rewardDefault = rewardDefault + rewardDead;
 		}
 		
-		return rewardBasic;
+		return rewardDefault;
 	}
 	
 	/**

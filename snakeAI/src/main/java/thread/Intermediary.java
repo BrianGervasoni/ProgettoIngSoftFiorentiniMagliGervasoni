@@ -1,5 +1,7 @@
 package thread;
 
+import java.util.ArrayList;
+
 import boxes.Direction;
 import boxes.SnakeBody;
 import boxes.SnakeBox;
@@ -8,7 +10,7 @@ import gioco.snakeAI.*;
 
 public class Intermediary implements Functions{
 	
-	ActionRegister[] actionRegister;
+	ArrayList<ActionRegister> actionRegister = new ArrayList<ActionRegister>();
 	
 	public Intermediary() {
 		
@@ -163,14 +165,15 @@ public class Intermediary implements Functions{
 		return null;
 		
 	}
-	
 	/**
-	 * 
+	 * for the last actionRegister added, set its reward value
 	 * @param r
-	 * @return 
 	 */
-	public void addActionReward(float r) {
-		
+	public void addActionReward(double r) {
+		this.actionRegister.get(this.actionRegister.size() - 1).setReward(r);
 	}
 	
+	public void addActionRegister(ActionRegister actionRegister) {
+		this.actionRegister.add(actionRegister);
+	}
 }
