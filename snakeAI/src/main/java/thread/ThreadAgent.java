@@ -50,7 +50,7 @@ public class ThreadAgent extends Thread implements Functions{
 			 * 			REPEAT FROM MAP CONVERTION
 			 */
 			
-			System.out.println("thread agent sta eseguendo");
+			System.out.println("thread agent " +number +" sta eseguendo");
 			
 			try {
 				Thread.sleep(3000);
@@ -63,17 +63,18 @@ public class ThreadAgent extends Thread implements Functions{
 			
 				//intermediary.finishEpisode();
 				lock.lock();
-			
-				/* 			SEND ACTIONS
-				 */
-			
-				System.out.println("thread agent numero" + number + "sta inviando azioni");
-				System.out.println("thread agent numero" + number + "ha finito di inviare azioni");
-			
-				lock.unlock();
-				System.out.println("thread agent ha finito");
+				try {		
+					//SEND ACTIONS
+					System.out.println("thread agent numero " + number + " sta inviando azioni");
+					System.out.println("thread agent numero " + number + " ha finito di inviare azioni");
+				}finally {
+					lock.unlock();
+				}
+				
+				System.out.println("thread agent " + number + " ha finito");
 			
 				this.model.threadAgentReportThatItHasFinished();
+				
 				try {
 					Thread.sleep(3000);
 				} catch (InterruptedException e) {
