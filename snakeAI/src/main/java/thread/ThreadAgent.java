@@ -31,15 +31,11 @@ public class ThreadAgent extends Thread implements Functions{
 			 * ADD ACTIONS
 			 * MOVE CONVERTION
 			 * MOVE SELECTION
-			 * MOVE
 			 * CALCOLO REWARD
-			 * ADD REWARD[]
-			 * CHECK LIFE/DEATH
-			 * 		IF DEAD game.finish() == true
+			 * ADD REWARD
+			 * IF DEAD game.finish() == true
 			 * 			FINISH EPISODE
 			 * 			SEND ACTIONS
-			 *		IF LIFE game.finish() == false
-			 * 			REPEAT FROM MAP CONVERTION
 			 */
 			
 			this.model.threadAgentReportThatItHasStarted();
@@ -48,16 +44,15 @@ public class ThreadAgent extends Thread implements Functions{
 			
 			this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
 			
-			this.calculateReward(this.game.getMap());
-
-			//ADD REWARD
+			this.intermediary.addActionReward(this.calculateReward(this.game.getMap()));
 			
 			if(game.finish() == true) {
 			
-				//intermediary.finishEpisode();
+				this.finish();
 			
 				synchronized(sharedLock) {
-					//SEND ACTIONS
+					this.sendActions();
+					this.resetActionRegister(); //VA QUA???????
 				}
 			
 				this.model.threadAgentReportThatItHasFinished();
@@ -142,7 +137,7 @@ public class ThreadAgent extends Thread implements Functions{
 		
 	}
 	
-	public void sendActions (ActionRegister actionRegister) {
+	public void sendActions () {
 		
 	}
 	

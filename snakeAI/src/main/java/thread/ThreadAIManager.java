@@ -10,6 +10,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import gioco.snakeAI.GameMain;
+import model.Model;
 
 public class ThreadAIManager{
 
@@ -34,6 +35,7 @@ public class ThreadAIManager{
 		List<ThreadModel> threadModels = new ArrayList<>();
 		Intermediary intermediary = new Intermediary();
 		GameMain gameMain = new GameMain();
+		Model model = new Model();
 		
 		this.threadAgents = threadAgents;
 		this.threadModels = threadModels;
@@ -42,7 +44,7 @@ public class ThreadAIManager{
 			
 			Path relativePath = Paths.get(relPath + name + i + ".json");
 			Path absolutePath = relativePath.toAbsolutePath();
-			ThreadModel threadModel = new ThreadModel(absolutePath.toString(),this.threadsAgentNumber);
+			ThreadModel threadModel = new ThreadModel(model, absolutePath.toString(), this.threadsAgentNumber);
 			threadModels.add(threadModel);
 			
 			for(int j = 0; j<this.threadsAgentNumber; j++) {
