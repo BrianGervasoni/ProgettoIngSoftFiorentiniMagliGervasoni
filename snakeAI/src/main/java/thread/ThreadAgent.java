@@ -18,6 +18,10 @@ public class ThreadAgent extends Thread implements Functions{
 	GameMain game;
 	
 	final Lock lock = new ReentrantLock();
+	final Condition sendActions = lock.newCondition(); 
+	private boolean taken = false;
+	private int nWaiting = 0;
+	
 	private int number;
 	static int N = 0;
 
@@ -62,11 +66,39 @@ public class ThreadAgent extends Thread implements Functions{
 			//if(game.finish() == true) {
 			
 				//intermediary.finishEpisode();
+			
 				lock.lock();
-				try {		
+				try {
+					
+					while(taken) {
+						nWaiting++;
+						sendActions.await();
+						nWaiting--;
+					}
+					
+					taken = true;
+					
 					//SEND ACTIONS
+					
 					System.out.println("thread agent numero " + number + " sta inviando azioni");
+					
+					try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					System.out.println("thread agent numero " + number + " ha finito di inviare azioni");
+					
+					if(nWaiting>0) {
+						taken = false;
+						sendActions.signal();
+					}
+					
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}finally {
 					lock.unlock();
 				}
