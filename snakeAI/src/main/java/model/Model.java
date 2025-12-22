@@ -12,7 +12,6 @@ import progettoAI.snakeAI.AI.AICritic;
 import progettoAI.snakeAI.AI.TypeGradientUpdate;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 import progettoAI.snakeAI.tools.Tools;
-import thread.ThreadAgent;
 
 public class Model {
 	private AICritic critic;

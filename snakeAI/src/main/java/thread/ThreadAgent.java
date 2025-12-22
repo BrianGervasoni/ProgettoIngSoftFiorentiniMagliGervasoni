@@ -15,13 +15,8 @@ public class ThreadAgent extends Thread implements Functions{
 	
 	private static final Object sharedLock = new Object();
 
-	private int number;
-	static int N = 0;
-
 	public ThreadAgent(Model model) {
 		this.model = model;
-		this.number = N;
-		N++;
 	}
 	
 	@Override
@@ -47,48 +42,17 @@ public class ThreadAgent extends Thread implements Functions{
 			 * 			REPEAT FROM MAP CONVERTION
 			 */
 			
-			System.out.println("thread agent " +number +" sta eseguendo");
 			
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			//if(game.finish() == true) {
+			if(game.finish() == true) {
 			
 				//intermediary.finishEpisode();
 			
-				
 				synchronized(sharedLock) {
 					//SEND ACTIONS
-					
-					System.out.println("thread agent numero " + number + " sta inviando azioni");
-					
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					System.out.println("thread agent numero " + number + " ha finito di inviare azioni");
-					
-					
 				}
-				
-				System.out.println("thread agent " + number + " ha finito");
 			
 				this.model.threadAgentReportThatItHasFinished();
-				
-				try {
-					Thread.sleep((long) (Math.random()*3000));
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			//}
+			}
 			
 		}
 	}

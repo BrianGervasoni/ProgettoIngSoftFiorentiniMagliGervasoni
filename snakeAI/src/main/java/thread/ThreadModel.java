@@ -18,63 +18,22 @@ public class ThreadModel extends Thread{
 		
 		while(true) {
 			
-			System.out.println("thread model è in attesa che gli agents finiscano");
-			
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
 			this.model.threadModelReportsThatItHasStartedInizitBackProp();
-			
-			System.out.println("thread model sta inizializza back propagation");
-			
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
 			//this.model.initBackPropagation();
 			
-			System.out.println("thread model ha finito inizializza back prop");
-			
-		
 			this.model.threadModelReportsThatItHasFinishedInizitBackProp();
 			
 			/*
 			 * CONTINUA ALTRE OPERZIONI BACK PROPAGATION
 			 */
 			
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			System.out.println("CONCURRENT TIME thread model sta facendo back prop");
-			
 			this.model.threadModelReportsThatItHasStartedOptimization();
-			
-			System.out.println("thread model sta iniziando optimization");
-			
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
 			/*
 			 * OPERZIONI OPTIMIZATION
 			 */
 			
-			System.out.println("thread model ha finito optimization");
-
 			this.model.threadModelReportsThatItHasFinishedInizitOptimization() ;
 		}
 	}
