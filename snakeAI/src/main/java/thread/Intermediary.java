@@ -180,4 +180,8 @@ public class Intermediary implements Functions{
 	public ActionRegister selectLastActionRegister() {
 		return this.actionRegister.get(this.actionRegister.size() - 1);
 	}
+	
+	public void reset() {
+		this.actionRegister = new ArrayList<ActionRegister>();
+	}
 }

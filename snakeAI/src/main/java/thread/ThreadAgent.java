@@ -34,7 +34,6 @@ public class ThreadAgent extends Thread implements Functions{
 			 * CALCOLO REWARD
 			 * ADD REWARD
 			 * IF DEAD game.finish() == true
-			 * 			FINISH EPISODE
 			 * 			SEND ACTIONS
 			 */
 			
@@ -48,11 +47,9 @@ public class ThreadAgent extends Thread implements Functions{
 			
 			if(game.finish() == true) {
 			
-				this.finish();
-			
 				synchronized(sharedLock) {
 					this.sendActions();
-					this.resetActionRegister(); //VA QUA???????
+					this.resetActionRegister(); 
 				}
 			
 				this.model.threadAgentReportThatItHasFinished();
@@ -67,11 +64,6 @@ public class ThreadAgent extends Thread implements Functions{
 
 	public void setModel(Model model) {
 		this.model = model;
-	}
-
-	
-	public void finish() {
-		
 	}
 	
 	/**
@@ -134,11 +126,12 @@ public class ThreadAgent extends Thread implements Functions{
 	}
 	
 	public void resetActionRegister() {
-		
+		this.intermediary.reset();
 	}
 	
 	public void sendActions () {
-		
+		ActionRegister[] a = this.intermediary.actionRegister.toArray(new ActionRegister[0]);
+		this.model.memorizeActions(a);
 	}
 	
 	public GameMain getGame() {

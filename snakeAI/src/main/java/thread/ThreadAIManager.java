@@ -5,12 +5,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import gioco.snakeAI.GameMain;
-import model.Model;
 
 public class ThreadAIManager{
 
