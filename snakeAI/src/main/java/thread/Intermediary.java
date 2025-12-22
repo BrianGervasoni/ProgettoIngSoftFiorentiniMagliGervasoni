@@ -22,18 +22,18 @@ public class Intermediary implements Functions{
 	 * @param map
 	 * @return normalization of the distance of the snake's head and the elements
 	 */
-	public double[] mapConversion(Map map, int outputLenght) { 
+	public double[] mapConversion(Map map, int inputLenght) { 
 		//outputLenght it's given by threadAgent.getModel.getAiActor.getLenght (it's the length of the array output 61 *3 ))
 		int startingDegree, rephase, n, nNonDivisibilePer3 = 0, delta = 0;	
 		
-		if(outputLenght%3 != 0) {
+		if(inputLenght%3 != 0) {
 			
-			nNonDivisibilePer3 = 3 * (int)(outputLenght/3);
-			delta = outputLenght - nNonDivisibilePer3;
+			nNonDivisibilePer3 = 3 * (int)(inputLenght/3);
+			delta = inputLenght - nNonDivisibilePer3;
 			
 		}
 		
-		n = (int)outputLenght/3;
+		n = (int)inputLenght/3;
 		
 		rephase = 180/n;
 		
@@ -148,18 +148,18 @@ public class Intermediary implements Functions{
 	 * More the AI will learn, more it will increase the probability of the correct action 
 	 * For example the probability can become : (0.8 , 0.1 , 0.1)
 	 */
-	public Direction moveSelection(double[] input) {
+	public Direction moveSelection(double[] Output) {
 		
 		double valore = Math.random(); //value from 0 to 1
 		double min = 0;
 		
-		for(int i=0; i<input.length; i++) {
+		for(int i=0; i<Output.length; i++) {
 			
-			if(valore > min && valore <= input[i]) {
+			if(valore > min && valore <= Output[i]) {
 				return moveConversion(i);
 			}
 			
-			min = input[i];
+			min = Output[i];
 		}
 		
 		return null;
@@ -175,5 +175,9 @@ public class Intermediary implements Functions{
 	
 	public void addActionRegister(ActionRegister actionRegister) {
 		this.actionRegister.add(actionRegister);
+	}
+	
+	public ActionRegister selectLastActionRegister() {
+		return this.actionRegister.get(this.actionRegister.size() - 1);
 	}
 }

@@ -9,6 +9,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import gioco.snakeAI.GameMain;
+
 public class ThreadAIManager{
 
 	List<ThreadAgent> threadAgents;
@@ -30,6 +32,8 @@ public class ThreadAIManager{
 		
 		List<ThreadAgent> threadAgents = new ArrayList<>();
 		List<ThreadModel> threadModels = new ArrayList<>();
+		Intermediary intermediary = new Intermediary();
+		GameMain gameMain = new GameMain();
 		
 		this.threadAgents = threadAgents;
 		this.threadModels = threadModels;
@@ -42,7 +46,7 @@ public class ThreadAIManager{
 			threadModels.add(threadModel);
 			
 			for(int j = 0; j<this.threadsAgentNumber; j++) {
-				ThreadAgent threadAgent = new ThreadAgent(threadModel.model);
+				ThreadAgent threadAgent = new ThreadAgent(threadModel.model, intermediary, gameMain);
 				threadAgents.add(threadAgent);
 			}
 		}

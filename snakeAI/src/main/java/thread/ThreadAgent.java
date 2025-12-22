@@ -15,8 +15,10 @@ public class ThreadAgent extends Thread implements Functions{
 	
 	private static final Object sharedLock = new Object();
 
-	public ThreadAgent(Model model) {
+	public ThreadAgent(Model model, Intermediary i, GameMain g) {
 		this.model = model;
+		this.intermediary = i;
+		this.game = g;
 	}
 	
 	@Override
@@ -24,15 +26,13 @@ public class ThreadAgent extends Thread implements Functions{
 		
 		while(true) {
 			
-			this.model.threadAgentReportThatItHasStarted();
-			//intermediary.mapConversion(game.getMap());
 			/*
-			 * intermediary
 			 * MAP CONVERTION
+			 * ADD ACTIONS
 			 * MOVE CONVERTION
 			 * MOVE SELECTION
 			 * MOVE
-			 * CALCOLO REARD
+			 * CALCOLO REWARD
 			 * ADD REWARD[]
 			 * CHECK LIFE/DEATH
 			 * 		IF DEAD game.finish() == true
@@ -42,6 +42,15 @@ public class ThreadAgent extends Thread implements Functions{
 			 * 			REPEAT FROM MAP CONVERTION
 			 */
 			
+			this.model.threadAgentReportThatItHasStarted();
+			
+			this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
+			
+			this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
+			
+			this.calculateReward(this.game.getMap());
+
+			//ADD REWARD
 			
 			if(game.finish() == true) {
 			

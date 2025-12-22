@@ -6,9 +6,9 @@ public class ThreadModel extends Thread{
 
 	Model model;
 	String dirFile; 
-	int nThreadsAgent; //TODO UML
+	int nThreadsAgent;
 	
-	public ThreadModel(String dir, int nTA) { //TODO UML
+	public ThreadModel(String dir, int nTA) { 
 		this.dirFile = dir;
 		this.nThreadsAgent = nTA;
 	}
@@ -51,9 +51,7 @@ public class ThreadModel extends Thread{
 	}
 	
 	public int forwading(double[] input) {
-		
 		return 0;
-		
 	}
 	
 	public double backPropagation() {
