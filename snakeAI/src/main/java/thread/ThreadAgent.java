@@ -1,5 +1,9 @@
 package thread;
 
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import boxes.Direction;
 import boxes.Food;
 import boxes.SnakeBody;
@@ -12,9 +16,15 @@ public class ThreadAgent extends Thread implements Functions{
 	Model model;
 	Intermediary intermediary;
 	GameMain game;
+	
+	final Lock lock = new ReentrantLock();
+	private int number;
+	static int N = 0;
 
 	public ThreadAgent(Model model) {
 		this.model = model;
+		this.number = N;
+		N++;
 	}
 	
 	@Override
@@ -35,26 +45,32 @@ public class ThreadAgent extends Thread implements Functions{
 			 * CHECK LIFE/DEATH
 			 * 		IF DEAD game.finish() == true
 			 * 			FINISH EPISODE
-			 * 			lock          !!!!!!!!!!!!!!!!
 			 * 			SEND ACTIONS
-			 *			unlock        !!!!!!!!!!!!!!!!
-			 * 		IF LIFE game.finish() == false
+			 *		IF LIFE game.finish() == false
 			 * 			REPEAT FROM MAP CONVERTION
 			 */
 			
 			System.out.println("thread agent sta eseguendo");
+			
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 			//if(game.finish() == true) {
 			
 				//intermediary.finishEpisode();
-				/**
-				 * SEND ACTIONS
+				lock.lock();
+			
+				/* 			SEND ACTIONS
 				 */
+			
+				System.out.println("thread agent numero" + number + "sta inviando azioni");
+				System.out.println("thread agent numero" + number + "ha finito di inviare azioni");
+			
+				lock.unlock();
 				System.out.println("thread agent ha finito");
 			
 				this.model.threadAgentReportThatItHasFinished();

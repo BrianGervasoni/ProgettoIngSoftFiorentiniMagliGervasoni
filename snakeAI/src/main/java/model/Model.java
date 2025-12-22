@@ -163,7 +163,7 @@ public class Model {
 		memory.addNewActions(r);
 	}
 	
-public void threadAgentReportThatItHasStarted() {
+	public void threadAgentReportThatItHasStarted() {
 		
 		lock.lock();
         try {

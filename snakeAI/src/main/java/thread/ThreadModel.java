@@ -60,10 +60,13 @@ public class ThreadModel extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("thread model ha finito optimization");
+			
 			/*
 			 * OPERZIONI OPTIMIZATION
 			 */
+			
+			System.out.println("thread model ha finito optimization");
+
 			this.model.threadModelReportsThatItHasFinishedInizitOptimization() ;
 		}
 	}
