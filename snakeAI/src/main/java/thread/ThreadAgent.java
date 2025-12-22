@@ -1,9 +1,5 @@
 package thread;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import boxes.Direction;
 import boxes.Food;
 import boxes.SnakeBody;
@@ -17,11 +13,8 @@ public class ThreadAgent extends Thread implements Functions{
 	Intermediary intermediary;
 	GameMain game;
 	
-	final Lock lock = new ReentrantLock();
-	final Condition sendActions = lock.newCondition(); 
-	private boolean taken = false;
-	private int nWaiting = 0;
-	
+	private static final Object sharedLock = new Object();
+
 	private int number;
 	static int N = 0;
 
@@ -67,17 +60,8 @@ public class ThreadAgent extends Thread implements Functions{
 			
 				//intermediary.finishEpisode();
 			
-				lock.lock();
-				try {
-					
-					while(taken) {
-						nWaiting++;
-						sendActions.await();
-						nWaiting--;
-					}
-					
-					taken = true;
-					
+				
+				synchronized(sharedLock) {
 					//SEND ACTIONS
 					
 					System.out.println("thread agent numero " + number + " sta inviando azioni");
@@ -91,16 +75,7 @@ public class ThreadAgent extends Thread implements Functions{
 					
 					System.out.println("thread agent numero " + number + " ha finito di inviare azioni");
 					
-					if(nWaiting>0) {
-						taken = false;
-						sendActions.signal();
-					}
 					
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}finally {
-					lock.unlock();
 				}
 				
 				System.out.println("thread agent " + number + " ha finito");
@@ -108,12 +83,11 @@ public class ThreadAgent extends Thread implements Functions{
 				this.model.threadAgentReportThatItHasFinished();
 				
 				try {
-					Thread.sleep(3000);
+					Thread.sleep((long) (Math.random()*3000));
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 			//}
 			
 		}
@@ -206,5 +180,4 @@ public class ThreadAgent extends Thread implements Functions{
 	public void setGame(GameMain game) {
 		this.game = game;
 	}
-	
 }

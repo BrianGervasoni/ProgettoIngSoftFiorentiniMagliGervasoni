@@ -12,6 +12,7 @@ import progettoAI.snakeAI.AI.AICritic;
 import progettoAI.snakeAI.AI.TypeGradientUpdate;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 import progettoAI.snakeAI.tools.Tools;
+import thread.ThreadAgent;
 
 public class Model {
 	private AICritic critic;
@@ -23,7 +24,7 @@ public class Model {
 	private transient int threadsModelRunning = 0; //DA AGGIUNGERE A UML 
 	private transient int threadsAgentWaiting = 0; //DA AGGIUNGERE A UML 
 	private transient int threadsModelWaiting= 0; //DA AGGIUNGERE A UML
-	private transient boolean initBackProp = true;
+	private transient boolean initBackProp = false;
 	private transient boolean initOptimization = false;
 	
 	//TODO
@@ -168,13 +169,13 @@ public class Model {
 		lock.lock();
         try {
         	
+        	
             // AGENTI SI METTONO IN WAITING 
-            while (this.threadsModelRunning > 0 && !initOptimization) {
+            while (this.threadsModelRunning > 0 || initOptimization || initBackProp) {
             	threadsAgentWaiting ++;
                 threadsAgent.await();
                 threadsAgentWaiting--;
             }
-            
             threadsAgentRunning++;
             
         } catch (InterruptedException e) {
@@ -190,20 +191,11 @@ public class Model {
 		
 		lock.lock();
         try {
-        	
         	threadsAgentRunning--;
         	threadsModel.signalAll(); 
         	
-        	while (!initBackProp) {
-            	threadsAgentWaiting ++;
-                threadsAgent.await();
-                threadsAgentWaiting--;
-            }
-            
-        } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
+        	
+        } finally {
 			lock.unlock();
 		}
 	}
@@ -214,7 +206,6 @@ public class Model {
 		try {
 			
 			initBackProp = true;
-			
             while(this.threadsAgentRunning > 0) {
             	threadsModelWaiting ++;
                 threadsModel.await();
@@ -237,11 +228,10 @@ public class Model {
 		lock.lock();
         try {
         	
-        	threadsModelRunning--;
-        	
         	initBackProp = false;
-        	initOptimization = true;
-        	
+
+        	threadsModelRunning--;
+
         	threadsAgent.signalAll(); 
         	
         } finally {
@@ -254,6 +244,8 @@ public class Model {
 
 		lock.lock();
 		try {
+			
+			initOptimization = true;
 			
             while(this.threadsAgentRunning > 0) {
             	threadsModelWaiting ++;
@@ -277,10 +269,9 @@ public class Model {
 		lock.lock();
         try {
         	
-        	threadsModelRunning--;
-        	
         	initOptimization = false;
-        	initBackProp = true;
+        	
+        	threadsModelRunning--;
         	
         	threadsAgent.signalAll(); 
 	
