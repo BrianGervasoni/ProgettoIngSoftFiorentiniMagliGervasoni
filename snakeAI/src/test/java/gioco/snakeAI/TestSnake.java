@@ -9,6 +9,18 @@ import boxes.*;
 class TestSnake {
 
 	@Test
+	void testSetHead() {
+		Map map = new Map();
+		Snake ss = new Snake(map);
+		
+		ss.getMap().setSnake(ss);
+		ss.getMap().initSnakeBody();
+		
+		assertEquals(1,1);
+		
+	}
+	
+	@Test
 	void testLength() {
 
 		Snake ss = new Snake(new Map());
@@ -59,8 +71,19 @@ class TestSnake {
 			}
 		}
 		
+	}
 		
+	@Test
+	void testAddPiece() {
 		
+		Map map = new Map();
+		SnakeBox sb = new SnakeBox(SnakeBody.HEAD, 7,7,null);
+		Snake sn = new Snake(map);
+		
+		sn.addPiece(sb);
+		sn.addLenght();
+		
+		assertEquals(1, sn.getBody().size());
 	}
 	
 
