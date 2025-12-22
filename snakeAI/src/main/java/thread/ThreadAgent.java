@@ -15,10 +15,10 @@ public class ThreadAgent extends Thread implements Functions{
 	
 	private static final Object sharedLock = new Object();
 
-	public ThreadAgent(Model model, Intermediary i, GameMain g) {
+	public ThreadAgent(Model model) {
 		this.model = model;
-		this.intermediary = i;
-		this.game = g;
+		this.intermediary = new Intermediary();
+		this.game = new GameMain();
 	}
 	
 	@Override

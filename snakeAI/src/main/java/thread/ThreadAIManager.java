@@ -33,9 +33,6 @@ public class ThreadAIManager{
 		
 		List<ThreadAgent> threadAgents = new ArrayList<>();
 		List<ThreadModel> threadModels = new ArrayList<>();
-		Intermediary intermediary = new Intermediary();
-		GameMain gameMain = new GameMain();
-		Model model = new Model();
 		
 		this.threadAgents = threadAgents;
 		this.threadModels = threadModels;
@@ -44,11 +41,11 @@ public class ThreadAIManager{
 			
 			Path relativePath = Paths.get(relPath + name + i + ".json");
 			Path absolutePath = relativePath.toAbsolutePath();
-			ThreadModel threadModel = new ThreadModel(model, absolutePath.toString(), this.threadsAgentNumber);
+			ThreadModel threadModel = new ThreadModel(absolutePath.toString(), this.threadsAgentNumber);
 			threadModels.add(threadModel);
 			
 			for(int j = 0; j<this.threadsAgentNumber; j++) {
-				ThreadAgent threadAgent = new ThreadAgent(threadModel.model, intermediary, gameMain);
+				ThreadAgent threadAgent = new ThreadAgent(threadModel.model);
 				threadAgents.add(threadAgent);
 			}
 		}

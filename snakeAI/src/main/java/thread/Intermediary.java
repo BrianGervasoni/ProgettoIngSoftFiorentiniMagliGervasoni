@@ -170,7 +170,7 @@ public class Intermediary implements Functions{
 	 * @param r
 	 */
 	public void addActionReward(double r) {
-		this.actionRegister.get(this.actionRegister.size() - 1).setReward(r);
+		this.selectLastActionRegister().setReward(r);
 	}
 	
 	public void addActionRegister(ActionRegister actionRegister) {

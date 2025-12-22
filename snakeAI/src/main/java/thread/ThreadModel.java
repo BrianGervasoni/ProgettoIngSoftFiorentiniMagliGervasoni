@@ -8,10 +8,10 @@ public class ThreadModel extends Thread{
 	String dirFile; 
 	int nThreadsAgent;
 	
-	public ThreadModel(Model m, String dir, int nTA) { 
+	public ThreadModel(String dir, int nTA) { 
+		this.model = new Model();
 		this.dirFile = dir;
 		this.nThreadsAgent = nTA;
-		this.model = m;
 	}
 	
 	@Override
