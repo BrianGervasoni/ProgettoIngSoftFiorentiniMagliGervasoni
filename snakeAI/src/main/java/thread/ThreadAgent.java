@@ -10,9 +10,9 @@ import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 
 public class ThreadAgent extends Thread implements Functions{
 
-	Model model;
-	Intermediary intermediary;
-	GameMain game;
+	public Model model;
+	public Intermediary intermediary;
+	public GameMain game;
 	
 	private static final Object sharedLock = new Object();
 
