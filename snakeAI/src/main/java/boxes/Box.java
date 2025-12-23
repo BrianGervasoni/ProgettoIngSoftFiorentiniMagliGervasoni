@@ -52,6 +52,6 @@ public abstract class Box implements Visualize, Equals{
     
 	public abstract BoxType getElementType(); 
 	public abstract void setElementType(BoxType boxType); 
-	public abstract boolean equals(Object object);
+	public abstract boolean equals(BoxType object);
 	
 }
