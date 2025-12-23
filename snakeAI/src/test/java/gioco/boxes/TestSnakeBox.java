@@ -42,28 +42,28 @@ public class TestSnakeBox {
 	@Test
 	public void testNext() {
 		
-		Map mm = null;
+		Map mm = new Map();
 		Snake sssss = new Snake(mm);
-		Box sn = new SnakeBox(SnakeBody.HEAD, 5, 5, null);
-		SnakeBox sn2 = new SnakeBox(SnakeBody.HEAD, 5, 6, null);
+		SnakeBox sn = new SnakeBox(SnakeBody.HEAD, 5, 5, null);
+		SnakeBox sn2 = new SnakeBox(SnakeBody.BODY, 5, 6, null);
 	
-		sn2.setNext((SnakeBox) sn);
+		sn2.setNext(sn);
 		
-		sssss.addPiece((SnakeBox)sn);
-		sssss.addPiece((SnakeBox)sn2);
+		sssss.addPiece(sn);
+		sssss.addPiece(sn2);
 		
-		assertEquals(sn2, sssss.getBodyPiece(1));
-	
-	
-	
+		System.out.println(sn);
+		System.out.println(sn2.getNext());
+		
+		assertEquals(sn.getElementType(), sn2.getNext().getElementType());
+
 	}
-	
 	
 	@Test
 	public void testEquals(){
 			
 		SnakeBox sn = new SnakeBox(SnakeBody.HEAD, 5, 5, null);
-		assertEquals(SnakeBody.HEAD, sn.equals());
+		assertEquals(true, sn.equals(SnakeBody.HEAD));
 		
 			
 	}

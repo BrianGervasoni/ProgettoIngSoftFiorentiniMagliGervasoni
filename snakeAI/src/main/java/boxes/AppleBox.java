@@ -1,5 +1,6 @@
 package boxes;
 
+
 public class AppleBox extends Box {
 	
 	//una AppleBox può contenere o no la mela
@@ -47,6 +48,7 @@ public class AppleBox extends Box {
 	@Override
 	public boolean equals(BoxType object) {
 		if(this.element == (Food) object) {
+
 			return true;
 		}
 		return false;

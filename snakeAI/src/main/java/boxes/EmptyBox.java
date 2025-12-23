@@ -1,6 +1,8 @@
 package boxes;
 
+
 public class EmptyBox extends Box {
+
 
 	//Una EmptyBox può essere vuota o contenere una parete del campo 
 	private MapElem element;
@@ -64,6 +66,7 @@ public class EmptyBox extends Box {
 	@Override
 	public boolean equals(BoxType object) {
 		if(this.element == (MapElem) object) {
+
 			return true;
 		}
 		return false;

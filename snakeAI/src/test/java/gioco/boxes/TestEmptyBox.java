@@ -51,8 +51,7 @@ public class TestEmptyBox {
 	public void testEquals(){
 			
 		EmptyBox sn = new EmptyBox(MapElem.WALL, 5, 5);
-		assertEquals(MapElem.WALL, sn.equals());
-		
+		assertEquals(true, sn.equals(MapElem.WALL));
 			
 	}
 	

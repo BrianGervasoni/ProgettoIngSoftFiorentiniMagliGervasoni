@@ -13,32 +13,56 @@ class TestSnake {
 
 		Snake ss = new Snake(new Map());
 		
-		ss.addLength();
-		ss.addLength();
-		ss.addLength();
+		ss.addLenght();
+		ss.addLenght();
+		ss.addLenght();
 		
-		assertEquals(3, ss.getLength());
+		assertEquals(3, ss.getLenght());
 		
-		ss.setLength(999);
-		assertEquals(999, ss.getLength());
+		ss.setLenght(999);
+		assertEquals(999, ss.getLenght());
 	}
 	
 	@Test
 	void testReset() {
 		
 		Snake ss = new Snake(new Map());
-		ss.addLength();
-		ss.addLength();
-		ss.addLength();
+		ss.addLenght();
+		ss.addLenght();
+		ss.addLenght();
 		ss.addPiece(new SnakeBox(SnakeBody.BODY, 7 ,3, null));
 		ss.addPiece(new SnakeBox(SnakeBody.HEAD, 1 ,2, null));
 		
 		ss.reset();
 		
-		assertEquals(0, ss.getLength());
+		assertEquals(0, ss.getLenght());
 		assertEquals(0, ss.getBody().size());
 		
 	}
 	
+
+	
+	@Test
+	void testMove() {
+		
+		Map mm = new Map();
+		
+		for(int i = 0; i < Map.X ; i++) {
+			for(int k = 0; k < Map.Y ; k++) {
+				if(i == 0 || i == Map.X-1 || k == 0 || k == Map.Y-1) {
+					mm.setBox(new EmptyBox(MapElem.WALL, i, k), i, k);
+					
+				}
+				else {
+					mm.setBox(new EmptyBox(MapElem.EMPTY, i, k), i, k);
+				}
+				
+			}
+		}
+		
+		
+		
+	}
+
 
 }

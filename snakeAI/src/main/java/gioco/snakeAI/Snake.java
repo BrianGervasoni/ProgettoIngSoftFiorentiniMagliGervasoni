@@ -57,6 +57,17 @@ public class Snake {
 	}
 	
 	/**
+	 * metodo che ritorna la mappa 
+	 * @return
+	 */
+	public Map getMap() {
+		
+		
+		return map;
+	}
+	
+	
+	/**
 	 * metodo per assegnare una direzione alla testa del serpente
 	 * 
 	 * @param dir direzione da assegnare alla testa del serpente
@@ -94,7 +105,7 @@ public class Snake {
 	 * 
 	 * @return la lunghezza del serpente
 	 */
-	public int getLength() {
+	public int getLenght() {
 		return length;
 	}
 	
@@ -102,7 +113,7 @@ public class Snake {
 	/**
 	 * metodo per allungare il serpente
 	 */
-	public void addLength() {
+	public void addLenght() {
 		this.length++;
 	}
 
@@ -112,7 +123,7 @@ public class Snake {
 	 * 
 	 * @param length lunghezza attuale del serpente
 	 */
-	public void setLength(int length) {
+	public void setLenght(int length) {
 		this.length = length;
 	}
 
@@ -290,7 +301,8 @@ public class Snake {
 	public void reset() {
 		
 		this.length = 0;
-		body = new ArrayList<SnakeBox>();
+		this.body = new ArrayList<SnakeBox>();
+		stretchbody = 0;
 	}
 	
 
