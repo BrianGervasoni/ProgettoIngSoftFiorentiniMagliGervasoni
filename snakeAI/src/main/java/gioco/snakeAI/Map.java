@@ -201,14 +201,6 @@ public class Map {
 	*/
 	
 	
-	/**
-	public void reset() {
-		Map map = new Map();
-		Snake snake = new Snake();
-		
-	}
-	*/
-	
 	
 	/**
 	 * metodo che inizializza il serpente (la testa e la prima parte del corpo)
@@ -367,6 +359,10 @@ public class Map {
 	public String toString() {
 		return this.toString();
 		
+	}
+	
+	public int getSnakeLength() {
+		return snake.getLenght();
 	}
 	
 	
