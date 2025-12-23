@@ -14,15 +14,10 @@ public class ThreadAgent extends Thread implements Functions{
 	private Intermediary intermediary;
 	private GameMain game;
 	
-	private static int N = 0;
-	private int n;
-
 	public ThreadAgent(Model model) {
 		this.model = model;
 		this.intermediary = new Intermediary();
 		this.game = new GameMain();
-		this.n = N;
-		N++;
 	}
 	
 	@Override
