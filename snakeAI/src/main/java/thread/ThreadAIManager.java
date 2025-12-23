@@ -50,7 +50,7 @@ public class ThreadAIManager{
 		
 	}
 	
-	public void startIstances(){
+	public void startTraining(){
 		
 		for(ThreadAgent threadAgent : threadAgents) { //remember threadsAgentNumber = number of agents PER threadsModel, while threadAgents.size() = number of total agents
 			threadAgent.start();
@@ -59,6 +59,18 @@ public class ThreadAIManager{
 		for(ThreadModel threadModel : threadModels) {
 			threadModel.start();
 		}
+		
+	}
+	
+	public void startExecution() {
+		
+	}
+	
+	public void terminateTraining() {
+		
+	}
+	
+	public void terminateExecution() {
 		
 	}
 	

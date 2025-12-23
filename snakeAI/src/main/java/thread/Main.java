@@ -34,7 +34,7 @@ public class Main {
 		manager.threadAgents = threadAgents;
 		manager.threadModels = threadModels;
 		
-		manager.startIstances();
+		manager.startTraining();
 
 	}
 
