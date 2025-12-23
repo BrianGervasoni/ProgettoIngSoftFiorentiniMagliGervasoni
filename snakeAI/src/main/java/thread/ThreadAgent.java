@@ -57,13 +57,13 @@ public class ThreadAgent extends Thread implements Functions{
 			
 			t++;
 			
-			synchronized(sharedLock) { //DA RIVEDERE IL SYNCHRONIZED PERCHE VUOI SINCRONIZZARE SOLO GLI AGENTS DI UN MODEL TRA DI LORO, NON TRA TUTTI
+			synchronized(sharedLock) { //TODO DA RIVEDERE IL SYNCHRONIZED PERCHE VUOI SINCRONIZZARE SOLO GLI AGENTS DI UN MODEL TRA DI LORO, NON TRA TUTTI
 				this.sendActions();
 				this.resetActionRegister(); 
 			}
 			
 			if(game.finish() == true) {
-				//this.game.reset(); DEVONO CREARE RESET METODO
+				//this.game.reset(); TODO DEVONO CREARE RESET METODO
 				this.model.threadAgentReportThatItHasFinished();
 			}
 			

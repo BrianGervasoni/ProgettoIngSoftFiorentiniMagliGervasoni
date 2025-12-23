@@ -47,7 +47,7 @@ public class ThreadModel extends Thread{
 	}
 	
 	public void saveStatistics(double[] loss) {
-		
+		//TODO SAVE STATICS SALVA CIO CHE GLI ARRIVA DELLA BACK PROPAGATION
 	}
 	
 	public void save() {

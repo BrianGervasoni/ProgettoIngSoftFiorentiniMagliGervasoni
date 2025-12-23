@@ -64,7 +64,7 @@ public class ThreadAIManager{
 	
 	public void startExecution() {
 		
-		for(ThreadAgent threadAgent : threadAgents) { //remember threadsAgentNumber = number of agents PER threadsModel, while threadAgents.size() = number of total agents
+		for(ThreadAgent threadAgent : threadAgents) { 
 			threadAgent.start();
 		}
 		
@@ -76,7 +76,7 @@ public class ThreadAIManager{
 			threadAgent.interrupt();
 		}
 		
-		//COME SALVO? 
+		//TODO COME SALVO? 
 		
 		for(ThreadModel threadModel : threadModels) {
 			threadModel.interrupt();
@@ -90,7 +90,7 @@ public class ThreadAIManager{
 	
 	public void computeStatics(){
 		/*
-		 * STATISTICHE DELLA FASE DI ESECUZIONE E ALLENAMENTO
+		 * TODO STATISTICHE DELLA FASE DI ESECUZIONE E ALLENAMENTO
 		 */
 	}
 	
