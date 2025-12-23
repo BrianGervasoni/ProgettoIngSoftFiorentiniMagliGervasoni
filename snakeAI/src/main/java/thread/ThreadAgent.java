@@ -26,15 +26,20 @@ public class ThreadAgent extends Thread implements Functions{
 		
 		while(true) {
 			
-			/*
+			/* LOCK
+			 * WHILE(game.finish() == false AND T < hyper.timestep)
 			 * MAP CONVERTION
 			 * ADD ACTIONS
 			 * MOVE CONVERTION
 			 * MOVE SELECTION
 			 * CALCOLO REWARD
 			 * ADD REWARD
-			 * IF DEAD game.finish() == true
-			 * 			SEND ACTIONS
+			 * END WHILE
+			 * Syncronize(SEND ACTIONS)
+			 * UNLOCK
+			 * RESET ACTIONS
+			 * IF(game.finish() == true)
+			 * 		RESET MAP
 			 */
 			
 			this.model.threadAgentReportThatItHasStarted();
