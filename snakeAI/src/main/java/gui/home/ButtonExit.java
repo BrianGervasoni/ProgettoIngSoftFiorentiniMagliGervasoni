@@ -1,4 +1,5 @@
-package gui.home;
+package gui.home;// sono da cancellare tutti i contenuti del frame 
+// myFrame.reset();
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

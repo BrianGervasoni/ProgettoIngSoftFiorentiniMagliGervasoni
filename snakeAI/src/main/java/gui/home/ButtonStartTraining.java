@@ -9,24 +9,16 @@ import javax.swing.JPanel;
 
 public class ButtonStartTraining extends JButton implements ActionListener {
 
-	private CardLayout cl;
-	private JPanel main;
 	
-	public ButtonStartTraining(String string, CardLayout myCl, JPanel jp) {
+	public ButtonStartTraining(String string) {
 		super(string);
 		addActionListener(this);
-		cl = myCl;
-		main = jp;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-	
-		((CardLayout) this.getParent().getParent().getLayout()).show(this.getParent().getParent(), "trainingNoMap");
-		
-		
-		System.out.println("Comincia ora il training");
+
 
 	}
 
