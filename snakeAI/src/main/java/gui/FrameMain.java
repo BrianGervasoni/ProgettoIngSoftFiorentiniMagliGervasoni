@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import gui.editHyperParameters.PanelEditHyperParam;
+import gui.execution.PanelExecution;
 import gui.home.PanelHome;
 import gui.trainingNoMap.PanelTrainingNoMap;
 import gui.trainingWithMap.PanelTrainingWithMap;
@@ -36,7 +37,8 @@ public class FrameMain {
 		PanelTrainingWithMap panelTrainingWithMap = new PanelTrainingWithMap();
 		jpanelmain.add(panelTrainingWithMap, "trainingWithMap");
 		
-		
+		PanelExecution panelExecution = new PanelExecution();
+		jpanelmain.add(panelExecution, "execution");
 		
 		frame.add(jpanelmain);
 		

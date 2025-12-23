@@ -22,7 +22,8 @@ public class ButtonStartExecution extends JButton implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("Comincia l'esecuzione del gioco");
+		((CardLayout) this.getParent().getParent().getLayout()).show(this.getParent().getParent(), "execution");
+		
 
 	}
 

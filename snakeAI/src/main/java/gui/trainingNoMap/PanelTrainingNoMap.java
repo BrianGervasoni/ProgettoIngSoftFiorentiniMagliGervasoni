@@ -13,11 +13,12 @@ public class PanelTrainingNoMap extends JPanel {
 		
 		ButtonShowRandomMap bsrm = new ButtonShowRandomMap("Mostra una mappa casuale");
 		ButtonStopTraining bst = new ButtonStopTraining("Interrompi l'allenamento");
+		ButtonToggle bt = new ButtonToggle("Toggle Train => Exec");
 		
 		add(ll);
 		add(bsrm);
 		add(bst);
-		
+		add(bt);
 		
 	}
 	
