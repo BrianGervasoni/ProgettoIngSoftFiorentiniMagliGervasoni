@@ -43,7 +43,7 @@ public class ThreadAIManager{
 			threadModels.add(threadModel);
 			
 			for(int j = 0; j<this.threadsAgentNumber; j++) {
-				ThreadAgent threadAgent = new ThreadAgent(threadModel.model);
+				ThreadAgent threadAgent = new ThreadAgent(threadModel.getModel());
 				threadAgents.add(threadAgent);
 			}
 		}
@@ -81,15 +81,15 @@ public class ThreadAIManager{
 	}
 	
 	private Map selectFirstMap() {
-		return this.threadAgents.get(0).game.getMap();
+		return this.threadAgents.get(0).getGame().getMap();
 	}
 	
 	private Map selectNextMap(int index) {
-		return this.threadAgents.get(index).game.getMap();
+		return this.threadAgents.get(index).getGame().getMap();
 	}
 	
 	private Map selectLastMap() {
-		return this.threadAgents.get(this.threadAgents.size() - 1).game.getMap();
+		return this.threadAgents.get(this.threadAgents.size() - 1).getGame().getMap();
 	}
 	
 	/**

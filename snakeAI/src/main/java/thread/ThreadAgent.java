@@ -10,9 +10,9 @@ import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 
 public class ThreadAgent extends Thread implements Functions{
 
-	public Model model;
-	public Intermediary intermediary;
-	public GameMain game;
+	private Model model;
+	private Intermediary intermediary;
+	private GameMain game;
 	
 	private static final Object sharedLock = new Object();
 
@@ -57,7 +57,7 @@ public class ThreadAgent extends Thread implements Functions{
 			
 			t++;
 			
-			synchronized(sharedLock) {
+			synchronized(sharedLock) { //DA RIVEDERE IL SYNCHRONIZED PERCHE VUOI SINCRONIZZARE SOLO GLI AGENTS DI UN MODEL TRA DI LORO, NON TRA TUTTI
 				this.sendActions();
 				this.resetActionRegister(); 
 			}

@@ -5,9 +5,9 @@ import model.Model;
 
 public class ThreadModel extends Thread{
 
-	public Model model;
-	public String dirFile; 
-	public int nThreadsAgent;
+	private Model model;
+	private String dirFile; 
+	private int nThreadsAgent;
 	
 	public ThreadModel(String dir, int nTA) {
 		this.dirFile = dir;
