@@ -50,45 +50,47 @@ public class ThreadAIManager{
 		
 	}
 	
-	public void startTraining(){
-		
+	private void startThreadsAgent() {
 		for(ThreadAgent threadAgent : threadAgents) { //remember threadsAgentNumber = number of agents PER threadsModel, while threadAgents.size() = number of total agents
 			threadAgent.start();
 		}
-		
+	}
+	
+	private void startThreadsModel() {
 		for(ThreadModel threadModel : threadModels) {
 			threadModel.start();
 		}
-		
 	}
 	
-	public void startExecution() {
-		
-		for(ThreadAgent threadAgent : threadAgents) { 
-			threadAgent.start();
-		}
-		
-	}
-	
-	public void terminateTraining() {
-		
+	private void terminateThreadsAgent() {
 		for(ThreadAgent threadAgent : threadAgents) { 
 			threadAgent.interrupt();
 		}
-		
-		//TODO COME SALVO? 
+	}
+	
+	private void terminateThreadsModel() {
 		for(ThreadModel threadModel : threadModels) {
-			threadModel.save();
-		}
-		
-		for(ThreadModel threadModel : threadModels) {
+			threadModel.save(); //TODO SALVO COSI??
 			threadModel.interrupt();
 		}
-		
+	}
+	
+	public void startTraining(){
+		this.startThreadsAgent();
+		this.startThreadsModel();
+	}
+	
+	public void startExecution() {
+		this.startThreadsAgent();
+	}
+	
+	public void terminateTraining() {
+		this.terminateThreadsAgent();
+		this.terminateThreadsModel();
 	}
 	
 	public void terminateExecution() {
-		
+		this.terminateThreadsAgent();
 	}
 	
 	public void computeStatics(){
