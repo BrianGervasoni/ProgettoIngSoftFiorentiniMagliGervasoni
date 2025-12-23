@@ -66,6 +66,7 @@ public class ThreadAIManager{
 	
 	private void terminateThreadsModel() {
 		for(ThreadModel threadModel : threadModels) {
+			threadModel.save();
 			threadModel.interrupt();
 		}
 	}

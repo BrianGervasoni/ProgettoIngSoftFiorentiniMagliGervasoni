@@ -27,7 +27,7 @@ public class ThreadAgent extends Thread implements Functions{
 		
 		int t = 0;
 		
-		while(true) {
+		while(!Thread.currentThread().isInterrupted()) {
 			
 			/* LOCK
 			 * WHILE(game.finish() == false AND T < hyper.timestep)

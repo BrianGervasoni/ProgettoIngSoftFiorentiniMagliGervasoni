@@ -21,7 +21,7 @@ public class ThreadModel extends Thread{
 		
 		int n = 0;
 		
-		while(true) {
+		while(!Thread.currentThread().isInterrupted()) {
 			
 			this.model.threadModelReportsThatItHasStartedInizitBackProp();
 			
