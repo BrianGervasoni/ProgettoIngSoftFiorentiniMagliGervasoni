@@ -25,7 +25,7 @@ public class Main {
 			threadModel.setModel(model);
 			
 			for(int j = 0; j<2; j++) {
-				ThreadAgent threadAgent = new ThreadAgent(threadModel.model);
+				ThreadAgent threadAgent = new ThreadAgent(threadModel.getModel());
 				threadAgents.add(threadAgent);
 				threadAgent.setModel(model);
 			}
