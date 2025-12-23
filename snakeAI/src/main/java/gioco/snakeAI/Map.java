@@ -361,5 +361,9 @@ public class Map {
 		
 	}
 	
+	public int getSnakeLength() {
+		return snake.getLenght();
+	}
+	
 	
 }
