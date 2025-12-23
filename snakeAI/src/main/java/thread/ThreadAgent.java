@@ -63,7 +63,7 @@ public class ThreadAgent extends Thread implements Functions{
 			}
 			
 			if(game.finish() == true) {
-				//this.game.reset(); TODO DEVONO CREARE RESET METODO
+				this.game.reset(); 
 				this.model.threadAgentReportThatItHasFinished();
 			}
 			

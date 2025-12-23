@@ -47,7 +47,7 @@ public class ThreadModel extends Thread{
 	}
 	
 	public void saveStatistics(double[] loss) {
-		//TODO SAVE STATICS SALVA CIO CHE GLI ARRIVA DELLA BACK PROPAGATION
+		this.statistics = loss;
 	}
 	
 	public void save() {
@@ -66,8 +66,8 @@ public class ThreadModel extends Thread{
 		this.model.optimization();
 	}
 	
-	public double[] backPropagation() {
-		return this.model.backPropagation(); //TODO POTRESTI SALVARE LE STATISTICHE DELLA BACKPROP E GESTIRLE DIVERSAMENTE !!!!!!
+	public void backPropagation() {
+		this.model.backPropagation(); 
 	}
 	
 	public Model getModel() {

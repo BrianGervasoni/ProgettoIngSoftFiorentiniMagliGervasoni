@@ -4,7 +4,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import gioco.snakeAI.Map;
 
@@ -22,12 +21,9 @@ public class ThreadAIManager{
 		this.threadsModelNumber = nModels;
 	}
 	
-	public void createIstance(){
+	public void createIstance(String name){
 	
 		String relPath = "modelli/";
-		Scanner scanner = new Scanner(System.in);
-		String name = scanner.next();
-		scanner.close();
 		
 		List<ThreadAgent> threadAgents = new ArrayList<>();
 		List<ThreadModel> threadModels = new ArrayList<>();
