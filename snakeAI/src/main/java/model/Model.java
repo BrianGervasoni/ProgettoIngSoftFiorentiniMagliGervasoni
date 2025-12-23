@@ -18,7 +18,6 @@ public class Model {
 	private AIActor actor;
 	private transient PPOMemory memory;
 	
-	//TODO
 	private transient int threadsAgentRunning = 0; //DA AGGIUNGERE A UML 
 	private transient int threadsModelRunning = 0; //DA AGGIUNGERE A UML 
 	private transient int threadsAgentWaiting = 0; //DA AGGIUNGERE A UML 
@@ -26,10 +25,12 @@ public class Model {
 	private transient boolean initBackProp = false;
 	private transient boolean initOptimization = false;
 	
-	//TODO
 	final Lock lock = new ReentrantLock();
 	final Condition threadsAgent = lock.newCondition(); 
 	final Condition threadsModel = lock.newCondition();
+	
+	final Lock lock1 = new ReentrantLock();
+	final Condition sendActions = lock.newCondition(); 
 	
 	/**
 	 * setup the default configuration (critic: 3X126 actor: 3X256)
@@ -163,6 +164,14 @@ public class Model {
 		memory.addNewActions(r);
 	}
 	
+	public void startingSendActions() {
+		lock1.lock();
+	}
+	
+	public void terminatingSendActions() {
+		lock1.unlock();
+	}
+	
 	public void threadAgentReportThatItHasStarted() {
 		
 		lock.lock();
@@ -178,7 +187,6 @@ public class Model {
             threadsAgentRunning++;
             
         } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			lock.unlock();
@@ -214,7 +222,6 @@ public class Model {
             threadsModelRunning++;
 			
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			lock.unlock();
@@ -255,7 +262,6 @@ public class Model {
             threadsModelRunning++;
 			
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			lock.unlock();

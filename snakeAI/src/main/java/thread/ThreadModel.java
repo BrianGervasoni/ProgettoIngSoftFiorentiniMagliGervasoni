@@ -25,15 +25,41 @@ public class ThreadModel extends Thread{
 			
 			this.model.threadModelReportsThatItHasStartedInizitBackProp();
 			
-			this.initBackPropagation();
+			//this.initBackPropagation();
+			System.out.println("model ha init back prop");
+			try {
+				sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("model ha finito init back prop");	
 			
 			this.model.threadModelReportsThatItHasFinishedInizitBackProp();
 			
-			this.backPropagation();
+			System.out.println("CONCURRENT model back prop");
+			try {
+				sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("CONCURRENT model ha finito back prop");
+			
+			//this.backPropagation();
 			
 			this.model.threadModelReportsThatItHasStartedOptimization();
 			
-			this.optimization();
+			
+			System.out.println("model start opt");
+			try {
+				sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("model ha finito opt");
+			//this.optimization();
 			
 			this.model.threadModelReportsThatItHasFinishedInizitOptimization() ;
 			

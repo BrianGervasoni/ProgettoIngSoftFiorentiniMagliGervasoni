@@ -14,12 +14,15 @@ public class ThreadAgent extends Thread implements Functions{
 	private Intermediary intermediary;
 	private GameMain game;
 	
-	private static final Object sharedLock = new Object();
+	private static int N = 0;
+	private int n;
 
 	public ThreadAgent(Model model) {
 		this.model = model;
 		this.intermediary = new Intermediary();
 		this.game = new GameMain();
+		this.n = N;
+		N++;
 	}
 	
 	@Override
@@ -29,43 +32,50 @@ public class ThreadAgent extends Thread implements Functions{
 		
 		while(!Thread.currentThread().isInterrupted()) {
 			
-			/* LOCK
-			 * WHILE(game.finish() == false AND T < hyper.timestep)
-			 * MAP CONVERTION
-			 * ADD ACTIONS
-			 * MOVE CONVERTION
-			 * MOVE SELECTION
-			 * CALCOLO REWARD
-			 * ADD REWARD
-			 * END WHILE
-			 * Syncronize(SEND ACTIONS)
-			 * UNLOCK
-			 * RESET ACTIONS
-			 * IF(game.finish() == true)
-			 * 		RESET MAP
-			 */
-			while(this.game.finish() == false && t < Hyperparameters.timeStep) {
+			//while(this.game.finish() == false && t < Hyperparameters.timeStep) {
 				
 				this.model.threadAgentReportThatItHasStarted();
+				System.out.println("agent " + this.n + " ha iniziato");
+				try {
+					sleep(3000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
 				
-				this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
+				//this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
 				
-				this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
-				
-				this.intermediary.addActionReward(this.calculateReward(this.game.getMap()));
-			}
+				//this.intermediary.addActionReward(this.calculateReward(this.game.getMap()));
+			//}
 			
 			t++;
 			
-			synchronized(sharedLock) { //TODO DA RIVEDERE IL SYNCHRONIZED PERCHE VUOI SINCRONIZZARE SOLO GLI AGENTS DI UN MODEL TRA DI LORO, NON TRA TUTTI
-				this.sendActions();
-				this.resetActionRegister(); 
+			this.model.startingSendActions();
+			System.out.println("agent " + this.n + " ha iniziato send action");
+				//this.sendActions();
+			try {
+				sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+				//this.resetActionRegister(); 
+			System.out.println("agent " + this.n + " ha terminato send action");	
+			this.model.terminatingSendActions();
 			
-			if(game.finish() == true) {
-				this.game.reset(); 
+			
+			//if(game.finish() == true) {
+			//	this.game.reset(); 
 				this.model.threadAgentReportThatItHasFinished();
-			}
+				System.out.println("agent " + this.n + " ha terminato");	
+				try {
+					sleep(3000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			//}
 			
 			
 			
