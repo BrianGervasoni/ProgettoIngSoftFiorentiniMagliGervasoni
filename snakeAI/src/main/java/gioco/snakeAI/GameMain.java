@@ -94,11 +94,6 @@ public class GameMain {
 		
 		map.makeSnakeMove(dir);
 	}
-
-	public boolean finish() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
 	/**
 	 * se ritorna false la partita è ancora in corso
