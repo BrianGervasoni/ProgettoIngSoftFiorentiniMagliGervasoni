@@ -45,7 +45,7 @@ public class AppleBox extends Box {
 	}
 	
 	@Override
-	public boolean equals(Object object) {
+	public boolean equals(BoxType object) {
 		if(this.element == (Food) object) {
 			return true;
 		}

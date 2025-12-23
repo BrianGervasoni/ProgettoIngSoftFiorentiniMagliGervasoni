@@ -81,7 +81,7 @@ public class SnakeBox extends Box {
 	}
 	
 	@Override
-	public boolean equals(Object object) {
+	public boolean equals(BoxType object) {
 		if(this.element == (SnakeBody) object) {
 			return true;
 		}

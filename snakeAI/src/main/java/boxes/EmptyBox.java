@@ -62,7 +62,7 @@ public class EmptyBox extends Box {
 	}
 	
 	@Override
-	public boolean equals(Object object) {
+	public boolean equals(BoxType object) {
 		if(this.element == (MapElem) object) {
 			return true;
 		}
