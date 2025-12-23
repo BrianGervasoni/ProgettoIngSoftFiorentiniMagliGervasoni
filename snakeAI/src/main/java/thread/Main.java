@@ -2,8 +2,6 @@ package thread;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import gioco.snakeAI.GameMain;
 import model.Model;
 
 public class Main {
