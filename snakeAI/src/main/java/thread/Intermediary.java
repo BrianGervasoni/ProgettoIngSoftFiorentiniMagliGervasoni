@@ -1,5 +1,7 @@
 package thread;
 
+import java.util.ArrayList;
+
 import boxes.Direction;
 import boxes.SnakeBody;
 import boxes.SnakeBox;
@@ -8,8 +10,7 @@ import gioco.snakeAI.*;
 
 public class Intermediary implements Functions{
 	
-	ActionRegister[] actionRegister;
-	float[] rewards;
+	ArrayList<ActionRegister> actionRegister = new ArrayList<ActionRegister>();
 	
 	public Intermediary() {
 		
@@ -21,12 +22,24 @@ public class Intermediary implements Functions{
 	 * @param map
 	 * @return normalization of the distance of the snake's head and the elements
 	 */
-	public double[] mapConversion(Map map) {
+	public double[] mapConversion(Map map, int inputLenght) { 
+		//outputLenght it's given by threadAgent.getModel.getAiActor.getLenght (it's the length of the array output 61 *3 ))
+		int startingDegree, rephase, n, nNonDivisibilePer3 = 0, delta = 0;	
 		
-		int startingDegree, rephase = 3, n = 61;	
+		if(inputLenght%3 != 0) {
+			
+			nNonDivisibilePer3 = 3 * (int)(inputLenght/3);
+			delta = inputLenght - nNonDivisibilePer3;
+			
+		}
+		
+		n = (int)inputLenght/3;
+		
+		rephase = 180/n;
+		
 		String dir;
 		int[] rays;
-		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n), result = inizializeArray(n*3);
+		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n), arrayMerged = inizializeArray(n*3), result = inizializeArray(n*3 +  delta);
 		
 		for(int i=0; i<map.X; i++) { //i get the length of the rows
 			for(int j=0; j<map.Y; j++) { //i get the length of the columns
@@ -75,32 +88,100 @@ public class Intermediary implements Functions{
 			}
 		}
 		
-		result = mergeArrays(food, walls, snake);
+		if(nNonDivisibilePer3 != 0) {
+			
+			arrayMerged = mergeArrays(food, walls, snake);
+			
+			double[] array = new double[delta];
+			for(int i=0; i<array.length; i++) {
+				array[i] = 0;
+			}
+			
+			result = merge(arrayMerged,array);
+			
+		}else {
+			
+			result = mergeArrays(food, walls, snake);
+			
+		}
+		
 		return normalizeArray(result);
 		
 	}
 	
+	/**
+	 * 
+	 * @param index with a dim = 3 (0,1,2)
+	 * 0 = left
+	 * 1 = straight 
+	 * 2 = right
+	 * @return the corresponding direction
+	 */
 	private Direction moveConversion(int index) {
 		
+		switch(index) {
+		
+		case 0 :
+			return Direction.LEFT;
+		case 1 :
+			return Direction.STRAIGHT;
+		case 2 :
+			return Direction.RIGHT;
+		default :
+			return null;
+			
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @param input. An array with the probability of a certain action.
+	 * For example : an array of 3 (0 = left, 1 = straight, 2 = right) probability of the 3 actions (0.43 , 0.27 , 0.3)
+	 * So i will divide the probability in : 
+	 * (0 ; 0.43) for the first action
+	 * (0.44 ; 0.7) for the second one
+	 * (0.71 ; 1) for the third one
+	 * I will choose a random value from 0 and 1 and select the corresponding direction, 
+	 * example : random value = 0.2 and select the left direction (because 0 < 0.2 < 0.43)
+	 * 
+	 * More the AI will learn, more it will increase the probability of the correct action 
+	 * For example the probability can become : (0.8 , 0.1 , 0.1)
+	 */
+	public Direction moveSelection(double[] Output) {
+		
+		double valore = Math.random(); //value from 0 to 1
+		double min = 0;
+		
+		for(int i=0; i<Output.length; i++) {
+			
+			if(valore > min && valore <= Output[i]) {
+				return moveConversion(i);
+			}
+			
+			min = Output[i];
+		}
+		
 		return null;
 		
 	}
-	
-	public Direction moveSelection(double[] input) {
-		
-		return null;
-		
+	/**
+	 * for the last actionRegister added, set its reward value
+	 * @param r
+	 */
+	public void addActionReward(double r) {
+		this.selectLastActionRegister().setReward(r);
 	}
 	
-	public void addActionReward(float r) {
-		
+	public void addActionRegister(ActionRegister actionRegister) {
+		this.actionRegister.add(actionRegister);
 	}
 	
-	public void finishEpisode() {
-		
+	public ActionRegister selectLastActionRegister() {
+		return this.actionRegister.get(this.actionRegister.size() - 1);
 	}
 	
-	private void calculateVTarget() {
-		
+	public void reset() {
+		this.actionRegister = new ArrayList<ActionRegister>();
 	}
 }

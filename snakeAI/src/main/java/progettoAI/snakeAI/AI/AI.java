@@ -50,6 +50,14 @@ public abstract class AI {
 	public void setMode(TypeGradientUpdate mode) {
 		this.mode = mode;
 	}
+	
+	/**
+	 * return how many input node the AI have
+	 * @return
+	 */
+	public int getInputLenght() {
+		return layers.get(0).getWeights().columns();
+	}
 
 	/**
 	 * return activation of the last layer in base of a date state, it dons't save the activation of all layers
@@ -102,8 +110,9 @@ public abstract class AI {
 	/**
 	 * perform a step in the backPropagation
 	 * @param r
+	 * @return mean loss [NX1]
 	 */
-	public void backPropagation(ActionRegister[] r) {
+	public INDArray backPropagation(ActionRegister[] r) {
 		INDArray tmpR = copyStateIntoINDArray(r,r.length);
 		
 		// perform the forwarding saving the intermediary state used for calculate the derivates
@@ -113,6 +122,8 @@ public abstract class AI {
 		for(int i=layers.size()-2; i>-1; i--){//perform the backPropagation for every layer
 			dLdA = layers.get(i).backPropagation(dLdA,this.getMode(),r.length);
 		}
+		
+		return lossCalculation(r,newProb).sum(1).mul(1/r.length).reshape(newProb.rows(),1);
 	}
 	
 	/**

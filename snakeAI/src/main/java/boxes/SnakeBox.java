@@ -1,6 +1,7 @@
 package boxes;
 
-public class SnakeBox extends Box implements Visualize{
+
+public class SnakeBox extends Box {
 
 	//Una SnakeBox può contenere la testa, il corpo o la coda del serpente
 	private SnakeBody element;
@@ -90,8 +91,9 @@ public class SnakeBox extends Box implements Visualize{
 	}
 	
 	@Override
-	public boolean equals(Object object) {
-		if(this.element == object) {
+
+	public boolean equals(BoxType object) {
+		if(this.element == (SnakeBody) object) {
 			return true;
 		}
 		return false;

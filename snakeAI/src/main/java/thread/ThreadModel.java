@@ -1,43 +1,91 @@
 package thread;
+
+import fileManager.JsonFileManager;
 import model.Model;
 
 public class ThreadModel extends Thread{
 
-	Model model;
-	String dirFile; 
-	
-	public ThreadModel(String dir) {
+	private Model model;
+	private String dirFile; 
+	private int nThreadsAgent;
+	private double[] statistics;
+
+	public ThreadModel(String dir, int nTA) {
 		this.dirFile = dir;
+		this.nThreadsAgent = nTA;
+		this.load();
 	}
 	
 	@Override
 	public void run() {
 		
+		int n = 0;
+		
+		while(true) {
+			
+			this.model.threadModelReportsThatItHasStartedInizitBackProp();
+			
+			this.initBackPropagation();
+			
+			this.model.threadModelReportsThatItHasFinishedInizitBackProp();
+			
+			this.backPropagation();
+			
+			this.model.threadModelReportsThatItHasStartedOptimization();
+			
+			this.optimization();
+			
+			this.model.threadModelReportsThatItHasFinishedInizitOptimization() ;
+			
+			if(n == 5) {
+				this.save();
+				n = 0;
+			}
+			
+			n++;
+		}
 	}
 	
-	public void update() {
-		
+	public void saveStatistics(double[] loss) {
+		//TODO SAVE STATICS SALVA CIO CHE GLI ARRIVA DELLA BACK PROPAGATION
 	}
-
+	
 	public void save() {
-		
+		JsonFileManager.saveModel(model, dirFile);
 	}
 	
 	public void load() {
-		
+		this.model = JsonFileManager.loadModel(dirFile);
 	}
 	
-	public int forwading(double[] input) {
-		
-		return 0;
-		
+	public void initBackPropagation() { 
+		this.model.initBackPropagation();
 	}
 	
-	public double backPropagation() {
-		
-		return 0;
-		
+	public void optimization() { 
+		this.model.optimization();
 	}
+	
+	public double[] backPropagation() {
+		return this.model.backPropagation(); //TODO POTRESTI SALVARE LE STATISTICHE DELLA BACKPROP E GESTIRLE DIVERSAMENTE !!!!!!
+	}
+	
+	public Model getModel() {
+		return model;
+	}
+
+	public void setModel(Model model) {
+		this.model = model;
+	}
+	
+	public int getnThreadsAgent() {
+		return nThreadsAgent;
+	}
+
+	public void setnThreadsAgent(int nThreadsAgent) {
+		this.nThreadsAgent = nThreadsAgent;
+	}
+	
 }
 
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Appender che scrive su Console (System.out) -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- Formato dettagliato -->
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Imposta il logger di Nd4j su INFO (o DEBUG se vuoi ancora più dettagli) -->
+    <!-- Questo riabilita tutti i messaggi informativi che avevi prima -->
+    <logger name="org.nd4j" level="INFO"/> 
+
+    <!-- Imposta il livello di log predefinito per il resto dell'applicazione su INFO -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

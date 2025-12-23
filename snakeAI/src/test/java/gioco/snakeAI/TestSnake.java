@@ -40,6 +40,7 @@ class TestSnake {
 		
 	}
 	
+
 	
 	@Test
 	void testMove() {
@@ -62,6 +63,6 @@ class TestSnake {
 		
 		
 	}
-	
+
 
 }

@@ -1,6 +1,7 @@
 package boxes;
 
-public class AppleBox extends Box implements Visualize{
+
+public class AppleBox extends Box {
 	
 	//una AppleBox può contenere o no la mela
 	private Food element;
@@ -45,8 +46,9 @@ public class AppleBox extends Box implements Visualize{
 	}
 	
 	@Override
-	public boolean equals(Object object) {
-		if(this.element == object) {
+	public boolean equals(BoxType object) {
+		if(this.element == (Food) object) {
+
 			return true;
 		}
 		return false;

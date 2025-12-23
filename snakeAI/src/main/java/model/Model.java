@@ -1,16 +1,35 @@
 package model;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import org.nd4j.linalg.api.ndarray.INDArray;
 
 import progettoAI.snakeAI.AI.AIActor;
 import progettoAI.snakeAI.AI.AICritic;
 import progettoAI.snakeAI.AI.TypeGradientUpdate;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
+import progettoAI.snakeAI.tools.Tools;
 
 public class Model {
 	private AICritic critic;
 	private AIActor actor;
 	private transient PPOMemory memory;
+	
+	//TODO
+	private transient int threadsAgentRunning = 0; //DA AGGIUNGERE A UML 
+	private transient int threadsModelRunning = 0; //DA AGGIUNGERE A UML 
+	private transient int threadsAgentWaiting = 0; //DA AGGIUNGERE A UML 
+	private transient int threadsModelWaiting= 0; //DA AGGIUNGERE A UML
+	private transient boolean initBackProp = false;
+	private transient boolean initOptimization = false;
+	
+	//TODO
+	final Lock lock = new ReentrantLock();
+	final Condition threadsAgent = lock.newCondition(); 
+	final Condition threadsModel = lock.newCondition();
 	
 	/**
 	 * setup the default configuration (critic: 3X126 actor: 3X256)
@@ -18,8 +37,8 @@ public class Model {
 	public Model() {
 		memory = new PPOMemory();
 		if(critic == null || actor == null) {
-			critic = new AICritic(new int[] {126,126,126,1},TypeGradientUpdate.DESCEND);
-			actor = new AIActor(new int[] {256,256,256,4},TypeGradientUpdate.ASCEND);
+			critic = new AICritic(new int[] {61*3,126,126,126,1},TypeGradientUpdate.DESCEND);
+			actor = new AIActor(new int[] {61*3,256,256,256,256,3},TypeGradientUpdate.ASCEND);
 		}
 	}
 	
@@ -51,6 +70,14 @@ public class Model {
 
 	public void setMemory(PPOMemory memory) {
 		this.memory = memory;
+	}
+	
+	/**
+	 * return how many input node the model have
+	 * @return
+	 */
+	public int getInputLenght() {
+		return actor.getInputLenght();
 	}
 
 	/**
@@ -95,28 +122,32 @@ public class Model {
 	
 	/**
 	 * perform the backPropagation for the critic and actor
+	 * @return [mean loss actor, mean loss critic]
 	 */
-	public void backPropagation() {
-		CompletableFuture<Void> procCritic = backPropCritic();
-		CompletableFuture<Void> procActor = backPropActor();
+	public double[] backPropagation() {
+		CompletableFuture<Double> procCritic = backPropCritic();
+		CompletableFuture<Double> procActor = backPropActor();
 		
-		procCritic.join();
-		procActor.join();
+		return new double[] {procActor.join(),procCritic.join()};
 	}
 	
-	private  CompletableFuture<Void> backPropCritic(){
-		return CompletableFuture.runAsync(()->{
+	private  CompletableFuture<Double> backPropCritic(){
+		return CompletableFuture.supplyAsync(()->{
+			INDArray mean = null;
 			for(int i=0; i<Hyperparameters.epoche; i++) {
-				critic.backPropagation(memory.getMiniBatch());
+				mean = Tools.appendCol(mean,critic.backPropagation(memory.getMiniBatch()));
 			}
+			return mean.sum(1).mul(1/(double)Hyperparameters.epoche).sum(0).toDoubleVector()[0];
 		});
 	}
 	
-	private  CompletableFuture<Void> backPropActor(){
-		return CompletableFuture.runAsync(()->{
+	private  CompletableFuture<Double> backPropActor(){
+		return CompletableFuture.supplyAsync(()->{
+			INDArray mean = null;
 			for(int i=0; i<Hyperparameters.epoche; i++) {
-				actor.backPropagation(memory.getMiniBatch());
+				mean = Tools.appendCol(mean,actor.backPropagation(memory.getMiniBatch()));
 			}
+			return mean.sum(1).mul(1/(double)Hyperparameters.epoche).sum(0).toDoubleVector()[0];
 		});
 	}
 	
@@ -130,5 +161,122 @@ public class Model {
 	
 	public void memorizeActions(ActionRegister[] r) {
 		memory.addNewActions(r);
+	}
+	
+	public void threadAgentReportThatItHasStarted() {
+		
+		lock.lock();
+        try {
+        	
+        	
+            // AGENTI SI METTONO IN WAITING 
+            while (this.threadsModelRunning > 0 || initOptimization || initBackProp) {
+            	threadsAgentWaiting ++;
+                threadsAgent.await();
+                threadsAgentWaiting--;
+            }
+            threadsAgentRunning++;
+            
+        } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			lock.unlock();
+		}
+        
+	}
+
+	public void threadAgentReportThatItHasFinished() {
+		
+		lock.lock();
+        try {
+        	threadsAgentRunning--;
+        	threadsModel.signalAll(); 
+        	
+        	
+        } finally {
+			lock.unlock();
+		}
+	}
+	
+	public void threadModelReportsThatItHasStartedInizitBackProp() {
+
+		lock.lock();
+		try {
+			
+			initBackProp = true;
+            while(this.threadsAgentRunning > 0) {
+            	threadsModelWaiting ++;
+                threadsModel.await();
+                threadsModelWaiting--;
+            }
+            
+            threadsModelRunning++;
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			lock.unlock();
+		}
+		
+	}
+	
+	public void threadModelReportsThatItHasFinishedInizitBackProp() {
+		
+		lock.lock();
+        try {
+        	
+        	initBackProp = false;
+
+        	threadsModelRunning--;
+
+        	threadsAgent.signalAll(); 
+        	
+        } finally {
+			lock.unlock();
+		}
+		
+	}
+	
+	public void threadModelReportsThatItHasStartedOptimization() {
+
+		lock.lock();
+		try {
+			
+			initOptimization = true;
+			
+            while(this.threadsAgentRunning > 0) {
+            	threadsModelWaiting ++;
+                threadsModel.await();
+                threadsModelWaiting--;
+            }
+            
+            threadsModelRunning++;
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			lock.unlock();
+		}
+		
+	}
+	
+	public void threadModelReportsThatItHasFinishedInizitOptimization() {
+		
+		lock.lock();
+        try {
+        	
+        	initOptimization = false;
+        	
+        	threadsModelRunning--;
+        	
+        	threadsAgent.signalAll(); 
+	
+        } finally {
+			lock.unlock();
+		}
+		
 	}
 }
