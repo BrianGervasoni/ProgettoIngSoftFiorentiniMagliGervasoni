@@ -89,12 +89,6 @@ public class ThreadAIManager{
 		this.terminateThreadsAgent();
 	}
 	
-	public void computeStatics(){
-		/*
-		 * TODO STATISTICHE DELLA FASE DI ESECUZIONE E ALLENAMENTO
-		 */
-	}
-	
 	private Map selectFirstMap() {
 		return this.threadAgents.get(0).getGame().getMap();
 	}
