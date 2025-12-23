@@ -1,6 +1,5 @@
-package gui.trainingNoMap;
+package gui.trainingWithMap;
 
-import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,8 +14,7 @@ public class ButtonShowRandomMap extends JButton implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		((CardLayout) this.getParent().getParent().getLayout()).show(this.getParent().getParent(), "trainingWithMap");
-		
+		// TODO Auto-generated method stub
 
 	}
 
