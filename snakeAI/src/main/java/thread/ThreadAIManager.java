@@ -77,6 +77,9 @@ public class ThreadAIManager{
 		}
 		
 		//TODO COME SALVO? 
+		for(ThreadModel threadModel : threadModels) {
+			threadModel.save();
+		}
 		
 		for(ThreadModel threadModel : threadModels) {
 			threadModel.interrupt();
