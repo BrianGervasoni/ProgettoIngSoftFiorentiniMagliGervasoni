@@ -9,12 +9,13 @@ public class ButtonExit extends JButton implements ActionListener {
 
 	public ButtonExit(String string) {
 		super(string);
+		addActionListener(this);
 	}
 
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("Chiusura del programma");
+		System.out.println("Ora chiudo il programma");
 	}
 
 }
