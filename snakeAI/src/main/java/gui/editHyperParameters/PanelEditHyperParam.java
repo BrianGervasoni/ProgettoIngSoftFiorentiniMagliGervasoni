@@ -18,7 +18,7 @@ public class PanelEditHyperParam extends JPanel {
 		
 		super();
 		
-		this.setLayout(new GridLayout(4, 5));
+		this.setLayout(new GridLayout(5, 4, 40, 40));
 		
 		
 		
@@ -54,6 +54,14 @@ public class PanelEditHyperParam extends JPanel {
 		//qui bisogna fare un get del valore
 		JTextField jtf7 = new JTextField("9", 15);
 		
+		JLabel l8 = new JLabel("motivation");
+		//qui bisogna fare un get del valore
+		JTextField jtf8 = new JTextField("0,16", 15);
+		
+		JLabel l9 = new JLabel("entropyContribution");
+		//qui bisogna fare un get del valore
+		JTextField jtf9 = new JTextField("0,78", 15);
+		
 		
 		
 		
@@ -70,6 +78,23 @@ public class PanelEditHyperParam extends JPanel {
 		add(jtf3);
 		
 		
+		add(l4);
+		add(jtf4);
+		
+		add(l5);
+		add(jtf5);
+		
+		add(l6);
+		add(jtf6);
+		
+		add(l7);
+		add(jtf7);
+		
+		add(l8);
+		add(jtf8);
+		
+		add(l9);
+		add(jtf9);
 		
 		
 		

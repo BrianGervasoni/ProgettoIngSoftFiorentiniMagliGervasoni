@@ -10,6 +10,7 @@ import javax.swing.WindowConstants;
 
 import gui.editHyperParameters.PanelEditHyperParam;
 import gui.home.PanelHome;
+import gui.trainingNoMap.PanelTrainingNoMap;
 
 public class FrameMain {
 
@@ -26,7 +27,13 @@ public class FrameMain {
 		jpanelmain.add(panelhome, "home");
 
 		PanelEditHyperParam panelEditHyperparam = new PanelEditHyperParam(layout, jpanelmain);
-		jpanelmain.add(panelEditHyperparam);
+		jpanelmain.add(panelEditHyperparam, "editHyper");
+		
+		PanelTrainingNoMap panelTrainingNoMap = new PanelTrainingNoMap();
+		jpanelmain.add(panelTrainingNoMap, "trainingNoMap");
+		
+		
+		
 		
 		frame.add(jpanelmain);
 		

@@ -21,6 +21,11 @@ public class ButtonStartTraining extends JButton implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
+	
+		((CardLayout) this.getParent().getParent().getLayout()).show(this.getParent().getParent(), "trainingNoMap");
+		
+		
 		System.out.println("Comincia ora il training");
 
 	}
