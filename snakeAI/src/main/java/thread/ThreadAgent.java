@@ -6,6 +6,7 @@ import boxes.SnakeBody;
 import gioco.snakeAI.GameMain;
 import gioco.snakeAI.Map;
 import model.*;
+import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 
 public class ThreadAgent extends Thread implements Functions{
 
@@ -24,6 +25,8 @@ public class ThreadAgent extends Thread implements Functions{
 	@Override
 	public void run() {
 		
+		int t = 0;
+		
 		while(true) {
 			
 			/* LOCK
@@ -41,24 +44,30 @@ public class ThreadAgent extends Thread implements Functions{
 			 * IF(game.finish() == true)
 			 * 		RESET MAP
 			 */
+			while(this.game.finish() == false && t < Hyperparameters.timeStep) {
+				
+				this.model.threadAgentReportThatItHasStarted();
+				
+				this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
+				
+				this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
+				
+				this.intermediary.addActionReward(this.calculateReward(this.game.getMap()));
+			}
 			
-			this.model.threadAgentReportThatItHasStarted();
+			t++;
 			
-			this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
-			
-			this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
-			
-			this.intermediary.addActionReward(this.calculateReward(this.game.getMap()));
+			synchronized(sharedLock) {
+				this.sendActions();
+				this.resetActionRegister(); 
+			}
 			
 			if(game.finish() == true) {
-			
-				synchronized(sharedLock) {
-					this.sendActions();
-					this.resetActionRegister(); 
-				}
-			
+				//this.game.reset(); DEVONO CREARE RESET METODO
 				this.model.threadAgentReportThatItHasFinished();
 			}
+			
+			
 			
 		}
 	}
