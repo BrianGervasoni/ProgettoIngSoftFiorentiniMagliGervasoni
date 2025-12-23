@@ -32,50 +32,29 @@ public class ThreadAgent extends Thread implements Functions{
 		
 		while(!Thread.currentThread().isInterrupted()) {
 			
-			//while(this.game.finish() == false && t < Hyperparameters.timeStep) {
+			while(this.game.finish() == false && t < Hyperparameters.timeStep) {
 				
 				this.model.threadAgentReportThatItHasStarted();
-				System.out.println("agent " + this.n + " ha iniziato");
-				try {
-					sleep(3000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				//this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
 				
-				//this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
+				this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
 				
-				//this.intermediary.addActionReward(this.calculateReward(this.game.getMap()));
-			//}
+				this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
+				
+				this.intermediary.addActionReward(this.calculateReward(this.game.getMap()));
+			}
 			
 			t++;
 			
 			this.model.startingSendActions();
-			System.out.println("agent " + this.n + " ha iniziato send action");
-				//this.sendActions();
-			try {
-				sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-				//this.resetActionRegister(); 
-			System.out.println("agent " + this.n + " ha terminato send action");	
+				this.sendActions();
+				this.resetActionRegister(); 	
 			this.model.terminatingSendActions();
 			
 			
-			//if(game.finish() == true) {
-			//	this.game.reset(); 
+			if(game.finish() == true) {
+				this.game.reset(); 
 				this.model.threadAgentReportThatItHasFinished();
-				System.out.println("agent " + this.n + " ha terminato");	
-				try {
-					sleep(3000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			//}
+			}
 			
 			
 			
