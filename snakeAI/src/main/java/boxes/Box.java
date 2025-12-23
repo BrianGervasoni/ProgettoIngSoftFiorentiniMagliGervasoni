@@ -1,6 +1,6 @@
 package boxes;
 
-public abstract class Box implements Visualize, Equals{
+public abstract class Box implements Visualize{
        
     private int Xcoordinate; //coordinata X della casella
     private int Ycoordinate; //coordinata Y della casella
