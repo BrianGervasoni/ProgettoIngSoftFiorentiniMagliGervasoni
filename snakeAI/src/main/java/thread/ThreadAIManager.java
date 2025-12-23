@@ -64,9 +64,23 @@ public class ThreadAIManager{
 	
 	public void startExecution() {
 		
+		for(ThreadAgent threadAgent : threadAgents) { //remember threadsAgentNumber = number of agents PER threadsModel, while threadAgents.size() = number of total agents
+			threadAgent.start();
+		}
+		
 	}
 	
 	public void terminateTraining() {
+		
+		for(ThreadAgent threadAgent : threadAgents) { 
+			threadAgent.interrupt();
+		}
+		
+		//COME SALVO? 
+		
+		for(ThreadModel threadModel : threadModels) {
+			threadModel.interrupt();
+		}
 		
 	}
 	
@@ -84,7 +98,7 @@ public class ThreadAIManager{
 		return this.threadAgents.get(0).getGame().getMap();
 	}
 	
-	private Map selectNextMap(int index) {
+	private Map selectIndexMap(int index) {
 		return this.threadAgents.get(index).getGame().getMap();
 	}
 	
@@ -130,7 +144,7 @@ public class ThreadAIManager{
 			return this.selectLastMap();
 		}
 		else {
-			return this.selectNextMap(mapIndex);
+			return this.selectIndexMap(mapIndex);
 		}
 	}
 

@@ -8,6 +8,7 @@ public class ThreadModel extends Thread{
 	private Model model;
 	private String dirFile; 
 	private int nThreadsAgent;
+	private double[] statistics;
 
 	public ThreadModel(String dir, int nTA) {
 		this.dirFile = dir;
@@ -43,6 +44,10 @@ public class ThreadModel extends Thread{
 			
 			n++;
 		}
+	}
+	
+	public void saveStatistics(double[] loss) {
+		
 	}
 	
 	public void save() {
