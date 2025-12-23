@@ -155,4 +155,12 @@ public class ThreadAgent extends Thread implements Functions{
 	public void setGame(GameMain game) {
 		this.game = game;
 	}
+	
+	public Intermediary getIntermediary() {
+		return intermediary;
+	}
+
+	public void setIntermediary(Intermediary intermediary) {
+		this.intermediary = intermediary;
+	}
 }

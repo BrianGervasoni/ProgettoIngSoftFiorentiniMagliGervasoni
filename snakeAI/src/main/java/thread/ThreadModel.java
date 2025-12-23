@@ -8,7 +8,7 @@ public class ThreadModel extends Thread{
 	private Model model;
 	private String dirFile; 
 	private int nThreadsAgent;
-	
+
 	public ThreadModel(String dir, int nTA) {
 		this.dirFile = dir;
 		this.nThreadsAgent = nTA;
@@ -71,6 +71,14 @@ public class ThreadModel extends Thread{
 
 	public void setModel(Model model) {
 		this.model = model;
+	}
+	
+	public int getnThreadsAgent() {
+		return nThreadsAgent;
+	}
+
+	public void setnThreadsAgent(int nThreadsAgent) {
+		this.nThreadsAgent = nThreadsAgent;
 	}
 	
 }
