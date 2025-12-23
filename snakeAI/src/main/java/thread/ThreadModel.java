@@ -8,15 +8,11 @@ public class ThreadModel extends Thread{
 	public Model model;
 	public String dirFile; 
 	public int nThreadsAgent;
-	static int N = 0; //TODO UML
-	public int n; //TODO UML
 	
 	public ThreadModel(String dir, int nTA) {
 		this.dirFile = dir;
 		this.nThreadsAgent = nTA;
 		this.load();
-		this.n = N;
-		N++;
 	}
 	
 	@Override
@@ -76,6 +72,7 @@ public class ThreadModel extends Thread{
 	public void setModel(Model model) {
 		this.model = model;
 	}
+	
 }
 
 
