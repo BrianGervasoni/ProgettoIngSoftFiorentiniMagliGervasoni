@@ -55,9 +55,6 @@ public class ThreadAgent extends Thread implements Functions{
 				this.game.reset(); 
 				this.model.threadAgentReportThatItHasFinished();
 			}
-			
-			
-			
 		}
 	}
 	
