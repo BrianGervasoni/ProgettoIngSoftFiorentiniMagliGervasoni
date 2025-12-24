@@ -28,8 +28,8 @@ public class EmptyBox extends Box {
 	 * Metodo ereditato dalla interface Visualize
 	 */
 	@Override
-	public void visual() {
-		System.out.print(element.getC());
+	public String visual() {
+		return element.getC();
 		
 	}
 	
