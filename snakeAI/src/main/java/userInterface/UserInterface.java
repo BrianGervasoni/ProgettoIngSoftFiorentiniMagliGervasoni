@@ -40,7 +40,7 @@ public class UserInterface {
 	}
 	
 	public void viewMap() {
-		renderMap(new Map());
+		renderMap();
 	}
 	
 	public void hideMap() {
@@ -125,7 +125,7 @@ public class UserInterface {
 		
 		resetFrame();
 		
-		//TODO comando per il ThreadAIManager di cominciare la fase di esecuzione con la mappa
+		controller.startTraining();
 		
 		JPanel training = new JPanel();
 		
@@ -213,7 +213,7 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO non sappiamo come gestire la cosa
+				controller.nextMap();
 				
 			}});
 		
@@ -223,7 +223,7 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO non sappiamo come gestire la cosa
+				controller.previousMap();
 				
 			}});
 		
@@ -307,7 +307,7 @@ public class UserInterface {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				startingMenu();
-				//TODO: salvare i valori per il ThreadAIManager
+				//TODO: non è chiaro come sia da gestire
 				
 			}});
 		
@@ -350,7 +350,7 @@ public class UserInterface {
 		
 		resetFrame();
 		
-		//TODO manda comando al ThreadAIManager di iniziare l'esecuzione
+		controller.startExecution();
 		
 		JPanel exec = new JPanel();
 		
@@ -363,7 +363,7 @@ public class UserInterface {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				startingMenu();
-				//TODO manda comando per interrompere l'esecuzione al ThreadAIManager
+				controller.terminateExecution();
 				
 			}});
 		
@@ -404,15 +404,17 @@ public class UserInterface {
 		//TODO non è chiaro come si gestisca
 	}
 	
-	public JTable renderMap(Map map) {
+	public JTable renderMap() {
+		
+		Map map = controller.getMap();
 		
 		DefaultTableModel model = new DefaultTableModel();
 		JTable table = new JTable(model);
 		model.setRowCount(map.getRowLenght());
 		model.setColumnCount(map.getColumnLenght());
 		
-		for(int i = 0; i < map.getRowLenght(); i++) {			// i sono le righe		questo for fa passare le righe
-			for(int y = 0; y < map.getColumnLenght(); y++) {		// y sono le colonne	questo for fa passare le colonne
+		for(int i = 0; i < map.getRowLenght(); i++) {
+			for(int y = 0; y < map.getColumnLenght(); y++) {
 				
 				if(((y==0) && (i==0))||((y==0) && (i==map.getRowLenght()-1))||((y==map.getColumnLenght()-1) && (i==0))||((i==map.getRowLenght()-1) && (y==map.getColumnLenght()-1)))
 					table.setValueAt("+", i, y);
@@ -435,18 +437,18 @@ public class UserInterface {
 	 * Chiudi il programma
 	 */
 	public void exit() {
-		//TODO da far quittare il programma
+		controller.exit();
 	}
 	
 	
 	public void toggleFromExecToTrain() {
 		startTrainingPhaseWithoutMap();
-		//TODO comando per il ThreadAIManager di interrompere l'esecuzione
+		controller.toggleFromExecToTrain();
 	}
 	
 	public void toggleFromTrainToExec() {
 		startExecutionPhase();
-		//TODO comando per il ThreadAIManager di interrompere l'allenamento
+		controller.toggleFromTrainToExec();
 	}
 	
 	
