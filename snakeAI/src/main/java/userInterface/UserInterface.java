@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
+import controller.Controller;
 import gioco.snakeAI.Map;
 
 
@@ -21,9 +22,12 @@ import gioco.snakeAI.Map;
 public class UserInterface {
 
 	private JFrame myFrame;
+	private Controller controller;
 	
-	public UserInterface() {
+	
+	public UserInterface(Controller ctr) {
 		myFrame = new JFrame("SnakeAI");
+		controller = ctr;
 	}
 	
 	
@@ -121,6 +125,8 @@ public class UserInterface {
 		
 		resetFrame();
 		
+		//TODO comando per il ThreadAIManager di cominciare la fase di esecuzione con la mappa
+		
 		JPanel training = new JPanel();
 		
 		JLabel ll = new JLabel("Statistiche e altra roba etc");
@@ -151,8 +157,7 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO
-				// qua ci va il toggle specifico
+				toggleFromTrainToExec();
 				
 			}});
 		
@@ -208,8 +213,7 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO
-				//prossimo thread
+				//TODO non sappiamo come gestire la cosa
 				
 			}});
 		
@@ -219,8 +223,7 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO
-				//thread precedente
+				//TODO non sappiamo come gestire la cosa
 				
 			}});
 		
@@ -347,6 +350,8 @@ public class UserInterface {
 		
 		resetFrame();
 		
+		//TODO manda comando al ThreadAIManager di iniziare l'esecuzione
+		
 		JPanel exec = new JPanel();
 		
 		JLabel jj = new JLabel("Rendering mappa in corso");
@@ -358,7 +363,7 @@ public class UserInterface {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				startingMenu();
-				//TODO manda comando per interrompere l'esecuzione
+				//TODO manda comando per interrompere l'esecuzione al ThreadAIManager
 				
 			}});
 		
@@ -367,7 +372,7 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO mettere un toggle specifico per exec train
+				toggleFromExecToTrain();
 			}});
 		
 		exec.add(jj);
@@ -392,11 +397,11 @@ public class UserInterface {
 	}
 	
 	public void insertDirFileModel() {
-		//??
+		//TODO non sappiamo come implementarlo, Davide aiutaci tu
 	}
 	
 	public void switchThreadMapTrainingPhase() {
-		//??
+		//TODO non è chiaro come si gestisca
 	}
 	
 	public JTable renderMap(Map map) {
@@ -432,6 +437,18 @@ public class UserInterface {
 	public void exit() {
 		//TODO da far quittare il programma
 	}
+	
+	
+	public void toggleFromExecToTrain() {
+		startTrainingPhaseWithoutMap();
+		//TODO comando per il ThreadAIManager di interrompere l'esecuzione
+	}
+	
+	public void toggleFromTrainToExec() {
+		startExecutionPhase();
+		//TODO comando per il ThreadAIManager di interrompere l'allenamento
+	}
+	
 	
 	
 }
