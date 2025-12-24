@@ -1,6 +1,5 @@
 package userInterface;
 
-import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -13,14 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import gui.editHyperParameters.ButtonAbort;
-import gui.editHyperParameters.ButtonDone;
-import gui.execution.ButtonStopExecution;
-import gui.trainingNoMap.ButtonShowRandomMap;
-import gui.trainingNoMap.ButtonStopTraining;
-import gui.trainingNoMap.ButtonToggle;
-import gui.trainingWithMap.ButtonNextThread;
-import gui.trainingWithMap.ButtonPreviousThread;
+
 
 public class UserInterface {
 
@@ -155,12 +147,13 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				//TODO
 				// qua ci va il toggle specifico
 				
 			}});
 		
 		
-		
+		training.add(ll);
 		training.add(buttonShowRandomMap);
 		training.add(buttonStopTraining);
 		training.add(buttonToggle);
@@ -173,6 +166,10 @@ public class UserInterface {
 	}
 	
 	
+	
+	/**
+	 * Passa alla schermata di allenamento con il rendering della mappa. Questo passaggio si può fare solo nella fase di allenamento senza la mappa
+	 */
 	public void startTrainingPhaseWithMap() {
 		
 		resetFrame();
@@ -182,16 +179,53 @@ public class UserInterface {
 		JLabel ll1 = new JLabel("Qua va renderizzata la mappa");
 		JLabel ll = new JLabel("Statistiche e altra roba etc");
 		
-		ButtonShowRandomMap bsrm = new ButtonShowRandomMap("Mostra una mappa casuale");
-		ButtonStopTraining bst = new ButtonStopTraining("Interrompi l'allenamento");
+		JButton buttonShowRandomMap = new JButton("Mostra una mappa casuale");
+		buttonShowRandomMap.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				switchThreadMapTrainingPhase();
+				
+			}});
 		
-		ButtonNextThread bnt = new ButtonNextThread("Thread successivo");
-		ButtonPreviousThread bpt = new ButtonPreviousThread("Thread precedente");
 		
-		training.add(bsrm);
-		training.add(bst);
-		training.add(bnt);
-		training.add(bpt);
+		JButton buttonStopTraining = new JButton("Interrompi l'allenamento");
+		buttonStopTraining.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				stopTrainingPhase();
+				
+			}});
+
+		
+		JButton buttonNextThread = new JButton("Thread successivo");
+		buttonNextThread.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				//TODO
+				//prossimo thread
+				
+			}});
+		
+
+		JButton buttonPreviousThread = new JButton("Thread precedente");
+		buttonPreviousThread.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				//TODO
+				//thread precedente
+				
+			}});
+		
+		training.add(ll1);
+		training.add(ll);
+		training.add(buttonShowRandomMap);
+		training.add(buttonStopTraining);
+		training.add(buttonNextThread);
+		training.add(buttonPreviousThread);
 		
 		myFrame.add(training);
 		myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -200,7 +234,9 @@ public class UserInterface {
 		myFrame.setVisible(true);
 	}
 	
-	
+	/**
+	 * Schermata per inserire gli iperparametri, accessibile dal menu
+	 */
 	public void insertHyperParameters() {
 		
 		resetFrame();
@@ -248,9 +284,27 @@ public class UserInterface {
 		
 		
 		
+		JButton buttonAbort = new JButton("buttonAbort");
+		buttonAbort.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				startingMenu();
+
+			}});
 		
-		ButtonAbort ba = new ButtonAbort("Annulla");
-		ButtonDone bd = new ButtonDone("Fatto");
+
+		JButton buttonDone = new JButton("Fatto");
+		buttonDone.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				startingMenu();
+				//TODO: salvare i valori per il ThreadAIManager
+				
+			}});
+		
+		
 		
 		
 		hyperParam.add(l1);
@@ -271,8 +325,8 @@ public class UserInterface {
 		hyperParam.add(jtf8);
 		hyperParam.add(l9);
 		hyperParam.add(jtf9);
-		hyperParam.add(ba);
-		hyperParam.add(bd);
+		hyperParam.add(buttonAbort);
+		hyperParam.add(buttonDone);
 		
 		myFrame.add(hyperParam);
 		myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -282,7 +336,9 @@ public class UserInterface {
 		
 	}
 	
-	
+	/**
+	 * Comincia la fase di esecuzione, accessibile dal menu. Di default mostra la mappa e non può essere nascosta
+	 */
 	public void startExecutionPhase() {
 		
 		resetFrame();
@@ -291,13 +347,29 @@ public class UserInterface {
 		
 		JLabel jj = new JLabel("Rendering mappa in corso");
 		JLabel stats = new JLabel("Statistiche etc");
-		ButtonStopExecution bse = new ButtonStopExecution("Termina esecuzione");
-		ButtonToggle bt = new ButtonToggle("Toggle Exec => Train");
+		
+		JButton buttonStopExecution = new JButton("Termina esecuzione");
+		buttonStopExecution.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				startingMenu();
+				//TODO manda comando per interrompere l'esecuzione
+				
+			}});
+		
+		JButton buttonToggle = new JButton("Toggle Exec => Train");
+		buttonToggle.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO mettere un toggle specifico per exec train
+			}});
 		
 		exec.add(jj);
 		exec.add(stats);
-		exec.add(bse);
-		exec.add(bt);
+		exec.add(buttonStopExecution);
+		exec.add(buttonToggle);
 		
 		myFrame.add(exec);
 		myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
