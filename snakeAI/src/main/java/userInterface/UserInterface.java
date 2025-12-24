@@ -9,8 +9,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableModel;
+
+import gioco.snakeAI.Map;
 
 
 
@@ -32,7 +36,7 @@ public class UserInterface {
 	}
 	
 	public void viewMap() {
-		renderMap();
+		renderMap(new Map());
 	}
 	
 	public void hideMap() {
@@ -395,15 +399,38 @@ public class UserInterface {
 		//??
 	}
 	
-	public void renderMap() {
+	public JTable renderMap(Map map) {
 		
+		DefaultTableModel model = new DefaultTableModel();
+		JTable table = new JTable(model);
+		model.setRowCount(map.getRowLenght());
+		model.setColumnCount(map.getColumnLenght());
+		
+		for(int i = 0; i < map.getRowLenght(); i++) {			// i sono le righe		questo for fa passare le righe
+			for(int y = 0; y < map.getColumnLenght(); y++) {		// y sono le colonne	questo for fa passare le colonne
+				
+				if(((y==0) && (i==0))||((y==0) && (i==map.getRowLenght()-1))||((y==map.getColumnLenght()-1) && (i==0))||((i==map.getRowLenght()-1) && (y==map.getColumnLenght()-1)))
+					table.setValueAt("+", i, y);
+				else if((i==0)||(i==map.getRowLenght()-1))
+					table.setValueAt("-", i, y);
+				else if((y==0)||(y==map.getColumnLenght()-1))
+					table.setValueAt("|", i, y);
+				else
+					table.setValueAt(map.getBox(i, y).visual(), i, y);
+
+				
+			}
+		}
+		
+		return table;
 	}
+	
 	
 	/*
 	 * Chiudi il programma
 	 */
 	public void exit() {
-		
+		//TODO da far quittare il programma
 	}
 	
 	

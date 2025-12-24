@@ -30,7 +30,7 @@ public class SnakeBox extends Box {
 	 * Metodo ereditato dalla interface Visualize
 	 */
 	@Override
-	public void visual() {
+	public String visual() {
 		
 		
 		int nextX = 0;
@@ -43,9 +43,9 @@ public class SnakeBox extends Box {
 			
 		
 		if((super.getXcoordinate() - nextX) != 0)
-			System.out.print(element.getC());
+			return element.getC();
 		else
-			System.out.print(element.getD());
+			return element.getD();
 	}
 	
 	/**

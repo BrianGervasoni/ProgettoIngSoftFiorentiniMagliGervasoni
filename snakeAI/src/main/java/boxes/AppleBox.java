@@ -27,9 +27,9 @@ public class AppleBox extends Box {
 	 * @return 
 	 */
 	@Override
-	public void visual() {
+	public String visual() {
 		
-		// element.getFood();
+		return element.getFood();
 	}
 
 	@Override
