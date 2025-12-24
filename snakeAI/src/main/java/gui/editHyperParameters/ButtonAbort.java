@@ -18,9 +18,7 @@ public class ButtonAbort extends JButton implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-//		System.out.println((CardLayout) this.getParent().getParent().getLayout());
-		((CardLayout) this.getParent().getParent().getLayout()).first(this.getParent().getParent());
-		
+
 		
 		
 	}

@@ -3,6 +3,8 @@ package userInterface;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,11 +16,6 @@ import javax.swing.WindowConstants;
 import gui.editHyperParameters.ButtonAbort;
 import gui.editHyperParameters.ButtonDone;
 import gui.execution.ButtonStopExecution;
-import gui.home.ButtonExit;
-import gui.home.ButtonModifyHyperParam;
-import gui.home.ButtonSelectModel;
-import gui.home.ButtonStartExecution;
-import gui.home.ButtonStartTraining;
 import gui.trainingNoMap.ButtonShowRandomMap;
 import gui.trainingNoMap.ButtonStopTraining;
 import gui.trainingNoMap.ButtonToggle;
@@ -43,25 +40,72 @@ public class UserInterface {
 	}
 	
 	public void viewMap() {
-		
+		renderMap();
 	}
 	
 	public void hideMap() {
-		
+		startTrainingPhaseWithoutMap();
 	}
 	
-	
+	/**
+	 * Fai renderizzare alla gui il menu principale
+	 */
 	public void startingMenu() {
 		
 		resetFrame();
 		
 		JPanel menuPanel = new JPanel();
 	
-		ButtonModifyHyperParam bmhp = new ButtonModifyHyperParam("Modifica HyperParametri");
-		ButtonSelectModel bsm = new ButtonSelectModel("Seleziona modello");
-		ButtonStartExecution bse = new ButtonStartExecution("Avvia esecutione");
-		ButtonStartTraining bst = new ButtonStartTraining("Avvia allenamento");
-		ButtonExit be = new ButtonExit("Esci");
+		JButton modifyHyperParam = new JButton("Modifica HyperParametri");
+		modifyHyperParam.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				stopTrainingPhase();
+			}});	
+		
+		
+		JButton buttonSelectModel = new JButton("Seleziona modello");
+		buttonSelectModel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				insertDirFileModel();
+			}});	
+		
+		
+		JButton buttonStartExecution = new JButton("Avvia esecutione");
+		buttonStartExecution.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				startExecutionPhase();
+			}});	
+		
+		
+		JButton buttonStartTraining = new JButton("Avvia allenamento");
+		buttonStartTraining.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				startTrainingPhaseWithoutMap();
+			}});	
+		
+		
+		JButton buttonExit = new JButton("Esci");
+		buttonExit.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				exit();
+			}});	
+	
+		menuPanel.add(modifyHyperParam);
+		menuPanel.add(buttonSelectModel);
+		menuPanel.add(buttonStartExecution);
+		menuPanel.add(buttonStartTraining);
+		menuPanel.add(buttonExit);
+		
 		
 		menuPanel.setLayout(new GridLayout(5, 1, 10, 10));
 		
@@ -74,7 +118,9 @@ public class UserInterface {
 	}
 	
 	
-	
+	/**
+	 * Mostra la schermata di allenamento senza la mappa; dal menu si passa a questa schermata di default quando si vuole far cominciare l'allenamento
+	 */
 	public void startTrainingPhaseWithoutMap() {
 		
 		resetFrame();
@@ -83,13 +129,41 @@ public class UserInterface {
 		
 		JLabel ll = new JLabel("Statistiche e altra roba etc");
 		
-		ButtonShowRandomMap bsrm = new ButtonShowRandomMap("Mostra una mappa casuale");
-		ButtonStopTraining bst = new ButtonStopTraining("Interrompi l'allenamento");
-		ButtonToggle bt = new ButtonToggle("Toggle Train => Exec");
+
+		JButton buttonShowRandomMap = new JButton("Mostra una mappa casuale");
+		buttonShowRandomMap.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				viewMap();
+				
+			}});
 		
-		training.add(bsrm);
-		training.add(bst);
-		training.add(bt);
+		
+		JButton buttonStopTraining = new JButton("Interrompi l'allenamento");
+		buttonStopTraining.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				stopTrainingPhase();
+				
+			}});
+		
+		
+		JButton buttonToggle = new JButton("Toggle traing => Exec");
+		buttonToggle.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// qua ci va il toggle specifico
+				
+			}});
+		
+		
+		
+		training.add(buttonShowRandomMap);
+		training.add(buttonStopTraining);
+		training.add(buttonToggle);
 		
 		myFrame.add(training);
 		myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -248,5 +322,17 @@ public class UserInterface {
 	public void switchThreadMapTrainingPhase() {
 		//??
 	}
+	
+	public void renderMap() {
+		
+	}
+	
+	/*
+	 * Chiudi il programma
+	 */
+	public void exit() {
+		
+	}
+	
 	
 }
