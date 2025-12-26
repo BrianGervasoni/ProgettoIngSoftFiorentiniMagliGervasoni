@@ -2,17 +2,20 @@ package thread;
 
 import fileManager.JsonFileManager;
 import model.Model;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 public class ThreadModel extends Thread{
 
 	private Model model;
 	private String dirFile; 
 	private int nThreadsAgent;
-	private double[] statistics;
+	private final BehaviorSubject<double[]> lossStat;
 
 	public ThreadModel(String dir, int nTA) {
 		this.dirFile = dir;
 		this.nThreadsAgent = nTA;
+		lossStat = BehaviorSubject.create();
 		this.load();
 	}
 	
@@ -46,9 +49,9 @@ public class ThreadModel extends Thread{
 		}
 	}
 	
-	public void saveStatistics(double[] loss) {
-		this.statistics = loss;
-	}
+	public Observable<double[]> observableLoss() {
+        return lossStat.hide();
+    }
 	
 	public void save() {
 		JsonFileManager.saveModel(model, dirFile);
@@ -67,7 +70,7 @@ public class ThreadModel extends Thread{
 	}
 	
 	public void backPropagation() {
-		this.model.backPropagation(); 
+		lossStat.onNext(this.model.backPropagation()); 
 	}
 	
 	public Model getModel() {
