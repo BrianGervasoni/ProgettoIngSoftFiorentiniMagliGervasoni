@@ -102,6 +102,10 @@ public class ThreadAIManager{
 		return this.threadAgents.get(index).getGame().getMap();
 	}
 	
+	public ThreadAgent selectIndexAgent(int index) {
+		return this.threadAgents.get(index);
+	}
+	
 	private Map selectLastMap() {
 		return this.threadAgents.get(this.threadAgents.size() - 1).getGame().getMap();
 	}
