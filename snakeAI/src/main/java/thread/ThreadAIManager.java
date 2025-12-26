@@ -33,7 +33,12 @@ public class ThreadAIManager{
 		
 		for(int i = 0; i<this.threadsModelNumber; i++) {
 			
-			Path relativePath = Paths.get(relPath + name + i + ".json");
+			Path relativePath;
+			if(i == 0) {//the first file dosn't get the index number
+				relativePath = Paths.get(relPath + name + ".json");
+			}else {
+				relativePath = Paths.get(relPath + name + i + ".json");
+			}
 			Path absolutePath = relativePath.toAbsolutePath();
 			ThreadModel threadModel = new ThreadModel(absolutePath.toString(), this.threadsAgentNumber);
 			threadModels.add(threadModel);
