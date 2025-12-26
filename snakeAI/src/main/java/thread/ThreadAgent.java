@@ -7,17 +7,21 @@ import gioco.snakeAI.GameMain;
 import gioco.snakeAI.Map;
 import model.*;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 public class ThreadAgent extends Thread implements Functions{
 
 	private Model model;
 	private Intermediary intermediary;
 	private GameMain game;
+	private final BehaviorSubject<Map> mapStat;
 	
 	public ThreadAgent(Model model) {
 		this.model = model;
 		this.intermediary = new Intermediary();
 		this.game = new GameMain();
+		mapStat = BehaviorSubject.create();
 	}
 	
 	@Override
@@ -28,6 +32,8 @@ public class ThreadAgent extends Thread implements Functions{
 		while(!Thread.currentThread().isInterrupted()) {
 			
 			while(this.game.finish() == false && t < Hyperparameters.timeStep) {
+				
+				this.mapStat.onNext(this.getGame().getMap());;
 				
 				this.model.threadAgentReportThatItHasStarted();
 				
@@ -53,6 +59,10 @@ public class ThreadAgent extends Thread implements Functions{
 		}
 	}
 	
+	public Observable<Map> observableMap() {
+        return mapStat.hide();
+    }
+	
 	public Model getModel() {
 		return model;
 	}
@@ -71,7 +81,7 @@ public class ThreadAgent extends Thread implements Functions{
 	 * - reward if the snake died = -50
 	 * @return the sum of the reward values, which says if the AI is doing good or not
 	 */
-	public double calculateReward(Map map) {
+	public double calculateReward(Map map) { //TODO TESTARE
 		
 		double rewardDefault = 4, rewardDistanceApple, rewardGetApple = 50, rewardDead = -50;
 		double diagonal = Math.sqrt((map.X*map.X) + (map.Y*map.Y));
