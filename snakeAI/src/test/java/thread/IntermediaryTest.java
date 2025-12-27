@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import boxes.*;
 import gioco.snakeAI.Map;
+import gioco.snakeAI.Snake;
 
 class IntermediaryTest {
 
@@ -161,6 +162,36 @@ class IntermediaryTest {
 	@Test
 	void mapConversion() {
 		
+		Map map = new Map();
+		Snake snake = new Snake();
+		
+		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, 3, 4);
+		map.setBox(firstBodyPiece,3, 4);
+		snake.addPiece(firstBodyPiece);
+		
+		SnakeBox head = new SnakeBox(SnakeBody.HEAD, 4, 4);
+		map.setBox(head, 4, 4);
+		snake.setHead(head);
+		
+		map.setSnake(snake);
+		
+		this.apple = new AppleBox(Food.APPLE, 5, 2);
+		map.setBox(apple, 5, 2);	
+		
+		int inputLenght = 61*3;
+		
+		double[] result, resultTest;
+		
+		resultTest = new double[61*3];
+		for(int i=0; i<resultTest.length; i++) {
+			resultTest[i] = 0;
+		}
+		
+		
+		Intermediary intermediary = new Intermediary();
+		result = intermediary.mapConversion(map,inputLenght);
+		
+		assertArrayEquals(result, resultTest);
 		
 	}
 }

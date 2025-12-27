@@ -43,7 +43,7 @@ public class EmptyBox extends Box {
 	
 	@Override
 	public boolean equals(BoxType object) {
-		if(this.element == (MapElem) object) {
+		if(this.element == object) {
 
 			return true;
 		}
