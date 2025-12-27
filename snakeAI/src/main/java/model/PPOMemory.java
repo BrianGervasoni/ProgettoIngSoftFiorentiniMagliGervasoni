@@ -24,6 +24,9 @@ public class PPOMemory {
 	 * @param actions
 	 */
 	private void processActions(ActionRegister[] actions) {
+		if(actions == null)
+			return;
+		
 		for(int i=0; i<actions.length; i++) {
 			actions[i].vTarget = 0;
 			actions[i].advantage = 0;
@@ -46,6 +49,7 @@ public class PPOMemory {
 	 */
 	public void prepareData() {
 		oldR = (ArrayList<ActionRegister>) currR.clone();
+		currR = new ArrayList<ActionRegister>();
 	}
 	
 	/**

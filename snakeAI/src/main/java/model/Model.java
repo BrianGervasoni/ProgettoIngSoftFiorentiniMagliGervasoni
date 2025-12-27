@@ -25,12 +25,12 @@ public class Model {
 	private transient boolean initBackProp = false;
 	private transient boolean initOptimization = false;
 	
-	final Lock lock = new ReentrantLock();
-	final Condition threadsAgent = lock.newCondition(); 
-	final Condition threadsModel = lock.newCondition();
+	private transient final Lock lock = new ReentrantLock();
+	private transient final Condition threadsAgent = lock.newCondition(); 
+	private transient final Condition threadsModel = lock.newCondition();
 	
-	final Lock lock1 = new ReentrantLock();
-	final Condition sendActions = lock.newCondition(); 
+	private transient final Lock lock1 = new ReentrantLock();
+	private transient final Condition sendActions = lock.newCondition(); 
 	
 	/**
 	 * setup the default configuration (critic: 3X126 actor: 3X256)
