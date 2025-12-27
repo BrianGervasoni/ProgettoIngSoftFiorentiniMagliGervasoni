@@ -29,7 +29,7 @@ public class Map {
 		this.box = new Box[X][Y];
 		this.apple = null;
 
-		this.snake = new Snake(this);
+		this.snake = new Snake();
 		
 		for(int i = 0; i < X ; i++) {
 			for(int k = 0; k < Y ; k++) {
@@ -92,7 +92,6 @@ public class Map {
 		
 				if(snake.getBodyPiece(0).getXcoordinate() == this.getXapple() && snake.getBodyPiece(0).getYcoordinate() == this.getYapple()){
 					
-					snake.addLenght();
 					return true;
 				}
 		
@@ -214,7 +213,7 @@ public class Map {
 			int randX = rand.nextInt(1, Map.X-1);
 			int randY = rand.nextInt(1, Map.Y-1);
 			
-			SnakeBox heead = new SnakeBox(SnakeBody.HEAD, randX, randY, null);
+			SnakeBox heead = new SnakeBox(SnakeBody.HEAD, randX, randY);
 			
 			this.setBox(heead, randX, randY);
 			snake.setHead(heead);
@@ -254,7 +253,7 @@ public class Map {
 				
 			}while(nonTrovato);
 			
-			SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, firstPieceX, firstPieceY, heead);
+			SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, firstPieceX, firstPieceY);
 			setBox(firstBodyPiece, firstPieceX, firstPieceY);
 			snake.addPiece(firstBodyPiece);
 			snake.addLenght();
@@ -274,12 +273,43 @@ public class Map {
 		 * seconda cosa: aggiornare il tipo di box verso cui e da cui lo snake si muove
 		 * terzo: ristampare il tutto aggiornato 
 		 */
-		
 
 			snake.move(dir);
+			
+			if(checkAppleCollision() == true) {
+				snake.addLenght();
+				setApple();
+			}else{
+				
+				snake.removeTail();
+				
+			}
+			
+			//controllo collisione con le pareti della mappa
+			if(snake.getBodyPiece(0).getXcoordinate() == 0 || snake.getBodyPiece(0).getXcoordinate() == Map.X-1 || snake.getBodyPiece(0).getYcoordinate() == 0 || snake.getBodyPiece(0).getYcoordinate() == Map.Y-1) {
+				
+				setFlag(true);
+				
+			}
+			
+			//controllo collisione con se stesso
+			for(int i = 1; i < snake.getBody().size(); i ++) {
+				
+				if(snake.getBodyPiece(0).getXcoordinate() == snake.getBodyPiece(i).getXcoordinate() && snake.getBodyPiece(0).getYcoordinate() == snake.getBodyPiece(i).getYcoordinate()) {
+					setFlag(true);
+				}
+					
+			}
+			
+			setFlag(false);
+			
+			
 			resetSnakeBoxes();
 			insertSnakeBoxes();
-		
+			
+			
+			
+			
 	}
 	
 	

@@ -13,9 +13,6 @@ public class Snake {
 	//lunghezza del serpente
 	private int length;
 	
-	//mappa di gioco
-	private Map map;
-	
 	//direction del serpente
 	private Direction direction;
 	
@@ -26,12 +23,11 @@ public class Snake {
 	 * 
 	 * @param map mappa di gioco
 	 */
-	public Snake(Map map) {
+	public Snake() {
 		
 		this.body = new ArrayList<SnakeBox>();
 		this.length = 0;
 		this.direction = Direction.STRAIGHT;
-		this.map = map;
 		
 	}
 	
@@ -54,16 +50,6 @@ public class Snake {
 		
 		return body;
 		
-	}
-	
-	/**
-	 * metodo che ritorna la mappa 
-	 * @return
-	 */
-	public Map getMap() {
-		
-		
-		return map;
 	}
 	
 	
@@ -107,6 +93,7 @@ public class Snake {
 	 */
 	public int getLenght() {
 		return length;
+		
 	}
 	
 	
@@ -114,7 +101,9 @@ public class Snake {
 	 * metodo per allungare il serpente
 	 */
 	public void addLenght() {
+		
 		this.length++;
+		
 	}
 
 
@@ -125,8 +114,8 @@ public class Snake {
 	 */
 	public void setLenght(int length) {
 		this.length = length;
+		
 	}
-
 
 
 	/**
@@ -139,8 +128,6 @@ public class Snake {
 		
 		int NCoordX = 0;
 		int NCoordY = 0;
-		
-		Boolean appleEaten = false;
 		
 		int X = this.body.get(0).getXcoordinate();
 		int Y = this.body.get(0).getYcoordinate();
@@ -234,44 +221,16 @@ public class Snake {
 			
 		}
 		
-		
 					
 		//controllo dove si stia muovendo il resto del corpo
 		
-		int A = 0;
-		int B = 0;
 		
-		for(int i = 1; i < body.size(); i++) {
-			
-			A = body.get(i).getXcoordinate();
-			B = body.get(i).getYcoordinate();
-			
-			body.get(i).setXcoordinate(X);
-			body.get(i).setYcoordinate(Y);
-			
-			X = A;
-			Y = B;
-		}
+		body.addFirst(new SnakeBox(SnakeBody.HEAD, NCoordX, NCoordY));
+		body.get(1).setBodyType(SnakeBody.BODY);
 		
-		if(stretchbody == 1) {
-			
-			SnakeBox newLast = new SnakeBox(SnakeBody.TAIL, X, Y, body.get(body.size() -1));
-			body.get(body.size()-1).setBodyType(SnakeBody.BODY);		
-			body.add(newLast);
-			map.setBox(newLast, X, Y);
-			
-			map.setApple();
-			
-			stretchbody--;
-		}
 		
-		//controllo collisione con la mela
-		appleEaten = map.checkAppleCollision();	
 		
-		if(appleEaten == true) {
-			stretchbody++;
-			appleEaten = false;
-		}
+		/**
 		
 		//controllo collisione con le pareti della mappa
 		if(body.get(0).getXcoordinate() == 0 || body.get(0).getXcoordinate() == Map.X-1 ||body.get(0).getYcoordinate() == 0 || body.get(0).getYcoordinate() == Map.Y-1) {
@@ -289,9 +248,18 @@ public class Snake {
 				
 		}
 		
-		
-		
 		map.setFlag(false);
+		*/
+		
+		
+		
+		
+	}
+	
+	public void removeTail() {
+		
+		body.remove(body.size()-1);
+		body.get(body.size()-1).setBodyType(SnakeBody.TAIL);
 		
 	}
 	
@@ -303,6 +271,16 @@ public class Snake {
 		this.length = 0;
 		this.body = new ArrayList<SnakeBox>();
 		stretchbody = 0;
+	}
+	
+	public int getStretchBody() {
+		
+		return stretchbody;
+	}
+	
+	public void setStretchBody() {
+		
+		
 	}
 	
 

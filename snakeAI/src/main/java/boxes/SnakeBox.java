@@ -6,9 +6,6 @@ public class SnakeBox extends Box {
 	//Una SnakeBox può contenere la testa, il corpo o la coda del serpente
 	private SnakeBody element;
 	
-	//variabile usata per indicare il pezzo successivo del corpo (dalla testa alla coda)
-	private SnakeBox next;
-	
 	/**
 	 * Questo è il costruttore della classe SnakeBox
 	 * 
@@ -17,10 +14,10 @@ public class SnakeBox extends Box {
 	 * @param Ycoordinate riceve in ingresso la coordinata Y della Box
 	 * @param next riceve in ingresso il pezzo seguente del corpo (es: la testa punta a null, il primo pezzo del corpo punta alla testa ecc...)
 	 */
-	public SnakeBox(SnakeBody piece, int Xcoordinate, int Ycoordinate, SnakeBox next) {
+	public SnakeBox(SnakeBody piece, int Xcoordinate, int Ycoordinate) {
 		super(Xcoordinate, Ycoordinate);
 		this.element = piece;
-		this.next=next;
+		
 	}
 	
 	
