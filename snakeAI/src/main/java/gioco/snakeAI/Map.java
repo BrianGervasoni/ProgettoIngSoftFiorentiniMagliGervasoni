@@ -14,6 +14,7 @@ public class Map {
 	private Box[][] box;
 	private Snake snake; // il serpente da muovere nel campo di gioco
 	private AppleBox apple; // la mela che il serpente deve consumare
+	private boolean appleCollision = false;
 	
 	/*
 	 * se è vero il serpente ha colliso con qualcosa
@@ -66,21 +67,6 @@ public class Map {
 		
 	}
 	
-	
-	
-	
-	
-	
-	/**
-	 * metodo usato per assegnare la direzione al serpente(alla testa del serpente)
-	 * 
-	 * @param dir direzione da assegnare al serpente(alla testa del serpente)
-	 */
-	public void updateStateHead(Direction dir) {
-		
-		this.snake.setDirection(dir);	
-		
-	}
 	
 	/**
 	 * metodo che controlla la collisione con la mela
@@ -308,9 +294,10 @@ public class Map {
 			snake.move(dir);
 			
 			if(checkAppleCollision() == true) {
+				appleCollision = true;
 				setApple();
 			}else{
-				
+				appleCollision = false;
 				snake.removeTail();
 				
 			}
@@ -318,9 +305,6 @@ public class Map {
 			checkDefeat();
 			resetSnakeBoxes();
 			insertSnakeBoxes();
-			
-			
-			
 			
 	}
 	
@@ -392,6 +376,12 @@ public class Map {
 		this.endFlag = endFlag;
 	}
 	
+	
+	
+	public boolean getAppleCollision() {
+		return appleCollision;
+	}
+
 	/**
 	 * metodo che ritorna l'identificativo in memoria della mappa
 	 * @return 

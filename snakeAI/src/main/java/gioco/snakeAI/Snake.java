@@ -10,9 +10,6 @@ public class Snake {
 	//parti del corpo del serpente
 	private List<SnakeBox> body;
 	
-	//direction del serpente
-	private Direction direction;
-	
 	/**
 	 * costruttore della classe Snake
 	 * 
@@ -21,7 +18,6 @@ public class Snake {
 	public Snake() {
 		
 		this.body = new ArrayList<SnakeBox>();
-		this.direction = Direction.STRAIGHT;
 		
 	}
 	
@@ -46,16 +42,6 @@ public class Snake {
 		
 	}
 	
-	
-	/**
-	 * metodo per assegnare una direzione alla testa del serpente
-	 * 
-	 * @param dir direzione da assegnare alla testa del serpente
-	 */
-	public void setDirection(Direction dir) {
-		
-		this.direction = dir;
-	}
 	
 	/**
 	 * metodo che aggiunge un pezzo del corpo al serpente
