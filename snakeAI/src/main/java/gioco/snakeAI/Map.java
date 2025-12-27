@@ -279,7 +279,6 @@ public class Map {
 			snake.move(dir);
 			resetSnakeBoxes();
 			insertSnakeBoxes();
-			GameMain.visualize(this);
 		
 	}
 	
