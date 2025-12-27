@@ -218,8 +218,6 @@ public class Map {
 			this.setBox(heead, randX, randY);
 			snake.setHead(heead);
 			
-			snake.addLenght();
-			
 			
 			//ora inizializziamo il primo pezzo di corpo
 
@@ -256,10 +254,10 @@ public class Map {
 			SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, firstPieceX, firstPieceY);
 			setBox(firstBodyPiece, firstPieceX, firstPieceY);
 			snake.addPiece(firstBodyPiece);
-			snake.addLenght();
 		
 		
 	}
+	
 	
 	/**
 	 * metodo di goco che si ripete  fino alla collisione del serpente con se stesso o i muri
@@ -277,7 +275,6 @@ public class Map {
 			snake.move(dir);
 			
 			if(checkAppleCollision() == true) {
-				snake.addLenght();
 				setApple();
 			}else{
 				

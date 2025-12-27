@@ -10,13 +10,8 @@ public class Snake {
 	//parti del corpo del serpente
 	private List<SnakeBox> body;
 	
-	//lunghezza del serpente
-	private int length;
-	
 	//direction del serpente
 	private Direction direction;
-	
-	private int stretchbody = 0;
 	
 	/**
 	 * costruttore della classe Snake
@@ -26,7 +21,6 @@ public class Snake {
 	public Snake() {
 		
 		this.body = new ArrayList<SnakeBox>();
-		this.length = 0;
 		this.direction = Direction.STRAIGHT;
 		
 	}
@@ -92,31 +86,9 @@ public class Snake {
 	 * @return la lunghezza del serpente
 	 */
 	public int getLenght() {
-		return length;
+		return body.size();
 		
 	}
-	
-	
-	/**
-	 * metodo per allungare il serpente
-	 */
-	public void addLenght() {
-		
-		this.length++;
-		
-	}
-
-
-	/**
-	 * metodo che ritorna la lunghezza attuale del serpente
-	 * 
-	 * @param length lunghezza attuale del serpente
-	 */
-	public void setLenght(int length) {
-		this.length = length;
-		
-	}
-
 
 	/**
 	 * metodo usato per muovere il serpente lungo la mappa
@@ -228,34 +200,11 @@ public class Snake {
 		body.addFirst(new SnakeBox(SnakeBody.HEAD, NCoordX, NCoordY));
 		body.get(1).setBodyType(SnakeBody.BODY);
 		
-		
-		
-		/**
-		
-		//controllo collisione con le pareti della mappa
-		if(body.get(0).getXcoordinate() == 0 || body.get(0).getXcoordinate() == Map.X-1 ||body.get(0).getYcoordinate() == 0 || body.get(0).getYcoordinate() == Map.Y-1) {
-			
-			map.setFlag(true);
-			
-		}
-		
-		//controllo collisione con se stesso
-		for(int i = 1; i < body.size(); i ++) {
-			
-			if(body.get(0).getXcoordinate() == body.get(i).getXcoordinate() && body.get(0).getYcoordinate() == body.get(i).getYcoordinate()) {
-				map.setFlag(true);
-			}
-				
-		}
-		
-		map.setFlag(false);
-		*/
-		
-		
-		
-		
 	}
 	
+	/**
+	 * metodo per la rimozione della coda dalla lista body
+	 */
 	public void removeTail() {
 		
 		body.remove(body.size()-1);
@@ -263,24 +212,13 @@ public class Snake {
 		
 	}
 	
+	
 	/**
 	 * metodo per fare reset del serpente
 	 */
 	public void reset() {
 		
-		this.length = 0;
 		this.body = new ArrayList<SnakeBox>();
-		stretchbody = 0;
-	}
-	
-	public int getStretchBody() {
-		
-		return stretchbody;
-	}
-	
-	public void setStretchBody() {
-		
-		
 	}
 	
 
