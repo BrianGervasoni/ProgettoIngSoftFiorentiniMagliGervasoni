@@ -22,7 +22,7 @@ public class Intermediary implements Functions{
 	 * @param map
 	 * @return normalization of the distance of the snake's head and the elements
 	 */
-	public double[] mapConversion(Map map, int inputLenght) { 
+	public double[] mapConversion(Map map, int inputLenght) { //TODO TESTARE
 		//outputLenght it's given by threadAgent.getModel.getAiActor.getLenght (it's the length of the array output 61 *3 ))
 		int startingDegree, rephase, n, nNonDivisibilePer3 = 0, delta = 0;	
 		
