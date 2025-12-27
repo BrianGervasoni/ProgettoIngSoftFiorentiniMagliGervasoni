@@ -42,9 +42,11 @@ public class ThreadAgent extends Thread implements Functions{
 				this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
 				
 				this.intermediary.addActionReward(this.calculateReward(this.game.getMap()));
+				
+				t++;
 			}
 			
-			t++;
+			t = 0;
 			
 			this.model.startingSendActions();
 				this.sendActions();
