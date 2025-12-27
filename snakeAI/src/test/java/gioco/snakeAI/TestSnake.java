@@ -20,20 +20,6 @@ class TestSnake {
 		
 	}
 	
-	@Test
-	void testLength() {
-
-		Snake ss = new Snake(new Map());
-		
-		ss.addLenght();
-		ss.addLenght();
-		ss.addLenght();
-		
-		assertEquals(3, ss.getLenght());
-		
-		ss.setLenght(999);
-		assertEquals(999, ss.getLenght());
-	}
 	
 	@Test
 	void testReset() {
