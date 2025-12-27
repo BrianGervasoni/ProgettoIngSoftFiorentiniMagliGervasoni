@@ -16,12 +16,6 @@ public class Map {
 	private AppleBox apple; // la mela che il serpente deve consumare
 	private boolean appleCollision = false;
 	
-	/*
-	 * se è vero il serpente ha colliso con qualcosa
-	 * se è falso il gioco è ancora in fase di esecuzione
-	 */
-	private Boolean endFlag = false; 
-	
 	/**
 	 * costruttore della classe Map
 	 * 
@@ -119,11 +113,12 @@ public class Map {
 	 * se la flag è true allora abbiamo colliso
 	 * @return
 	 */
-	public void checkDefeat() {
+	public Boolean checkDefeat() {
 		//controllo collisione con le pareti della mappa
 		if(snake.getBodyPiece(0).getXcoordinate() == 0 || snake.getBodyPiece(0).getXcoordinate() == Map.X-1 || snake.getBodyPiece(0).getYcoordinate() == 0 || snake.getBodyPiece(0).getYcoordinate() == Map.Y-1) {
 			
-			setFlag(true);
+			
+			return true;
 			
 		}
 		
@@ -131,12 +126,14 @@ public class Map {
 		for(int i = 1; i < snake.getBody().size(); i ++) {
 			
 			if(snake.getBodyPiece(0).getXcoordinate() == snake.getBodyPiece(i).getXcoordinate() && snake.getBodyPiece(0).getYcoordinate() == snake.getBodyPiece(i).getYcoordinate()) {
-				setFlag(true);
+				
+				return true;
 			}
 				
 		}
 		
-		setFlag(false);
+		
+		return false;
 	}
 	
 	/**
@@ -360,23 +357,6 @@ public class Map {
 	public void setBox(Box box, int X, int Y) {
 		this.box[X][Y] = box;
 	}
-	
-	
-	public void setFlag(Boolean fl) {
-		
-		this.endFlag = fl;
-	}
-
-
-	public Boolean getEndFlag() {
-		return endFlag;
-	}
-
-	public void setEndFlag(Boolean endFlag) {
-		this.endFlag = endFlag;
-	}
-	
-	
 	
 	public boolean getAppleCollision() {
 		return appleCollision;

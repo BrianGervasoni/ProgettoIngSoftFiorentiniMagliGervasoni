@@ -44,12 +44,12 @@ public class GameMain {
 	
 	/**
 	 * se ritorna false la partita è ancora in corso
-	 * se ritorna vero il serpente è entrato in collisione
+	 * se ritorna vero se il giocatore ha perso oppure ha vinto
 	 * @return
 	 */
 	public boolean finish() {
 		
-		return map.getEndFlag();
+		return map.checkDefeat() || map.checkVictory();
 	}
 	
 	/**

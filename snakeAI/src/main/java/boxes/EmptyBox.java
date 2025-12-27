@@ -22,28 +22,6 @@ public class EmptyBox extends Box {
 	}
 
 	
-	
-	/**
-	 * Metodo che stampa l'enumerazione contenuta nella casella che chiama il metodo
-	 * Metodo ereditato dalla interface Visualize
-	 */
-	@Override
-	public String visual() {
-		return element.getC();
-		
-	}
-	
-	
-	/**
-	 * Metodo usato per recuperare l'enumerazione della EmptyBox in forma di Stringa
-	 * 
-	 * @return l'enumerazione rappresentata come Stringa
-	 */
-	public String getElem() {
-		return this.element.getC();
-	}
-	
-	
 	/**
 	 * Metodo usato per recuperare l'enumerazione della EmptyBox
 	 * 
@@ -71,5 +49,27 @@ public class EmptyBox extends Box {
 		}
 		return false;
 	}
+
+
+	/**
+	 * Metodo che stampa l'enumerazione contenuta nella casella che chiama il metodo
+	 * Metodo ereditato dalla interface Visualize
+	 */
+	@Override
+	public String visual() {
+		return element.getC();
+		
+	}
+	
+	
+	/**
+	 * Metodo usato per recuperare l'enumerazione della EmptyBox in forma di Stringa
+	 * 
+	 * @return l'enumerazione rappresentata come Stringa
+	 */
+	public String getElem() {
+		return this.element.getC();
+	}
+	
 	
 }

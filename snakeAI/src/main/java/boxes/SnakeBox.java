@@ -21,48 +21,6 @@ public class SnakeBox extends Box {
 	}
 	
 	
-
-	/**
-	 * Metodo che stampa l'enumerazione contenuta nella casella che chiama il metodo
-	 * Metodo ereditato dalla interface Visualize
-	 */
-	@Override
-	public String visual() {
-		
-		
-		int nextX = 0;
-		int nextY = 0;
-		
-		if(next != null) {
-			nextX = next.getXcoordinate();
-			nextY = next.getYcoordinate();
-		}
-			
-		
-		if((super.getXcoordinate() - nextX) != 0)
-			return element.getC();
-		else
-			return element.getD();
-	}
-	
-	/**
-	 * Metodo usato per impostare la parte successiva del serpente
-	 * @param next indica il pezzo successivo del serpente
-	 */
-	public void setNext(SnakeBox next) {
-		
-		this.next = next;
-	}
-	
-	/**
-	 * Metodo usato per ritornare il pezzo successivo del serpente
-	 * 
-	 */
-	public SnakeBox getNext() {
-		
-		return this.next;
-	}
-	
 	/**
 	 * metodo che altera l'enumerazione Snake Body della Box che chiama il metodo
 	 * @param element enumerazione di Snake Body
@@ -95,7 +53,17 @@ public class SnakeBox extends Box {
 		}
 		return false;
 	}
-	
-	
+
+
+	/**
+	 * Metodo che stampa l'enumerazione contenuta nella casella che chiama il metodo
+	 * Metodo ereditato dalla interface Visualize
+	 */
+	@Override
+	public String visual() {
+		
+		return element.getC();
+			
+	}
 	
 }
