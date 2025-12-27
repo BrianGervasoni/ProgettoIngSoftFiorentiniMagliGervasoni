@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import boxes.*;
+import gioco.snakeAI.Map;
 
 class IntermediaryTest {
 
@@ -155,5 +156,11 @@ class IntermediaryTest {
 		arrayTest = intermediary.normalizeArray(arrayTest);
 		
 		assertArrayEquals(array, arrayTest);
+	}
+	
+	@Test
+	void mapConversion() {
+		
+		
 	}
 }

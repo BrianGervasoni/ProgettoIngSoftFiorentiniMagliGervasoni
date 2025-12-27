@@ -31,7 +31,7 @@ public class ThreadAgent extends Thread implements Functions{
 		
 		while(!Thread.currentThread().isInterrupted()) {
 			
-			while(this.game.finish() == false && t < Hyperparameters.timeStep) {
+			while(this.game.finish() == false && this.game.getMap().checkVictory() == false && t < Hyperparameters.timeStep) {
 				
 				this.mapStat.onNext(this.getGame().getMap());;
 				
@@ -52,7 +52,7 @@ public class ThreadAgent extends Thread implements Functions{
 			this.model.terminatingSendActions();
 			
 			
-			if(game.finish() == true) {
+			if(game.finish() == true || this.game.getMap().checkVictory() == true) {
 				this.game.reset(); 
 				this.model.threadAgentReportThatItHasFinished();
 			}
