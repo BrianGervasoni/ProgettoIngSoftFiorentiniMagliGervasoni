@@ -103,7 +103,7 @@ public class Map {
 	 * @return
 	 */
 	public boolean checkVictory() {
-		if(this.snake.getLenght() == (getRowLenght()-2)*(getColumnLenght()-2)){
+		if(allEmptyBoxes().isEmpty()){
 			return true;
 		}
 		return false;
@@ -133,9 +133,44 @@ public class Map {
 	 * se la flag è true allora abbiamo colliso
 	 * @return
 	 */
-	public boolean checkDefeat() {
+	public void checkDefeat() {
+		//controllo collisione con le pareti della mappa
+		if(snake.getBodyPiece(0).getXcoordinate() == 0 || snake.getBodyPiece(0).getXcoordinate() == Map.X-1 || snake.getBodyPiece(0).getYcoordinate() == 0 || snake.getBodyPiece(0).getYcoordinate() == Map.Y-1) {
+			
+			setFlag(true);
+			
+		}
 		
-		return endFlag;
+		//controllo collisione con se stesso
+		for(int i = 1; i < snake.getBody().size(); i ++) {
+			
+			if(snake.getBodyPiece(0).getXcoordinate() == snake.getBodyPiece(i).getXcoordinate() && snake.getBodyPiece(0).getYcoordinate() == snake.getBodyPiece(i).getYcoordinate()) {
+				setFlag(true);
+			}
+				
+		}
+		
+		setFlag(false);
+	}
+	
+	/**
+	 * metodo che ritorna la lista contenente tutte le caselle vuote della mappa
+	 * 
+	 * @return array di caselle vuote della mappa
+	 */
+	public ArrayList<EmptyBox> allEmptyBoxes() {
+		
+		ArrayList<EmptyBox> ar = new ArrayList<EmptyBox>();
+		for(int i = 0; i < X-1; i++) {
+			for(int j = 0; j < Y-1; j++) {
+				if(box[i][j].equals(MapElem.EMPTY)) {
+					ar.add((EmptyBox)box[i][j]);
+				}
+				
+			}
+		}
+		
+		return ar;
 	}
 	
 	
@@ -145,32 +180,30 @@ public class Map {
 	 *
 	 * @return true o false
 	 */
-	public boolean setApple() {
+	public void setApple() {
+		
+		ArrayList<EmptyBox> ar = allEmptyBoxes();
+		
+		if(ar.isEmpty()) {
+			return;
+		}
 		
 		Random rand = new Random();
 		
 		int appleX = 0;
 		int appleY = 0;
-
-		Boolean nonTrovato = false;
+		int index = 0;
 		
-		do {
-			
-			appleX = rand.nextInt(1, Map.X-1);
-			appleY = rand.nextInt(1, Map.Y-1);	
-			
-			if(((appleX != 0)&&(appleX != Map.X-1))&&((appleY != 0)&&(appleY != Map.Y-1))) {
-				nonTrovato = false;
-			}if(getBox(appleX, appleY) instanceof SnakeBox)
-				nonTrovato = true;
-
-			
-		}while(nonTrovato);
 		
+		index = rand.nextInt(ar.size());
+		appleX = ar.get(index).getXcoordinate();
+		appleY = ar.get(index).getYcoordinate();
+		
+			
 		this.apple = new AppleBox(Food.APPLE, appleX, appleY);
 		setBox(apple, appleX, appleY);	
 		
-		return true;
+		
 	}
 	
 	/**
@@ -282,25 +315,7 @@ public class Map {
 				
 			}
 			
-			//controllo collisione con le pareti della mappa
-			if(snake.getBodyPiece(0).getXcoordinate() == 0 || snake.getBodyPiece(0).getXcoordinate() == Map.X-1 || snake.getBodyPiece(0).getYcoordinate() == 0 || snake.getBodyPiece(0).getYcoordinate() == Map.Y-1) {
-				
-				setFlag(true);
-				
-			}
-			
-			//controllo collisione con se stesso
-			for(int i = 1; i < snake.getBody().size(); i ++) {
-				
-				if(snake.getBodyPiece(0).getXcoordinate() == snake.getBodyPiece(i).getXcoordinate() && snake.getBodyPiece(0).getYcoordinate() == snake.getBodyPiece(i).getYcoordinate()) {
-					setFlag(true);
-				}
-					
-			}
-			
-			setFlag(false);
-			
-			
+			checkDefeat();
 			resetSnakeBoxes();
 			insertSnakeBoxes();
 			
