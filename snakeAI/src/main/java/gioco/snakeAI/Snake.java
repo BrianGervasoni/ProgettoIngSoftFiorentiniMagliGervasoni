@@ -183,7 +183,7 @@ public class Snake {
 		//controllo dove si stia muovendo il resto del corpo
 		
 		
-		body.addFirst(new SnakeBox(SnakeBody.HEAD, NCoordX, NCoordY));
+		body.add(0, (new SnakeBox(SnakeBody.HEAD, NCoordX, NCoordY)));
 		body.get(1).setBodyType(SnakeBody.BODY);
 		
 	}
