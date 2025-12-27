@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gioco.snakeAI.Map;
+import io.reactivex.rxjava3.core.Observable;
 
 public class ThreadAIManager{
 
@@ -150,6 +151,22 @@ public class ThreadAIManager{
 		else {
 			return this.selectIndexMap(mapIndex);
 		}
+	}
+	
+	/**
+	 * get the observable from the selected agent to start get a stream of data
+	 * @return
+	 */
+	public Observable<Map> getObserverFromIndexAgent(){
+		return this.threadAgents.get(mapIndex).observableMap();
+	}
+	
+	/**
+	 * get the observable from the first model to start get a stream of data
+	 * @return
+	 */
+	public Observable<double[]> getObserverFromModel(){
+		return this.threadModels.get(0).observableLoss();
 	}
 
 }
