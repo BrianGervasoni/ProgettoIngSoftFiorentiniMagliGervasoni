@@ -110,7 +110,7 @@ public class ThreadAgent extends Thread implements Functions{
 			}
 		}
 		
-		if(map.checkAppleCollision()) {
+		if(map.getAppleCollision()) {
 			rewardDefault = rewardDefault + rewardGetApple;
 		}
 		

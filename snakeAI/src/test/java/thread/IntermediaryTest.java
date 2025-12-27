@@ -12,7 +12,7 @@ class IntermediaryTest {
 	int[] raysTest = new int[n];
 	Intermediary intermediary = new Intermediary();
 	Box apple = new AppleBox(Food.APPLE,x,y);
-	SnakeBox head= new SnakeBox(SnakeBody.HEAD,0,0,null);
+	SnakeBox head= new SnakeBox(SnakeBody.HEAD,0,0);
 	String dir;
 	
 	
