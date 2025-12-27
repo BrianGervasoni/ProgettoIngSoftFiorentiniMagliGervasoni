@@ -168,6 +168,5 @@ public class ThreadAIManager{
 	public Observable<double[]> getObserverFromModel(){
 		return this.threadModels.get(0).observableLoss();
 	}
-
 }
 
