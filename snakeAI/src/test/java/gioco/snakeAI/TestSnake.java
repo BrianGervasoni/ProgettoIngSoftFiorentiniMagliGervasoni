@@ -11,10 +11,10 @@ class TestSnake {
 	@Test
 	void testSetHead() {
 		Map map = new Map();
-		Snake ss = new Snake(map);
+		Snake ss = new Snake();
 		
-		ss.getMap().setSnake(ss);
-		ss.getMap().initSnakeBody();
+		map.setSnake(ss);
+		map.initSnakeBody();
 		
 		assertEquals(1,1);
 		
@@ -24,12 +24,10 @@ class TestSnake {
 	@Test
 	void testReset() {
 		
-		Snake ss = new Snake(new Map());
-		ss.addLenght();
-		ss.addLenght();
-		ss.addLenght();
-		ss.addPiece(new SnakeBox(SnakeBody.BODY, 7 ,3, null));
-		ss.addPiece(new SnakeBox(SnakeBody.HEAD, 1 ,2, null));
+		Snake ss = new Snake();
+		
+		ss.addPiece(new SnakeBox(SnakeBody.BODY, 7 ,3));
+		ss.addPiece(new SnakeBox(SnakeBody.HEAD, 1 ,2));
 		
 		ss.reset();
 		
@@ -63,12 +61,11 @@ class TestSnake {
 	@Test
 	void testAddPiece() {
 		
-		Map map = new Map();
-		SnakeBox sb = new SnakeBox(SnakeBody.HEAD, 7,7,null);
-		Snake sn = new Snake(map);
+		//Map map = new Map();
+		SnakeBox sb = new SnakeBox(SnakeBody.HEAD, 7,7);
+		Snake sn = new Snake();
 		
 		sn.addPiece(sb);
-		sn.addLenght();
 		
 		assertEquals(1, sn.getBody().size());
 	}
