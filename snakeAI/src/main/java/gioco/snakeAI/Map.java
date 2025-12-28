@@ -7,10 +7,10 @@ import java.util.concurrent.TimeUnit;
 
 public class Map {
 	
-	 public static final int X = 12; // grandezza massima del campo di gioco (righe)
-	 public static final int Y = 12; // grandezza massima del campo di gioco (colonne)
+	public static final int X = 12; // grandezza massima del campo di gioco (righe)
+	public static final int Y = 12; // grandezza massima del campo di gioco (colonne)
 
-	 //il campo di gioco è una matrice X * Y
+	//il campo di gioco è una matrice X * Y
 	private Box[][] box;
 	private Snake snake; // il serpente da muovere nel campo di gioco
 	private AppleBox apple; // la mela che il serpente deve consumare
@@ -304,6 +304,25 @@ public class Map {
 			insertSnakeBoxes();
 			
 	}
+	
+	
+	/**
+	 * Solo per fini di testing, ritorna la mela contenuta nella mappa
+	 * @return AppleBox
+	 */
+	public AppleBox testOnlyGetApple() {
+		return this.apple;
+	}
+	
+	
+	/**
+	 * Solo per fini di testing, imposta una mela personalizzata
+	 */
+	public void testOnlySetApple(AppleBox app) {
+		this.apple = app;
+		setBox(app, app.getXcoordinate(), app.getYcoordinate());
+	}
+	
 	
 	
 	/**
