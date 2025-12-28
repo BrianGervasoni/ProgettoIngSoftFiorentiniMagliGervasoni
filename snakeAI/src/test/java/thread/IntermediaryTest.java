@@ -189,6 +189,8 @@ class IntermediaryTest {
 			System.out.println(" " + result[i] + " " + k);
 		}
 		
+		System.out.println();
+		
 		for(int i = 0; i < map.X ; i++) {
 			for(int k = 0; k < map.Y ; k++) {
 				System.out.println(map.getBox(i, k).getElementType().toString() + " " + i + " " + k);
