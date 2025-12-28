@@ -165,13 +165,13 @@ class IntermediaryTest {
 		Map map = new Map();
 		Snake snake = new Snake();
 		
-		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, 4, 3);
-		map.setBox(firstBodyPiece,4, 3);
-		snake.addPiece(firstBodyPiece);
-		
 		SnakeBox head = new SnakeBox(SnakeBody.HEAD, 4, 4);
 		map.setBox(head, 4, 4);
 		snake.setHead(head);
+		
+		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, 4, 3);
+		map.setBox(firstBodyPiece,4, 3);
+		snake.addPiece(firstBodyPiece);
 		
 		map.setSnake(snake);
 		
