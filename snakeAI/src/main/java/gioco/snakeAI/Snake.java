@@ -26,6 +26,7 @@ public class Snake {
 	 * @param box casella in cui è stat creata la tesat del serpente
 	 */
 	public void setHead(SnakeBox box) {
+		box.setBodyType(SnakeBody.HEAD);
 		if(body.isEmpty())
 			body.add(0,box);
 		else {
