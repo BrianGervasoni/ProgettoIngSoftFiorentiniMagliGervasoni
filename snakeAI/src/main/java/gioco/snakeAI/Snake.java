@@ -27,7 +27,7 @@ public class Snake {
 	 */
 	public void setHead(SnakeBox box) {
 		
-		body.add(box);
+		body.add(0,box);
 		
 	}
 	/**
