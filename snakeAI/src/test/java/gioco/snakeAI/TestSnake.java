@@ -94,35 +94,7 @@ class TestSnake {
 		
 		
 		
-		/*
-		SnakeBox heead = new SnakeBox(SnakeBody.HEAD, 5, 5);
-		mm.setBox(heead, 5, 5);
-		mm.getSnake().setHead(heead);
-		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, 5, 4);
-		mm.setBox(firstBodyPiece, 5, 4);
-		mm.getSnake().addPiece(firstBodyPiece);
-		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
-		mm.testOnlySetApple(apple1);
 		
-		
-		//quello da cui si parte
-		Map mm2 = new Map();
-		SnakeBox heead2 = new SnakeBox(SnakeBody.HEAD, 5, 2);
-		mm2.setBox(heead2, 5, 2);
-		mm2.getSnake().setHead(heead2);
-		SnakeBox firstBodyPiece2 = new SnakeBox(SnakeBody.BODY, 5, 1);
-		mm2.setBox(firstBodyPiece2, 5, 1);
-		mm2.getSnake().addPiece(firstBodyPiece2);
-		AppleBox apple2 = new AppleBox(Food.APPLE, 10, 10);
-		mm2.testOnlySetApple(apple1);
-		
-		
-		mm2.makeSnakeMove(Direction.STRAIGHT);
-		mm2.makeSnakeMove(Direction.STRAIGHT);
-		mm2.makeSnakeMove(Direction.STRAIGHT);
-		
-		assertEquals(true, mm2.equals(mm));
-		*/
 		
 		
 		
