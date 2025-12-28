@@ -175,16 +175,21 @@ public interface Functions {
 		
 		if(box.getElementType() == Food.APPLE) {
 			
-			food[index] = distance;
+			if(index!=-1) {
+				food[index] = distance;
+			}
 			
 		}else if(box.getElementType() == MapElem.WALL) {
 			
-			walls[index] = distance;
+			if(index!=-1) {
+				walls[index] = distance;
+			}
 			
 		}else if(box.getElementType() == SnakeBody.BODY || box.getElementType() == SnakeBody.TAIL) {
 			
-			snake[index] = distance;
-			
+			if(index!=-1) {
+				snake[index] = distance;
+			}
 		}
 	}
 	
