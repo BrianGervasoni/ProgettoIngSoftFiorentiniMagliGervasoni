@@ -262,13 +262,17 @@ class TestMap {
 		mm.testOnlySetApple(apple1);
 		
 		mm.makeSnakeMove(Direction.LEFT);
-		mm.makeSnakeMove(Direction.LEFT);
+		
+		assertEquals(false, mm.checkDefeat());
+		
 		mm.makeSnakeMove(Direction.LEFT);
 		
+		assertEquals(false, mm.checkDefeat());
+		
+		mm.makeSnakeMove(Direction.LEFT);
 		
 		assertEquals(true, mm.checkDefeat());
 
-		
 	}
 	
 	
