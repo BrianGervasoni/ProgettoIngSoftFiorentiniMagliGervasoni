@@ -25,7 +25,6 @@ public class Intermediary implements Functions{
 	public double[] mapConversion(Map map, int inputLenght) { //TODO TESTARE
 		//outputLenght it's given by threadAgent.getModel.getAiActor.getLenght (it's the length of the array output 61 *3 ))
 		int startingDegree, rephase, n, nNonDivisibilePer3 = 0, delta = 0;	
-		
 		if(inputLenght%3 != 0) {
 			
 			nNonDivisibilePer3 = 3 * (int)(inputLenght/3);
@@ -35,7 +34,9 @@ public class Intermediary implements Functions{
 		
 		n = (int)inputLenght/3;
 		
-		rephase = 180/n;
+		rephase = (int) Math.round(180.0/n);
+		
+		System.out.println("n : " + n + " rephase : " + rephase + " nnondivisibile3 : " + nNonDivisibilePer3 + " delta : " + delta);
 		
 		String dir;
 		int[] rays;
@@ -54,7 +55,6 @@ public class Intermediary implements Functions{
 					if(snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() < 0) {
 						//head left and body right
 						dir = "left";
-						System.out.println(dir);
 						startingDegree = 90;
 						rays = rays(startingDegree, rephase, n);
 						
@@ -64,16 +64,23 @@ public class Intermediary implements Functions{
 					} else if(snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() > 0) {
 						//head right and body left
 						dir = "right";
+						
 						System.out.println(dir);
+						
 						startingDegree = -90;
 						rays = rays(startingDegree, rephase, n);
+						
+						System.out.println();
+						for(int l = 0; l<rays.length; l++) {
+							System.out.println("raggio numero " + l + " = " + rays[l]);
+						}
+						System.out.println();
 						
 						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
 					} else if(snakeHead.getXcoordinate()- snakeFirstBodyBox.getXcoordinate() > 0) {
 						//head down and body up
 						dir = "down";
-						System.out.println(dir);
 						startingDegree = 180;
 						rays = rays(startingDegree, rephase, n);
 						
@@ -82,7 +89,6 @@ public class Intermediary implements Functions{
 					} else {
 						//head up and body down
 						dir = "up";
-						System.out.println(dir);
 						startingDegree = 0;
 						rays = rays(startingDegree, rephase, n);
 						

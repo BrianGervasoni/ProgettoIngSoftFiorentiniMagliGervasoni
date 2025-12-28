@@ -38,15 +38,27 @@ public interface Functions {
 		int rePhase = 0;
 		
 		for(int i=0; i<n; i++) {
+			
+			//System.out.println("rephase : " + rePhase); TODO TEST COMMENTATI
+			//System.out.println("rephasing : " + rePhasing);
+			
 			alpha = startingDegree + rePhase;
 			
 			if(alpha < 0) { //when the snake it's in the range >270 and <90 i've used the convention [-180; 180] so i have to switch back to [0; 360]
+				//System.out.println("alpha : " + alpha);
 				rays[i] = alpha + 360;
+				//System.out.println("ray : " + rays[i]);
 			}else {
 				rays[i] = alpha;
+				//System.out.println("ray AHHH: " + rays[i]);
 			}
 			
 			rePhase = rePhase + rePhasing; 
+		}
+		
+		for(int i = 0; i<rays.length; i++) {
+			int k = i+1;
+			//System.out.println("ray " + i + " " + rays[i]);
 		}
 		
 		return rays;
@@ -69,7 +81,8 @@ public interface Functions {
 		int deltaY = box.getYcoordinate() - snakeHead.getYcoordinate();
 				
 		//the angle between the head and the object, it's in radiant and it is in the range [- pi; +pi]
-		double alpha = Math.atan2(deltaY, deltaX);
+		double alpha = Math.atan2(deltaX, deltaY); //TODO FINTO PER ATTIRARE ATTENZIONE!!!!!!!!!!!!!!!!!
+		//ESSENDO LA MATRICE DISTRIBUITA CON LE X IN VERTICALE E LE Y IN ORIZZONTALE IL DELTAX E DELTAY SONO SWITCHATI
 				
 		double alphaDegree = Math.toDegrees(alpha); //transform from radiant to degree
 		
@@ -179,7 +192,7 @@ public interface Functions {
 			
 			if(index!=-1) {
 				food[index] = distance;
-				System.out.println("HELOOOOOOOOO " + index);
+				//System.out.println("HELOOOOOOOOO " + index); TODO TEST COMMENTATI
 			}
 			
 		}else if(box.getElementType() == MapElem.WALL) {
@@ -211,6 +224,7 @@ public interface Functions {
 	 * @return change the value on the array of rays (food, walls and snake) and set the array[index] = distance , for every ray that is involved
 	 */
 	public default void setValuesArrays(Map map, SnakeBox snakeHead, String dir, int rephase, double[] food, double[] walls, double[] snake, int[] rays) {
+		
 		for(int k=0; k<map.X; k++) {
 			for(int h=0; h<map.Y; h++) {
 				
@@ -225,6 +239,7 @@ public interface Functions {
 				
 			}
 		}
+		
 	}
 	
 	/**

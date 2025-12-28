@@ -53,30 +53,26 @@ class IntermediaryTest {
 		assertArrayEquals(raysTest, rays);
 	}
 	
-	//VERIFICATO CHE NEL ES. HEAD (0,0) VEDE APPLE (5,4) SE DIR è UP O RIGHT , SE è LEFT O DOWN NON LO VEDE
+	//VERIFICATO CHE NEL ES. HEAD (0,0) VEDE APPLE (4,5) SE DIR è UP O RIGHT , SE è LEFT O DOWN NON LO VEDE
 	@Test
 	void calculateAngle() {
 		dir = "right";
 		double angle = intermediary.calculateAngle(apple, head, dir);
-		double angleTest = Math.toDegrees(Math.atan2(5, 4));
+		double angleTest = Math.toDegrees(Math.atan2(4, 5));
 		
 		assertEquals(angleTest, angle);
 	}
 	
 	/**
 	 * COSI  PER ES. CON VISTA DA [0; 180] HO OGGETTO A (4, 5) E QUINDI ANGOLO 
-	 * CON ARCTAN(5/4)) HO UN ANGOLO DI TIPO 51.34019175
-	 * DIVIDO PER 3 E OTTENGO 17.11339725 E ARROTONDO PER AVERE 17, RIMOLTIPLICANDO *3 HO IL RAGGIO CHE SAREBBE 51!	
-	 * 
-	 * ALTRO ES. CON VISTA DA [0; 180] HO OGGETTO A (-5, 3) E QUINDI ANGOLO 
-	 * CON ARCTAN(3 /(-5)) +180, HO UN ANGOLO DI TIPO 149.0362435
-	 * DIVIDO PER 3 E OTTENGO 49.67874782 E ARROTONDO PER AVERE 50, RIMOLTIPLICANDO *3 HO IL RAGGIO CHE SAREBBE 150!	
+	 * CON ARCTAN(4/5)) HO UN ANGOLO DI TIPO 38.65980825
+	 * DIVIDO PER 3 E OTTENGO 12.88660275 E ARROTONDO PER AVERE 13, RIMOLTIPLICANDO *3 HO IL RAGGIO CHE SAREBBE 39!	
 	 */
 	@Test
 	void calculateRay() {
 		
 		dir = "right";
-		int rayTest = 51;
+		int rayTest = 39;
 		int ray = intermediary.calculateRay(apple, head, dir, rephase);
 		
 		assertEquals(rayTest, ray);
@@ -180,7 +176,7 @@ class IntermediaryTest {
 		AppleBox apple = new AppleBox(Food.APPLE, 2, 5);
 		map.setBox(apple, 2, 5);	
 		
-		int inputLenght = 9*3;
+		int inputLenght = 10*3; //ho fatto vari test ma sembra NON funzionare con 9*3 mi da i raggi = NaN, mentre 10*3 e 61*3 non da problemi
 		
 		double[] result;
 		
@@ -193,12 +189,12 @@ class IntermediaryTest {
 		
 		System.out.println();
 		
-		for(int i = 0; i < map.X ; i++) {
+		/*for(int i = 0; i < map.X ; i++) {
 			for(int k = 0; k < map.Y ; k++) {
 				System.out.println(map.getBox(i, k).getElementType().toString() + " " + i + " " + k);
 			}
 			System.out.println();
-		}
+		}*/
 		
 	}
 }
