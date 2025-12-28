@@ -47,29 +47,33 @@ public class Intermediary implements Functions{
 				if((map.getBox(i, j).equals(SnakeBody.HEAD))) {
 					
 					SnakeBox snakeHead = (SnakeBox) map.getBox(i, j);
+					
 					SnakeBox snakeFirstBodyBox = map.getSnake().getBodyPiece(1);
 					
 					//i calculate the direction of the snake
-					if(snakeHead.getXcoordinate() - snakeFirstBodyBox.getXcoordinate() < 0) {
+					if(snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() < 0) {
 						//head left and body right
 						dir = "left";
+						System.out.println(dir);
 						startingDegree = 90;
 						rays = rays(startingDegree, rephase, n);
 						
 						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
 						
-					} else if(snakeHead.getXcoordinate() - snakeFirstBodyBox.getXcoordinate() > 0) {
+					} else if(snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() > 0) {
 						//head right and body left
 						dir = "right";
+						System.out.println(dir);
 						startingDegree = -90;
 						rays = rays(startingDegree, rephase, n);
 						
 						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
-					} else if(snakeHead.getYcoordinate()- snakeFirstBodyBox.getYcoordinate() < 0) {
+					} else if(snakeHead.getXcoordinate()- snakeFirstBodyBox.getXcoordinate() > 0) {
 						//head down and body up
 						dir = "down";
+						System.out.println(dir);
 						startingDegree = 180;
 						rays = rays(startingDegree, rephase, n);
 						
@@ -78,6 +82,7 @@ public class Intermediary implements Functions{
 					} else {
 						//head up and body down
 						dir = "up";
+						System.out.println(dir);
 						startingDegree = 0;
 						rays = rays(startingDegree, rephase, n);
 						

@@ -180,6 +180,7 @@ public interface Functions {
 			
 			if(index!=-1) {
 				food[index] = distance;
+				System.out.println("HELOOOOOOOOO " + index);
 			}
 			
 		}else if(box.getElementType() == MapElem.WALL) {

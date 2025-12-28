@@ -168,10 +168,12 @@ class IntermediaryTest {
 		SnakeBox head = new SnakeBox(SnakeBody.HEAD, 4, 4);
 		map.setBox(head, 4, 4);
 		snake.setHead(head);
+		System.out.println("head : " + snake.getBodyPiece(0).getXcoordinate() + "; " + snake.getBodyPiece(0).getYcoordinate());
 		
 		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, 4, 3);
 		map.setBox(firstBodyPiece,4, 3);
 		snake.addPiece(firstBodyPiece);
+		System.out.println("primo corpo : " + snake.getBodyPiece(1).getXcoordinate() + "; " +snake.getBodyPiece(1).getYcoordinate());
 		
 		map.setSnake(snake);
 		

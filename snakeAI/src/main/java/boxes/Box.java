@@ -2,7 +2,7 @@ package boxes;
 
 public abstract class Box implements Visualize{
        
-    private int Xcoordinate; //coordinata X della casella
+	private int Xcoordinate; //coordinata X della casella
     private int Ycoordinate; //coordinata Y della casella
     
     
@@ -22,7 +22,7 @@ public abstract class Box implements Visualize{
      * Metodo che ritorna la coordinata X della Box
      * @return la coordinata X attuale della Box che chiama il metodo
      */
-	public int getXcoordinate() {
+	public int snakeFirstBodyBox() {
 		return Xcoordinate;
 	}
 	
@@ -49,6 +49,10 @@ public abstract class Box implements Visualize{
 	public void setYcoordinate(int ycoordinate) {
 		Ycoordinate = ycoordinate;
 	}
+	
+	 public int getXcoordinate() {
+			return Xcoordinate;
+		}
     
 	public abstract BoxType getElementType(); 
 	public abstract void setElementType(BoxType boxType); 
