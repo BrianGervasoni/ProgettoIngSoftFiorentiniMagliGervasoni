@@ -178,41 +178,9 @@ class IntermediaryTest {
 		this.apple = new AppleBox(Food.APPLE, 2, 5);
 		map.setBox(apple, 2, 5);	
 		
-		int inputLenght = 61*3;
+		int inputLenght = 9*3;
 		
-		double[] result, resultTest;
-		
-		/*resultTest = new double[9*3];
-		resultTest[0] = 0.0;
-		resultTest[1] = 0.0;
-		resultTest[2] = 0.0;
-		resultTest[3] = 0.0;
-		resultTest[4] = 0.0;
-		resultTest[5] = 0.0;
-		resultTest[6] = 0.0;
-		resultTest[7] = 0.0;
-		resultTest[8] = 0.0;
-		
-		resultTest[9] = 0.7404992487087236;
-		resultTest[10] = 0.8314383190232244;
-		resultTest[11] = 1.0;
-		resultTest[12] = 0.8809880937499394;
-		resultTest[13] = 0.7596783096313416;
-		resultTest[14] =  0.7404992487087236;
-		resultTest[15] = 0.7904745271199053;
-		resultTest[16] = 0.6107488730630855;
-		resultTest[17] = 0.5020540847831897;
-		
-		resultTest[18] = 0.0;
-		resultTest[19] = 0.0;
-		resultTest[20] = 0.0;
-		resultTest[21] = 0.0;
-		resultTest[22] = 0.0;
-		resultTest[23] = 0.0;
-		resultTest[24] = 0.0;
-		resultTest[25] = 0.0;
-		resultTest[26] = 0.0;*/
-		
+		double[] result;
 		
 		Intermediary intermediary = new Intermediary();
 		result = intermediary.mapConversion(map,inputLenght);
@@ -227,7 +195,6 @@ class IntermediaryTest {
 			}
 			System.out.println();
 		}
-		//assertArrayEquals(result, resultTest);
 		
 	}
 }

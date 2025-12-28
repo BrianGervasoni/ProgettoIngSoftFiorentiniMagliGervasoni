@@ -15,7 +15,7 @@ public interface Functions {
 		double[] array = new double[n];
 		
 		for(int i = 0; i<array.length; i++) {
-			array[i] = -1;
+			array[i] = -1; //TODO, COME INIZIALIZZO CON CHE VALORE???
 		}
 		
 		return array;
