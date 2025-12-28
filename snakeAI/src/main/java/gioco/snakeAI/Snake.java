@@ -29,7 +29,11 @@ public class Snake {
 		if(body.isEmpty())
 			body.add(0,box);
 		else {
-			body.get(0).setBodyType(SnakeBody.BODY);
+			if(body.size() == 1) 
+				body.get(0).setBodyType(SnakeBody.TAIL);
+			else
+				body.get(0).setBodyType(SnakeBody.BODY);
+			
 			body.add(0,box);
 		}	
 	}
