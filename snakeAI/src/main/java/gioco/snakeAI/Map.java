@@ -40,7 +40,7 @@ public class Map {
 		
 	}
 	
-	
+	 /*
 	public Map(Snake ss) {
 		this.box = new Box[X][Y];
 		this.apple = null;
@@ -60,7 +60,7 @@ public class Map {
 		}
 		
 	}
-	
+	*/
 	
 	/**
 	 * metodo che controlla la collisione con la mela
