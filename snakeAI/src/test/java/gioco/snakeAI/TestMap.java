@@ -211,5 +211,97 @@ class TestMap {
 	
 	
 	
+	@Test
+	void testCheckDefeat() {
+		
+		
+		Map mm = new Map();
+		SnakeBox heead = new SnakeBox(SnakeBody.HEAD, 3, 1);
+		mm.setBox(heead, 3, 1);
+		mm.getSnake().setHead(heead);
+		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.TAIL, 3, 2);
+		mm.setBox(firstBodyPiece, 3, 2);
+		mm.getSnake().addPiece(firstBodyPiece);
+		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
+		mm.testOnlySetApple(apple1);
+		
+		mm.makeSnakeMove(Direction.STRAIGHT);
+		
+		assertEquals(true, mm.checkDefeat());
+
+		
+	}
+	
+	
+	@Test
+	void testCheckDefeat2() {
+		
+		
+		Map mm = new Map();
+		SnakeBox heead = new SnakeBox(SnakeBody.HEAD, 5, 1);
+		mm.setBox(heead, 5, 1);
+		mm.getSnake().setHead(heead);
+		
+		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, 4, 1);
+		mm.setBox(firstBodyPiece, 4, 1);
+		mm.getSnake().addPiece(firstBodyPiece);
+		
+		SnakeBox bodyPiece2 = new SnakeBox(SnakeBody.BODY, 3, 1);
+		mm.setBox(bodyPiece2, 3, 1);
+		mm.getSnake().addPiece(bodyPiece2);
+		
+		SnakeBox bodyPiece3 = new SnakeBox(SnakeBody.BODY, 2, 1);
+		mm.setBox(bodyPiece3, 2, 1);
+		mm.getSnake().addPiece(bodyPiece3);
+		
+		SnakeBox bodyPiece4 = new SnakeBox(SnakeBody.TAIL, 1, 1);
+		mm.setBox(bodyPiece4, 1, 1);
+		mm.getSnake().addPiece(bodyPiece4);
+		
+		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
+		mm.testOnlySetApple(apple1);
+		
+		mm.makeSnakeMove(Direction.LEFT);
+		mm.makeSnakeMove(Direction.LEFT);
+		mm.makeSnakeMove(Direction.LEFT);
+		
+		
+		assertEquals(true, mm.checkDefeat());
+
+		
+	}
+	
+	
+	
+	
+	@Test
+	void testCheckVictory() {
+		
+		Map mm = new Map();
+		
+		for(int i = 0; i < Map.X; i++) {
+			for(int j = 0; j < Map.Y; j++) {
+				
+				SnakeBox bb = new SnakeBox(SnakeBody.BODY, i, j);
+				mm.setBox(bb , i, j);
+				mm.getSnake().addPiece(bb);
+			}
+		}
+				
+		assertEquals(true, mm.checkVictory());
+		
+		mm.getSnake().reset();
+		mm.resetSnakeBoxes();
+		mm.insertSnakeBoxes();
+		
+		assertEquals(false, mm.checkVictory());
+		
+		
+	}
+	
+	
+	
+	
+	
 
 }
