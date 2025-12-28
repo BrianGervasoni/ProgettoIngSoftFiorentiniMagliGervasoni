@@ -93,9 +93,6 @@ class TestMap {
 		mm.setBox(heead, 9, 5);
 		mm.getSnake().setHead(heead);
 		
-		
-		
-		
 		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, 8, 5);
 		mm.setBox(firstBodyPiece, 8, 5);
 		mm.getSnake().addPiece(firstBodyPiece);
@@ -149,5 +146,70 @@ class TestMap {
 	}
 	
 
+	
+	
+	
+	
+	@Test
+	void testSnakeComplexMovement() {
+		
+		Map mm = new Map();
+		SnakeBox heead = new SnakeBox(SnakeBody.HEAD, 2, 1);
+		mm.setBox(heead, 2, 1);
+		mm.getSnake().setHead(heead);
+		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.TAIL, 1, 1);
+		mm.setBox(firstBodyPiece, 1, 1);
+		mm.getSnake().addPiece(firstBodyPiece);
+		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
+		mm.testOnlySetApple(apple1);
+		
+		
+		mm.makeSnakeMove(Direction.STRAIGHT);
+		
+		mm.makeSnakeMove(Direction.LEFT);
+		mm.makeSnakeMove(Direction.STRAIGHT);
+		mm.makeSnakeMove(Direction.LEFT);
+		mm.makeSnakeMove(Direction.STRAIGHT);
+		
+		mm.makeSnakeMove(Direction.RIGHT);
+		mm.makeSnakeMove(Direction.STRAIGHT);
+		mm.makeSnakeMove(Direction.RIGHT);
+		mm.makeSnakeMove(Direction.STRAIGHT);
+		
+		mm.makeSnakeMove(Direction.LEFT);
+		mm.makeSnakeMove(Direction.STRAIGHT);
+		mm.makeSnakeMove(Direction.LEFT);
+		mm.makeSnakeMove(Direction.STRAIGHT);
+		
+		mm.makeSnakeMove(Direction.RIGHT);
+		mm.makeSnakeMove(Direction.STRAIGHT);
+		mm.makeSnakeMove(Direction.RIGHT);
+		mm.makeSnakeMove(Direction.STRAIGHT);
+		
+		
+		Boolean check = true;
+		
+		if((mm.getSnake().getBodyPiece(0).getXcoordinate()==3)&&(mm.getSnake().getBodyPiece(0).getYcoordinate()==9)){
+			check = true;
+		}else
+			check = false;
+		
+		assertEquals(true, check);
+		
+		
+		
+		if((mm.getSnake().getBodyPiece(1).getXcoordinate()==2)&&(mm.getSnake().getBodyPiece(1).getYcoordinate()==9)){
+			check = true;
+		}else
+			check = false;
+		
+		assertEquals(true, check);
+		
+		
+		
+	}
+	
+	
+	
 
 }
