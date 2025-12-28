@@ -174,6 +174,8 @@ public interface Functions {
 		
 		int index = foundRayPosition(rays, ray);
 		
+		//System.out.println("index : "+ index + " ray :" + ray);
+		
 		if(box.getElementType() == Food.APPLE) {
 			
 			if(index!=-1) {
