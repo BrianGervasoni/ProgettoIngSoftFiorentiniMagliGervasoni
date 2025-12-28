@@ -10,12 +10,16 @@ import boxes.SnakeBody;
 import boxes.SnakeBox;
 import gioco.snakeAI.Map;
 import gioco.snakeAI.Snake;
+import model.Model;
 
 class ThreadAgentTest {
 
 	@Test
 	void calculateReward() {
 
+		Model model = new Model();
+		ThreadAgent tA= new ThreadAgent(model);
+		
 		Map map = new Map();
 		Snake snake = new Snake();
 		
@@ -31,6 +35,10 @@ class ThreadAgentTest {
 		
 		AppleBox apple = new AppleBox(Food.APPLE, 2, 5);
 		map.setBox(apple, 2, 5);	
+		double reward = tA.calculateReward(map);
+		
+		System.out.println(reward); //DI DEFAULT DA +4, IN QUESTO CASO NON HA NE IL +50 DI MANGIATO MELA E NE IL -50 DI ESSERE MORTO
+		//VIENE QUINDI SOLO AGGIUNTO IL +variable CHE INDICA QUANTO è DISTANTE DALLA MELA NORMALIZZATO IN UN RANGE TRA (-5 E 5)
 	}
 
 }
