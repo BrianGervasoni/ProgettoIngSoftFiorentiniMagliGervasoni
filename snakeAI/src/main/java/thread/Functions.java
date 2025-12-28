@@ -16,6 +16,7 @@ public interface Functions {
 		
 		for(int i = 0; i<array.length; i++) {
 			array[i] = -1; //TODO, COME INIZIALIZZO CON CHE VALORE???
+							//perche chiedi a davide del perche si ha che a priori distanza normalizzata 0 (anche quando non ce oggetto)
 		}
 		
 		return array;

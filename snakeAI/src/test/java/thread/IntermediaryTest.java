@@ -166,7 +166,7 @@ class IntermediaryTest {
 		Snake snake = new Snake();
 		
 		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, 4, 3);
-		map.setBox(firstBodyPiece,3, 4);
+		map.setBox(firstBodyPiece,4, 3);
 		snake.addPiece(firstBodyPiece);
 		
 		SnakeBox head = new SnakeBox(SnakeBody.HEAD, 4, 4);
@@ -175,7 +175,7 @@ class IntermediaryTest {
 		
 		map.setSnake(snake);
 		
-		this.apple = new AppleBox(Food.APPLE, 2, 5);
+		AppleBox apple = new AppleBox(Food.APPLE, 2, 5);
 		map.setBox(apple, 2, 5);	
 		
 		int inputLenght = 9*3;
