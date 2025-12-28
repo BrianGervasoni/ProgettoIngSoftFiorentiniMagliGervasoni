@@ -26,9 +26,12 @@ public class Snake {
 	 * @param box casella in cui è stat creata la tesat del serpente
 	 */
 	public void setHead(SnakeBox box) {
-		
-		body.add(0,box);
-		
+		if(body.isEmpty())
+			body.add(0,box);
+		else {
+			body.get(0).setBodyType(SnakeBody.BODY);
+			body.add(0,box);
+		}	
 	}
 	/**
 	 * metodo usato per restituire l'array body del serpente
