@@ -40,7 +40,7 @@ public class Map {
 		
 	}
 	
-	 /*
+
 	public Map(Snake ss) {
 		this.box = new Box[X][Y];
 		this.apple = null;
@@ -60,7 +60,7 @@ public class Map {
 		}
 		
 	}
-	*/
+	
 	
 	/**
 	 * metodo che controlla la collisione con la mela
@@ -307,18 +307,18 @@ public class Map {
 	
 	
 	/**
-	 * Solo per fini di testing, ritorna la mela contenuta nella mappa
+	 * Ritorna la mela contenuta nella mappa
 	 * @return AppleBox
 	 */
-	public AppleBox testOnlyGetApple() {
+	public AppleBox getApple() {
 		return this.apple;
 	}
 	
 	
 	/**
-	 * Solo per fini di testing, imposta una mela personalizzata
+	 * Imposta una mela personalizzata
 	 */
-	public void testOnlySetApple(AppleBox app) {
+	public void setApple(AppleBox app) {
 		this.apple = app;
 		setBox(app, app.getXcoordinate(), app.getYcoordinate());
 	}
