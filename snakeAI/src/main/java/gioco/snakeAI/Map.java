@@ -146,7 +146,7 @@ public class Map {
 		ArrayList<EmptyBox> ar = new ArrayList<EmptyBox>();
 		for(int i = 0; i < X-1; i++) {
 			for(int j = 0; j < Y-1; j++) {
-				if(box[i][j].equals(MapElem.EMPTY)) {
+				if(checkValidCoordinates(i, j)) {
 					ar.add((EmptyBox)box[i][j]);
 				}
 				
@@ -159,9 +159,7 @@ public class Map {
 	
 	/**
 	 * 
-	 *metodo per la creazione della mela nella mappa
-	 *
-	 * @return true o false
+	 * metodo per la creazione della mela nella mappa
 	 */
 	public void setApple() {
 		
@@ -245,19 +243,19 @@ public class Map {
 			Boolean nonTrovato = true;
 			
 			do {
-				if((randA <= 25) && (( (EmptyBox) box[randX+1][randY]).getEnum() == MapElem.EMPTY )) {
+				if((randA <= 25) && (checkValidCoordinates(randX+1, randY) )) {
 					firstPieceX = randX + 1;
 					firstPieceY = randY;
-					nonTrovato = false;
-				}else if((randA>25)&&(randA<=50) && (( (EmptyBox) box[randX-1][randY]).getEnum() == MapElem.EMPTY )){
+					nonTrovato = false;					
+				}else if((randA>25)&&(randA<=50) && (checkValidCoordinates(randX-1, randY))){
 					firstPieceX = randX - 1;
 					firstPieceY = randY;
 					nonTrovato = false;
-				}else if((randA>50)&&(randA<=75) && (( (EmptyBox) box[randX][randY+1]).getEnum() == MapElem.EMPTY )){
+				}else if((randA>50)&&(randA<=75) && (checkValidCoordinates(randX, randY+1))){
 					firstPieceX = randX;
 					firstPieceY = randY + 1;
-					nonTrovato = false;
-				}else if((randA>75)&&(randA<=100) && (( (EmptyBox) box[randX+1][randY-1]).getEnum() == MapElem.EMPTY )){
+					nonTrovato = false;					
+				}else if((randA>75)&&(randA<=100) && (checkValidCoordinates(randX+1, randY+1))){
 					firstPieceX = randX;
 					firstPieceY = randY - 1;
 					nonTrovato = false;
@@ -318,10 +316,32 @@ public class Map {
 	/**
 	 * Imposta una mela personalizzata
 	 */
-	public void setApple(AppleBox app) {
-		this.apple = app;
-		setBox(app, app.getXcoordinate(), app.getYcoordinate());
+	public boolean forceSetApple(int x, int y) {
+		
+		if(checkValidCoordinates(x, y)) {
+			this.apple = new AppleBox(Food.APPLE, x, y);
+			setBox(apple, x, y);
+			return true;
+			
+		}else {
+			
+			return false;
+		}
+	
 	}
+	
+	
+	/**
+	 * Metodo che controlla che in corrispondenza delle coordinate inserite ci sia una casella vuota (EmptyBox con MapElem.EMPTY)
+	 * @param x
+	 * @param y
+	 * @return true false
+	 */
+	public boolean checkValidCoordinates(int x, int y) {
+		
+		return getBox(x, y).equals(MapElem.EMPTY);
+	}
+	
 	
 	
 	
@@ -359,6 +379,8 @@ public class Map {
 		}
 	}
 	
+	
+
 	
 	//metodi get e set dei parametri della classe Map
 	public Snake getSnake() {

@@ -25,9 +25,9 @@ class TestMap {
 		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.TAIL, 4, 5);
 		mm.setBox(firstBodyPiece, 4, 5);
 		mm.getSnake().addPiece(firstBodyPiece);
-		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
-		mm.setApple(apple1);
+		Boolean valid = mm.forceSetApple(10, 10);
 		
+		assertEquals(valid, true);
 		
 		//quello da cui si parte
 		Map mm2 = new Map();
@@ -37,8 +37,10 @@ class TestMap {
 		SnakeBox firstBodyPiece2 = new SnakeBox(SnakeBody.TAIL, 1, 5);
 		mm2.setBox(firstBodyPiece2, 1, 5);
 		mm2.getSnake().addPiece(firstBodyPiece2);
-		AppleBox apple2 = new AppleBox(Food.APPLE, 10, 10);
-		mm2.setApple(apple2);
+		Boolean valid2 = mm2.forceSetApple(10, 10);
+		
+		assertEquals(valid2, true);
+		
 		
 		
 		mm2.makeSnakeMove(Direction.STRAIGHT);
@@ -76,8 +78,10 @@ class TestMap {
 		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.TAIL, 4, 5);
 		mm.setBox(firstBodyPiece, 4, 5);
 		mm.getSnake().addPiece(firstBodyPiece);
-		AppleBox apple1 = new AppleBox(Food.APPLE, 6, 5);
-		mm.setApple(apple1);
+		AppleBox apple1 = new AppleBox(Food.APPLE, 6, 5);	
+		Boolean valid = mm.forceSetApple(6, 5);
+		
+		assertEquals(valid, true);
 		
 		mm.getSnake().move(Direction.STRAIGHT);
 		assertEquals(true, mm.checkAppleCollision());
@@ -101,9 +105,8 @@ class TestMap {
 		mm.setBox(secondBodyPiece, 7, 5);
 		mm.getSnake().addPiece(secondBodyPiece);
 		
-		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
-		mm.setApple(apple1);
-		
+		Boolean valid = mm.forceSetApple(10, 10);
+		assertEquals(valid, true);
 		
 		//quello da cui si parte
 		Map mm2 = new Map();
@@ -113,8 +116,9 @@ class TestMap {
 		SnakeBox firstBodyPiece2 = new SnakeBox(SnakeBody.TAIL, 1, 5);
 		mm2.setBox(firstBodyPiece2, 1, 5);
 		mm2.getSnake().addPiece(firstBodyPiece2);
-		AppleBox apple2 = new AppleBox(Food.APPLE, 6, 5);
-		mm2.setApple(apple2);
+		
+		
+		assertEquals(true, mm2.forceSetApple(6, 5));
 		
 		
 		mm2.makeSnakeMove(Direction.STRAIGHT);
@@ -160,8 +164,8 @@ class TestMap {
 		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.TAIL, 1, 1);
 		mm.setBox(firstBodyPiece, 1, 1);
 		mm.getSnake().addPiece(firstBodyPiece);
-		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
-		mm.setApple(apple1);
+		
+		assertEquals(true, mm.forceSetApple(10, 10));
 		
 		
 		mm.makeSnakeMove(Direction.STRAIGHT);
@@ -222,8 +226,8 @@ class TestMap {
 		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.TAIL, 3, 2);
 		mm.setBox(firstBodyPiece, 3, 2);
 		mm.getSnake().addPiece(firstBodyPiece);
-		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
-		mm.setApple(apple1);
+		
+		assertEquals(true, mm.forceSetApple(10, 10));
 		
 		mm.makeSnakeMove(Direction.STRAIGHT);
 		
@@ -259,7 +263,7 @@ class TestMap {
 		mm.getSnake().addPiece(bodyPiece4);
 		
 		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
-		mm.setApple(apple1);
+		assertEquals(true, mm.forceSetApple(10, 10));
 		
 		mm.makeSnakeMove(Direction.LEFT);
 		
@@ -273,6 +277,25 @@ class TestMap {
 		
 		assertEquals(true, mm.checkDefeat());
 
+	}
+	
+	
+	@Test
+	void testCheckValidCoordinates() {
+		
+		Map mm = new Map();
+		SnakeBox heead = new SnakeBox(SnakeBody.HEAD, 3, 1);
+		mm.setBox(heead, 3, 1);
+		mm.getSnake().setHead(heead);
+		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.TAIL, 3, 2);
+		mm.setBox(firstBodyPiece, 3, 2);
+		mm.getSnake().addPiece(firstBodyPiece);
+		
+		assertEquals(true, mm.forceSetApple(10, 10));
+		assertEquals(false, mm.forceSetApple(3,  1));
+		
+		
+		
 	}
 	
 	
@@ -302,10 +325,5 @@ class TestMap {
 		
 		
 	}
-	
-	
-	
-	
-	
 
 }
