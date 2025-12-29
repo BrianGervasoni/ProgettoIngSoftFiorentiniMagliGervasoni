@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import boxes.AppleBox;
 import boxes.Direction;
-import boxes.Food;
+import boxes.EmptyBox;
+import boxes.MapElem;
 import boxes.SnakeBody;
 import boxes.SnakeBox;
 
@@ -78,7 +79,7 @@ class TestMap {
 		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.TAIL, 4, 5);
 		mm.setBox(firstBodyPiece, 4, 5);
 		mm.getSnake().addPiece(firstBodyPiece);
-		AppleBox apple1 = new AppleBox(Food.APPLE, 6, 5);	
+
 		Boolean valid = mm.forceSetApple(6, 5);
 		
 		assertEquals(valid, true);
@@ -216,7 +217,7 @@ class TestMap {
 	
 	
 	@Test
-	void testCheckDefeat() {
+	void testCheckDefeatWallCollision() {
 		
 		
 		Map mm = new Map();
@@ -238,7 +239,7 @@ class TestMap {
 	
 	
 	@Test
-	void testCheckDefeat2() {
+	void testCheckDefeatAutoCollision() {
 		
 		
 		Map mm = new Map();
@@ -262,7 +263,6 @@ class TestMap {
 		mm.setBox(bodyPiece4, 1, 1);
 		mm.getSnake().addPiece(bodyPiece4);
 		
-		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
 		assertEquals(true, mm.forceSetApple(10, 10));
 		
 		mm.makeSnakeMove(Direction.LEFT);
@@ -302,12 +302,12 @@ class TestMap {
 	
 	
 	@Test
-	void testCheckVictory() {
+	void testCheckVictoryWithMapFilled() {
 		
 		Map mm = new Map();
 		
-		for(int i = 0; i < Map.X; i++) {
-			for(int j = 0; j < Map.Y; j++) {
+		for(int i = 1; i < Map.X-1; i++) {
+			for(int j = 1; j < Map.Y-1; j++) {
 				
 				SnakeBox bb = new SnakeBox(SnakeBody.BODY, i, j);
 				mm.setBox(bb , i, j);
@@ -325,5 +325,40 @@ class TestMap {
 		
 		
 	}
+	
+	
+	@Test
+	void testCheckVictoryAfterEatingApple() {
+		Map mm = new Map();
+		
+		for(int i = 1; i < Map.X-1; i++) {
+			for(int j = 1; j < Map.Y-1; j++) {
+				
+				SnakeBox bb = new SnakeBox(SnakeBody.BODY, i, j);
+				mm.setBox(bb , i, j);
+				mm.getSnake().addPiece(bb);
+			}
+		}
+		
+		//Qui viene rimosso il pezzo di corpo in 1 1
+		mm.getSnake().getBody().remove(0);
+		
+		mm.setBox(new EmptyBox(MapElem.EMPTY, 1, 1), 1, 1);
+		
+		assertEquals(true, mm.forceSetApple(1, 1));
+		
+		mm.getSnake().getBodyPiece(0).setBodyType(SnakeBody.HEAD);
+		mm.getSnake().getBodyPiece(mm.getSnakeLength()-1).setBodyType(SnakeBody.TAIL);
+
+		mm.makeSnakeMove(Direction.STRAIGHT);
+		
+		assertEquals(true, mm.checkVictory());
+		
+		
+		
+	}
+	
+	
+	
 
 }
