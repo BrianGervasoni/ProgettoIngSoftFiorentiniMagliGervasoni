@@ -92,8 +92,8 @@ public class Snake {
 	 */
 	public void move(Direction dir) {
 		
-		int NCoordX = 0;
-		int NCoordY = 0;
+		int NCoordX = this.body.get(0).getXcoordinate();
+		int NCoordY = this.body.get(0).getYcoordinate();
 		
 		int X = this.body.get(0).getXcoordinate();
 		int Y = this.body.get(0).getYcoordinate();
@@ -106,17 +106,17 @@ public class Snake {
 			if(dir == Direction.RIGHT) {
 			
 				NCoordY = this.body.get(0).getYcoordinate() - 1;
-				this.body.get(0).setYcoordinate(NCoordY);
+	
 			
 			}else if(dir == Direction.LEFT) {
 				
 				NCoordY = this.body.get(0).getYcoordinate() + 1;
-				this.body.get(0).setYcoordinate(NCoordY);
+
 				
 			}else {
 				
-				NCoordX = this.body.get(0).getXcoordinate() + 1;
-				this.body.get(0).setXcoordinate(NCoordX);
+				NCoordX = this.body.get(0).getXcoordinate() + 1;			//le X sono le righe
+
 				
 			}
 			
@@ -128,16 +128,16 @@ public class Snake {
 			if(dir == Direction.RIGHT) {
 			
 				NCoordY = this.body.get(0).getYcoordinate() + 1;
-				this.body.get(0).setYcoordinate(NCoordY);
+
 			
 			}else if(dir == Direction.LEFT) {
 				
 				NCoordY = this.body.get(0).getYcoordinate() - 1;
-				this.body.get(0).setYcoordinate(NCoordY);
+
 			}else {
 				
 				NCoordX = this.body.get(0).getXcoordinate() - 1;
-				this.body.get(0).setXcoordinate(NCoordX);
+
 				
 			}
 			
@@ -149,17 +149,16 @@ public class Snake {
 			if(dir == Direction.RIGHT) {
 			
 				NCoordX = this.body.get(0).getXcoordinate() + 1;
-				this.body.get(0).setXcoordinate(NCoordX);
 			
 			}else if(dir == Direction.LEFT) {
 				
 				NCoordX = this.body.get(0).getXcoordinate() - 1;
-				this.body.get(0).setXcoordinate(NCoordX);
+
 				
 			}else {
 				
 				NCoordY = this.body.get(0).getYcoordinate() + 1;
-				this.body.get(0).setYcoordinate(NCoordY);
+
 				
 			}
 			
@@ -171,17 +170,16 @@ public class Snake {
 			if(dir == Direction.RIGHT) {
 			
 				NCoordX = this.body.get(0).getXcoordinate() - 1;
-				this.body.get(0).setXcoordinate(NCoordX);
 			
 			}else if(dir == Direction.LEFT) {
 				
 				NCoordX = this.body.get(0).getXcoordinate() + 1;
-				this.body.get(0).setXcoordinate(NCoordX);
+
 				
 			}else {
 				
 				NCoordY = this.body.get(0).getYcoordinate() - 1;
-				this.body.get(0).setYcoordinate(NCoordY);
+
 				
 			}
 			

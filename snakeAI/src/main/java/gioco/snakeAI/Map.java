@@ -7,10 +7,10 @@ import java.util.concurrent.TimeUnit;
 
 public class Map {
 	
-	 public static final int X = 12; // grandezza massima del campo di gioco (righe)
-	 public static final int Y = 12; // grandezza massima del campo di gioco (colonne)
+	public static final int X = 12; // grandezza massima del campo di gioco (righe)
+	public static final int Y = 12; // grandezza massima del campo di gioco (colonne)
 
-	 //il campo di gioco è una matrice X * Y
+	//il campo di gioco è una matrice X * Y
 	private Box[][] box;
 	private Snake snake; // il serpente da muovere nel campo di gioco
 	private AppleBox apple; // la mela che il serpente deve consumare
@@ -40,7 +40,7 @@ public class Map {
 		
 	}
 	
-	
+
 	public Map(Snake ss) {
 		this.box = new Box[X][Y];
 		this.apple = null;
@@ -146,7 +146,7 @@ public class Map {
 		ArrayList<EmptyBox> ar = new ArrayList<EmptyBox>();
 		for(int i = 0; i < X-1; i++) {
 			for(int j = 0; j < Y-1; j++) {
-				if(box[i][j].equals(MapElem.EMPTY)) {
+				if(checkValidCoordinates(i, j)) {
 					ar.add((EmptyBox)box[i][j]);
 				}
 				
@@ -159,9 +159,7 @@ public class Map {
 	
 	/**
 	 * 
-	 *metodo per la creazione della mela nella mappa
-	 *
-	 * @return true o false
+	 * metodo per la creazione della mela nella mappa
 	 */
 	public void setApple() {
 		
@@ -245,19 +243,19 @@ public class Map {
 			Boolean nonTrovato = true;
 			
 			do {
-				if((randA <= 25) && (( (EmptyBox) box[randX+1][randY]).getEnum() == MapElem.EMPTY )) {
+				if((randA <= 25) && (checkValidCoordinates(randX+1, randY) )) {
 					firstPieceX = randX + 1;
 					firstPieceY = randY;
-					nonTrovato = false;
-				}else if((randA>25)&&(randA<=50) && (( (EmptyBox) box[randX-1][randY]).getEnum() == MapElem.EMPTY )){
+					nonTrovato = false;					
+				}else if((randA>25)&&(randA<=50) && (checkValidCoordinates(randX-1, randY))){
 					firstPieceX = randX - 1;
 					firstPieceY = randY;
 					nonTrovato = false;
-				}else if((randA>50)&&(randA<=75) && (( (EmptyBox) box[randX][randY+1]).getEnum() == MapElem.EMPTY )){
+				}else if((randA>50)&&(randA<=75) && (checkValidCoordinates(randX, randY+1))){
 					firstPieceX = randX;
 					firstPieceY = randY + 1;
-					nonTrovato = false;
-				}else if((randA>75)&&(randA<=100) && (( (EmptyBox) box[randX+1][randY-1]).getEnum() == MapElem.EMPTY )){
+					nonTrovato = false;					
+				}else if((randA>75)&&(randA<=100) && (checkValidCoordinates(randX+1, randY+1))){
 					firstPieceX = randX;
 					firstPieceY = randY - 1;
 					nonTrovato = false;
@@ -307,6 +305,47 @@ public class Map {
 	
 	
 	/**
+	 * Ritorna la mela contenuta nella mappa
+	 * @return AppleBox
+	 */
+	public AppleBox getApple() {
+		return this.apple;
+	}
+	
+	
+	/**
+	 * Imposta una mela personalizzata
+	 */
+	public boolean forceSetApple(int x, int y) {
+		
+		if(checkValidCoordinates(x, y)) {
+			this.apple = new AppleBox(Food.APPLE, x, y);
+			setBox(apple, x, y);
+			return true;
+			
+		}else {
+			
+			return false;
+		}
+	
+	}
+	
+	
+	/**
+	 * Metodo che controlla che in corrispondenza delle coordinate inserite ci sia una casella vuota (EmptyBox con MapElem.EMPTY)
+	 * @param x
+	 * @param y
+	 * @return true false
+	 */
+	public boolean checkValidCoordinates(int x, int y) {
+		
+		return getBox(x, y).equals(MapElem.EMPTY);
+	}
+	
+	
+	
+	
+	/**
 	 * metodo che resetta tutte le Box della mappa e le rende EmptyBox
 	 * 
 	 */
@@ -340,6 +379,8 @@ public class Map {
 		}
 	}
 	
+	
+
 	
 	//metodi get e set dei parametri della classe Map
 	public Snake getSnake() {
