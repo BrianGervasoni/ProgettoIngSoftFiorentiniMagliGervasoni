@@ -26,7 +26,7 @@ class TestMap {
 		mm.setBox(firstBodyPiece, 4, 5);
 		mm.getSnake().addPiece(firstBodyPiece);
 		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
-		mm.testOnlySetApple(apple1);
+		mm.setApple(apple1);
 		
 		
 		//quello da cui si parte
@@ -38,7 +38,7 @@ class TestMap {
 		mm2.setBox(firstBodyPiece2, 1, 5);
 		mm2.getSnake().addPiece(firstBodyPiece2);
 		AppleBox apple2 = new AppleBox(Food.APPLE, 10, 10);
-		mm2.testOnlySetApple(apple2);
+		mm2.setApple(apple2);
 		
 		
 		mm2.makeSnakeMove(Direction.STRAIGHT);
@@ -77,7 +77,7 @@ class TestMap {
 		mm.setBox(firstBodyPiece, 4, 5);
 		mm.getSnake().addPiece(firstBodyPiece);
 		AppleBox apple1 = new AppleBox(Food.APPLE, 6, 5);
-		mm.testOnlySetApple(apple1);
+		mm.setApple(apple1);
 		
 		mm.getSnake().move(Direction.STRAIGHT);
 		assertEquals(true, mm.checkAppleCollision());
@@ -102,7 +102,7 @@ class TestMap {
 		mm.getSnake().addPiece(secondBodyPiece);
 		
 		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
-		mm.testOnlySetApple(apple1);
+		mm.setApple(apple1);
 		
 		
 		//quello da cui si parte
@@ -114,7 +114,7 @@ class TestMap {
 		mm2.setBox(firstBodyPiece2, 1, 5);
 		mm2.getSnake().addPiece(firstBodyPiece2);
 		AppleBox apple2 = new AppleBox(Food.APPLE, 6, 5);
-		mm2.testOnlySetApple(apple2);
+		mm2.setApple(apple2);
 		
 		
 		mm2.makeSnakeMove(Direction.STRAIGHT);
@@ -161,7 +161,7 @@ class TestMap {
 		mm.setBox(firstBodyPiece, 1, 1);
 		mm.getSnake().addPiece(firstBodyPiece);
 		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
-		mm.testOnlySetApple(apple1);
+		mm.setApple(apple1);
 		
 		
 		mm.makeSnakeMove(Direction.STRAIGHT);
@@ -223,7 +223,7 @@ class TestMap {
 		mm.setBox(firstBodyPiece, 3, 2);
 		mm.getSnake().addPiece(firstBodyPiece);
 		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
-		mm.testOnlySetApple(apple1);
+		mm.setApple(apple1);
 		
 		mm.makeSnakeMove(Direction.STRAIGHT);
 		
@@ -259,7 +259,7 @@ class TestMap {
 		mm.getSnake().addPiece(bodyPiece4);
 		
 		AppleBox apple1 = new AppleBox(Food.APPLE, 10, 10);
-		mm.testOnlySetApple(apple1);
+		mm.setApple(apple1);
 		
 		mm.makeSnakeMove(Direction.LEFT);
 		
