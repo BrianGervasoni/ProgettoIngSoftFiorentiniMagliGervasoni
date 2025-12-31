@@ -10,10 +10,6 @@ import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 
 public class AITest {
 
-	public AITest() {
-		// TODO Auto-generated constructor stub
-	}
-	
 	@Test
 	void testBackProp() {
 		double[] b = new double[] {1,2};

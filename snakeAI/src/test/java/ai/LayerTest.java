@@ -9,10 +9,6 @@ import progettoAI.snakeAI.tools.Tools;
 
 public class LayerTest {
 
-	public LayerTest() {
-		// TODO Auto-generated constructor stub
-	}
-	
 	@Test
 	void testForwarding() {//node=2, inputNode=3
 		double[] b = new double[] {1,2};
