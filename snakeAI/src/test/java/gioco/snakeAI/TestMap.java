@@ -317,11 +317,15 @@ class TestMap {
 		
 		Map mm = new Map();
 		SnakeBox heead = new SnakeBox(SnakeBody.HEAD, 3, 1);
-		mm.setBox(heead, 3, 1);
-		mm.getSnake().setHead(heead);
+		mm.getSnake().getBodyPiece(0).setXcoordinate(3);
+		mm.getSnake().getBodyPiece(0).setXcoordinate(1);
+		mm.setBox(mm.getSnake().getBodyPiece(0), 3, 1);
+		
+		
 		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.TAIL, 3, 2);
-		mm.setBox(firstBodyPiece, 3, 2);
-		mm.getSnake().addPiece(firstBodyPiece);
+		mm.getSnake().getBodyPiece(1).setXcoordinate(3);
+		mm.getSnake().getBodyPiece(1).setXcoordinate(2);
+		mm.setBox(mm.getSnake().getBodyPiece(1), 3, 2);
 		
 		assertEquals(true, mm.forceSetApple(10, 10));
 		assertEquals(false, mm.forceSetApple(3,  1));
