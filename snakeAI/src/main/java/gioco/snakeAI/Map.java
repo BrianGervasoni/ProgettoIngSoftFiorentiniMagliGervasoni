@@ -324,6 +324,8 @@ public class Map {
 	 */
 	public boolean forceSetApple(int x, int y) {
 		
+		
+		
 		if(checkValidCoordinates(x, y)) {
 			this.apple = new AppleBox(Food.APPLE, x, y);
 			setBox(apple, x, y);
