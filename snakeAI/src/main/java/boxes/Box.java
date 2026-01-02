@@ -50,9 +50,9 @@ public abstract class Box implements Visualize{
 		Ycoordinate = ycoordinate;
 	}
 	
-	 public int getXcoordinate() {
-			return Xcoordinate;
-		}
+	public int getXcoordinate() {
+		return Xcoordinate;
+	}
     
 	public abstract BoxType getElementType(); 
 	public abstract void setElementType(BoxType boxType); 

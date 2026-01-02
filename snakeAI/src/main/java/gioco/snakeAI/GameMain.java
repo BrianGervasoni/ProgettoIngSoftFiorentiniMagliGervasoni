@@ -26,7 +26,7 @@ public class GameMain {
 	 * 
 	 * @param map mappa di gioco
 	 */
-	public static void initialize(Map map) {
+	public void initialize(Map map) {
 		
 		map.initSnakeBody();			// questo piazza la testa iniziale
 		map.setApple();
@@ -38,8 +38,9 @@ public class GameMain {
 	 * @param dir direzione da assegnare
 	 */
 	public void giveDirections(Direction dir) {
-		
 		map.makeSnakeMove(dir);
+		map.addTick();
+		
 	}
 	
 	/**

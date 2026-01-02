@@ -18,6 +18,8 @@ public class Snake {
 	public Snake() {
 		
 		this.body = new ArrayList<SnakeBox>();
+		setHead(new SnakeBox(SnakeBody.HEAD, -1, -1));
+		addPiece(new SnakeBox(SnakeBody.TAIL, -1, -1));
 		
 	}
 	
@@ -27,6 +29,7 @@ public class Snake {
 	 */
 	public void setHead(SnakeBox box) {
 		box.setBodyType(SnakeBody.HEAD);
+		
 		if(body.isEmpty())
 			body.add(0,box);
 		else {
@@ -38,6 +41,7 @@ public class Snake {
 			body.add(0,box);
 		}	
 	}
+	
 	/**
 	 * metodo usato per restituire l'array body del serpente
 	 * 

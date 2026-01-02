@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 import controller.Controller;
 import gioco.snakeAI.Map;
+import io.reactivex.rxjava3.core.Observable;
 
 
 
@@ -39,8 +40,8 @@ public class UserInterface {
 		myFrame.repaint();
 	}
 	
-	public void viewMap() {
-		renderMap();
+	public void viewMap(Map map) {
+		renderMap(map);
 	}
 	
 	public void hideMap() {
@@ -130,14 +131,15 @@ public class UserInterface {
 		JPanel training = new JPanel();
 		
 		JLabel ll = new JLabel("Statistiche e altra roba etc");
-		
+		//da mostrare anche i tick contati dalla mappa
 
 		JButton buttonShowRandomMap = new JButton("Mostra una mappa casuale");
 		buttonShowRandomMap.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				viewMap();
+				startTrainingPhaseWithMap();
+				//si deve creare la nuova schermata con la mappa
 				
 			}});
 		
@@ -187,6 +189,7 @@ public class UserInterface {
 		
 		JLabel ll1 = new JLabel("Qua va renderizzata la mappa");
 		JLabel ll = new JLabel("Statistiche e altra roba etc");
+		//da mostrare anche i tick contati dalla mappa
 		
 		JButton buttonShowRandomMap = new JButton("Mostra una mappa casuale");
 		buttonShowRandomMap.addActionListener(new ActionListener() {
@@ -404,9 +407,7 @@ public class UserInterface {
 		//TODO non è chiaro come si gestisca
 	}
 	
-	public JTable renderMap() {
-		
-		Map map = controller.getMap();
+	public JTable renderMap(Map map) {
 		
 		DefaultTableModel model = new DefaultTableModel();
 		JTable table = new JTable(model);
@@ -430,6 +431,17 @@ public class UserInterface {
 		}
 		
 		return table;
+	}
+	
+	
+	public void setLossAgent(double ar) {
+		//rischiamo la sezione del jpanel contenente l'elemento ricevuto in ingresso e lo cambio con un set
+		
+	}
+	
+	public void setLossModel(double model) {
+		//rischiamo la sezione del jpanel contenente l'elemento ricevuto in ingresso e lo cambio con un set
+		
 	}
 	
 	

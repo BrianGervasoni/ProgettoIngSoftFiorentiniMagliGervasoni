@@ -16,13 +16,15 @@ public class Map {
 	private AppleBox apple; // la mela che il serpente deve consumare
 	private boolean appleCollision = false;
 	
+	private int matchDuration;
+	
 	/**
 	 * costruttore della classe Map
 	 * 
 	 */
 	public Map() {
 		this.box = new Box[X][Y];
-		this.apple = null;
+		this.matchDuration = 0;
 
 		this.snake = new Snake();
 		
@@ -38,13 +40,16 @@ public class Map {
 			}
 		}
 		
+		initSnakeBody();
+		setApple();
+		
 	}
 	
 
 	public Map(Snake ss) {
 		this.box = new Box[X][Y];
 		this.apple = null;
-
+		this.matchDuration = 0;
 		this.snake = ss;
 		
 		for(int i = 0; i < X ; i++) {
@@ -58,6 +63,9 @@ public class Map {
 				}
 			}
 		}
+		
+		initSnakeBody();
+		setApple();
 		
 	}
 	
@@ -227,10 +235,8 @@ public class Map {
 			int randX = rand.nextInt(1, Map.X-1);
 			int randY = rand.nextInt(1, Map.Y-1);
 			
-			SnakeBox heead = new SnakeBox(SnakeBody.HEAD, randX, randY);
-			
-			this.setBox(heead, randX, randY);
-			snake.setHead(heead);
+			getSnake().getBodyPiece(0).setXcoordinate(randX);
+			getSnake().getBodyPiece(0).setYcoordinate(randY);
 			
 			
 			//ora inizializziamo il primo pezzo di corpo
@@ -265,9 +271,8 @@ public class Map {
 				
 			}while(nonTrovato);
 			
-			SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, firstPieceX, firstPieceY);
-			setBox(firstBodyPiece, firstPieceX, firstPieceY);
-			snake.addPiece(firstBodyPiece);
+			getSnake().getBodyPiece(1).setXcoordinate(firstPieceX);
+			getSnake().getBodyPiece(1).setYcoordinate(firstPieceY);
 		
 		
 	}
@@ -300,6 +305,7 @@ public class Map {
 			checkDefeat();
 			resetSnakeBoxes();
 			insertSnakeBoxes();
+			
 			
 	}
 	
@@ -382,6 +388,16 @@ public class Map {
 	
 
 	
+	public int getMatchDuration() {
+		return matchDuration;
+	}
+
+
+	public void addTick() {
+		this.matchDuration ++;
+	}
+
+
 	//metodi get e set dei parametri della classe Map
 	public Snake getSnake() {
 		return snake;
