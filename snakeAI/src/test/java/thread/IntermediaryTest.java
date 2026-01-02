@@ -161,7 +161,7 @@ class IntermediaryTest {
 		Map map = new Map();
 		Snake snake = new Snake();
 		
-		SnakeBox head = new SnakeBox(SnakeBody.HEAD, 4, 4);
+		/*SnakeBox head = new SnakeBox(SnakeBody.HEAD, 4, 4);
 		map.setBox(head, 4, 4);
 		snake.setHead(head);
 		System.out.println("head : " + snake.getBodyPiece(0).getXcoordinate() + "; " + snake.getBodyPiece(0).getYcoordinate());
@@ -169,9 +169,21 @@ class IntermediaryTest {
 		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, 4, 3);
 		map.setBox(firstBodyPiece,4, 3);
 		snake.addPiece(firstBodyPiece);
-		System.out.println("primo corpo : " + snake.getBodyPiece(1).getXcoordinate() + "; " +snake.getBodyPiece(1).getYcoordinate());
+		System.out.println("primo corpo : " + snake.getBodyPiece(1).getXcoordinate() + "; " +snake.getBodyPiece(1).getYcoordinate());*/
 		
+		snake.getBodyPiece(1).setXcoordinate(4);
+		snake.getBodyPiece(1).setYcoordinate(3);
+		
+		//SnakeBox head = new SnakeBox(SnakeBody.HEAD, 4, 4);
+		//map.setBox(head, 4, 4);
+		//snake.setHead(head);
+		snake.getBodyPiece(0).setXcoordinate(4);
+		snake.getBodyPiece(0).setYcoordinate(4);
 		map.setSnake(snake);
+		map.resetSnakeBoxes();
+		map.insertSnakeBoxes();
+		
+		
 		
 		AppleBox apple = new AppleBox(Food.APPLE, 2, 5);
 		map.setBox(apple, 2, 5);	

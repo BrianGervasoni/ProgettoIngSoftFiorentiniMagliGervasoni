@@ -39,8 +39,8 @@ class ThreadAgentTest {
 		map.resetSnakeBoxes();
 		map.insertSnakeBoxes();
 		
-		AppleBox apple = new AppleBox(Food.APPLE, 2, 5);
-		map.setBox(apple, 2, 5);	
+		//AppleBox apple = new AppleBox(Food.APPLE, 2, 5);
+		//map.setBox(apple, 2, 5);	
 		double reward = tA.calculateReward(map);
 		
 		System.out.println(reward); //DI DEFAULT DA +4, IN QUESTO CASO NON HA NE IL +50 DI MANGIATO MELA E NE IL -50 DI ESSERE MORTO
