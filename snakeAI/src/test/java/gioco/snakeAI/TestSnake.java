@@ -14,19 +14,6 @@ import boxes.*;
 class TestSnake {
 
 	@Test
-	void testSetHead() {
-		Map map = new Map();
-		Snake ss = new Snake();
-		
-		map.setSnake(ss);
-		map.initSnakeBody();
-		
-		assertEquals(1,1);
-		
-	}
-	
-	
-	@Test
 	void testReset() {
 		
 		Snake ss = new Snake();
@@ -47,16 +34,17 @@ class TestSnake {
 	void testSnakeMove() {
 		
 		Snake ss = new Snake();
-		SnakeBox head = new SnakeBox(SnakeBody.HEAD, 5, 5);
-		ss.setHead(head);
-		ss.addPiece(new SnakeBox(SnakeBody.TAIL, 4, 5));
-		
+		ss.getBodyPiece(0).setXcoordinate(5);
+		ss.getBodyPiece(0).setYcoordinate(5);
+		ss.getBodyPiece(1).setXcoordinate(4);
+		ss.getBodyPiece(1).setYcoordinate(5);
+
 		
 		Snake ss2 = new Snake();
-		SnakeBox head2 = new SnakeBox(SnakeBody.HEAD, 2, 5);
-		ss2.setHead(head2);
-		ss2.addPiece(new SnakeBox(SnakeBody.TAIL, 1, 5));
-
+		ss2.getBodyPiece(0).setXcoordinate(2);
+		ss2.getBodyPiece(0).setYcoordinate(5);
+		ss2.getBodyPiece(1).setXcoordinate(1);
+		ss2.getBodyPiece(1).setYcoordinate(5);
 		
 		ss2.move(Direction.STRAIGHT);
 		ss2.removeTail();
@@ -75,7 +63,7 @@ class TestSnake {
 		
 		for(int i = 0; i < body1.size(); i++) {
 			
-			if((body1.get(i).getXcoordinate()==body2.get(i).getXcoordinate())&&(body1.get(i).getYcoordinate()==body2.get(i).getYcoordinate())&&(body1.get(i).getElementType().equals(body2.get(i).getElementType())))
+			if((body1.get(i).getXcoordinate()==body2.get(i).getXcoordinate())&&(body1.get(i).getYcoordinate()==body2.get(i).getYcoordinate())&&(body1.get(i).getElementType()==body2.get(i).getElementType()))
 				check = 0;
 			else {
 				check = 1;
@@ -86,30 +74,23 @@ class TestSnake {
 		assertEquals(0, check);
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	}
 		
+	
+	
 	
 	@Test
 	void testRemoveTail() {
 		
 		Snake ss = new Snake();
 		SnakeBox head = new SnakeBox(SnakeBody.HEAD, 5, 5);
-		ss.setHead(head);
-		ss.addPiece(new SnakeBox(SnakeBody.BODY, 4, 5));
+		
+		ss.getBodyPiece(0).setXcoordinate(5);
+		ss.getBodyPiece(0).setYcoordinate(5);
+		ss.getBodyPiece(1).setXcoordinate(4);
+		ss.getBodyPiece(1).setYcoordinate(5);
+		
 		ss.addPiece(new SnakeBox(SnakeBody.TAIL, 3, 5));
-
 		ss.removeTail();
 
 		Boolean test = true;
@@ -129,12 +110,12 @@ class TestSnake {
 	void testAddPiece() {
 		
 		//Map map = new Map();
-		SnakeBox sb = new SnakeBox(SnakeBody.HEAD, 7,7);
+		SnakeBox sb = new SnakeBox(SnakeBody.BODY, 7,7);
 		Snake sn = new Snake();
 		
 		sn.addPiece(sb);
 		
-		assertEquals(1, sn.getBody().size());
+		assertEquals(3, sn.getBody().size());
 	}
 
 
