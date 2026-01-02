@@ -120,7 +120,7 @@ public class Controller {
 	public Map getMap() {
 		return ai.selectMap();
 	}
-	
+
 	
 }
 

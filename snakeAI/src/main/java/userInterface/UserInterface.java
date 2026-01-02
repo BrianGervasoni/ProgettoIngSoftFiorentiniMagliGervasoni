@@ -30,14 +30,16 @@ public class UserInterface {
 	
 	/**
 	 * Se 0, si è in fase di esecuzione; se 1, si è in fase di allenamento senza mappa; se 2, si è in fase di allenamento con mappa
+	 * Se -1, si è nel Menu principale.
+	 *
 	 */
-	private int trainingWithMap;
+	private int modeIndicator;
 	
 	
 	public UserInterface(Controller ctr) {
 		myFrame = new JFrame("SnakeAI");
 		controller = ctr;
-		trainingWithMap = 0;
+		modeIndicator = -1;
 	}
 	
 	
@@ -90,12 +92,15 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				modeIndicator = 0;
 				startExecutionPhase();
 				controller.startExecution();
-				trainingWithMap = 0;
 			}});	
 		
 		
+		/**
+		 * Di default parte l'allenamento senza mappa
+		 */
 		JButton buttonStartTraining = new JButton("Avvia allenamento");
 		buttonStartTraining.addActionListener(new ActionListener() {
 
@@ -103,7 +108,7 @@ public class UserInterface {
 			public void actionPerformed(ActionEvent arg0) {
 				startTrainingPhaseWithoutMap();
 				controller.startTraining();
-				trainingWithMap = 1;
+				modeIndicator = 1;
 			}});	
 		
 		
@@ -142,21 +147,18 @@ public class UserInterface {
 		
 		resetFrame();
 		
-		controller.startTraining();
-		
 		JPanel training = new JPanel();
-		
-		JLabel ll = new JLabel("Statistiche e altra roba etc");
-		//da mostrare anche i tick contati dalla mappa
 
+		JLabel duration = new JLabel("Durata partita: " + String.valueOf(controller.getMap().getMatchDuration()));
+		JLabel snakeLength = new JLabel("Lunghezza snake: " + String.valueOf(controller.getMap().getSnakeLength()));
+		
 		JButton buttonShowRandomMap = new JButton("Mostra una mappa casuale");
 		buttonShowRandomMap.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				modeIndicator = 2;
 				startTrainingPhaseWithMap();
-				//TODO nel controller non è meglio precisato i due tipi di allenamento (con / senza mappa)
-				trainingWithMap = 2;
 			}});
 		
 		
@@ -165,9 +167,9 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				stopTrainingPhase();
 				controller.terminateTraining();
-				
+				modeIndicator = -1;
+				stopTrainingPhase();
 			}});
 		
 		
@@ -176,20 +178,19 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				modeIndicator = 0;
 				toggleFromTrainToExec();
-				trainingWithMap = 0;
-				
 			}});
 		
 		
-		
-		
-		training.add(ll);
 		training.add(lossAgent);
 		training.add(lossModel);
+		training.add(duration);
+		training.add(snakeLength);
 		training.add(buttonShowRandomMap);
 		training.add(buttonStopTraining);
 		training.add(buttonToggle);
+		
 		
 		myFrame.add(training);
 		myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -209,15 +210,17 @@ public class UserInterface {
 		
 		JPanel training = new JPanel();
 		
-		//da mostrare anche i tick contati dalla mappa
+		JLabel duration = new JLabel("Durata partita: " + String.valueOf(controller.getMap().getMatchDuration()));
+		JLabel snakeLength = new JLabel("Lunghezza snake: " + String.valueOf(controller.getMap().getSnakeLength()));
 		
 		
-		JButton buttonShowRandomMap = new JButton("Mostra una mappa casuale");
-		buttonShowRandomMap.addActionListener(new ActionListener() {
+		JButton buttonHideMap = new JButton("Nascondi mappa");
+		buttonHideMap.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				switchThreadMapTrainingPhase();
+				startTrainingPhaseWithoutMap();
+				modeIndicator = 1;
 				
 			}});
 		
@@ -227,9 +230,9 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				stopTrainingPhase();
 				controller.terminateTraining();
-				
+				modeIndicator = -1;
+				stopTrainingPhase();
 			}});
 
 		
@@ -252,9 +255,25 @@ public class UserInterface {
 				
 			}});
 		
+		
+		JButton buttonToggle = new JButton("Toggle training => Exec");
+		buttonToggle.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				modeIndicator = 0;
+				toggleFromTrainToExec();
+			}});
+		
+		
+		
+		training.add(renderedMap);
 		training.add(lossAgent);
 		training.add(lossModel);
-		training.add(buttonShowRandomMap);
+		training.add(duration);
+		training.add(snakeLength);
+		training.add(buttonHideMap);
+		training.add(buttonToggle);
 		training.add(buttonStopTraining);
 		training.add(buttonNextThread);
 		training.add(buttonPreviousThread);
@@ -331,9 +350,9 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				startingMenu();
-				//TODO: non è chiaro come sia da gestire
 				
+				//TODO: non è chiaro come sia da gestire
+				startingMenu();
 			}});
 		
 		
@@ -375,12 +394,10 @@ public class UserInterface {
 		
 		resetFrame();
 		
-		controller.startExecution();
-		
 		JPanel exec = new JPanel();
 		
-		JLabel duration = new JLabel(String.valueOf(controller.getMap().getMatchDuration()));
-		JLabel snakeLength = new JLabel(String.valueOf(controller.getMap().getSnakeLength()));
+		JLabel duration = new JLabel("Durata partita: " + String.valueOf(controller.getMap().getMatchDuration()));
+		JLabel snakeLength = new JLabel("Lunghezza snake: " + String.valueOf(controller.getMap().getSnakeLength()));
 		
 		
 		JButton buttonStopExecution = new JButton("Termina esecuzione");
@@ -388,9 +405,9 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				startingMenu();
 				controller.terminateExecution();
-				
+				modeIndicator = -1;
+				startingMenu();
 			}});
 		
 		JButton buttonToggle = new JButton("Toggle Exec => Train");
@@ -398,14 +415,15 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				modeIndicator = 1;
 				toggleFromExecToTrain();
-				trainingWithMap = 1;
 			}});
 		
+		exec.add(renderedMap);
 		exec.add(lossAgent);
 		exec.add(lossModel);
 		exec.add(duration);
-		
+		exec.add(snakeLength);
 		exec.add(buttonStopExecution);
 		exec.add(buttonToggle);
 		
@@ -429,9 +447,6 @@ public class UserInterface {
 		//TODO non sappiamo come implementarlo, Davide aiutaci tu
 	}
 	
-	public void switchThreadMapTrainingPhase() {
-		//TODO non è chiaro come si gestisca
-	}
 	
 	public void renderMap(Map map) {
 		
@@ -455,18 +470,19 @@ public class UserInterface {
 				
 			}
 		}
+		
+		renderRightState();
 
 	}
 	
 	
 	public void renderRightState() {
-		if(trainingWithMap == 0) 
+		if(modeIndicator == 0) 
 			startExecutionPhase();
-		else if(trainingWithMap == 1) 
+		else if(modeIndicator == 1) 
 			startTrainingPhaseWithoutMap();
-		else if(trainingWithMap == 2) 
-			startTrainingPhaseWithMap();
-		
+		else if(modeIndicator == 2) 
+			startTrainingPhaseWithMap();	
 	}
 	
 	
@@ -477,7 +493,7 @@ public class UserInterface {
 	}
 	
 	public void setLossModel(double model) {
-		lossAgent = new JLabel("Loss Agent: " + String.valueOf(model));
+		lossAgent = new JLabel("Loss Model: " + String.valueOf(model));
 		renderRightState();
 	}
 	
