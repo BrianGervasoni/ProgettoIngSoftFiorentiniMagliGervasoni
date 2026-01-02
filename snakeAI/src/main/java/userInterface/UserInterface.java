@@ -18,17 +18,26 @@ import controller.Controller;
 import gioco.snakeAI.Map;
 import io.reactivex.rxjava3.core.Observable;
 
-
-
 public class UserInterface {
 
 	private JFrame myFrame;
 	private Controller controller;
 	
+	private JLabel lossAgent;
+	private JLabel lossModel;
+	private JTable renderedMap;
+
+	
+	/**
+	 * Se 0, si è in fase di esecuzione; se 1, si è in fase di allenamento senza mappa; se 2, si è in fase di allenamento con mappa
+	 */
+	private int trainingWithMap;
+	
 	
 	public UserInterface(Controller ctr) {
 		myFrame = new JFrame("SnakeAI");
 		controller = ctr;
+		trainingWithMap = 0;
 	}
 	
 	
@@ -41,6 +50,7 @@ public class UserInterface {
 	}
 	
 	public void viewMap(Map map) {
+		
 		renderMap(map);
 	}
 	
@@ -62,7 +72,7 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				stopTrainingPhase();
+				insertHyperParameters();
 			}});	
 		
 		
@@ -81,6 +91,8 @@ public class UserInterface {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				startExecutionPhase();
+				controller.startExecution();
+				trainingWithMap = 0;
 			}});	
 		
 		
@@ -90,6 +102,8 @@ public class UserInterface {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				startTrainingPhaseWithoutMap();
+				controller.startTraining();
+				trainingWithMap = 1;
 			}});	
 		
 		
@@ -98,6 +112,8 @@ public class UserInterface {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				
+				controller.exit();
 				exit();
 			}});	
 	
@@ -139,8 +155,8 @@ public class UserInterface {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				startTrainingPhaseWithMap();
-				//si deve creare la nuova schermata con la mappa
-				
+				//TODO nel controller non è meglio precisato i due tipi di allenamento (con / senza mappa)
+				trainingWithMap = 2;
 			}});
 		
 		
@@ -150,21 +166,27 @@ public class UserInterface {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				stopTrainingPhase();
+				controller.terminateTraining();
 				
 			}});
 		
 		
-		JButton buttonToggle = new JButton("Toggle traing => Exec");
+		JButton buttonToggle = new JButton("Toggle training => Exec");
 		buttonToggle.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				toggleFromTrainToExec();
+				trainingWithMap = 0;
 				
 			}});
 		
 		
+		
+		
 		training.add(ll);
+		training.add(lossAgent);
+		training.add(lossModel);
 		training.add(buttonShowRandomMap);
 		training.add(buttonStopTraining);
 		training.add(buttonToggle);
@@ -187,9 +209,8 @@ public class UserInterface {
 		
 		JPanel training = new JPanel();
 		
-		JLabel ll1 = new JLabel("Qua va renderizzata la mappa");
-		JLabel ll = new JLabel("Statistiche e altra roba etc");
 		//da mostrare anche i tick contati dalla mappa
+		
 		
 		JButton buttonShowRandomMap = new JButton("Mostra una mappa casuale");
 		buttonShowRandomMap.addActionListener(new ActionListener() {
@@ -207,6 +228,7 @@ public class UserInterface {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				stopTrainingPhase();
+				controller.terminateTraining();
 				
 			}});
 
@@ -230,8 +252,8 @@ public class UserInterface {
 				
 			}});
 		
-		training.add(ll1);
-		training.add(ll);
+		training.add(lossAgent);
+		training.add(lossModel);
 		training.add(buttonShowRandomMap);
 		training.add(buttonStopTraining);
 		training.add(buttonNextThread);
@@ -357,8 +379,9 @@ public class UserInterface {
 		
 		JPanel exec = new JPanel();
 		
-		JLabel jj = new JLabel("Rendering mappa in corso");
-		JLabel stats = new JLabel("Statistiche etc");
+		JLabel duration = new JLabel(String.valueOf(controller.getMap().getMatchDuration()));
+		JLabel snakeLength = new JLabel(String.valueOf(controller.getMap().getSnakeLength()));
+		
 		
 		JButton buttonStopExecution = new JButton("Termina esecuzione");
 		buttonStopExecution.addActionListener(new ActionListener() {
@@ -376,10 +399,13 @@ public class UserInterface {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				toggleFromExecToTrain();
+				trainingWithMap = 1;
 			}});
 		
-		exec.add(jj);
-		exec.add(stats);
+		exec.add(lossAgent);
+		exec.add(lossModel);
+		exec.add(duration);
+		
 		exec.add(buttonStopExecution);
 		exec.add(buttonToggle);
 		
@@ -407,10 +433,10 @@ public class UserInterface {
 		//TODO non è chiaro come si gestisca
 	}
 	
-	public JTable renderMap(Map map) {
+	public void renderMap(Map map) {
 		
 		DefaultTableModel model = new DefaultTableModel();
-		JTable table = new JTable(model);
+		renderedMap = new JTable(model);
 		model.setRowCount(map.getRowLenght());
 		model.setColumnCount(map.getColumnLenght());
 		
@@ -418,30 +444,41 @@ public class UserInterface {
 			for(int y = 0; y < map.getColumnLenght(); y++) {
 				
 				if(((y==0) && (i==0))||((y==0) && (i==map.getRowLenght()-1))||((y==map.getColumnLenght()-1) && (i==0))||((i==map.getRowLenght()-1) && (y==map.getColumnLenght()-1)))
-					table.setValueAt("+", i, y);
+					renderedMap.setValueAt("+", i, y);
 				else if((i==0)||(i==map.getRowLenght()-1))
-					table.setValueAt("-", i, y);
+					renderedMap.setValueAt("-", i, y);
 				else if((y==0)||(y==map.getColumnLenght()-1))
-					table.setValueAt("|", i, y);
+					renderedMap.setValueAt("|", i, y);
 				else
-					table.setValueAt(map.getBox(i, y).visual(), i, y);
+					renderedMap.setValueAt(map.getBox(i, y).visual(), i, y);
 
 				
 			}
 		}
+
+	}
+	
+	
+	public void renderRightState() {
+		if(trainingWithMap == 0) 
+			startExecutionPhase();
+		else if(trainingWithMap == 1) 
+			startTrainingPhaseWithoutMap();
+		else if(trainingWithMap == 2) 
+			startTrainingPhaseWithMap();
 		
-		return table;
 	}
 	
 	
 	public void setLossAgent(double ar) {
-		//rischiamo la sezione del jpanel contenente l'elemento ricevuto in ingresso e lo cambio con un set
 		
+		lossAgent = new JLabel("Loss Agent: " + String.valueOf(ar));
+		renderRightState();		
 	}
 	
 	public void setLossModel(double model) {
-		//rischiamo la sezione del jpanel contenente l'elemento ricevuto in ingresso e lo cambio con un set
-		
+		lossAgent = new JLabel("Loss Agent: " + String.valueOf(model));
+		renderRightState();
 	}
 	
 	

@@ -245,6 +245,9 @@ class TestMap {
 		Map mm = new Map();
 		SnakeBox heead = new SnakeBox(SnakeBody.HEAD, 5, 1);
 		mm.setBox(heead, 5, 1);
+		
+		
+		
 		mm.getSnake().setHead(heead);
 		
 		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.BODY, 4, 1);
