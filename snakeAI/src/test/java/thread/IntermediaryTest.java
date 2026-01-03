@@ -191,8 +191,14 @@ Map map = new Map();
 		
 		
 		
-		AppleBox apple = new AppleBox(Food.APPLE, 2, 5);
-		map.setBox(apple, 2, 5);	
+		/*AppleBox apple = new AppleBox(Food.APPLE, 2, 5);
+		map.setBox(apple, 2, 5);	*/
+		
+		map.allPlaceApples().forEach(e->{
+			map.setBox(new EmptyBox(MapElem.EMPTY, e.getXcoordinate(), e.getYcoordinate()), e.getXcoordinate(), e.getYcoordinate());
+		});
+		
+		map.forceSetApple(2, 5);
 		
 		int inputLenght = 10*3; //ho fatto vari test ma sembra NON funzionare con 9*3 mi da i raggi = NaN, mentre 10*3 e 61*3 non da problemi
 		
@@ -207,12 +213,12 @@ Map map = new Map();
 		
 		System.out.println();
 		
-		/*for(int i = 0; i < map.X ; i++) {
+		for(int i = 0; i < map.X ; i++) {
 			for(int k = 0; k < map.Y ; k++) {
 				System.out.println(map.getBox(i, k).getElementType().toString() + " " + i + " " + k);
 			}
 			System.out.println();
-		}*/
+		}
 		
 	}
 }
