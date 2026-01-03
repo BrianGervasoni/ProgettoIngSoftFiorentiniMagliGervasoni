@@ -140,17 +140,23 @@ class IntermediaryTest {
 	@Test 
 	void normalizeArray(){
 		
-		double[] arrayTest = new double[3];
-		arrayTest[0] = 50;
+Map map = new Map();
+		
+		Snake snake = new Snake();
+		
+		double[] arrayTest = new double[4];
+		arrayTest[0] = 5;
 		arrayTest[1] = 10;
-		arrayTest[2] = 80;
+		arrayTest[2] = 0;
+		arrayTest[3] =  Math.sqrt(map.X*map.X + map.Y*map.Y);
 		
-		double[] array = new double[3];
-		array[0] = 0.571428571428571429;
-		array[1] = 0.000000000000000000;
-		array[2] = 1.000000000000000000;
+		double[] array = new double[4];
+		array[0] = 0.2946278254943948;
+		array[1] = 0.5892556509887896;
+		array[2] = 0.0;
+		array[3] = 1.0;
 		
-		arrayTest = intermediary.normalizeArray(arrayTest);
+		arrayTest = intermediary.normalizeArray(arrayTest,map);
 		
 		assertArrayEquals(array, arrayTest);
 	}

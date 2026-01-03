@@ -285,10 +285,10 @@ public interface Functions {
 	 * @param array
 	 * @return linear normalization, set the value of array[i] at its new linear normalized value (a value in this interval [0;1])
 	 */
-	public default double[] normalizeArray(double[] array) {
+	public default double[] normalizeArray(double[] array, Map map) {
 		
-		double min = array[0];
-		double max = array[0];
+		double min = 0;
+		double max = Math.sqrt(map.X*map.X + map.Y*map.Y);
 		double xNormalizzato;
 		
 		//i get minimal value and maximal value

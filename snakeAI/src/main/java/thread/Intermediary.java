@@ -116,7 +116,7 @@ public class Intermediary implements Functions{
 			
 		}
 		
-		return normalizeArray(result);
+		return normalizeArray(result,map);
 		
 	}
 	
