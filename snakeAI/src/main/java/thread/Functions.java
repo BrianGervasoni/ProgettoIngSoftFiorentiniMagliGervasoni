@@ -7,6 +7,7 @@ import org.nd4j.linalg.factory.Nd4j;
 
 import boxes.*;
 import gioco.snakeAI.Map;
+import progettoAI.snakeAI.tools.Tools;
 
 public interface Functions {
 	
@@ -57,9 +58,9 @@ public interface Functions {
 	    // Converte in radianti
 	    double radians = Math.toRadians(degrees);
 
-	    // Calcola le componenti (assumendo 0 gradi = Est, senso antiorario)
-	    double x = Math.cos(radians);
-	    double y = Math.sin(radians);
+	    // Calcola le componenti (assumendo 0 gradi = Est, senso antiorario) con attenznione alla conversione con il sistema di coordinate ella mappa
+	    double x = -1*Math.sin(radians);
+	    double y = Math.cos(radians);
 
 	    return Nd4j.create(new double[] {x,y});
 	}
@@ -99,46 +100,6 @@ public interface Functions {
 	/**
 	 * 
 	 * @param box
-	 * @param map
-	 * @param snakeHead
-	 * @param startDegree
-	 * @param endDegree
-	 * @return if the object collides with one of the ray of the head it will return the angle of the ray 
-	 * else it will return 361
-	 */
-	public default double calculateAngle(Box box, SnakeBox snakeHead, String dir) {
-		
-		int deltaX = box.getXcoordinate() - snakeHead.getXcoordinate();
-		int deltaY = box.getYcoordinate() - snakeHead.getYcoordinate();
-		
-				
-		//the angle between the head and the object, it's in radiant and it is in the range [- pi; +pi]
-		double alpha = Math.atan2(deltaX, deltaY); //TODO FINTO PER ATTIRARE ATTENZIONE!!!!!!!!!!!!!!!!!
-		//ESSENDO LA MATRICE DISTRIBUITA CON LE X IN VERTICALE E LE Y IN ORIZZONTALE IL DELTAX E DELTAY SONO SWITCHATI
-				
-		double alphaDegree = Math.toDegrees(alpha); //transform from radiant to degree
-		
-		//convert from [-180; 180] to [0; 360]
-		if(alphaDegree<0) {
-			alphaDegree = alphaDegree + 360;
-		}
-				
-		if(dir == "up" && (alphaDegree<=180 && alphaDegree>=0)) {
-			return alphaDegree;
-		}else if(dir == "down" && ((alphaDegree>=180 && alphaDegree<360) || alphaDegree == 0)) {
-			return alphaDegree;
-		}else if(dir == "left" && (alphaDegree>=90 && alphaDegree<=270)) {
-			return alphaDegree;
-		}else if(dir == "right" && (alphaDegree>=270 || alphaDegree<=90)) {
-			return alphaDegree;
-		}
-		
-		return 361; //i choose 361, because it is not in the range [0; 360]
-	}
-	
-	/**
-	 * 
-	 * @param box
 	 * @param box1
 	 * @param startDegree
 	 * @param endDegree
@@ -149,8 +110,22 @@ public interface Functions {
 		double x = Math.abs(box1.getXcoordinate() - box.getXcoordinate());
 		double y = Math.abs(box1.getYcoordinate() - box.getYcoordinate());
 		double distance = Math.sqrt((x*x)+(y*y));
-		
 		return distance;
+		
+	}
+	
+	public default double calculateRayDistance(Box box, Box box1, Ray ray) {
+	   double tmin = Double.NEGATIVE_INFINITY;
+	   double tmax = Double.POSITIVE_INFINITY;
+		
+	   double tx1 = ((box.getXcoordinate()-0.5) - ray.originX()) / ray.directionX();
+	   double tx2 = ((box.getXcoordinate()+0.5) - ray.originX()) / ray.directionX();
+	   tmin = Math.max(tmin, Math.min(tx1, tx2));
+	   
+	   tx1 = ((box.getXcoordinate()-0.5) - ray.originY()) / ray.originY();
+	   tx2 = ((box.getXcoordinate()+0.5) - ray.originY()) / ray.originY();
+	   tmin = Math.max(tmin, Math.min(tx1, tx2));
+	   return Tools.lengthVector(ray.direction.mul(tmin));
 	}
 	
 	/**
@@ -182,7 +157,7 @@ public interface Functions {
 
         // Se tmax < 0, la collisione è alle spalle del raggio
         // Se tmin > tmax, non c'è intersezione
-        return tmax >= Math.min(0.0, tmin);
+        return tmax >= tmin && tmax >= 0;
 	}
 	
 	/**
@@ -201,21 +176,22 @@ public interface Functions {
 			for(int i=0; i<map.X; i++) {
 				for(int j=0; j<map.Y; j++) {
 					
-					if(rays[k].originX()!= i && rays[k].originY()!= j) {
+					if(rays[k].originX() == i && rays[k].originY() == j) {
 						
 						continue;
 					}
 					
 					if(checkCollision(map.getBox(i, j),rays[k])) {
+						System.out.println("raggio("+k+")"+"collisione con:"+map.getBox(i,j).getElementType());
 						
 						if(map.getBox(i, j).getElementType().equals(MapElem.WALL)) {
-							walls[k] = calculateDistance(map.getBox(i, j), map.getBox((int)rays[k].originX(), (int)rays[k].originY()));
+							walls[k] = calculateRayDistance(map.getBox(i, j), map.getBox((int)rays[k].originX(), (int)rays[k].originY()),rays[k]);
 						}
 						if(map.getBox(i, j).getElementType().equals(SnakeBody.BODY) || map.getBox(i, j).getElementType().equals(SnakeBody.TAIL)) {
-							snake[k] = calculateDistance(map.getBox(i, j), map.getBox((int)rays[k].originX(), (int)rays[k].originY()));
+							snake[k] = calculateRayDistance(map.getBox(i, j), map.getBox((int)rays[k].originX(), (int)rays[k].originY()),rays[k]);
 						}
 						if(map.getBox(i, j).getElementType().equals(Food.APPLE)) {
-							food[k] = calculateDistance(map.getBox(i, j), map.getBox((int)rays[k].originX(), (int)rays[k].originY()));
+							food[k] = calculateRayDistance(map.getBox(i, j), map.getBox((int)rays[k].originX(), (int)rays[k].originY()),rays[k]);
 						}
 						
 					}

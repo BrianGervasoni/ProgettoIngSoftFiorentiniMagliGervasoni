@@ -67,6 +67,10 @@ public class Intermediary implements Functions{
 					rays = rays(startingDegree, rephase, n, snakeHead.getXcoordinate(), snakeHead.getYcoordinate());
 					setValuesArrays(map, food, walls, snake, rays);
 					
+					for(Ray r: rays) {
+						System.out.println(r.direction.toString());
+					}
+					
 					
 		if(nNonDivisibilePer3 != 0) {
 			

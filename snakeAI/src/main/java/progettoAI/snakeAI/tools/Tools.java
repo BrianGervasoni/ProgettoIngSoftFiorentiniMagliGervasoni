@@ -10,6 +10,10 @@ import org.nd4j.linalg.factory.Nd4j;
 
 public final class Tools {
 	
+	public static double lengthVector(INDArray x) {
+		return Math.sqrt(Math.pow(x.getDouble(0),2)+Math.pow(x.getDouble(1),2));
+	}
+	
 	public static double pickRandom(double min,double max) {
 		Random rand = new Random();
 		return  (rand.nextDouble() * (max - min))+min;
