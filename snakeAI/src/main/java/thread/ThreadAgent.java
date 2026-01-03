@@ -89,28 +89,10 @@ public class ThreadAgent extends Thread implements Functions{
 		double diagonal = Math.sqrt((map.X*map.X) + (map.Y*map.Y));
 		double distance;
 		
-		for(int i=0; i<map.X; i++) {
-			for(int j=0; j<map.Y; j++) {
-				
-				if(map.getBox(i, j).equals(SnakeBody.HEAD)) {
-					
-					for(int k=0; k<map.X; k++) {
-						for(int h=0; h<map.Y; h++) {
-							
-							if(map.getBox(k, h).equals(Food.APPLE)) {
+		distance = this.calculateDistance(map.getSnake().getBodyPiece(0), map.getApple());
+		rewardDistanceApple = this.normalizeRewardDistanceHeadApple(distance, 0, diagonal); 
+		rewardDefault = rewardDefault + rewardDistanceApple;
 								
-								distance = this.calculateDistance(map.getBox(i, j), map.getBox(h, k));
-								rewardDistanceApple = this.normalizeRewardDistanceHeadApple(distance, 0, diagonal); 
-								rewardDefault = rewardDefault + rewardDistanceApple;
-								
-							}
-							
-						}
-					}
-					
-				}
-			}
-		}
 		
 		if(map.getAppleCollision()) {
 			rewardDefault = rewardDefault + rewardGetApple;

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import boxes.AppleBox;
 import boxes.Food;
+import boxes.MapElem;
 import boxes.SnakeBody;
 import boxes.SnakeBox;
 import gioco.snakeAI.Map;
@@ -27,7 +28,7 @@ class ThreadAgentTest {
 		//map.setBox(firstBodyPiece,3, 4);
 		//snake.addPiece(firstBodyPiece);
 		
-		snake.getBodyPiece(1).setXcoordinate(3);
+		snake.getBodyPiece(1).setXcoordinate(3); //TODO NON FUNZIONANO I SET
 		snake.getBodyPiece(1).setYcoordinate(4);
 		
 		//SnakeBox head = new SnakeBox(SnakeBody.HEAD, 4, 4);
@@ -43,8 +44,13 @@ class ThreadAgentTest {
 		//map.setBox(apple, 2, 5);	
 		double reward = tA.calculateReward(map);
 		
-		System.out.println(reward); //DI DEFAULT DA +4, IN QUESTO CASO NON HA NE IL +50 DI MANGIATO MELA E NE IL -50 DI ESSERE MORTO
+		System.out.println("REWARD : " + reward); //DI DEFAULT DA +4, IN QUESTO CASO NON HA NE IL +50 DI MANGIATO MELA E NE IL -50 DI ESSERE MORTO
 		//VIENE QUINDI SOLO AGGIUNTO IL +variable CHE INDICA QUANTO è DISTANTE DALLA MELA NORMALIZZATO IN UN RANGE TRA (-5 E 5)
+		System.out.println(); 
+		for(int i=0; i<map.X; i++) {
+			for(int j=0; j<map.X; j++) {
+				System.out.println(map.getBox(j, i).getElementType() + " " + i + " " + j);
+			}
+		}
 	}
-
 }
