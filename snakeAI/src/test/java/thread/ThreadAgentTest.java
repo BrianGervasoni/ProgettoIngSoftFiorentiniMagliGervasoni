@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import boxes.AppleBox;
+import boxes.EmptyBox;
 import boxes.Food;
 import boxes.MapElem;
 import boxes.SnakeBody;
@@ -36,9 +37,15 @@ class ThreadAgentTest {
 		//snake.setHead(head);
 		snake.getBodyPiece(0).setXcoordinate(4);
 		snake.getBodyPiece(0).setYcoordinate(4);
-		
+		map.setSnake(snake);
 		map.resetSnakeBoxes();
 		map.insertSnakeBoxes();
+		
+		map.allPlaceApples().forEach(e->{
+			map.setBox(new EmptyBox(MapElem.EMPTY, e.getXcoordinate(), e.getYcoordinate()), e.getXcoordinate(), e.getYcoordinate());
+		});
+		
+		map.forceSetApple(2, 5);
 		
 		//AppleBox apple = new AppleBox(Food.APPLE, 2, 5);
 		//map.setBox(apple, 2, 5);	
