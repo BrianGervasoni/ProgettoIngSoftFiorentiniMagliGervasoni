@@ -1,5 +1,7 @@
 package thread;
 
+import java.util.stream.DoubleStream;
+
 import boxes.*;
 import gioco.snakeAI.Map;
 
@@ -93,7 +95,7 @@ public interface Functions {
 				
 		if(dir == "up" && (alphaDegree<=180 && alphaDegree>=0)) {
 			return alphaDegree;
-		}else if(dir == "down" && (alphaDegree>=180 && alphaDegree<360)) {
+		}else if(dir == "down" && ((alphaDegree>=180 && alphaDegree<360) || alphaDegree == 0)) {
 			return alphaDegree;
 		}else if(dir == "left" && (alphaDegree>=90 && alphaDegree<=270)) {
 			return alphaDegree;
@@ -230,9 +232,13 @@ public interface Functions {
 				
 				int ray = calculateRay(map.getBox(k, h), snakeHead, dir, rephase);
 				
+				//System.out.println("ricalcolo ray : " + ray + " e tipo box che paragono : " + map.getBox(k, h).getElementType());
+				
 				if(ray != 361) {
 					
 					double distance = calculateDistance(map.getBox(k, h), snakeHead);
+					//System.out.println("valore distance " + distance);
+					
 					distanceAssignedToRay(map.getBox(k, h), distance, food, walls, snake, rays, ray);
 					
 				}
@@ -251,33 +257,12 @@ public interface Functions {
 	 */
 	public default double[] mergeArrays(double[] a1, double[] a2, double[] a3) {
 		
-		double[] array = inizializeArray(a1.length + a2.length + a3.length);
-		int index = 0;
-		
-		System.arraycopy(a1, 0, array, index, a1.length);
-		index = index + a1.length;
-		
-		System.arraycopy(a2, 0, array, index, a2.length);
-		index = index + a2.length;
-		
-		System.arraycopy(a3, 0, array, index, a3.length);
-		index = index + a3.length;
-		
-		return array;
+		return DoubleStream.concat(DoubleStream.concat(DoubleStream.of(a1), DoubleStream.of(a2)), DoubleStream.of(a3)).toArray();
 	}
 	
 	public default double[] merge(double[] a1, double[] a2) {
 		
-		double[] array = inizializeArray(a1.length + a2.length);
-		int index = 0;
-		
-		System.arraycopy(a1, 0, array, index, a1.length);
-		index = index + a1.length;
-		
-		System.arraycopy(a2, 0, array, index, a2.length);
-		index = index + a2.length;
-		
-		return array;
+		return DoubleStream.concat(DoubleStream.of(a1), DoubleStream.of(a2)).toArray();
 	}
 	
 	/**
