@@ -88,10 +88,10 @@ public class Map {
 	}
 	/**
 	 * metodo per la vittoria
-	 * @return
+	 * @return vero se non ci sono caselle vuote o con mele
 	 */
 	public boolean checkVictory() {
-		if(allEmptyBoxes().isEmpty()){
+		if(allEmptyBoxes().isEmpty() && allPlaceApples().isEmpty()){
 			return true;
 		}
 		return false;
@@ -156,6 +156,24 @@ public class Map {
 			for(int j = 0; j < Y-1; j++) {
 				if(checkValidCoordinates(i, j)) {
 					ar.add((EmptyBox)box[i][j]);
+				}
+				
+			}
+		}
+		
+		return ar;
+	}
+	
+	/**
+	 * metodo che ritorna la lista contenente tutte le caselle con mele nella mappa
+	 * @return
+	 */
+	public ArrayList<AppleBox> allPlaceApples(){
+		ArrayList<AppleBox> ar = new ArrayList<AppleBox>();
+		for(int i = 0; i < X-1; i++) {
+			for(int j = 0; j < Y-1; j++) {
+				if(box[i][j].equals(Food.APPLE)) {
+					ar.add((AppleBox)box[i][j]);
 				}
 				
 			}
