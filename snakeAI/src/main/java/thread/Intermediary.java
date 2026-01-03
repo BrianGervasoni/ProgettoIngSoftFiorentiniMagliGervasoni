@@ -38,10 +38,8 @@ public class Intermediary implements Functions{
 		
 		System.out.println("n : " + n + " rephase : " + rephase + " nnondivisibile3 : " + nNonDivisibilePer3 + " delta : " + delta);
 		
-		String dir;
-		int[] rays;
+		Ray[] rays;
 		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n), arrayMerged = inizializeArray(n*3), result = inizializeArray(n*3 +  delta);
-	
 					
 					SnakeBox snakeHead = map.getSnake().getBodyPiece(0);
 					
@@ -50,49 +48,26 @@ public class Intermediary implements Functions{
 					//i calculate the direction of the snake
 					if(snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() < 0) {
 						//head left and body right
-						dir = "left";
 						startingDegree = 90;
-						rays = rays(startingDegree, rephase, n);
-						
-						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
-						
 						
 					} else if(snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() > 0) {
 						//head right and body left
-						dir = "right";
-						
-						System.out.println(dir);
-						
 						startingDegree = -90;
-						rays = rays(startingDegree, rephase, n);
-						
-						System.out.println();
-						for(int l = 0; l<rays.length; l++) {
-							System.out.println("raggio numero " + l + " = " + rays[l]);
-						}
-						System.out.println();
-						
-						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
 					} else if(snakeHead.getXcoordinate()- snakeFirstBodyBox.getXcoordinate() > 0) {
 						//head down and body up
-						dir = "down";
 						startingDegree = 180;
-						rays = rays(startingDegree, rephase, n);
-						
-						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
 					} else {
 						//head up and body down
-						dir = "up";
 						startingDegree = 0;
-						rays = rays(startingDegree, rephase, n);
-						
-						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
 					}
-				
-		
+					
+					rays = rays(startingDegree, rephase, n, snakeHead.getXcoordinate(), snakeHead.getYcoordinate());
+					setValuesArrays(map, food, walls, snake, rays);
+					
+					
 		if(nNonDivisibilePer3 != 0) {
 			
 			arrayMerged = mergeArrays(food, walls, snake);
@@ -109,6 +84,10 @@ public class Intermediary implements Functions{
 			result = mergeArrays(food, walls, snake);
 			
 		}
+		
+		for(int i=0; i<walls.length; i++) {
+			System.out.println("wall :"+ i + " valore " + walls[i]);
+			}
 		
 		return normalizeArray(result,map);
 		

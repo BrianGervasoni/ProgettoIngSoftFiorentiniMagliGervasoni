@@ -16,7 +16,7 @@ class IntermediaryTest {
 	SnakeBox head= new SnakeBox(SnakeBody.HEAD,0,0);
 	String dir;
 	
-	
+	/*
 	//VERIFICATO in caso alpha appartiene a [0; 360]
 	@Test
 	void rays1() {
@@ -63,11 +63,7 @@ class IntermediaryTest {
 		assertEquals(angleTest, angle);
 	}
 	
-	/**
-	 * COSI  PER ES. CON VISTA DA [0; 180] HO OGGETTO A (4, 5) E QUINDI ANGOLO 
-	 * CON ARCTAN(4/5)) HO UN ANGOLO DI TIPO 38.65980825
-	 * DIVIDO PER 3 E OTTENGO 12.88660275 E ARROTONDO PER AVERE 13, RIMOLTIPLICANDO *3 HO IL RAGGIO CHE SAREBBE 39!	
-	 */
+	
 	@Test
 	void calculateRay() {
 		
@@ -160,6 +156,7 @@ Map map = new Map();
 		
 		assertArrayEquals(array, arrayTest);
 	}
+	*/
 	
 	@Test
 	void mapConversion() {

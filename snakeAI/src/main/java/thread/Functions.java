@@ -2,6 +2,9 @@ package thread;
 
 import java.util.stream.DoubleStream;
 
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
+
 import boxes.*;
 import gioco.snakeAI.Map;
 
@@ -23,48 +26,74 @@ public interface Functions {
 		return array;
 	}
 	
-	/**
-	 * 
-	 * @param snakeHead
-	 * @param snakeFirstBodyBox
-	 * @param startingDegree
-	 * @param rePhasing = 3 , every straight line is rephrase for a value of 3 degree
-	 * @param n = 61 , number of straight lines
-	 * 
-	 * @return angle of the various 61 rays that represent the view of the head of the snake
-	 */
-	public default int[] rays(int startingDegree, int rePhasing, int n) {
+	class Ray {
 		
-		int[] rays = new int[n]; //m of the i-th straight line i = 1...n
+		INDArray direction, origin; //indice 0 per le x, indice 1 per le y
+
+		public Ray(INDArray origin, INDArray direction) {
+	        this.origin = origin;
+	        this.direction = direction;
+	    }
+		
+		public double originX() {
+			return this.origin.getDouble(0);
+		}
+		
+		public double originY() {
+			return this.origin.getDouble(1);
+		}
+		
+		public double directionX() {
+			return this.direction.getDouble(0);
+		}
+		
+		public double directionY() {
+			return this.direction.getDouble(1);
+		}
+	    
+	}
+	
+	public default INDArray degreesToVector(double degrees) {
+	    // Converte in radianti
+	    double radians = Math.toRadians(degrees);
+
+	    // Calcola le componenti (assumendo 0 gradi = Est, senso antiorario)
+	    double x = Math.cos(radians);
+	    double y = Math.sin(radians);
+
+	    return Nd4j.create(new double[] {x,y});
+	}
+	
+	public default Ray[] rays(int startingDegree, int rePhasing, int n, int x, int y) {
+		
+		int[] angles = new int[n]; 
+		Ray[] rays = new Ray[n];
 		int alpha = startingDegree;
 		int rePhase = 0;
 		
 		for(int i=0; i<n; i++) {
 			
-			//System.out.println("rephase : " + rePhase); TODO TEST COMMENTATI
-			//System.out.println("rephasing : " + rePhasing);
-			
 			alpha = startingDegree + rePhase;
 			
 			if(alpha < 0) { //when the snake it's in the range >270 and <90 i've used the convention [-180; 180] so i have to switch back to [0; 360]
 				//System.out.println("alpha : " + alpha);
-				rays[i] = alpha + 360;
+				angles[i] = alpha + 360;
 				//System.out.println("ray : " + rays[i]);
 			}else {
-				rays[i] = alpha;
+				angles[i] = alpha;
 				//System.out.println("ray AHHH: " + rays[i]);
 			}
 			
 			rePhase = rePhase + rePhasing; 
+			
 		}
 		
-		for(int i = 0; i<rays.length; i++) {
-			int k = i+1;
-			//System.out.println("ray " + i + " " + rays[i]);
+		for(int i=0; i<n; i++) {
+			rays[i] = new Ray(Nd4j.create(new double[] {x,y}), degreesToVector(angles[i]));
 		}
 		
 		return rays;
-		
+			
 	}
 	
 	/**
@@ -81,6 +110,7 @@ public interface Functions {
 		
 		int deltaX = box.getXcoordinate() - snakeHead.getXcoordinate();
 		int deltaY = box.getYcoordinate() - snakeHead.getYcoordinate();
+		
 				
 		//the angle between the head and the object, it's in radiant and it is in the range [- pi; +pi]
 		double alpha = Math.atan2(deltaX, deltaY); //TODO FINTO PER ATTIRARE ATTENZIONE!!!!!!!!!!!!!!!!!
@@ -125,124 +155,72 @@ public interface Functions {
 	
 	/**
 	 * 
-	 * @param rays (61 rays for food, 61 rays for walls or 61 rays for snake's body)
-	 * @param boxtype (food, walls or snake)
-	 * @param map
-	 * @param snakeFirstBodyBox
 	 * @param box
-	 * @param snakeHead
-	 * @param dir
-	 * @param rephase = 3 degree
-	 */
-	public default int calculateRay(Box box, SnakeBox snakeHead, String dir, int rephase) {
-		
-		int closest, ray;
-		
-		if(box.getXcoordinate() != snakeHead.getXcoordinate() && box.getYcoordinate() != snakeHead.getYcoordinate()) {
-			
-			double alpha = calculateAngle(box, snakeHead, dir);
-			
-			if (alpha != 361) {
-				
-				closest = (int) Math.round(alpha / rephase); 
-				ray = closest * rephase;
-				return ray;
-			}
-		}
-		
-		return 361;
-	}
-	
-	/**
-	 * 
-	 * @param rays
 	 * @param ray
-	 * @return the index of the ray from the 61 rays (of food or walls or snake)
+	 * @return
 	 */
-	public default int foundRayPosition(int[] rays, int ray) {
+	public default boolean checkCollision(Box box, Ray ray) {
 		
-		for(int i=0; i<rays.length; i++) {
-			
-			if(rays[i] == ray) {
-				return i;
-			}
-			
-		}
-		
-		return -1;
-	}
-	
-	/**
-	 * 
-	 * @param box
-	 * @param distance
-	 * @param food
-	 * @param walls
-	 * @param snake
-	 * @param indexFood
-	 * @param indexWall
-	 * @param indexSnake
-	 * @return to every distance calculate between the object and the head of the snake we assign a ray
-	 */
-	public default void distanceAssignedToRay(Box box,  double distance, double[] food, double[] walls, double[] snake, int[] rays, int ray) {
-		
-		int index = foundRayPosition(rays, ray);
-		
-		//System.out.println("index : "+ index + " ray :" + ray);
-		
-		if(box.getElementType() == Food.APPLE) {
-			
-			if(index!=-1) {
-				food[index] = distance;
-				//System.out.println("HELOOOOOOOOO " + index); TODO TEST COMMENTATI
-			}
-			
-		}else if(box.getElementType() == MapElem.WALL) {
-			
-			if(index!=-1) {
-				walls[index] = distance;
-			}
-			
-		}else if(box.getElementType() == SnakeBody.BODY || box.getElementType() == SnakeBody.TAIL) {
-			
-			if(index!=-1) {
-				snake[index] = distance;
-			}
-		}
+		 double tmin = Double.NEGATIVE_INFINITY;
+	     double tmax = Double.POSITIVE_INFINITY;
+	        
+		// Controllo per l'asse X
+        if (ray.directionX() != 0.0) {
+            double tx1 = ((box.getXcoordinate()-0.5) - ray.originX()) / ray.directionX();
+            double tx2 = ((box.getXcoordinate()+0.5) - ray.originX()) / ray.directionX();
+            tmin = Math.max(tmin, Math.min(tx1, tx2));
+            tmax = Math.min(tmax, Math.max(tx1, tx2));
+        }
+
+        // Controllo per l'asse Y
+        if (ray.directionY() != 0.0) {
+            double tx1 = ((box.getXcoordinate()-0.5) - ray.originY()) / ray.originY();
+            double tx2 = ((box.getXcoordinate()+0.5) - ray.originY()) / ray.originY();
+            tmin = Math.max(tmin, Math.min(tx1, tx2));
+            tmax = Math.min(tmax, Math.max(tx1, tx2));
+        }
+
+        // Se tmax < 0, la collisione è alle spalle del raggio
+        // Se tmin > tmax, non c'è intersezione
+        return tmax >= Math.min(0.0, tmin);
 	}
 	
 	/**
 	 * 
 	 * @param map
-	 * @param snakeHead
-	 * @param dir
-	 * @param rephase
-	 * @param distance
 	 * @param food
 	 * @param walls
 	 * @param snake
 	 * @param rays
-	 * @param ray
-	 * @return change the value on the array of rays (food, walls and snake) and set the array[index] = distance , for every ray that is involved
+	 * change the value on the array of rays (food, walls and snake) and set the array[index] = distance , for every ray that is involved
 	 */
-	public default void setValuesArrays(Map map, SnakeBox snakeHead, String dir, int rephase, double[] food, double[] walls, double[] snake, int[] rays) {
+	public default void setValuesArrays(Map map, double[] food, double[] walls, double[] snake, Ray[] rays) {
 		
-		for(int k=0; k<map.X; k++) {
-			for(int h=0; h<map.Y; h++) {
-				
-				int ray = calculateRay(map.getBox(k, h), snakeHead, dir, rephase);
-				
-				//System.out.println("ricalcolo ray : " + ray + " e tipo box che paragono : " + map.getBox(k, h).getElementType());
-				
-				if(ray != 361) {
+		for(int k = 0; k < rays.length; k++) {
+			
+			for(int i=0; i<map.X; i++) {
+				for(int j=0; j<map.Y; j++) {
 					
-					double distance = calculateDistance(map.getBox(k, h), snakeHead);
-					//System.out.println("valore distance " + distance);
+					if(rays[k].originX()!= i && rays[k].originY()!= j) {
+						
+						continue;
+					}
 					
-					distanceAssignedToRay(map.getBox(k, h), distance, food, walls, snake, rays, ray);
+					if(checkCollision(map.getBox(i, j),rays[k])) {
+						
+						if(map.getBox(i, j).getElementType().equals(MapElem.WALL)) {
+							walls[k] = calculateDistance(map.getBox(i, j), map.getBox((int)rays[k].originX(), (int)rays[k].originY()));
+						}
+						if(map.getBox(i, j).getElementType().equals(SnakeBody.BODY) || map.getBox(i, j).getElementType().equals(SnakeBody.TAIL)) {
+							snake[k] = calculateDistance(map.getBox(i, j), map.getBox((int)rays[k].originX(), (int)rays[k].originY()));
+						}
+						if(map.getBox(i, j).getElementType().equals(Food.APPLE)) {
+							food[k] = calculateDistance(map.getBox(i, j), map.getBox((int)rays[k].originX(), (int)rays[k].originY()));
+						}
+						
+					}
 					
 				}
-				
 			}
 		}
 		
