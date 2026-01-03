@@ -8,7 +8,7 @@ import boxes.*;
 public class Snake {
 	
 	//parti del corpo del serpente
-	private List<SnakeBox> body;
+	private ArrayList<SnakeBox> body;
 	
 	/**
 	 * costruttore della classe Snake
