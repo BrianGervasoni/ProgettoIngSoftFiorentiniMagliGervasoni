@@ -36,12 +36,12 @@ public interface Functions {
 	        this.direction = direction;
 	    }
 		
-		public double originX() {
-			return this.origin.getDouble(0);
+		public int originX() {
+			return (int) this.origin.getDouble(0);
 		}
 		
-		public double originY() {
-			return this.origin.getDouble(1);
+		public int originY() {
+			return (int) this.origin.getDouble(1);
 		}
 		
 		public double directionX() {
@@ -114,18 +114,42 @@ public interface Functions {
 		
 	}
 	
-	public default double calculateRayDistance(Box box, Box box1, Ray ray) {
-	   double tmin = Double.NEGATIVE_INFINITY;
-	   double tmax = Double.POSITIVE_INFINITY;
-		
-	   double tx1 = ((box.getXcoordinate()-0.5) - ray.originX()) / ray.directionX();
-	   double tx2 = ((box.getXcoordinate()+0.5) - ray.originX()) / ray.directionX();
-	   tmin = Math.max(tmin, Math.min(tx1, tx2));
-	   
-	   tx1 = ((box.getXcoordinate()-0.5) - ray.originY()) / ray.originY();
-	   tx2 = ((box.getXcoordinate()+0.5) - ray.originY()) / ray.originY();
-	   tmin = Math.max(tmin, Math.min(tx1, tx2));
-	   return Tools.lengthVector(ray.direction.mul(tmin));
+	public default double calculateRayDistance(Box box, Ray ray) {
+		double[] min =new double[] {box.getXcoordinate() - 0.5, box.getYcoordinate() - 0.5};
+        double[] max = new double[] {box.getXcoordinate() + 0.5, box.getYcoordinate() + 0.5};
+        double[] direction = new double[] {ray.directionX(), ray.directionY()};
+        double[] origin = new double[] {ray.originX(), ray.originY()};
+        double tNear = Double.NEGATIVE_INFINITY;
+        double tFar = Double.POSITIVE_INFINITY;
+
+        for (int i = 0; i < 2; i++) {
+            if (direction[i] != 0.0) {
+                double t1 = (min[i] - origin[i]) / direction[i];
+                double t2 = (max[i] - origin[i]) / direction[i];
+
+                // t1 deve essere l'entrata e t2 l'uscita su questo asse
+                double tEntry = Math.min(t1, t2);
+                double tExit = Math.max(t1, t2);
+
+                // Restringiamo l'intervallo globale
+                tNear = Math.max(tNear, tEntry);
+                tFar = Math.min(tFar, tExit);
+            } else {
+                // Se il raggio è parallelo e fuori dai limiti dell'asse, nessuna collisione
+                if (origin[i] < min[i] || origin[i] > max[i]) return -1;
+            }
+        }
+
+        // CONDIZIONI CRITICHE:
+        // 1. tFar >= tNear: Il raggio attraversa effettivamente la box
+        // 2. tFar > 0: La box non deve essere completamente dietro il raggio
+        // 3. tNear > 0: Il punto di entrata deve essere davanti (questo rimuove le collisioni che coincidono con l'origine)
+        
+        if( tFar >= tNear && tFar > 0 && tNear > 0 ) {
+        	return Math.abs(tFar);
+        }else{
+        	return -1;
+        }
 	}
 	
 	/**
@@ -136,28 +160,11 @@ public interface Functions {
 	 */
 	public default boolean checkCollision(Box box, Ray ray) {
 		
-		 double tmin = Double.NEGATIVE_INFINITY;
-	     double tmax = Double.POSITIVE_INFINITY;
-	        
-		// Controllo per l'asse X
-        if (ray.directionX() != 0.0) {
-            double tx1 = ((box.getXcoordinate()-0.5) - ray.originX()) / ray.directionX();
-            double tx2 = ((box.getXcoordinate()+0.5) - ray.originX()) / ray.directionX();
-            tmin = Math.max(tmin, Math.min(tx1, tx2));
-            tmax = Math.min(tmax, Math.max(tx1, tx2));
+        if(calculateRayDistance(box,ray) != -1) {
+        	return true;
+        }else {
+        	return false;
         }
-
-        // Controllo per l'asse Y
-        if (ray.directionY() != 0.0) {
-            double tx1 = ((box.getXcoordinate()-0.5) - ray.originY()) / ray.originY();
-            double tx2 = ((box.getXcoordinate()+0.5) - ray.originY()) / ray.originY();
-            tmin = Math.max(tmin, Math.min(tx1, tx2));
-            tmax = Math.min(tmax, Math.max(tx1, tx2));
-        }
-
-        // Se tmax < 0, la collisione è alle spalle del raggio
-        // Se tmin > tmax, non c'è intersezione
-        return tmax >= tmin && tmax >= 0;
 	}
 	
 	/**
@@ -172,26 +179,21 @@ public interface Functions {
 	public default void setValuesArrays(Map map, double[] food, double[] walls, double[] snake, Ray[] rays) {
 		
 		for(int k = 0; k < rays.length; k++) {
-			
+			System.out.println("origin a:"+rays[k].originX()+","+rays[k].originY()+")");
 			for(int i=0; i<map.X; i++) {
 				for(int j=0; j<map.Y; j++) {
 					
-					if(rays[k].originX() == i && rays[k].originY() == j) {
-						
-						continue;
-					}
-					
 					if(checkCollision(map.getBox(i, j),rays[k])) {
-						System.out.println("raggio("+k+")"+"collisione con:"+map.getBox(i,j).getElementType());
+						System.out.println("raggio("+k+")"+"collisione con:"+map.getBox(i,j).getElementType()+" a coordinate("+i+","+j+")");
 						
 						if(map.getBox(i, j).getElementType().equals(MapElem.WALL)) {
-							walls[k] = calculateRayDistance(map.getBox(i, j), map.getBox((int)rays[k].originX(), (int)rays[k].originY()),rays[k]);
+							walls[k] = calculateRayDistance(map.getBox(i, j),rays[k]);
 						}
 						if(map.getBox(i, j).getElementType().equals(SnakeBody.BODY) || map.getBox(i, j).getElementType().equals(SnakeBody.TAIL)) {
-							snake[k] = calculateRayDistance(map.getBox(i, j), map.getBox((int)rays[k].originX(), (int)rays[k].originY()),rays[k]);
+							snake[k] = calculateRayDistance(map.getBox(i, j),rays[k]);
 						}
 						if(map.getBox(i, j).getElementType().equals(Food.APPLE)) {
-							food[k] = calculateRayDistance(map.getBox(i, j), map.getBox((int)rays[k].originX(), (int)rays[k].originY()),rays[k]);
+							food[k] = calculateRayDistance(map.getBox(i, j),rays[k]);
 						}
 						
 					}
