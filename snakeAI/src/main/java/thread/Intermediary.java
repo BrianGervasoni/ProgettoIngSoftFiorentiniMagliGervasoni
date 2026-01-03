@@ -22,7 +22,7 @@ public class Intermediary implements Functions{
 	 * @param map
 	 * @return normalization of the distance of the snake's head and the elements
 	 */
-	public double[] mapConversion(Map map, int inputLenght) { //TODO TESTARE
+	public double[] mapConversion(Map map, int inputLenght) { 
 		//outputLenght it's given by threadAgent.getModel.getAiActor.getLenght (it's the length of the array output 61 *3 ))
 		int startingDegree, rephase, n, nNonDivisibilePer3 = 0, delta = 0;	
 		if(inputLenght%3 != 0) {
@@ -41,13 +41,9 @@ public class Intermediary implements Functions{
 		String dir;
 		int[] rays;
 		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n), arrayMerged = inizializeArray(n*3), result = inizializeArray(n*3 +  delta);
-		
-		for(int i=0; i<map.X; i++) { //i get the length of the rows
-			for(int j=0; j<map.Y; j++) { //i get the length of the columns
-				
-				if((map.getBox(i, j).equals(SnakeBody.HEAD))) {
+	
 					
-					SnakeBox snakeHead = (SnakeBox) map.getBox(i, j);
+					SnakeBox snakeHead = map.getSnake().getBodyPiece(0);
 					
 					SnakeBox snakeFirstBodyBox = map.getSnake().getBodyPiece(1);
 					
@@ -95,9 +91,7 @@ public class Intermediary implements Functions{
 						setValuesArrays(map, snakeHead, dir, rephase, food, walls, snake, rays);
 						
 					}
-				}
-			}
-		}
+				
 		
 		if(nNonDivisibilePer3 != 0) {
 			
