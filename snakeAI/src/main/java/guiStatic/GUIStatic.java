@@ -499,8 +499,4 @@ public class GUIStatic {
 	}
 	
 	
-	
-	
-	
-	
 }

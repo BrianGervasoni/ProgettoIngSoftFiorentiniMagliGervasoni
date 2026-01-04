@@ -114,6 +114,7 @@ public class UserInterface {
 	
 	
 	public void renderRightState() {
+		
 		if(modeIndicator == 0) 
 			GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 		else if(modeIndicator == 1) 
