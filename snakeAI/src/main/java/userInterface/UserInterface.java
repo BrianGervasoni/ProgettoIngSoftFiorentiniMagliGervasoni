@@ -172,7 +172,7 @@ public class UserInterface {
 	
 	public void trainWithoutMap() {
 		modeIndicator = 1;
-		controller.startTraining();
+		controller.startTraining(threadNumber);
 		GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
 	}
 	
@@ -207,7 +207,6 @@ public class UserInterface {
 
 	public void setThreadNumber(int th) {
 		threadNumber = th;
-		controller.setThreadNumber(threadNumber);
 	}
 	
 }

@@ -13,44 +13,44 @@ public class Controller {
 	private Disposable snakeObserver;
 	private Disposable lossObserver;
 	
-	public Controller(ThreadAIManager newTam, UserInterface newUi) {
+	
+	public Controller(UserInterface newUi) {
 		
-		ai = newTam;
 		view = newUi;
 		snakeObserver = null;
 		lossObserver = null;
-		
 	}
 	
 	
-	public void startTraining() {
+	public void startTraining(int threadNumber) {
 		
+		ai = new ThreadAIManager(threadNumber, 1);
 		ai.startTraining();
 		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
 		lossObserver = ai.getObserverFromModel().subscribe(this::gestioneStreamLoss);
-		
 	}
 
+	
 	public void startExecution() {
 		
+		ai = new ThreadAIManager(1, 1);
 		ai.startExecution();
 		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
-		
 	}
+	
 	
 	public void terminateTraining() {
 		
 		ai.terminateTraining();
 		snakeObserver.dispose();		
 		lossObserver.dispose();
-		
 	}
+	
 	
 	public void terminateExecution() {
 		
 		ai.terminateExecution();
 		snakeObserver.dispose();		
-		
 	}
 
 	
@@ -58,27 +58,25 @@ public class Controller {
 		
 		ai.terminateExecution();
 		ai.startTraining();
-		
 	}
+	
 	
 	public void toggleFromTrainToExec() {
 		
 		ai.terminateTraining();
 		ai.startExecution();
-		
 	}
 	
 
 	public void exit() {
 	
-		if(snakeObserver != null) {
+		if(snakeObserver != null)
 			snakeObserver.dispose();
 			
-		}
 		
-		if(lossObserver != null) {
+		if(lossObserver != null)
 			lossObserver.dispose();
-		}
+		
 		
 	}
 	
@@ -89,44 +87,38 @@ public class Controller {
 	 * 
 	 */
 	public void gestioneStreamMap(Map map){
-		this.view.viewMap(map);
 		
+		this.view.viewMap(map);
 	}
 	
 	
 	public void gestioneStreamLoss(double[] array) {
-		this.view.setLossAgent(array[0]);
 		
+		this.view.setLossAgent(array[0]);
 	}
 	
 	
 	
 	public void nextMap() {
-		snakeObserver.dispose();		
 		
+		snakeObserver.dispose();		
 		ai.selectNextMap();
 		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
-		
 	}
+	
 	
 	public void previousMap() {
-		snakeObserver.dispose();
 		
+		snakeObserver.dispose();
 		ai.selectPreviousMap();
 		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
-		
 	}
 	
+	
 	public Map getMap() {
+		
 		return ai.selectMap();
-	}
-
-
-	public void setThreadNumber(int threadNumber) {
-		ai.setThreadNumber(threadNumber);
 	}
 
 	
 }
-
-
