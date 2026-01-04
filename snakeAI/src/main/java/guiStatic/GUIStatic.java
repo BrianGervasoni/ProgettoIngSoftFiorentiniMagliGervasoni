@@ -38,7 +38,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				insertHyperParameters();
+				GUIStatic.insertHyperParameters(jf, ui);
 			}});	
 		
 		
@@ -47,7 +47,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				insertDirFileModel();
+				GUIStatic.insertDirFileModel();
 			}});	
 		
 		
@@ -56,9 +56,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ui.setModeIndicator(0);
-				ui.startExecutionPhase();
-				//ui.controller.startExecution();
+				ui.execution();
 			}});	
 		
 		
@@ -70,9 +68,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ui.startTrainingPhaseWithoutMap();
-				//controller.startTraining();
-				ui.setModeIndicator(1);
+				ui.trainWithoutMap();
 			}});	
 		
 		
@@ -83,7 +79,6 @@ public class GUIStatic {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				ui.exit();
-				//exit();
 			}});	
 	
 		menuPanel.add(modifyHyperParam);
@@ -94,9 +89,7 @@ public class GUIStatic {
 		
 		
 		menuPanel.setLayout(new GridLayout(5, 1, 10, 10));
-		
 		jf.add(menuPanel);
-		
 		jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		jf.pack();		
 		jf.setSize(640,480);
@@ -105,6 +98,15 @@ public class GUIStatic {
 	
 	
 	
+	public static void insertDirFileModel() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+
 	public static void printTrainNoMap(JFrame myFrame, JLabel lossAgent, JLabel lossModel, UserInterface ui) {
 		
 		GUIStatic.resetFrame(myFrame);
@@ -119,8 +121,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ui.setModeIndicator(2);
-				ui.startTrainingPhaseWithMap();
+				ui.trainWithMap();
 			}});
 		
 		
@@ -129,9 +130,8 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//controller.terminateTraining();
-				ui.setModeIndicator(-1);
-				ui.stopTrainingPhase();
+
+				ui.stopTraining();
 			}});
 		
 		
@@ -140,8 +140,8 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ui.setModeIndicator(0);
-				//toggleFromTrainToExec();
+
+				ui.toggleFromTrainToExec();
 			}});
 		
 		
@@ -180,9 +180,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-		//		ui.startTrainingPhaseWithoutMap();
-				ui.setModeIndicator(1);
-				
+				ui.hideMap();
 			}});
 		
 		
@@ -191,9 +189,8 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-			//	controller.terminateTraining();
-				ui.setModeIndicator(-1);
-				ui.stopTrainingPhase();
+
+				ui.stopTraining();
 			}});
 
 		
@@ -202,7 +199,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//controller.nextMap();
+				ui.nextMap();
 				
 			}});
 		
@@ -212,7 +209,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//controller.previousMap();
+				ui.previousMap();
 				
 			}});
 		
@@ -222,7 +219,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ui.setModeIndicator(0);
+				ui.toggleFromTrainToExec();
 			}});
 		
 		
@@ -262,8 +259,9 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-//				controller.terminateExecution();
-				setModeIndicator(-1);
+
+				ui.stopExecution();
+
 			}});
 		
 		JButton buttonToggle = new JButton("Toggle Exec => Train");
@@ -271,9 +269,10 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ui.setModeIndicator(1);
-//				toggleFromExecToTrain();
+
+				ui.toggleFromExecToTrain();
 			}});
+		
 		
 		exec.add(renderedMap);
 		exec.add(lossAgent);

@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 import controller.Controller;
 import gioco.snakeAI.Map;
+import guiStatic.GUIStatic;
 import io.reactivex.rxjava3.core.Observable;
 
 public class UserInterface {
@@ -56,7 +57,8 @@ public class UserInterface {
 	
 	
 	public void hideMap() {
-		startTrainingPhaseWithoutMap();
+		modeIndicator = 1;
+		GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
 	}
 	
 	public int getMatchDuration() {
@@ -177,13 +179,10 @@ public class UserInterface {
 	 */
 	
 	
-	public void stopTrainingPhase() {
-		this.startingMenu();
-	}
-	
-	
-	public void stopExecutionPhase() {
-		this.startingMenu();
+	public void stopExecution() {
+		modeIndicator = -1;
+		controller.terminateExecution();
+		GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 	}
 	
 	public void insertDirFileModel() {
@@ -250,15 +249,58 @@ public class UserInterface {
 	
 	
 	public void toggleFromExecToTrain() {
-		startTrainingPhaseWithoutMap();
+		modeIndicator = 1;
 		controller.toggleFromExecToTrain();
+		GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
 	}
+	
+	
 	
 	public void toggleFromTrainToExec() {
-		startExecutionPhase();
+		
+		modeIndicator = 0;
 		controller.toggleFromTrainToExec();
+		GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 	}
 	
 	
+	
+	public void mainMenu() {
+		modeIndicator = -1;
+		GUIStatic.printMenu(myFrame, this);
+	}
+	
+	public void execution() {
+		modeIndicator = 0;
+		controller.startExecution();
+		GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
+	}
+	
+	public void trainWithoutMap() {
+		modeIndicator = 1;
+		controller.startTraining();
+		GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
+	}
+	
+	public void trainWithMap() {
+		modeIndicator = 2;
+		GUIStatic.printTrainWithMap(myFrame, lossAgent, lossModel, renderedMap, this);
+	}
+
+
+
+	public void stopTraining() {
+		modeIndicator = -1;
+		controller.terminateTraining();
+		GUIStatic.printMenu(myFrame, this);
+	}
+	
+	public void nextMap(){
+		controller.nextMap();
+	}
+	
+	public void previousMap() {
+		controller.previousMap();
+	}
 	
 }
