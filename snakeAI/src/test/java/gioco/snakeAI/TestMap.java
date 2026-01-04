@@ -23,11 +23,12 @@ class TestMap {
 		mm.getSnake().getBodyPiece(0).setXcoordinate(5);
 		mm.getSnake().getBodyPiece(0).setYcoordinate(5);
 		
-		mm.setBox(mm.getSnake().getBodyPiece(0), 5, 5);
 		mm.getSnake().getBodyPiece(1).setXcoordinate(4);
 		mm.getSnake().getBodyPiece(1).setYcoordinate(5);
-		mm.setBox(mm.getSnake().getBodyPiece(1), 4, 5);
 
+		mm.resetSnakeBoxes();
+		mm.insertSnakeBoxes();
+		
 		Boolean valid = mm.forceSetApple(10, 10);
 		
 /*		System.out.println("x" + mm.getSnake().getBodyPiece(0).getXcoordinate());
@@ -42,10 +43,11 @@ class TestMap {
 		
 		mm2.getSnake().getBodyPiece(0).setXcoordinate(2);
 		mm2.getSnake().getBodyPiece(0).setYcoordinate(5);
-		mm2.setBox(mm2.getSnake().getBodyPiece(0), 2, 5);
 		mm2.getSnake().getBodyPiece(1).setXcoordinate(1);
 		mm2.getSnake().getBodyPiece(1).setYcoordinate(5);
-		mm2.setBox(mm2.getSnake().getBodyPiece(1), 1, 5);
+		
+		mm.resetSnakeBoxes();
+		mm.insertSnakeBoxes();
 
 		
 /*		System.out.println("x" + mm2.getSnake().getBodyPiece(0).getXcoordinate());
@@ -93,13 +95,12 @@ class TestMap {
 		
 		mm.getSnake().getBodyPiece(0).setXcoordinate(5);
 		mm.getSnake().getBodyPiece(0).setYcoordinate(5);
-		mm.setBox(mm.getSnake().getBodyPiece(0), 5, 5);
 
 		
 		mm.getSnake().getBodyPiece(1).setXcoordinate(4);
 		mm.getSnake().getBodyPiece(1).setYcoordinate(5);
-		mm.setBox(mm.getSnake().getBodyPiece(1), 4, 5);
-		mm.setBox(mm.getSnake().getBodyPiece(1), 4, 5);
+		mm.resetSnakeBoxes();
+		mm.insertSnakeBoxes();
 
 		Boolean valid = mm.forceSetApple(6, 5);
 		
@@ -117,16 +118,16 @@ class TestMap {
 		Map mm = new Map();
 		mm.getSnake().getBodyPiece(0).setXcoordinate(9);
 		mm.getSnake().getBodyPiece(0).setYcoordinate(5);
-		mm.setBox(mm.getSnake().getBodyPiece(0), 9, 5);
 		
 		mm.getSnake().getBodyPiece(1).setXcoordinate(8);
 		mm.getSnake().getBodyPiece(1).setYcoordinate(5);
-		mm.setBox(mm.getSnake().getBodyPiece(1), 8, 5);
 		mm.getSnake().getBodyPiece(1).setElementType(SnakeBody.BODY);
 
 		SnakeBox secondBodyPiece = new SnakeBox(SnakeBody.TAIL, 7, 5);
-		mm.setBox(secondBodyPiece, 7, 5);
 		mm.getSnake().addPiece(secondBodyPiece);
+		
+		mm.resetSnakeBoxes();
+		mm.insertSnakeBoxes();
 		
 		for(int i = 0; i < mm.getSnake().getBody().size(); i++)
 			System.out.println(mm.getSnake().getBodyPiece(i).getElementType());
@@ -142,11 +143,12 @@ class TestMap {
 
 		mm2.getSnake().getBodyPiece(0).setXcoordinate(2);
 		mm2.getSnake().getBodyPiece(0).setYcoordinate(5);
-		mm2.setBox(mm.getSnake().getBodyPiece(0), 2, 5);
 		
 		mm2.getSnake().getBodyPiece(1).setXcoordinate(1);
 		mm2.getSnake().getBodyPiece(1).setYcoordinate(5);
-		mm2.setBox(mm.getSnake().getBodyPiece(1), 1, 5);
+		
+		mm.resetSnakeBoxes();
+		mm.insertSnakeBoxes();
 
 		assertEquals(true, mm2.forceSetApple(6, 5));
 		
@@ -190,11 +192,12 @@ class TestMap {
 		Map mm = new Map();
 		mm.getSnake().getBodyPiece(0).setXcoordinate(2);
 		mm.getSnake().getBodyPiece(0).setYcoordinate(1);
-		mm.setBox(mm.getSnake().getBodyPiece(0), 2, 1);
 		
 		mm.getSnake().getBodyPiece(1).setXcoordinate(1);
 		mm.getSnake().getBodyPiece(1).setYcoordinate(1);
-		mm.setBox(mm.getSnake().getBodyPiece(1), 1, 1);
+		
+		mm.resetSnakeBoxes();
+		mm.insertSnakeBoxes();
 		
 		assertEquals(true, mm.forceSetApple(10, 10));
 		
@@ -253,11 +256,12 @@ class TestMap {
 		Map mm = new Map();
 		mm.getSnake().getBodyPiece(0).setXcoordinate(3);
 		mm.getSnake().getBodyPiece(0).setYcoordinate(1);
-		mm.setBox(mm.getSnake().getBodyPiece(0), 3, 1);
 		
 		mm.getSnake().getBodyPiece(1).setXcoordinate(3);
 		mm.getSnake().getBodyPiece(1).setYcoordinate(2);
-		mm.setBox(mm.getSnake().getBodyPiece(1), 3, 2);
+		
+		mm.resetSnakeBoxes();
+		mm.insertSnakeBoxes();
 		
 		assertEquals(true, mm.forceSetApple(10, 10));
 		
@@ -277,23 +281,23 @@ class TestMap {
 		
 		mm.getSnake().getBodyPiece(0).setXcoordinate(5);
 		mm.getSnake().getBodyPiece(0).setYcoordinate(1);
-		mm.setBox(mm.getSnake().getBodyPiece(0), 5, 1);
 		
 		mm.getSnake().getBodyPiece(1).setXcoordinate(4);
 		mm.getSnake().getBodyPiece(1).setYcoordinate(1);
-		mm.setBox(mm.getSnake().getBodyPiece(1), 4, 1);
+		
 		
 		SnakeBox bodyPiece2 = new SnakeBox(SnakeBody.BODY, 3, 1);
-		mm.setBox(bodyPiece2, 3, 1);
 		mm.getSnake().addPiece(bodyPiece2);
 		
 		SnakeBox bodyPiece3 = new SnakeBox(SnakeBody.BODY, 2, 1);
-		mm.setBox(bodyPiece3, 2, 1);
 		mm.getSnake().addPiece(bodyPiece3);
 		
 		SnakeBox bodyPiece4 = new SnakeBox(SnakeBody.TAIL, 1, 1);
-		mm.setBox(bodyPiece4, 1, 1);
 		mm.getSnake().addPiece(bodyPiece4);
+		
+
+		mm.resetSnakeBoxes();
+		mm.insertSnakeBoxes();
 		
 		assertEquals(true, mm.forceSetApple(10, 10));
 		
@@ -318,14 +322,16 @@ class TestMap {
 		Map mm = new Map();
 		SnakeBox heead = new SnakeBox(SnakeBody.HEAD, 3, 1);
 		mm.getSnake().getBodyPiece(0).setXcoordinate(3);
-		mm.getSnake().getBodyPiece(0).setXcoordinate(1);
-		mm.setBox(mm.getSnake().getBodyPiece(0), 3, 1);
+		mm.getSnake().getBodyPiece(0).setYcoordinate(1);
 		
 		
 		SnakeBox firstBodyPiece = new SnakeBox(SnakeBody.TAIL, 3, 2);
 		mm.getSnake().getBodyPiece(1).setXcoordinate(3);
-		mm.getSnake().getBodyPiece(1).setXcoordinate(2);
-		mm.setBox(mm.getSnake().getBodyPiece(1), 3, 2);
+		mm.getSnake().getBodyPiece(1).setYcoordinate(2);
+		
+
+		mm.resetSnakeBoxes();
+		mm.insertSnakeBoxes();
 		
 		assertEquals(true, mm.forceSetApple(10, 10));
 		assertEquals(false, mm.forceSetApple(3,  1));
@@ -374,7 +380,6 @@ class TestMap {
 			for(int j = 1; j < Map.Y-1; j++) {
 				
 				SnakeBox bb = new SnakeBox(SnakeBody.BODY, i, j);
-				mm.setBox(bb , i, j);
 				mm.getSnake().addPiece(bb);
 			}
 		}
@@ -382,7 +387,8 @@ class TestMap {
 		//Qui viene rimosso il pezzo di corpo in 1 1
 		mm.getSnake().getBody().remove(0);
 		
-		mm.setBox(new EmptyBox(MapElem.EMPTY, 1, 1), 1, 1);
+		mm.resetSnakeBoxes();
+		mm.insertSnakeBoxes();
 		
 		assertEquals(true, mm.forceSetApple(1, 1));
 	
