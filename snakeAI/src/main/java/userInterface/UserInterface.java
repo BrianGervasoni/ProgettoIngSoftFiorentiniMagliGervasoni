@@ -28,6 +28,7 @@ public class UserInterface {
 	private JLabel lossModel;
 	private JTable renderedMap;
 
+	private String modelPath;
 	
 	/**
 	 * Se 0, si è in fase di esecuzione; se 1, si è in fase di allenamento senza mappa; se 2, si è in fase di allenamento con mappa
@@ -69,110 +70,7 @@ public class UserInterface {
 		return controller.getMap().getSnakeLength();
 	}
 	
-	
-	
 
-	
-	
-	/**
-	 * Schermata per inserire gli iperparametri, accessibile dal menu
-	 */
-	public void insertHyperParameters() {
-		
-		resetFrame();
-		
-		JPanel hyperParam = new JPanel();
-		
-		hyperParam.setLayout(new GridLayout(5, 4, 40, 40));
-		
-		JLabel l1 = new JLabel("alphaW");
-		//qui bisogna fare un get del valore
-		JTextField jtf1 = new JTextField("123", 15);
-		
-		JLabel l2 = new JLabel("alphaB");
-		//qui bisogna fare un get del valore
-		JTextField jtf2 = new JTextField("0,15", 15);
-		
-		
-		JLabel l3 = new JLabel("epoche");
-		//qui bisogna fare un get del valore
-		JTextField jtf3 = new JTextField("315", 15);
-		
-		JLabel l4 = new JLabel("minipatchSize");
-		//qui bisogna fare un get del valore
-		JTextField jtf4 = new JTextField("13", 15);
-		
-		JLabel l5 = new JLabel("discount");
-		//qui bisogna fare un get del valore
-		JTextField jtf5 = new JTextField("0,11", 15);
-		
-		JLabel l6 = new JLabel("lambda");
-		//qui bisogna fare un get del valore
-		JTextField jtf6 = new JTextField("9", 15);
-		
-		JLabel l7 = new JLabel("TimeStep");
-		//qui bisogna fare un get del valore
-		JTextField jtf7 = new JTextField("9", 15);
-		
-		JLabel l8 = new JLabel("motivation");
-		//qui bisogna fare un get del valore
-		JTextField jtf8 = new JTextField("0,16", 15);
-		
-		JLabel l9 = new JLabel("entropyContribution");
-		//qui bisogna fare un get del valore
-		JTextField jtf9 = new JTextField("0,78", 15);
-		
-		
-		
-		JButton buttonAbort = new JButton("buttonAbort");
-		buttonAbort.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				startingMenu();
-
-			}});
-		
-
-		JButton buttonDone = new JButton("Fatto");
-		buttonDone.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-				//TODO: non è chiaro come sia da gestire
-				startingMenu();
-			}});
-
-		
-		hyperParam.add(l1);
-		hyperParam.add(jtf1);
-		hyperParam.add(l2);
-		hyperParam.add(jtf2);
-		hyperParam.add(l3);
-		hyperParam.add(jtf3);
-		hyperParam.add(l4);
-		hyperParam.add(jtf4);
-		hyperParam.add(l5);
-		hyperParam.add(jtf5);
-		hyperParam.add(l6);
-		hyperParam.add(jtf6);
-		hyperParam.add(l7);
-		hyperParam.add(jtf7);
-		hyperParam.add(l8);
-		hyperParam.add(jtf8);
-		hyperParam.add(l9);
-		hyperParam.add(jtf9);
-		hyperParam.add(buttonAbort);
-		hyperParam.add(buttonDone);
-		
-		myFrame.add(hyperParam);
-		myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		myFrame.pack();		
-		myFrame.setSize(640,480);
-		myFrame.setVisible(true);
-		
-	}
 	
 	/**
 	 * Comincia la fase di esecuzione, accessibile dal menu. Di default mostra la mappa e non può essere nascosta
@@ -186,9 +84,10 @@ public class UserInterface {
 	}
 	
 	public void insertDirFileModel() {
-		//TODO non sappiamo come implementarlo, Davide aiutaci tu
+		GUIStatic.p
 	}
 	
+	public void 
 	
 	public void renderMap(Map map) {
 		
@@ -220,11 +119,11 @@ public class UserInterface {
 	
 	public void renderRightState() {
 		if(modeIndicator == 0) 
-			startExecutionPhase();
+			GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 		else if(modeIndicator == 1) 
-			startTrainingPhaseWithoutMap();
+			GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
 		else if(modeIndicator == 2) 
-			startTrainingPhaseWithMap();	
+			GUIStatic.printTrainWithMap(myFrame, lossAgent, lossModel, renderedMap, this);	
 	}
 	
 	
@@ -287,8 +186,6 @@ public class UserInterface {
 		GUIStatic.printTrainWithMap(myFrame, lossAgent, lossModel, renderedMap, this);
 	}
 
-
-
 	public void stopTraining() {
 		modeIndicator = -1;
 		controller.terminateTraining();
@@ -301,6 +198,11 @@ public class UserInterface {
 	
 	public void previousMap() {
 		controller.previousMap();
+	}
+
+	public void setModelpath(String filePath) {
+		modelPath = filePath;
+		
 	}
 	
 }

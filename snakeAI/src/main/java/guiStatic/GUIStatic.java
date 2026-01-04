@@ -4,8 +4,10 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -13,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import fileManager.JsonFileManager;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
@@ -50,7 +53,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				GUIStatic.insertDirFileModel();
+				GUIStatic.insertDirFileModel(ui);
 			}});	
 		
 		
@@ -101,8 +104,27 @@ public class GUIStatic {
 	
 	
 	
-	public static void insertDirFileModel() {
-		// TODO Auto-generated method stub
+	public static void insertDirFileModel(UserInterface ui) {
+		
+		JFileChooser fileChooser = new JFileChooser();
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("File JSON", "json");
+        fileChooser.setFileFilter(filter);
+
+        int returnValue = fileChooser.showOpenDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            String filePath = selectedFile.getAbsolutePath();
+
+            if (filePath.toLowerCase().endsWith(".json")) {
+                filePath = filePath.substring(0, filePath.length() - 5);
+            }
+
+            ui.setModelpath(filePath);
+        } else {
+        	ui.setModelpath(null);
+        }
 		
 	}
 
@@ -305,6 +327,8 @@ public class GUIStatic {
 		
 		hyperParam.setLayout(new GridLayout(5, 4, 40, 40));
 		
+		JsonFileManager.loadModel(ui.getModelPath());
+		
 		JLabel l1 = new JLabel("alphaW");
 		//qui bisogna fare un get del valore
 		JTextField jtf1 = new JTextField(String.valueOf(Hyperparameters.alphaW), 15);
@@ -348,7 +372,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ui.mainMenu();ì
+				ui.mainMenu();
 			}});
 		
 
@@ -359,29 +383,38 @@ public class GUIStatic {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				double alphaW = Double.parseDouble(jtf1.getText());
-				int epoche = Integer.parseInt(jtf2.getText());
-				double minibatchSize = Double.parseDouble(jtf3.getText());
-				double discount = Double.parseDouble(jtf4.getText());
-				double lambda = Double.parseDouble(jtf5.getText()); 
-				int timeStep = Integer.parseInt(jtf6.getText());
-				double motivation = Double.parseDouble(jtf7.getText());
-				double entropyContribution = Double.parseDouble(jtf8.getText());	
+				double alphaB = Double.parseDouble(jtf2.getText());
+				double minibatchSize = Double.parseDouble(jtf4.getText());
+				double discount = Double.parseDouble(jtf5.getText());
+				double lambda = Double.parseDouble(jtf6.getText()); 
+				double motivation = Double.parseDouble(jtf8.getText());
+				double entropyContribution = Double.parseDouble(jtf9.getText());	
 				
 				boolean readyToSave = true;
 				
 				readyToSave = checkBetweenZeroOne(alphaW);
+				readyToSave = checkBetweenZeroOne(alphaB);
 				readyToSave = checkBetweenZeroOne(minibatchSize);
 				readyToSave = checkBetweenZeroOne(discount);
 				readyToSave = checkBetweenZeroOne(lambda);
 				readyToSave = checkBetweenZeroOne(motivation);
 				readyToSave = checkBetweenZeroOne(entropyContribution);
 				
-				if(readyToSave)
+				if(readyToSave) {
+					Hyperparameters.alphaW = alphaW;
+					Hyperparameters.alphaB = alphaB;
+					Hyperparameters.discount = discount;
+					Hyperparameters.entropyContribution = entropyContribution;
+					Hyperparameters.epoche = Integer.parseInt(jtf3.getText());
+					Hyperparameters.lambda = lambda;
+					Hyperparameters.minibacthSize = minibatchSize;
+					Hyperparameters.motivation = motivation;
+					Hyperparameters.timeStep = Integer.parseInt(jtf7.getText());					
 					JsonFileManager.saveHyperparameters(null);
-				else
+					
+				}else
 					JOptionPane.showMessageDialog(myFrame, "Alcuni valori inseriti non sono corretti. Ricontrollare.");
 
-				
 			}});
 
 		
