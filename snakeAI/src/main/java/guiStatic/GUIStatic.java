@@ -74,7 +74,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ui.trainWithoutMap();
+				GUIStatic.askThreadNumberBeforeTrain(jf, ui);
 			}});	
 		
 		
@@ -410,7 +410,7 @@ public class GUIStatic {
 					Hyperparameters.minibacthSize = minibatchSize;
 					Hyperparameters.motivation = motivation;
 					Hyperparameters.timeStep = Integer.parseInt(jtf7.getText());					
-					JsonFileManager.saveHyperparameters(null);
+					JsonFileManager.saveHyperparameters(ui.getModelPath());
 					
 				}else
 					JOptionPane.showMessageDialog(myFrame, "Alcuni valori inseriti non sono corretti. Ricontrollare.");
@@ -452,6 +452,50 @@ public class GUIStatic {
 		if(db > 0 && db < 1)
 			return true;
 		else return false;		
+	}
+
+
+	public static void askThreadNumberBeforeTrain(JFrame myFrame, UserInterface ui) {
+		
+		GUIStatic.resetFrame(myFrame);
+		JPanel th = new JPanel();
+		
+		
+		JTextField field = new JTextField("10", 15);
+		JLabel label = new JLabel("Inserire numero di Thread dedicati all'allenamento");
+		JButton jbutton = new JButton("Fatto");
+		jbutton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(Integer.valueOf(field.getText())>0) {
+					ui.setThreadNumber(Integer.valueOf(field.getText()));
+					ui.trainWithoutMap();
+				}else
+					JOptionPane.showMessageDialog(myFrame, "Il numero inserito non è corretto.");	
+			}
+		});
+		
+		
+		JButton jbutton2 = new JButton("Annulla");
+		jbutton2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ui.mainMenu();
+			}
+		});
+		
+		th.add(field);
+		th.add(label);
+		th.add(jbutton);
+		th.add(jbutton2);
+		myFrame.add(th);
+		myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		myFrame.pack();		
+		myFrame.setSize(640,480);
+		myFrame.setVisible(true);
+		
+		
 	}
 	
 	

@@ -121,6 +121,11 @@ public class Controller {
 		return ai.selectMap();
 	}
 
+
+	public void setThreadNumber(int threadNumber) {
+		ai.setThreadNumber(threadNumber);
+	}
+
 	
 }
 

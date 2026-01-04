@@ -29,6 +29,7 @@ public class UserInterface {
 	private JTable renderedMap;
 
 	private String modelPath;
+	private int threadNumber;
 	
 	/**
 	 * Se 0, si è in fase di esecuzione; se 1, si è in fase di allenamento senza mappa; se 2, si è in fase di allenamento con mappa
@@ -45,9 +46,7 @@ public class UserInterface {
 	}
 	
 
-	
 	public void viewMap(Map map) {
-		
 		renderMap(map);
 	}
 	
@@ -62,19 +61,15 @@ public class UserInterface {
 		GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
 	}
 	
+	
 	public int getMatchDuration() {
 		return controller.getMap().getMatchDuration();
 	}
 	
+	
 	public int getSnakeLength() {
 		return controller.getMap().getSnakeLength();
 	}
-	
-
-	
-	/**
-	 * Comincia la fase di esecuzione, accessibile dal menu. Di default mostra la mappa e non può essere nascosta
-	 */
 	
 	
 	public void stopExecution() {
@@ -83,11 +78,16 @@ public class UserInterface {
 		GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 	}
 	
+	
 	public void insertDirFileModel() {
-		GUIStatic.p
+		GUIStatic.insertDirFileModel(this);
 	}
 	
-	public void 
+	
+	public String getModelPath() {
+		return modelPath;
+	}
+	
 	
 	public void renderMap(Map map) {
 		
@@ -106,14 +106,10 @@ public class UserInterface {
 				else if((y==0)||(y==map.getColumnLenght()-1))
 					renderedMap.setValueAt("|", i, y);
 				else
-					renderedMap.setValueAt(map.getBox(i, y).visual(), i, y);
-
-				
+					renderedMap.setValueAt(map.getBox(i, y).visual(), i, y);	
 			}
 		}
-		
 		renderRightState();
-
 	}
 	
 	
@@ -133,15 +129,14 @@ public class UserInterface {
 		renderRightState();		
 	}
 	
+	
 	public void setLossModel(double model) {
+		
 		lossAgent = new JLabel("Loss Model: " + String.valueOf(model));
 		renderRightState();
 	}
 	
 	
-	/*
-	 * Chiudi il programma
-	 */
 	public void exit() {
 		controller.exit();
 	}
@@ -154,7 +149,6 @@ public class UserInterface {
 	}
 	
 	
-	
 	public void toggleFromTrainToExec() {
 		
 		modeIndicator = 0;
@@ -163,11 +157,11 @@ public class UserInterface {
 	}
 	
 	
-	
 	public void mainMenu() {
 		modeIndicator = -1;
 		GUIStatic.printMenu(myFrame, this);
 	}
+	
 	
 	public void execution() {
 		modeIndicator = 0;
@@ -175,34 +169,45 @@ public class UserInterface {
 		GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 	}
 	
+	
 	public void trainWithoutMap() {
 		modeIndicator = 1;
 		controller.startTraining();
 		GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
 	}
 	
+	
 	public void trainWithMap() {
 		modeIndicator = 2;
 		GUIStatic.printTrainWithMap(myFrame, lossAgent, lossModel, renderedMap, this);
 	}
 
+	
 	public void stopTraining() {
 		modeIndicator = -1;
 		controller.terminateTraining();
 		GUIStatic.printMenu(myFrame, this);
 	}
 	
+	
 	public void nextMap(){
 		controller.nextMap();
 	}
+	
 	
 	public void previousMap() {
 		controller.previousMap();
 	}
 
+	
 	public void setModelpath(String filePath) {
 		modelPath = filePath;
-		
+	}
+
+
+	public void setThreadNumber(int th) {
+		threadNumber = th;
+		controller.setThreadNumber(threadNumber);
 	}
 	
 }
