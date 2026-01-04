@@ -348,7 +348,7 @@ public class Map {
 		
 		
 		
-		if(checkValidCoordinates(x, y)) {
+		if(checkValidCoordinates(x, y) || getBox(x, y).equals(Food.APPLE)) {
 			this.apple = new AppleBox(Food.APPLE, x, y);
 			setBox(apple, x, y);
 			return true;

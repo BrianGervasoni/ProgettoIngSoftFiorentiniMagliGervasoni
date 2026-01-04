@@ -36,6 +36,9 @@ class TestMap {
 		System.out.println("x" + mm.getSnake().getBodyPiece(1).getXcoordinate());
 		System.out.println("y" + mm.getSnake().getBodyPiece(1).getYcoordinate());*/
 		
+		
+		
+		
 		assertEquals(valid, true);
 		
 		//quello da cui si parte
@@ -147,11 +150,12 @@ class TestMap {
 		mm2.getSnake().getBodyPiece(1).setXcoordinate(1);
 		mm2.getSnake().getBodyPiece(1).setYcoordinate(5);
 		
-		mm.resetSnakeBoxes();
-		mm.insertSnakeBoxes();
+		mm2.resetSnakeBoxes();
+		mm2.insertSnakeBoxes();
+		
 
 		assertEquals(true, mm2.forceSetApple(6, 5));
-		
+
 		
 		mm2.makeSnakeMove(Direction.STRAIGHT);
 		mm2.makeSnakeMove(Direction.STRAIGHT);
