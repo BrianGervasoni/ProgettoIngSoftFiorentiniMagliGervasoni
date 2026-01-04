@@ -46,7 +46,9 @@ public class UserInterface {
 	}
 	
 
-
+	public void viewMap(Map map) {
+		renderMap(map);
+	}
 	
 	
 	public void setModeIndicator(int num) {
