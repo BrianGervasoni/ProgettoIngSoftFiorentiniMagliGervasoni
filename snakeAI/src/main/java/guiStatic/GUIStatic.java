@@ -8,11 +8,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import fileManager.JsonFileManager;
+import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 import userInterface.UserInterface;
 
 public class GUIStatic {
@@ -304,40 +307,39 @@ public class GUIStatic {
 		
 		JLabel l1 = new JLabel("alphaW");
 		//qui bisogna fare un get del valore
-		JTextField jtf1 = new JTextField("123", 15);
+		JTextField jtf1 = new JTextField(String.valueOf(Hyperparameters.alphaW), 15);
 		
 		JLabel l2 = new JLabel("alphaB");
 		//qui bisogna fare un get del valore
-		JTextField jtf2 = new JTextField("0,15", 15);
-		
+		JTextField jtf2 = new JTextField(String.valueOf(Hyperparameters.alphaB), 15);
 		
 		JLabel l3 = new JLabel("epoche");
 		//qui bisogna fare un get del valore
-		JTextField jtf3 = new JTextField("315", 15);
+		JTextField jtf3 = new JTextField(String.valueOf(Hyperparameters.epoche), 15);
 		
-		JLabel l4 = new JLabel("minipatchSize");
+		JLabel l4 = new JLabel("minibatchSize");
 		//qui bisogna fare un get del valore
-		JTextField jtf4 = new JTextField("13", 15);
+		JTextField jtf4 = new JTextField(String.valueOf(Hyperparameters.minibacthSize), 15);
 		
 		JLabel l5 = new JLabel("discount");
 		//qui bisogna fare un get del valore
-		JTextField jtf5 = new JTextField("0,11", 15);
+		JTextField jtf5 = new JTextField(String.valueOf(Hyperparameters.discount), 15);
 		
 		JLabel l6 = new JLabel("lambda");
 		//qui bisogna fare un get del valore
-		JTextField jtf6 = new JTextField("9", 15);
+		JTextField jtf6 = new JTextField(String.valueOf(Hyperparameters.lambda), 15);
 		
 		JLabel l7 = new JLabel("TimeStep");
 		//qui bisogna fare un get del valore
-		JTextField jtf7 = new JTextField("9", 15);
+		JTextField jtf7 = new JTextField(String.valueOf(Hyperparameters.timeStep), 15);
 		
 		JLabel l8 = new JLabel("motivation");
 		//qui bisogna fare un get del valore
-		JTextField jtf8 = new JTextField("0,16", 15);
+		JTextField jtf8 = new JTextField(String.valueOf(Hyperparameters.motivation), 15);
 		
 		JLabel l9 = new JLabel("entropyContribution");
 		//qui bisogna fare un get del valore
-		JTextField jtf9 = new JTextField("0,78", 15);
+		JTextField jtf9 = new JTextField(String.valueOf(Hyperparameters.entropyContribution), 15);
 		
 		
 		
@@ -346,8 +348,7 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				startingMenu();
-
+				ui.mainMenu();ì
 			}});
 		
 
@@ -357,8 +358,30 @@ public class GUIStatic {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				//TODO: non è chiaro come sia da gestire
-				startingMenu();
+				double alphaW = Double.parseDouble(jtf1.getText());
+				int epoche = Integer.parseInt(jtf2.getText());
+				double minibatchSize = Double.parseDouble(jtf3.getText());
+				double discount = Double.parseDouble(jtf4.getText());
+				double lambda = Double.parseDouble(jtf5.getText()); 
+				int timeStep = Integer.parseInt(jtf6.getText());
+				double motivation = Double.parseDouble(jtf7.getText());
+				double entropyContribution = Double.parseDouble(jtf8.getText());	
+				
+				boolean readyToSave = true;
+				
+				readyToSave = checkBetweenZeroOne(alphaW);
+				readyToSave = checkBetweenZeroOne(minibatchSize);
+				readyToSave = checkBetweenZeroOne(discount);
+				readyToSave = checkBetweenZeroOne(lambda);
+				readyToSave = checkBetweenZeroOne(motivation);
+				readyToSave = checkBetweenZeroOne(entropyContribution);
+				
+				if(readyToSave)
+					JsonFileManager.saveHyperparameters(null);
+				else
+					JOptionPane.showMessageDialog(myFrame, "Alcuni valori inseriti non sono corretti. Ricontrollare.");
+
+				
 			}});
 
 		
@@ -392,7 +415,11 @@ public class GUIStatic {
 	}
 	
 	
-	
+	public static boolean checkBetweenZeroOne(Double db) {
+		if(db > 0 && db < 1)
+			return true;
+		else return false;		
+	}
 	
 	
 	
