@@ -41,6 +41,8 @@ public class Map {
 		}
 		
 		initSnakeBody();
+		resetSnakeBoxes();
+		insertSnakeBoxes();
 		setApple();
 		
 	}
@@ -65,6 +67,8 @@ public class Map {
 		}
 		
 		initSnakeBody();
+		resetSnakeBoxes();
+		insertSnakeBoxes();
 		setApple();
 		
 	}

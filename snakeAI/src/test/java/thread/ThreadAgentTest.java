@@ -47,16 +47,18 @@ class ThreadAgentTest {
 		
 		map.forceSetApple(2, 5);
 		
+		tA.getGame().setMap(map);
+		
 		//AppleBox apple = new AppleBox(Food.APPLE, 2, 5);
 		//map.setBox(apple, 2, 5);	
-		double reward = tA.calculateReward(map);
+		double reward = tA.calculateReward();
 		
 		System.out.println("REWARD : " + reward); //DI DEFAULT DA +4, IN QUESTO CASO NON HA NE IL +50 DI MANGIATO MELA E NE IL -50 DI ESSERE MORTO
 		//VIENE QUINDI SOLO AGGIUNTO IL +variable CHE INDICA QUANTO è DISTANTE DALLA MELA NORMALIZZATO IN UN RANGE TRA (-5 E 5)
 		System.out.println(); 
 		for(int i=0; i<map.X; i++) {
-			for(int j=0; j<map.X; j++) {
-				System.out.println(map.getBox(j, i).getElementType() + " " + i + " " + j);
+			for(int j=0; j<map.Y; j++) {
+				System.out.println(map.getBox(i, j).getElementType() + " " + i + " " + j);
 			}
 		}
 	}

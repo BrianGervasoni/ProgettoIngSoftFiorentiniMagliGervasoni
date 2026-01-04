@@ -29,9 +29,11 @@ public class ThreadAgent extends Thread implements Functions{
 		
 		int t = 0;
 		
+		
 		while(!Thread.currentThread().isInterrupted()) {
 			
 			while(this.game.finish() == false && t < Hyperparameters.timeStep) {
+				
 				
 				this.mapStat.onNext(this.getGame().getMap());
 				
@@ -41,16 +43,17 @@ public class ThreadAgent extends Thread implements Functions{
 				
 				this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
 				
-				this.intermediary.addActionReward(this.calculateReward(this.game.getMap()));
+				this.intermediary.addActionReward(this.calculateReward());
 				
 				t++;
+				
 			}
 			
 			t = 0;
 			
 			this.model.startingSendActions();
-				this.sendActions();
-				this.resetActionRegister(); 	
+			this.sendActions();
+			this.resetActionRegister(); 	
 			this.model.terminatingSendActions();
 			
 			
@@ -75,30 +78,29 @@ public class ThreadAgent extends Thread implements Functions{
 	
 	/**
 	 * 
-	 * @param map
 	 * there are 4 type of reward :
 	 * - default reward = 4 
 	 * - reward based on the distance between the head and the apple which is a value between (-5 ; 5)
 	 * - reward if the snake got the apple = 50
-	 * - reward if the snake died = -50
+	 * - reward if the snake died or dosn't have eaten an apple for timeStep = -50
 	 * @return the sum of the reward values, which says if the AI is doing good or not
 	 */
-	public double calculateReward(Map map) { //TODO TESTARE
+	public double calculateReward() { //TODO TESTARE
 		
 		double rewardDefault = 4, rewardDistanceApple, rewardGetApple = 50, rewardDead = -50;
-		double diagonal = Math.sqrt((map.X*map.X) + (map.Y*map.Y));
+		double diagonal = Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
 		double distance;
 		
-		distance = this.calculateDistance(map.getSnake().getBodyPiece(0), map.getApple());
+		distance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple());
 		rewardDistanceApple = this.normalizeRewardDistanceHeadApple(distance, 0, diagonal); 
 		rewardDefault = rewardDefault + rewardDistanceApple;
 								
 		
-		if(map.getAppleCollision()) {
+		if(this.game.getMap().getAppleCollision()) {
 			rewardDefault = rewardDefault + rewardGetApple;
 		}
 		
-		if(map.checkDefeat()) {
+		if(this.game.finish()) {
 			rewardDefault = rewardDefault + rewardDead;
 		}
 		

@@ -1,10 +1,12 @@
 package gioco.snakeAI;
 
 import boxes.*;
+import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 
 public class GameMain {
 
 	Map map;
+	int tLastApple = 0;
 	
 	
 	public GameMain() {
@@ -21,17 +23,14 @@ public class GameMain {
 		this.map = map;
 	}
 
-	/**
-	 * costruttore della classe GameMain
-	 * 
-	 * @param map mappa di gioco
-	 */
-	public void initialize(Map map) {
-		
-		map.initSnakeBody();			// questo piazza la testa iniziale
-		map.setApple();
-	}
 	
+	public int getTickLastApple() {
+		return tLastApple;
+	}
+
+	public void setTickLastApple(int tLastApple) {
+		this.tLastApple = tLastApple;
+	}
 	
 	/**
 	 * metodo che permette di vuovere il serpente secondo una direzione scelta
@@ -39,6 +38,11 @@ public class GameMain {
 	 */
 	public void giveDirections(Direction dir) {
 		map.makeSnakeMove(dir);
+		if(map.getAppleCollision()) {
+			tLastApple = 0;
+		}else {
+			tLastApple++;
+		}
 		map.addTick();
 		
 	}
@@ -50,7 +54,7 @@ public class GameMain {
 	 */
 	public boolean finish() {
 		
-		return map.checkDefeat() || map.checkVictory();
+		return map.checkDefeat() || map.checkVictory() || tLastApple >= Hyperparameters.timeStep;
 	}
 	
 	/**
@@ -58,10 +62,8 @@ public class GameMain {
 	 * 
 	 */
 	public void reset() {
-		
+		tLastApple = 0;
 		this.map = new Map();
-		initialize(map);
-		
 	}
 	
 	/**
