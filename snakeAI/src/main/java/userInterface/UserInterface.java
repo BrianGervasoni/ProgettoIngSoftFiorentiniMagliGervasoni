@@ -144,8 +144,8 @@ public class UserInterface {
 	
 	public void toggleFromExecToTrain() {
 		modeIndicator = 1;
-		controller.toggleFromExecToTrain();
-		GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
+		controller.terminateExecution();
+		GUIStatic.askThreadNumberBeforeTrain(myFrame, this);
 	}
 	
 	
