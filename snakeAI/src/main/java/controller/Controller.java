@@ -50,7 +50,7 @@ public class Controller {
 		ai = new ThreadAIManager(1, 1);
 		ai.setAgentExceptionHandler(errore -> {
 		    SwingUtilities.invokeLater(() -> {
-		       //TODO dovete mettere qui un view.gestisciErrore
+		    	view.gestisciErroreAgent(errore);
 		    });
 		});
 		ai.startExecution();
