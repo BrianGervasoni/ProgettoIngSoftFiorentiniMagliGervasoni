@@ -4,7 +4,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
+import javax.swing.SwingUtilities;
+
+import errorHandler.ThreadException;
 import gioco.snakeAI.Map;
 import io.reactivex.rxjava3.core.Observable;
 
@@ -52,7 +56,27 @@ public class ThreadAIManager{
 		
 	}
 	
-	private void startThreadsAgent(boolean lockSpeed) {
+	public void setAgentExceptionHandler(Consumer<Throwable> onWarning) {
+		if(threadAgents == null || onWarning == null)
+			return;
+		for(ThreadAgent threadAgent : threadAgents) { //remember threadsAgentNumber = number of agents PER threadsModel, while threadAgents.size() = number of total agents
+			threadAgent.setUncaughtExceptionHandler((t, e) ->{
+				onWarning.accept(e);
+			});
+		}
+	}
+	
+	public void setModelExceptionHandler(Consumer<Throwable> onWarning) {
+		if(threadModels == null || onWarning == null)
+			return;
+		for(ThreadModel threadModel : threadModels) { //remember threadsAgentNumber = number of agents PER threadsModel, while threadAgents.size() = number of total agents
+			threadModel.setUncaughtExceptionHandler((t, e) ->{
+				onWarning.accept(e);
+			});
+		}
+	}
+	
+	private void startThreadsAgent(boolean lockSpeed) throws ThreadException {
 
 		try {
 			for(ThreadAgent threadAgent : threadAgents) { //remember threadsAgentNumber = number of agents PER threadsModel, while threadAgents.size() = number of total agents
@@ -60,18 +84,18 @@ public class ThreadAIManager{
 				threadAgent.start();
 			}
 		}catch(NullPointerException e) {
-			System.err.println("fallimento nello start dei thread agent: " + e.getMessage());
+			throw new ThreadException("fallimento nello start dei thread agent: " + e.getMessage(),e.getCause());
 		}
 		
 	}
 	
-	private void startThreadsModel() {
+	private void startThreadsModel() throws ThreadException{
 		try {
 			for(ThreadModel threadModel : threadModels) {
 				threadModel.start();
 			}
 		}catch(NullPointerException e) {
-			System.err.println("fallimento nello start dei thread model: " + e.getMessage());
+			throw new ThreadException("fallimento nello start dei thread model: "  + e.getMessage(),e.getCause());
 		}
 		
 		
@@ -100,12 +124,12 @@ public class ThreadAIManager{
 		
 	}
 	
-	public void startTraining(){
+	public void startTraining() throws ThreadException{
 		this.startThreadsAgent(false);
 		this.startThreadsModel();
 	}
 	
-	public void startExecution() {
+	public void startExecution() throws ThreadException{
 		this.startThreadsAgent(true);
 	}
 	

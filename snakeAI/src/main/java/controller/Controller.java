@@ -1,5 +1,8 @@
 package controller;
 
+import javax.swing.SwingUtilities;
+
+import errorHandler.ThreadException;
 import gioco.snakeAI.Map;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -22,18 +25,34 @@ public class Controller {
 	}
 	
 	
-	public void startTraining(int threadNumber) {
+	public void startTraining(int threadNumber) throws ThreadException{
 		
 		ai = new ThreadAIManager(threadNumber, 1);
+		ai.setAgentExceptionHandler(errore -> {
+		    SwingUtilities.invokeLater(() -> {
+		       //TODO dovete mettere qui un view.gestisciErrore
+		    });
+		});
+		
+		ai.setModelExceptionHandler(errore -> {
+		    SwingUtilities.invokeLater(() -> {
+		       //TODO dovete mettere qui un view.gestisciErrore
+		    });
+		});
 		ai.startTraining();
 		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
 		lossObserver = ai.getObserverFromModel().subscribe(this::gestioneStreamLoss);
 	}
 
 	
-	public void startExecution() {
+	public void startExecution() throws ThreadException{
 		
 		ai = new ThreadAIManager(1, 1);
+		ai.setAgentExceptionHandler(errore -> {
+		    SwingUtilities.invokeLater(() -> {
+		       //TODO dovete mettere qui un view.gestisciErrore
+		    });
+		});
 		ai.startExecution();
 		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
 	}
@@ -54,14 +73,14 @@ public class Controller {
 	}
 
 	
-	public void toggleFromExecToTrain() {
+	public void toggleFromExecToTrain() throws ThreadException{
 		
 		ai.terminateExecution();
 		ai.startTraining();
 	}
 	
 	
-	public void toggleFromTrainToExec() {
+	public void toggleFromTrainToExec() throws ThreadException{
 		
 		ai.terminateTraining();
 		ai.startExecution();

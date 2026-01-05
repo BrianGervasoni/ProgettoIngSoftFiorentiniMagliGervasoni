@@ -2,6 +2,8 @@ package thread;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import errorHandler.ThreadException;
 import model.Model;
 
 public class Main {
@@ -31,8 +33,12 @@ public class Main {
 		
 		manager.threadAgents = threadAgents;
 		manager.threadModels = threadModels;
+		try {
+			manager.startTraining();
+		}catch(ThreadException e) {
+			//TODO
+		}
 		
-		manager.startTraining();
 
 	}
 

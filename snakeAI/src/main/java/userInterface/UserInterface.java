@@ -15,6 +15,7 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
 import controller.Controller;
+import errorHandler.ThreadException;
 import gioco.snakeAI.Map;
 import guiStatic.GUIStatic;
 import io.reactivex.rxjava3.core.Observable;
@@ -159,10 +160,14 @@ public class UserInterface {
 	
 	
 	public void toggleFromTrainToExec() {
+		try {
+			modeIndicator = 0;
+			controller.toggleFromTrainToExec();
+			GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
+		}catch(ThreadException e) {
+			//TODO
+		}
 		
-		modeIndicator = 0;
-		controller.toggleFromTrainToExec();
-		GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 	}
 	
 	
@@ -173,16 +178,26 @@ public class UserInterface {
 	
 	
 	public void execution() {
-		modeIndicator = 0;
-		controller.startExecution();
-		GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
+		try {
+			modeIndicator = 0;
+			controller.startExecution();
+			GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
+		}catch(ThreadException e) {
+			//TODO
+		}
+		
 	}
 	
 	
 	public void trainWithoutMap() {
-		modeIndicator = 1;
-		controller.startTraining(threadNumber);
-		GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
+		try {
+			modeIndicator = 1;
+			controller.startTraining(threadNumber);
+			GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
+		}catch(ThreadException e) {
+			//TODO
+		}
+		
 	}
 	
 	

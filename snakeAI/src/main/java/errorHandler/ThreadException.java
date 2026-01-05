@@ -1,8 +1,8 @@
 package errorHandler;
 
-public class ThreadCreationException extends Exception{
+public class ThreadException extends Exception{
 	
-	public ThreadCreationException(String message, Throwable cause) {
+	public ThreadException(String message, Throwable cause) {
         super(message, cause);
     }
 	
@@ -12,7 +12,7 @@ public class ThreadCreationException extends Exception{
 	@Override
 	public String toString() {
 		
-		return "Si è verificato un errore nella creazione del thread";
+		return "Si è verificato un errore nella gestione dei thread";
 	}
 
 }
