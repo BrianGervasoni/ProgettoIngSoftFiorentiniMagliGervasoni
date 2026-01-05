@@ -52,8 +52,9 @@ public class ThreadAIManager{
 		
 	}
 	
-	private void startThreadsAgent() {
+	private void startThreadsAgent(boolean lockSpeed) {
 		for(ThreadAgent threadAgent : threadAgents) { //remember threadsAgentNumber = number of agents PER threadsModel, while threadAgents.size() = number of total agents
+			threadAgent.setLockSpeed(lockSpeed);
 			threadAgent.start();
 		}
 	}
@@ -78,12 +79,12 @@ public class ThreadAIManager{
 	}
 	
 	public void startTraining(){
-		this.startThreadsAgent();
+		this.startThreadsAgent(false);
 		this.startThreadsModel();
 	}
 	
 	public void startExecution() {
-		this.startThreadsAgent();
+		this.startThreadsAgent(true);
 	}
 	
 	public void terminateTraining() {

@@ -16,6 +16,7 @@ public class ThreadAgent extends Thread implements Functions{
 	private Intermediary intermediary;
 	private GameMain game;
 	private final BehaviorSubject<Map> mapStat;
+	private boolean lockSpeed;
 	
 	public ThreadAgent(Model model) {
 		this.model = model;
@@ -28,12 +29,15 @@ public class ThreadAgent extends Thread implements Functions{
 	public void run() {
 		
 		int t = 0;
-		
+		long inizio;
+		long fine;
+		long durataEffettiva;
+		long attesaNecessaria;
 		
 		while(!Thread.currentThread().isInterrupted()) {
 			
 			while(this.game.finish() == false && t < Hyperparameters.timeStep) {
-				
+				inizio = System.currentTimeMillis();
 				
 				this.mapStat.onNext(this.getGame().getMap());
 				
@@ -45,16 +49,32 @@ public class ThreadAgent extends Thread implements Functions{
 				
 				this.intermediary.addActionReward(this.calculateReward());
 				
-				t++;
+				if(this.isLockSpeed()) {
+					fine = System.currentTimeMillis();
+				    durataEffettiva = fine - inizio;
+				    attesaNecessaria = 1000 - durataEffettiva;// deve attendere almeno 1s
+				    if (attesaNecessaria > 0) {
+				        try {
+				            Thread.sleep(attesaNecessaria);
+				        } catch (InterruptedException e) {
+				            e.printStackTrace();
+				        }
+				    }
+				}
 				
+				t++;
 			}
 			
 			t = 0;
 			
-			this.model.startingSendActions();
-			this.sendActions();
-			this.resetActionRegister(); 	
-			this.model.terminatingSendActions();
+			if(!this.isLockSpeed()) {
+				this.model.startingSendActions();
+				this.sendActions(); 	
+				this.model.terminatingSendActions();
+			}
+			
+			this.resetActionRegister();
+			
 			
 			
 			if(game.finish() == true) {
@@ -68,6 +88,16 @@ public class ThreadAgent extends Thread implements Functions{
         return mapStat.hide();
     }
 	
+	
+	
+	public boolean isLockSpeed() {
+		return lockSpeed;
+	}
+
+	public void setLockSpeed(boolean lockSpeed) {
+		this.lockSpeed = lockSpeed;
+	}
+
 	public Model getModel() {
 		return model;
 	}
