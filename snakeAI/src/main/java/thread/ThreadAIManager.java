@@ -53,29 +53,51 @@ public class ThreadAIManager{
 	}
 	
 	private void startThreadsAgent(boolean lockSpeed) {
-		for(ThreadAgent threadAgent : threadAgents) { //remember threadsAgentNumber = number of agents PER threadsModel, while threadAgents.size() = number of total agents
-			threadAgent.setLockSpeed(lockSpeed);
-			threadAgent.start();
+
+		try {
+			for(ThreadAgent threadAgent : threadAgents) { //remember threadsAgentNumber = number of agents PER threadsModel, while threadAgents.size() = number of total agents
+				threadAgent.setLockSpeed(lockSpeed);
+				threadAgent.start();
+			}
+		}catch(NullPointerException e) {
+			System.err.println("fallimento nello start dei thread agent: " + e.getMessage());
 		}
+		
 	}
 	
 	private void startThreadsModel() {
-		for(ThreadModel threadModel : threadModels) {
-			threadModel.start();
+		try {
+			for(ThreadModel threadModel : threadModels) {
+				threadModel.start();
+			}
+		}catch(NullPointerException e) {
+			System.err.println("fallimento nello start dei thread model: " + e.getMessage());
 		}
+		
+		
 	}
 	
 	private void terminateThreadsAgent() {
-		for(ThreadAgent threadAgent : threadAgents) { 
-			threadAgent.interrupt();
+		try {
+			for(ThreadAgent threadAgent : threadAgents) { 
+				threadAgent.interrupt();
+			}
+		}catch(NullPointerException e) {
+			System.err.println("fallimento nella chiusura dei thread agent: " + e.getMessage());
 		}
+		
 	}
 	
 	private void terminateThreadsModel() {
-		for(ThreadModel threadModel : threadModels) {
-			threadModel.save();
-			threadModel.interrupt();
+		try {
+			for(ThreadModel threadModel : threadModels) {
+				threadModel.save();
+				threadModel.interrupt();
+			}
+		}catch(NullPointerException e) {
+			System.err.println("fallimento nella chiusura dei thread model: " + e.getMessage());
 		}
+		
 	}
 	
 	public void startTraining(){
@@ -94,6 +116,19 @@ public class ThreadAIManager{
 	
 	public void terminateExecution() {
 		this.terminateThreadsAgent();
+	}
+	
+	/**
+	 * terminate all threads
+	 */
+	public void terminate() {
+		if(threadAgents != null) {
+			this.terminateThreadsAgent();
+		}
+		
+		if(threadModels != null) {
+			this.terminateThreadsModel();
+		}
 	}
 	
 	private Map selectFirstMap() {
