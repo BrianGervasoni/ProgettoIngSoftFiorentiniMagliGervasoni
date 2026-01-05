@@ -29,15 +29,16 @@ public class Controller {
 		ai = new ThreadAIManager(threadNumber, 1);
 		ai.setAgentExceptionHandler(errore -> {
 		    SwingUtilities.invokeLater(() -> {
-		       //TODO dovete mettere qui un view.gestisciErrore
+		       view.gestisciErroreAgent(errore.getMessage());
 		    });
 		});
 		
 		ai.setModelExceptionHandler(errore -> {
 		    SwingUtilities.invokeLater(() -> {
-		       //TODO dovete mettere qui un view.gestisciErrore
+		    	view.gestisciErroreModel(errore.getMessage());
 		    });
 		});
+		
 		ai.startTraining();
 		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
 		lossObserver = ai.getObserverFromModel().subscribe(this::gestioneStreamLoss);

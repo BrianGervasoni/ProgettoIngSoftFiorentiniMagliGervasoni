@@ -500,4 +500,9 @@ public class GUIStatic {
 	}
 	
 	
+	public static void sendWarning(JFrame jf, String str) {
+		JOptionPane.showMessageDialog(jf, str);
+	}
+	
+	
 }
