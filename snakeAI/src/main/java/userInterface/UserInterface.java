@@ -223,12 +223,12 @@ public class UserInterface {
 		threadNumber = th;
 	}
 	
-	public void gestisciErroreAgent(String str) {
-		GUIStatic.sendWarning(myFrame, "Si è verificato un problema con i thread agent:" + str);
+	public void gestisciErroreAgent(Throwable e) {
+		GUIStatic.sendWarning(myFrame, "Si è verificato un problema con i thread agent:" + e.getMessage());
 	}
 	
-	public void gestisciErroreModel(String str) {
-		GUIStatic.sendWarning(myFrame, "Si è verificato un problema con i thread model:"+ str);
+	public void gestisciErroreModel(Throwable e) {
+		GUIStatic.sendWarning(myFrame, "Si è verificato un problema con i thread model:"+ e.getMessage());
 	}
 	
 }

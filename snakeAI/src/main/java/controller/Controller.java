@@ -29,13 +29,13 @@ public class Controller {
 		ai = new ThreadAIManager(threadNumber, 1);
 		ai.setAgentExceptionHandler(errore -> {
 		    SwingUtilities.invokeLater(() -> {
-		       view.gestisciErroreAgent(errore.getMessage());
+		       view.gestisciErroreAgent(errore);
 		    });
 		});
 		
 		ai.setModelExceptionHandler(errore -> {
 		    SwingUtilities.invokeLater(() -> {
-		    	view.gestisciErroreModel(errore.getMessage());
+		    	view.gestisciErroreModel(errore);
 		    });
 		});
 		
