@@ -328,8 +328,6 @@ public class GUIStatic {
 		
 		hyperParam.setLayout(new GridLayout(5, 4, 40, 40));
 		
-		JsonFileManager.loadModel(ui.getModelPath());
-		
 		JLabel l1 = new JLabel("alphaW");
 		//qui bisogna fare un get del valore
 		JTextField jtf1 = new JTextField(String.valueOf(Hyperparameters.alphaW), 15);
@@ -381,7 +379,7 @@ public class GUIStatic {
 		buttonDone.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {//TODO questo metodo fatelo fare alla ui
 				
 				double alphaW = Double.parseDouble(jtf1.getText());
 				double alphaB = Double.parseDouble(jtf2.getText());
@@ -394,12 +392,12 @@ public class GUIStatic {
 				boolean readyToSave = true;
 				
 				readyToSave = checkBetweenZeroOne(alphaW);
-				readyToSave = checkBetweenZeroOne(alphaB);
-				readyToSave = checkBetweenZeroOne(minibatchSize);
-				readyToSave = checkBetweenZeroOne(discount);
-				readyToSave = checkBetweenZeroOne(lambda);
-				readyToSave = checkBetweenZeroOne(motivation);
-				readyToSave = checkBetweenZeroOne(entropyContribution);
+				readyToSave = readyToSave && checkBetweenZeroOne(alphaB);
+				readyToSave = readyToSave && checkBetweenZeroOne(minibatchSize);
+				readyToSave = readyToSave && checkBetweenZeroOne(discount);
+				readyToSave = readyToSave && checkBetweenZeroOne(lambda);
+				readyToSave = readyToSave && checkBetweenZeroOne(motivation);
+				readyToSave = readyToSave && checkBetweenZeroOne(entropyContribution);
 				
 				if(readyToSave) {
 					Hyperparameters.alphaW = alphaW;
