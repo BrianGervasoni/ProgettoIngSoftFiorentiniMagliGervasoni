@@ -75,23 +75,27 @@ public class UserInterface {
 		return controller.getMap().getSnakeLength();
 	}
 	
-	
+	public JFrame getMyFrame() {
+		return myFrame;
+	}
+
+	public void setMyFrame(JFrame myFrame) {
+		this.myFrame = myFrame;
+	}
+
 	public void stopExecution() {
 		modeIndicator = -1;
 		controller.terminateExecution();
 		GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 	}
 	
-	
 	public void insertDirFileModel() {
 		GUIStatic.insertDirFileModel(this);
 	}
 	
-	
 	public String getModelPath() {
 		return modelPath;
 	}
-	
 	
 	public void renderMap(Map map) {
 		

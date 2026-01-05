@@ -85,6 +85,7 @@ public class GUIStatic {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				ui.exit();
+				ui.getMyFrame().dispose();
 			}});	
 	
 		menuPanel.add(modifyHyperParam);

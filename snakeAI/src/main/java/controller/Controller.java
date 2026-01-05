@@ -77,7 +77,8 @@ public class Controller {
 		if(lossObserver != null)
 			lossObserver.dispose();
 		
-		ai.terminate();
+		if(ai != null)
+			ai.terminate();
 		
 	}
 	
