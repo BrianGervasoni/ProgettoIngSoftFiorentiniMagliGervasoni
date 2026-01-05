@@ -1,6 +1,5 @@
 package main;
 
-import guiStatic.GUIStatic;
 import userInterface.UserInterface;
 
 public class Main {

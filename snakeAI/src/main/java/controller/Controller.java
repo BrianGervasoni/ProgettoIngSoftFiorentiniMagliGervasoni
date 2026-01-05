@@ -4,7 +4,6 @@ import javax.swing.SwingUtilities;
 
 import errorHandler.ThreadException;
 import gioco.snakeAI.Map;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import thread.ThreadAIManager;
 import userInterface.UserInterface;

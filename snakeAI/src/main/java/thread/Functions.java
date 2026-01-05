@@ -7,7 +7,6 @@ import org.nd4j.linalg.factory.Nd4j;
 
 import boxes.*;
 import gioco.snakeAI.Map;
-import progettoAI.snakeAI.tools.Tools;
 
 public interface Functions {
 	

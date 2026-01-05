@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import javax.swing.SwingUtilities;
-
 import errorHandler.ThreadException;
 import gioco.snakeAI.Map;
 import io.reactivex.rxjava3.core.Observable;

@@ -1,6 +1,5 @@
 package progettoAI.snakeAI.tools;
 
-import java.util.ArrayList;
 
 import java.util.Random;
 

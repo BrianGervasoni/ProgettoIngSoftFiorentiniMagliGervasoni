@@ -1,24 +1,14 @@
 package userInterface;
 
-import java.awt.Container;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
-
 import controller.Controller;
 import errorHandler.ThreadException;
 import gioco.snakeAI.Map;
 import guiStatic.GUIStatic;
-import io.reactivex.rxjava3.core.Observable;
 
 public class UserInterface {
 

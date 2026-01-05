@@ -1,8 +1,6 @@
 package thread;
 
 import boxes.Direction;
-import boxes.Food;
-import boxes.SnakeBody;
 import gioco.snakeAI.GameMain;
 import gioco.snakeAI.Map;
 import model.*;
