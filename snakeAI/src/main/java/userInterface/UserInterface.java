@@ -170,7 +170,7 @@ public class UserInterface {
 	public void execution() {
 		try {
 			modeIndicator = 0;
-			controller.startExecution();
+			controller.startExecution(null);//TODO mettete la stringa del file selezionato dall'utente, invece del null, se la stringa è vuota o null fate vedere un errore (create invalidInputException)
 			GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 		}catch(ThreadException e) {
 			//TODO
@@ -182,7 +182,7 @@ public class UserInterface {
 	public void trainWithoutMap() {
 		try {
 			modeIndicator = 1;
-			controller.startTraining(threadNumber);
+			controller.startTraining(threadNumber,null);//TODO mettete la stringa del file selezionato dall'utente, invece del null, se la stringa è vuota o null fate vedere un errore(create invalidInputException)
 			GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
 		}catch(ThreadException e) {
 			//TODO
