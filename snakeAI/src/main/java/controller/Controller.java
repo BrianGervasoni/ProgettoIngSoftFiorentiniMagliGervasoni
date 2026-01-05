@@ -24,10 +24,10 @@ public class Controller {
 	}
 	
 	
-	public void startTraining(int threadNumber,String dir) throws ThreadException{
+	public void startTraining(int threadNumber,String name) throws ThreadException{
 		
 		ai = new ThreadAIManager(threadNumber, 1);
-		ai.createIstance(dir);
+		ai.createIstance(name);
 		ai.setAgentExceptionHandler(errore -> {
 		    SwingUtilities.invokeLater(() -> {
 		       view.gestisciErroreAgent(errore);
@@ -46,10 +46,10 @@ public class Controller {
 	}
 
 	
-	public void startExecution(String dir) throws ThreadException{
+	public void startExecution(String name) throws ThreadException{
 		
 		ai = new ThreadAIManager(1, 1);
-		ai.createIstance(dir);
+		ai.createIstance(name);
 		ai.setAgentExceptionHandler(errore -> {
 		    SwingUtilities.invokeLater(() -> {
 		    	view.gestisciErroreAgent(errore);
