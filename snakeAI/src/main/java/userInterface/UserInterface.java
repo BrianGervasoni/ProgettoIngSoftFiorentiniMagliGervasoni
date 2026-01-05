@@ -39,10 +39,14 @@ public class UserInterface {
 	private int modeIndicator;
 	
 	
-	public UserInterface(Controller ctr) {
+	public UserInterface() {
 		myFrame = new JFrame("SnakeAI");
-		controller = ctr;
+		controller = new Controller(this);
 		modeIndicator = -1;
+	}
+	
+	public void start() {
+		GUIStatic.printMenu(myFrame, this);
 	}
 	
 
