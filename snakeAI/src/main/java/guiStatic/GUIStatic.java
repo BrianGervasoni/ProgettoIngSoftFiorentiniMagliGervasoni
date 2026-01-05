@@ -379,7 +379,7 @@ public class GUIStatic {
 		buttonDone.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {//TODO questo metodo fatelo fare alla ui
+			public void actionPerformed(ActionEvent arg0) {
 				
 				double alphaW = Double.parseDouble(jtf1.getText());
 				double alphaB = Double.parseDouble(jtf2.getText());
