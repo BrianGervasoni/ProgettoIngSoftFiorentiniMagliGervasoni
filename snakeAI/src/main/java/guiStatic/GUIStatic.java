@@ -150,7 +150,7 @@ public class GUIStatic {
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            String filePath = selectedFile.getAbsolutePath();
+            String filePath = selectedFile.getName();
 
             if (filePath.toLowerCase().endsWith(".json")) {
                 filePath = filePath.substring(0, filePath.length() - 5);
@@ -161,11 +161,7 @@ public class GUIStatic {
         	ui.setModelpath(null);
         }
         
-        
-        
-        System.out.println(ui.getModelPath());
-        ui.mainMenu();
-		
+        ui.mainMenu();   
 	}
 
 

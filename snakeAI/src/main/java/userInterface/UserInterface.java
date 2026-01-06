@@ -333,9 +333,7 @@ public class UserInterface {
             GUIStatic.sendWarning(myFrame, "Errore durante la creazione del file: " + e.getMessage());
         }
         
-        
-        System.out.println(newModel.getAbsolutePath());
-        setModelpath(newModel.getAbsolutePath());
+        setModelpath(text);
         mainMenu();
 		
 	}
@@ -344,8 +342,8 @@ public class UserInterface {
 	
 	
 	public void createNewModelFile() {
-		GUIStatic.createNewFileModel(myFrame, this);
 		
+		GUIStatic.createNewFileModel(myFrame, this);
 	}
 	
 }
