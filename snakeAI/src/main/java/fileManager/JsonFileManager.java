@@ -10,6 +10,9 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import errorHandler.ThreadException;
+
 import java.lang.reflect.Modifier;
 
 import model.Model;
@@ -23,43 +26,53 @@ public class JsonFileManager {
     		.registerTypeAdapter(IActivation.class, new IActivationAdapter()).
     		registerTypeAdapter(Layer.class, new LayerAdapter()).setPrettyPrinting().create();
     
-	public static void saveModel(Model m,String dirFile) {
+	public static void saveModel(Model m,String dirFile) throws IOException,FileNotFoundException {
 		try (FileWriter writer = new FileWriter(dirFile)) {
             // Serializes the model objects into a JSON string
             GSON.toJson(m, writer);
-        } catch (IOException e) {
+        }catch (FileNotFoundException e) {
+        	System.err.println("file non trovato: " + e.getMessage());
+        	throw new FileNotFoundException(e.getMessage());
+        }
+		catch (IOException e) {
             e.printStackTrace();
         }
 	}
 	
-	public static Model loadModel(String dirFile) {
+	public static Model loadModel(String dirFile) throws IOException,FileNotFoundException {
 		 try (FileReader reader = new FileReader(dirFile)) {
 	            return GSON.fromJson(reader, Model.class);
 	        } catch (FileNotFoundException e) {
 	        	System.err.println("file non trovato: " + e.getMessage());
-	        	return new Model();
+	        	throw new FileNotFoundException(e.getMessage());
 	        } catch (IOException e) {
 	            System.err.println("Errore durante la lettura del file: " + e.getMessage());
 	            e.printStackTrace();
-	            return null;
+	            throw new IOException(e.getMessage(),e.getCause());
 	        }
 	}
 	
-	public static void saveHyperparameters(String dirFile) {
+	public static void saveHyperparameters(String dirFile) throws IOException,FileNotFoundException {
 		try (FileWriter writer = new FileWriter(dirFile)) {
             GSON.toJson(new Hyperparameters(), writer);
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+        	System.err.println("file non trovato: " + e.getMessage());
+        	throw new FileNotFoundException(e.getMessage());
+        }catch (IOException e) {
             e.printStackTrace();
+            throw new IOException(e.getMessage(),e.getCause());
         }
 	}
 	
-	public static void loadHyperparameters(String dirFile) {
+	public static void loadHyperparameters(String dirFile) throws IOException,FileNotFoundException {
 		 try (FileReader reader = new FileReader(dirFile)) {
 	            GSON.fromJson(reader, Hyperparameters.class);
 	        } catch (FileNotFoundException e) {
 	        	System.err.println("file con iperparametri non trovato: " + e.getMessage());
+	        	throw new FileNotFoundException(e.getMessage());
 	        } catch (IOException e) {
 	            System.err.println("Errore durante la lettura del file dei iperparametri: " + e.getMessage());
+	            throw new IOException(e.getMessage(),e.getCause());
 	        }
 	}
 }

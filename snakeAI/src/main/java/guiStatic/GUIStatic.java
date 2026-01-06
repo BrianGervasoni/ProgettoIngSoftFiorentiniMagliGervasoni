@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -17,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import errorHandler.ThreadException;
 import fileManager.JsonFileManager;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 import userInterface.UserInterface;
@@ -364,7 +366,12 @@ public class GUIStatic {
 		
 		hyperParam.setLayout(new GridLayout(5, 4, 40, 40));
 		
-		JsonFileManager.loadHyperparameters(ui.getHyperParamPath());
+		try {
+			JsonFileManager.loadHyperparameters(ui.getHyperParamPath());
+		}catch(IOException e) {
+			//TODO
+		}
+		
 		
 		JLabel l1 = new JLabel("alphaW");
 		//qui bisogna fare un get del valore
@@ -446,8 +453,13 @@ public class GUIStatic {
 					Hyperparameters.lambda = lambda;
 					Hyperparameters.minibacthSize = minibatchSize;
 					Hyperparameters.motivation = motivation;
-					Hyperparameters.timeStep = Integer.parseInt(jtf7.getText());					
-					JsonFileManager.saveHyperparameters(ui.getHyperParamPath());
+					Hyperparameters.timeStep = Integer.parseInt(jtf7.getText());
+					try {
+						JsonFileManager.saveHyperparameters(ui.getHyperParamPath());
+					}catch(IOException e) {
+						//TODO
+					}
+					
 					ui.mainMenu();
 					
 				}else

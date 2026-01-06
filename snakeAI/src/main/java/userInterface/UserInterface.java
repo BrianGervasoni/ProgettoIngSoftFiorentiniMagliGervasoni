@@ -1,6 +1,8 @@
 package userInterface;
 
 
+import java.io.IOException;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -80,7 +82,12 @@ public class UserInterface {
 
 	public void stopExecution() {
 		modeIndicator = -1;
-		controller.terminateExecution();
+		try {
+			controller.terminateExecution();
+		}catch(ThreadException e) {
+			//TODO
+		}
+		
 		GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 	}
 	
@@ -142,13 +149,25 @@ public class UserInterface {
 	
 	
 	public void exit() {
-		controller.exit();
+		try {
+			controller.exit();
+		}catch(ThreadException e) {
+			//TODO
+		}catch(IOException e) {
+			//TODO
+		}
+		
 	}
 	
 	
 	public void toggleFromExecToTrain() {
 		modeIndicator = 1;
-		controller.terminateExecution();
+		try {
+			controller.terminateExecution();
+		}catch(ThreadException e) {
+			//TODO
+		}
+		
 		GUIStatic.askThreadNumberBeforeTrain(myFrame, this);
 	}
 	
@@ -160,6 +179,8 @@ public class UserInterface {
 			GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 		}catch(ThreadException e) {
 			GUIStatic.sendWarning(myFrame, "Si è verificato un problema nel fare il toggle: " + e.getMessage());
+		}catch(IOException e) {
+			//TODO
 		}
 		
 	}
@@ -172,7 +193,7 @@ public class UserInterface {
 	
 	
 	public void execution() {
-		
+	
 		System.out.println(getModelPath());
 		
 		if(getModelPath() != null) {
@@ -183,15 +204,21 @@ public class UserInterface {
 				GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 			}catch(ThreadException e) {
 				GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'esecuzione: " + e.getMessage());
+			}catch(IOException e) {
+			//TODO
 			}
 		
 		}else GUIStatic.sendWarning(myFrame, "Non è stato selezionato un file model, oppure non è leggibile");
 
+
+
+		
 		
 	}
 	
 	
 	public void trainWithoutMap() {
+
 		
 		if(getModelPath() == null)
 			GUIStatic.sendWarning(myFrame, "Non è stato selezionato un file model, oppure non è leggibile");
@@ -205,6 +232,8 @@ public class UserInterface {
 				GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
 			}catch(ThreadException e) {
 				GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'allenamento: " + e.getMessage());
+			}}catch(IOException e) {
+			//TODO
 			}
 		
 		}
@@ -221,7 +250,14 @@ public class UserInterface {
 	
 	public void stopTraining() {
 		modeIndicator = -1;
-		controller.terminateTraining();
+		try {
+			controller.terminateTraining();
+		}catch(ThreadException e) {
+			//TODO
+		}catch(IOException e) {
+			//TODO
+		}
+		
 		GUIStatic.printMenu(myFrame, this);
 	}
 	

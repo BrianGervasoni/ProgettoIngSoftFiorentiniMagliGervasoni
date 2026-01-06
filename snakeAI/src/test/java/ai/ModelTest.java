@@ -2,6 +2,7 @@ package ai;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,7 +28,12 @@ public class ModelTest {
 		Path relativePath = Paths.get(relPath);
 		Path absolutePath = relativePath.toAbsolutePath();
 		//JsonFileManager.saveModel(mSave, absolutePath.toString());
-		m = JsonFileManager.loadModel(absolutePath.toString());
+		try {
+			m = JsonFileManager.loadModel(absolutePath.toString());
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
 		ActionRegister r= m.forwarding(new double[] {1,2,3,4});
 		r.reward = 4;
 		r.indexAction = 2;
@@ -48,9 +54,17 @@ public class ModelTest {
 		Path relativePath = Paths.get(relPath);
 		Path absolutePath = relativePath.toAbsolutePath();
 		Hyperparameters.alphaB = 0.1;
-		JsonFileManager.saveHyperparameters(absolutePath.toString());
+		try {
+			JsonFileManager.saveHyperparameters(absolutePath.toString());
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
 		Hyperparameters.alphaB = 0.3;
-		JsonFileManager.loadHyperparameters(absolutePath.toString());
+		try {
+			JsonFileManager.loadHyperparameters(absolutePath.toString());
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
 		
 		assertEquals(0.1,Hyperparameters.alphaB);
 	}
