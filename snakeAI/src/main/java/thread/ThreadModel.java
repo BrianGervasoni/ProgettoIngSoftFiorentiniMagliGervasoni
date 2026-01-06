@@ -78,6 +78,9 @@ public class ThreadModel extends Thread{
 	
 	public void load() throws IOException{
 		this.model = JsonFileManager.loadModel(dirFile);
+		if(this.model == null) {
+			this.model = new Model();
+		}
 	}
 	
 	public void initBackPropagation() { 
