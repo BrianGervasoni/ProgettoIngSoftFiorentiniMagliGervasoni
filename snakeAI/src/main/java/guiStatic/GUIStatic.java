@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -556,9 +557,12 @@ public class GUIStatic {
 		GUIStatic.resetFrame(jf);
 		JPanel jp = new JPanel();
 		
-		JLabel question = new JLabel("Effettua la seguente selezione:");
+		GridLayout gl = new GridLayout(4, 1, 50, 50);
+		jp.setLayout(gl);
 		
-		JButton jb1 = new JButton("Crea un nuovo file modello");
+		JLabel question = new JLabel("Effettua la seguente selezione:", SwingConstants.CENTER);
+		
+		JButton jb1 = new JButton("Crea e seleziona il nuovo file modello");
 		jb1.addActionListener(new ActionListener() {
 
 			@Override
@@ -576,9 +580,19 @@ public class GUIStatic {
 				
 			}});
 		
+		JButton jb3 = new JButton("Annulla");
+		jb3.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ui.mainMenu();
+				
+			}});
+		
 		jp.add(question);
 		jp.add(jb1);
 		jp.add(jb2);
+		jp.add(jb3);
 		jf.add(jp);
 		jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		jf.pack();		
