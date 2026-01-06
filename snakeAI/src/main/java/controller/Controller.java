@@ -66,7 +66,7 @@ public class Controller {
 	}
 	
 	
-	public void terminateTraining() throws FileNotFoundException, ThreadException, IOException {
+	public void terminateTraining() throws FileNotFoundException, IOException {
 		
 		ai.terminateTraining();
 		snakeObserver.dispose();		
@@ -74,7 +74,7 @@ public class Controller {
 	}
 	
 	
-	public void terminateExecution() throws  ThreadException{
+	public void terminateExecution(){
 		
 		ai.terminateExecution();
 		snakeObserver.dispose();		

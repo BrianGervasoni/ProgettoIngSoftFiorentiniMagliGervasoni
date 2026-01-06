@@ -84,12 +84,7 @@ public class UserInterface {
 
 	public void stopExecution() {
 		modeIndicator = -1;
-		try {
-			controller.terminateExecution();
-		}catch(ThreadException e) {
-			GUIStatic.sendWarning(myFrame, "Si è verificato un problema nei thread nell'interrompere l'esecuzione: " + e.getMessage());
-		}
-		
+		controller.terminateExecution();
 	}
 	
 	public void insertDirFileModel() {
@@ -170,16 +165,9 @@ public class UserInterface {
 	
 	public void toggleFromExecToTrain() {
 		modeIndicator = 1;
-		try {
-			
-			controller.terminateExecution();
-			this.trainWithoutMap();
-			
-		}catch(ThreadException e) {
-			GUIStatic.sendWarning(myFrame, "Si è verificato un problema nei thread nel fare il toggle execution=>training: " + e.getMessage());
-		}
-		
-		
+
+		controller.terminateExecution();
+		this.trainWithoutMap();	
 	}
 	
 	
@@ -188,8 +176,6 @@ public class UserInterface {
 			modeIndicator = 0;
 			controller.terminateTraining();
 			execution();
-		}catch(ThreadException e) {
-			GUIStatic.sendWarning(myFrame, "Si è verificato un problema nei thread nel fare il toggle: " + e.getMessage());
 		}catch(IOException e) {
 			GUIStatic.sendWarning(myFrame, "Si è verificato un problema di input output nel fare il toggle: " + e.getMessage());
 
@@ -261,11 +247,8 @@ public class UserInterface {
 		modeIndicator = -1;
 		try {
 			controller.terminateTraining();
-		}catch(ThreadException e) {
-			GUIStatic.sendWarning(myFrame, "C'è un problema con l'interruzione dei thread dell'allenamento: " + e.getMessage());
 		}catch(IOException e) {
 			GUIStatic.sendWarning(myFrame, "C'è un problema di input output con l'interruzione dell'allenamento: " + e.getMessage());
-
 		}
 		
 		GUIStatic.printMenu(myFrame, this);

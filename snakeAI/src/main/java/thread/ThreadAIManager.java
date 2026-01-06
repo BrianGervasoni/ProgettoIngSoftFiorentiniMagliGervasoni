@@ -103,28 +103,47 @@ public class ThreadAIManager{
 		
 	}
 	
-	private void terminateThreadsAgent() throws ThreadException{
-		try {
-			for(ThreadAgent threadAgent : threadAgents) { 
-				threadAgent.interrupt();
-			}
-		}catch(NullPointerException e) {
-			System.err.println("fallimento nella chiusura dei thread agent: " + e.getMessage());
-			throw new ThreadException(e.getMessage(),e.getCause());
+	private void terminateThreadsAgent(){
+		if(threadAgents == null)
+			return;
+		
+		for(ThreadAgent threadAgent : threadAgents) { 
+			threadAgent.interrupt();
 		}
 		
+		 for (ThreadAgent threadAgent : threadAgents) { 
+		    if (threadAgent != null) {
+		        try {
+		            threadAgent.join();
+		        } catch (InterruptedException e) {
+		            // Ripristiniamo il segnale per il thread chiamante
+			        Thread.currentThread().interrupt();
+			        return;
+		        }
+		    }
+		 }
 	}
 	
 	private void terminateThreadsModel() throws IOException,FileNotFoundException{
-		try {
-			for(ThreadModel threadModel : threadModels) {
-				threadModel.save();
-				threadModel.interrupt();
-			}
-		}catch(NullPointerException e) {
-			System.err.println("fallimento nella chiusura dei thread model: " + e.getMessage());
+		if(threadModels == null)
+			return;
+		
+		for(ThreadModel threadModel : threadModels) {
+			threadModel.save();
+			threadModel.interrupt();
 		}
 		
+		for(ThreadModel threadModel : threadModels) {
+			if (threadModel != null) {
+		        try {
+		            threadModel.join();
+		        } catch (InterruptedException e) {
+		            // Ripristiniamo il segnale per il thread chiamante
+			        Thread.currentThread().interrupt();
+			        return;
+		        }
+		    }
+		}
 	}
 	
 	public void startTraining() throws ThreadException{
@@ -136,12 +155,12 @@ public class ThreadAIManager{
 		this.startThreadsAgent(true);
 	}
 	
-	public void terminateTraining() throws ThreadException,FileNotFoundException, IOException {
+	public void terminateTraining() throws FileNotFoundException, IOException {
 		this.terminateThreadsAgent();
 		this.terminateThreadsModel();
 	}
 	
-	public void terminateExecution() throws ThreadException{
+	public void terminateExecution(){
 		this.terminateThreadsAgent();
 	}
 	
