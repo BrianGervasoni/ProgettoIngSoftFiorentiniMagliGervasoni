@@ -20,7 +20,9 @@ public class UserInterface {
 	private JTable renderedMap;
 
 	private String modelPath;
+	private String hyperparametersPath;
 	private int threadNumber;
+	
 	
 	/**
 	 * Se 0, si è in fase di esecuzione; se 1, si è in fase di allenamento senza mappa; se 2, si è in fase di allenamento con mappa
@@ -34,6 +36,8 @@ public class UserInterface {
 		myFrame = new JFrame("SnakeAI");
 		controller = new Controller(this);
 		modeIndicator = -1;
+		modelPath = null;
+		hyperparametersPath = null;
 	}
 	
 	public void start() {
@@ -170,7 +174,7 @@ public class UserInterface {
 	public void execution() {
 		try {
 			modeIndicator = 0;
-			controller.startExecution(null);//TODO mettete la stringa del file selezionato dall'utente, invece del null, se la stringa è vuota o null fate vedere un errore (create invalidInputException)
+			controller.startExecution(modelPath);//TODO mettete la stringa del file selezionato dall'utente, invece del null, se la stringa è vuota o null fate vedere un errore (create invalidInputException)
 			GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 		}catch(ThreadException e) {
 			//TODO

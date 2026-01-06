@@ -57,12 +57,18 @@ public class GUIStatic {
 			}});	
 		
 		
-		JButton buttonStartExecution = new JButton("Avvia esecutione");
+		JButton buttonStartExecution = new JButton("Avvia esecuzione");
 		buttonStartExecution.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ui.execution();
+				
+				System.out.println(ui.getModelPath());
+				
+				if(ui.getModelPath() != null)
+					ui.execution();
+				else sendWarning(jf, "Non è stato selezionato un file model, oppure non è leggibile");
+
 			}});	
 		
 		
@@ -74,7 +80,12 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				GUIStatic.askThreadNumberBeforeTrain(jf, ui);
+				
+				if(ui.getModelPath() == null)
+					sendWarning(jf, "Non è stato selezionato un file model, oppure non è leggibile");
+
+				else GUIStatic.askThreadNumberBeforeTrain(jf, ui);
+	
 			}});	
 		
 		
@@ -112,6 +123,9 @@ public class GUIStatic {
         FileNameExtensionFilter filter = new FileNameExtensionFilter("File JSON", "json");
         fileChooser.setFileFilter(filter);
 
+		fileChooser.setCurrentDirectory(new File("modelli"));
+		
+		
         int returnValue = fileChooser.showOpenDialog(null);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
