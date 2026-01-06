@@ -132,14 +132,18 @@ public class GUIStatic {
             File selectedFile = fileChooser.getSelectedFile();
             String filePath = selectedFile.getAbsolutePath();
 
-            if (filePath.toLowerCase().endsWith(".json")) {
+/*            if (filePath.toLowerCase().endsWith(".json")) {
                 filePath = filePath.substring(0, filePath.length() - 5);
-            }
+            }*/
 
             ui.setModelpath(filePath);
         } else {
         	ui.setModelpath(null);
         }
+        
+        
+        
+        System.out.println(ui.getModelPath());
 		
 	}
 
