@@ -53,12 +53,15 @@ public class Controller {
 		
 		ai = new ThreadAIManager(1, 1);
 		ai.createIstance(name);
+		
 		ai.setAgentExceptionHandler(errore -> {
 		    SwingUtilities.invokeLater(() -> {
 		    	view.gestisciErroreAgent(errore);
 		    });
 		});
+		
 		ai.startExecution();
+		
 		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
 	}
 	
@@ -77,19 +80,6 @@ public class Controller {
 		snakeObserver.dispose();		
 	}
 
-	
-	public void toggleFromExecToTrain() throws ThreadException{
-		
-		ai.terminateExecution();
-		ai.startTraining();
-	}
-	
-	
-	public void toggleFromTrainToExec() throws ThreadException, FileNotFoundException, IOException{
-		
-		ai.terminateTraining();
-		ai.startExecution();
-	}
 	
 
 	public void exit() throws FileNotFoundException, ThreadException, IOException {
@@ -121,6 +111,7 @@ public class Controller {
 	public void gestioneStreamLoss(double[] array) {
 		
 		this.view.setLossAgent(array[0]);
+		this.view.setLossModel(array[1]);
 	}
 	
 	

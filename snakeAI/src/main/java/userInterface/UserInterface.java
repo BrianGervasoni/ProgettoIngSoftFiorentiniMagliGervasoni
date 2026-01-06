@@ -171,8 +171,10 @@ public class UserInterface {
 	public void toggleFromExecToTrain() {
 		modeIndicator = 1;
 		try {
+			
 			controller.terminateExecution();
-			GUIStatic.askThreadNumberBeforeTrain(myFrame, this);
+			this.trainWithoutMap();
+			
 		}catch(ThreadException e) {
 			GUIStatic.sendWarning(myFrame, "Si è verificato un problema nei thread nel fare il toggle execution=>training: " + e.getMessage());
 		}
@@ -184,8 +186,8 @@ public class UserInterface {
 	public void toggleFromTrainToExec() {
 		try {
 			modeIndicator = 0;
-			controller.toggleFromTrainToExec();
-			GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
+			controller.terminateTraining();
+			execution();
 		}catch(ThreadException e) {
 			GUIStatic.sendWarning(myFrame, "Si è verificato un problema nei thread nel fare il toggle: " + e.getMessage());
 		}catch(IOException e) {
