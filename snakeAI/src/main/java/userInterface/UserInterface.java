@@ -232,7 +232,7 @@ public class UserInterface {
 				GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
 			}catch(ThreadException e) {
 				GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'allenamento: " + e.getMessage());
-			}}catch(IOException e) {
+			}catch(IOException e) {
 			//TODO
 			}
 		
