@@ -1,6 +1,8 @@
 package userInterface;
 
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -85,13 +87,18 @@ public class UserInterface {
 		try {
 			controller.terminateExecution();
 		}catch(ThreadException e) {
-			//TODO
+			GUIStatic.sendWarning(myFrame, "Si è verificato un problema nei thread nell'interrompere l'esecuzione: " + e.getMessage());
 		}
 		
-		GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 	}
 	
 	public void insertDirFileModel() {
+		
+		
+		
+		
+		
+		
 		GUIStatic.insertDirFileModel(this);
 	}
 	
@@ -152,9 +159,10 @@ public class UserInterface {
 		try {
 			controller.exit();
 		}catch(ThreadException e) {
-			//TODO
+			GUIStatic.sendWarning(myFrame, "Si è verificato un problema nei thread nel chiudere il programma: " + e.getMessage());
 		}catch(IOException e) {
-			//TODO
+			GUIStatic.sendWarning(myFrame, "Si è verificato un problema di i/o nel chiudere il programma: " + e.getMessage());
+
 		}
 		
 	}
@@ -164,11 +172,12 @@ public class UserInterface {
 		modeIndicator = 1;
 		try {
 			controller.terminateExecution();
+			GUIStatic.askThreadNumberBeforeTrain(myFrame, this);
 		}catch(ThreadException e) {
-			//TODO
+			GUIStatic.sendWarning(myFrame, "Si è verificato un problema nei thread nel fare il toggle execution=>training: " + e.getMessage());
 		}
 		
-		GUIStatic.askThreadNumberBeforeTrain(myFrame, this);
+		
 	}
 	
 	
@@ -178,9 +187,10 @@ public class UserInterface {
 			controller.toggleFromTrainToExec();
 			GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 		}catch(ThreadException e) {
-			GUIStatic.sendWarning(myFrame, "Si è verificato un problema nel fare il toggle: " + e.getMessage());
+			GUIStatic.sendWarning(myFrame, "Si è verificato un problema nei thread nel fare il toggle: " + e.getMessage());
 		}catch(IOException e) {
-			//TODO
+			GUIStatic.sendWarning(myFrame, "Si è verificato un problema di input output nel fare il toggle: " + e.getMessage());
+
 		}
 		
 	}
@@ -203,23 +213,19 @@ public class UserInterface {
 				controller.startExecution(modelPath);
 				GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 			}catch(ThreadException e) {
-				GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'esecuzione: " + e.getMessage());
+				GUIStatic.sendWarning(myFrame, "C'è un problema di thread a far partire l'esecuzione: " + e.getMessage());
 			}catch(IOException e) {
-			//TODO
+				GUIStatic.sendWarning(myFrame, "C'è un problema di input output a far partire l'esecuzione: " + e.getMessage());
+
 			}
 		
 		}else GUIStatic.sendWarning(myFrame, "Non è stato selezionato un file model, oppure non è leggibile");
-
-
-
-		
 		
 	}
 	
 	
 	public void trainWithoutMap() {
 
-		
 		if(getModelPath() == null)
 			GUIStatic.sendWarning(myFrame, "Non è stato selezionato un file model, oppure non è leggibile");
 
@@ -232,8 +238,8 @@ public class UserInterface {
 				GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
 			}catch(ThreadException e) {
 				GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'allenamento: " + e.getMessage());
-			}}catch(IOException e) {
-			//TODO
+			}catch(IOException e) {
+				GUIStatic.sendWarning(myFrame, "C'è un problema di input output: " + e.getMessage());
 			}
 		
 		}
@@ -253,9 +259,10 @@ public class UserInterface {
 		try {
 			controller.terminateTraining();
 		}catch(ThreadException e) {
-			//TODO
+			GUIStatic.sendWarning(myFrame, "C'è un problema con l'interruzione dei thread dell'allenamento: " + e.getMessage());
 		}catch(IOException e) {
-			//TODO
+			GUIStatic.sendWarning(myFrame, "C'è un problema di input output con l'interruzione dell'allenamento: " + e.getMessage());
+
 		}
 		
 		GUIStatic.printMenu(myFrame, this);
@@ -297,10 +304,13 @@ public class UserInterface {
 		return hyperparametersPath;
 	}
 
-	public void createNewModelFile() {
+	public void createOrChooseModelFile() {
 		
-		
+		GUIStatic.createNewModelOrChooseModel(myFrame, this);
 	}
+
+	
+	
 
 	public void editHyperParameters() {
 		
@@ -309,6 +319,32 @@ public class UserInterface {
 		if(getHyperParamPath() == null)
 			GUIStatic.sendWarning(myFrame, "Il file degli hyperParameters non è valido.");
 		else GUIStatic.insertHyperParameters(myFrame, this);
+	}
+
+	
+	public void newModelFile(String text) {
+		
+        File newModel = new File("modelli/" + text + ".json");
+
+        try{
+        	FileWriter writer = new FileWriter(newModel);
+        } catch (IOException e) {
+            GUIStatic.sendWarning(myFrame, "Errore durante la creazione del file: " + e.getMessage());
+        }
+        
+        
+        System.out.println(newModel.getAbsolutePath());
+        setModelpath(newModel.getAbsolutePath());
+        mainMenu();
+		
+	}
+
+	
+	
+	
+	public void createNewModelFile() {
+		GUIStatic.createNewFileModel(myFrame, this);
+		
 	}
 	
 }

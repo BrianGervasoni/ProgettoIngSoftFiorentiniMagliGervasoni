@@ -57,7 +57,7 @@ public class GUIStatic {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				ui.insertDirFileModel();
+				ui.createOrChooseModelFile();
 			}});	
 		
 		
@@ -164,6 +164,7 @@ public class GUIStatic {
         
         
         System.out.println(ui.getModelPath());
+        ui.mainMenu();
 		
 	}
 
@@ -369,7 +370,7 @@ public class GUIStatic {
 		try {
 			JsonFileManager.loadHyperparameters(ui.getHyperParamPath());
 		}catch(IOException e) {
-			//TODO
+			GUIStatic.sendWarning(myFrame, "C'è un problema di i/o nel caricamento degli iperparametri: " + e.getMessage());
 		}
 		
 		
@@ -457,7 +458,7 @@ public class GUIStatic {
 					try {
 						JsonFileManager.saveHyperparameters(ui.getHyperParamPath());
 					}catch(IOException e) {
-						//TODO
+						GUIStatic.sendWarning(myFrame, "C'è un problema di i/o nel salvataggio degli iperparametri: " + e.getMessage());
 					}
 					
 					ui.mainMenu();
@@ -579,9 +580,67 @@ public class GUIStatic {
 				
 			}});
 		
-		
+		jp.add(question);
 		jp.add(jb1);
 		jp.add(jb2);
+		jf.add(jp);
+		jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		jf.pack();		
+		jf.setSize(640,480);
+		jf.setVisible(true);
+	}
+	
+	
+	
+	
+	public static void createNewFileModel(JFrame jf, UserInterface ui) {
+		
+		GUIStatic.resetFrame(jf);
+		
+		JPanel jp = new JPanel();
+		JLabel jl = new JLabel("Inserisci il nome che vuoi dare al modello: ");
+		JTextField jtf = new JTextField(15);
+		
+		JButton jb1 = new JButton("Annulla");
+		jb1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ui.mainMenu();
+	
+			}	
+		});
+		
+
+		JButton jb2 = new JButton("Fatto");
+		jb2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if(jtf.getText().isEmpty())
+					GUIStatic.sendWarning(jf, "Il nome del modello non può essere vuoto. Inserire un nome");
+				else ui.newModelFile(jtf.getText());
+				
+			}
+			
+			
+		});
+		
+		
+		jp.add(jl);
+		jp.add(jtf);
+		jp.add(jb1);
+		jp.add(jb2);
+		jf.add(jp);
+		jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		jf.pack();		
+		jf.setSize(640,480);
+		jf.setVisible(true);
+		
+		
+		
+		
 		
 	}
 	
