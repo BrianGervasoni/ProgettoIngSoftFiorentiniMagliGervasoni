@@ -347,5 +347,10 @@ public class UserInterface {
 		
 		GUIStatic.createNewFileModel(myFrame, this);
 	}
+
+	public void showMap() {
+		modeIndicator = 2;
+		GUIStatic.printTrainWithMap(myFrame, lossAgent, lossModel, renderedMap, this);	
+	}
 	
 }
