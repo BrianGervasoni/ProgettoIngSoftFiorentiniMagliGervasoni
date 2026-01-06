@@ -159,7 +159,7 @@ public class UserInterface {
 			controller.toggleFromTrainToExec();
 			GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 		}catch(ThreadException e) {
-			//TODO
+			GUIStatic.sendWarning(myFrame, "Si è verificato un problema nel fare il toggle: " + e.getMessage());
 		}
 		
 	}
@@ -174,10 +174,10 @@ public class UserInterface {
 	public void execution() {
 		try {
 			modeIndicator = 0;
-			controller.startExecution(modelPath);//TODO mettete la stringa del file selezionato dall'utente, invece del null, se la stringa è vuota o null fate vedere un errore (create invalidInputException)
+			controller.startExecution(modelPath);
 			GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
 		}catch(ThreadException e) {
-			//TODO
+			GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'esecuzione: " + e.getMessage());
 		}
 		
 	}
@@ -186,10 +186,10 @@ public class UserInterface {
 	public void trainWithoutMap() {
 		try {
 			modeIndicator = 1;
-			controller.startTraining(threadNumber,null);//TODO mettete la stringa del file selezionato dall'utente, invece del null, se la stringa è vuota o null fate vedere un errore(create invalidInputException)
+			controller.startTraining(threadNumber, modelPath);
 			GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
 		}catch(ThreadException e) {
-			//TODO
+			GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'allenamento: " + e.getMessage());
 		}
 		
 	}
@@ -233,6 +233,14 @@ public class UserInterface {
 	
 	public void gestisciErroreModel(Throwable e) {
 		GUIStatic.sendWarning(myFrame, "Si è verificato un problema con i thread model:"+ e.getMessage());
+	}
+
+	public void setHyperParamPath(String filePath) {
+		hyperparametersPath = filePath;
+	}
+	
+	public String getHyperParamPath() {
+		return hyperparametersPath;
 	}
 	
 }

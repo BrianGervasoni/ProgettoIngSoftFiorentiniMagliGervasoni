@@ -44,7 +44,13 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				GUIStatic.insertHyperParameters(jf, ui);
+				
+				GUIStatic.loadHyperParamFile(jf, ui);
+				
+				if(ui.getHyperParamPath() == null)
+					sendWarning(jf, "Il file degli hyperParameters non è valido.");
+				else GUIStatic.insertHyperParameters(jf, ui);
+				
 			}});	
 		
 		
@@ -116,6 +122,30 @@ public class GUIStatic {
 	
 	
 	
+	public static void loadHyperParamFile(JFrame jf, UserInterface ui) {
+		
+		JFileChooser fileChooser = new JFileChooser();
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("File JSON", "json");
+        fileChooser.setFileFilter(filter);
+
+		fileChooser.setCurrentDirectory(new File("iperparametri"));
+		
+		
+        int returnValue = fileChooser.showOpenDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            String filePath = selectedFile.getAbsolutePath();
+
+            ui.setHyperParamPath(filePath);
+        } else {
+        	ui.setHyperParamPath(null);
+        }
+		
+	}
+
+
 	public static void insertDirFileModel(UserInterface ui) {
 		
 		JFileChooser fileChooser = new JFileChooser();
@@ -346,6 +376,8 @@ public class GUIStatic {
 		
 		hyperParam.setLayout(new GridLayout(5, 4, 40, 40));
 		
+		JsonFileManager.loadHyperparameters(ui.getHyperParamPath());
+		
 		JLabel l1 = new JLabel("alphaW");
 		//qui bisogna fare un get del valore
 		JTextField jtf1 = new JTextField(String.valueOf(Hyperparameters.alphaW), 15);
@@ -427,7 +459,8 @@ public class GUIStatic {
 					Hyperparameters.minibacthSize = minibatchSize;
 					Hyperparameters.motivation = motivation;
 					Hyperparameters.timeStep = Integer.parseInt(jtf7.getText());					
-					JsonFileManager.saveHyperparameters(ui.getModelPath());
+					JsonFileManager.saveHyperparameters(ui.getHyperParamPath());
+					ui.mainMenu();
 					
 				}else
 					JOptionPane.showMessageDialog(myFrame, "Alcuni valori inseriti non sono corretti. Ricontrollare.");

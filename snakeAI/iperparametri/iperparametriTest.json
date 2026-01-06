@@ -6,6 +6,6 @@
   "discount": 0.99,
   "lambda": 0.95,
   "timeStep": 30,
-  "motivation": 0.3,
+  "motivation": 0.1,
   "entropyContribution": 0.5
 }
