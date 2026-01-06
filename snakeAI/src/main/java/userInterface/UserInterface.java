@@ -172,25 +172,43 @@ public class UserInterface {
 	
 	
 	public void execution() {
-		try {
-			modeIndicator = 0;
-			controller.startExecution(modelPath);
-			GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
-		}catch(ThreadException e) {
-			GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'esecuzione: " + e.getMessage());
-		}
+		
+		System.out.println(getModelPath());
+		
+		if(getModelPath() != null) {
+			
+			try {
+				modeIndicator = 0;
+				controller.startExecution(modelPath);
+				GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
+			}catch(ThreadException e) {
+				GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'esecuzione: " + e.getMessage());
+			}
+		
+		}else GUIStatic.sendWarning(myFrame, "Non è stato selezionato un file model, oppure non è leggibile");
+
 		
 	}
 	
 	
 	public void trainWithoutMap() {
-		try {
-			modeIndicator = 1;
-			controller.startTraining(threadNumber, modelPath);
-			GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
-		}catch(ThreadException e) {
-			GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'allenamento: " + e.getMessage());
+		
+		if(getModelPath() == null)
+			GUIStatic.sendWarning(myFrame, "Non è stato selezionato un file model, oppure non è leggibile");
+
+		else{
+			
+			GUIStatic.askThreadNumberBeforeTrain(myFrame, this);
+			try {
+				modeIndicator = 1;
+				controller.startTraining(threadNumber, modelPath);
+				GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
+			}catch(ThreadException e) {
+				GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'allenamento: " + e.getMessage());
+			}
+		
 		}
+		
 		
 	}
 	
@@ -241,6 +259,20 @@ public class UserInterface {
 	
 	public String getHyperParamPath() {
 		return hyperparametersPath;
+	}
+
+	public void createNewModelFile() {
+		
+		
+	}
+
+	public void editHyperParameters() {
+		
+		GUIStatic.loadHyperParamFile(myFrame, this);
+		
+		if(getHyperParamPath() == null)
+			GUIStatic.sendWarning(myFrame, "Il file degli hyperParameters non è valido.");
+		else GUIStatic.insertHyperParameters(myFrame, this);
 	}
 	
 }

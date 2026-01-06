@@ -45,12 +45,7 @@ public class GUIStatic {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				GUIStatic.loadHyperParamFile(jf, ui);
-				
-				if(ui.getHyperParamPath() == null)
-					sendWarning(jf, "Il file degli hyperParameters non è valido.");
-				else GUIStatic.insertHyperParameters(jf, ui);
-				
+				ui.editHyperParameters();
 			}});	
 		
 		
@@ -59,7 +54,8 @@ public class GUIStatic {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				GUIStatic.insertDirFileModel(ui);
+				
+				ui.insertDirFileModel();
 			}});	
 		
 		
@@ -69,12 +65,8 @@ public class GUIStatic {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				System.out.println(ui.getModelPath());
+				ui.execution();
 				
-				if(ui.getModelPath() != null)
-					ui.execution();
-				else sendWarning(jf, "Non è stato selezionato un file model, oppure non è leggibile");
-
 			}});	
 		
 		
@@ -87,11 +79,7 @@ public class GUIStatic {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				if(ui.getModelPath() == null)
-					sendWarning(jf, "Non è stato selezionato un file model, oppure non è leggibile");
-
-				else GUIStatic.askThreadNumberBeforeTrain(jf, ui);
-	
+				ui.trainWithoutMap();
 			}});	
 		
 		
@@ -162,9 +150,9 @@ public class GUIStatic {
             File selectedFile = fileChooser.getSelectedFile();
             String filePath = selectedFile.getAbsolutePath();
 
-/*            if (filePath.toLowerCase().endsWith(".json")) {
+            if (filePath.toLowerCase().endsWith(".json")) {
                 filePath = filePath.substring(0, filePath.length() - 5);
-            }*/
+            }
 
             ui.setModelpath(filePath);
         } else {
@@ -551,6 +539,38 @@ public class GUIStatic {
 	
 	public static void sendWarning(JFrame jf, String str) {
 		JOptionPane.showMessageDialog(jf, str);
+	}
+	
+	
+	public static void createNewModelOrChooseModel(JFrame jf, UserInterface ui) {
+		
+		GUIStatic.resetFrame(jf);
+		JPanel jp = new JPanel();
+		
+		JLabel question = new JLabel("Effettua la seguente selezione:");
+		
+		JButton jb1 = new JButton("Crea un nuovo file modello");
+		jb1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ui.createNewModelFile();
+				
+			}});
+		
+		JButton jb2 = new JButton("Seleziona un file modello dal filesystem");
+		jb2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ui.insertDirFileModel();
+				
+			}});
+		
+		
+		jp.add(jb1);
+		jp.add(jb2);
+		
 	}
 	
 	
