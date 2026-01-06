@@ -1,5 +1,6 @@
 package thread;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +20,13 @@ public class Main {
 		List<ThreadModel> threadModels = new ArrayList<>();
 		
 		for(int i = 0; i<1; i++) {
+			ThreadModel threadModel = null;
+			try {
+				threadModel = new ThreadModel("hello",2);
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
 			
-			ThreadModel threadModel = new ThreadModel("hello",2);
 			threadModels.add(threadModel);
 			threadModel.setModel(model);
 			

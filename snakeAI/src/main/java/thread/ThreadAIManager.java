@@ -1,5 +1,7 @@
 package thread;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ public class ThreadAIManager{
 		this.threadsModelNumber = nModels;
 	}
 	
-	public void createIstance(String name){
+	public void createIstance(String name) throws IOException{
 	
 		String relPath = "modelli/";
 		
@@ -44,6 +46,8 @@ public class ThreadAIManager{
 			}
 			Path absolutePath = relativePath.toAbsolutePath();
 			ThreadModel threadModel = new ThreadModel(absolutePath.toString(), this.threadsAgentNumber);
+
+			
 			threadModels.add(threadModel);
 			
 			for(int j = 0; j<this.threadsAgentNumber; j++) {
@@ -99,18 +103,19 @@ public class ThreadAIManager{
 		
 	}
 	
-	private void terminateThreadsAgent() {
+	private void terminateThreadsAgent() throws ThreadException{
 		try {
 			for(ThreadAgent threadAgent : threadAgents) { 
 				threadAgent.interrupt();
 			}
 		}catch(NullPointerException e) {
 			System.err.println("fallimento nella chiusura dei thread agent: " + e.getMessage());
+			throw new ThreadException(e.getMessage(),e.getCause());
 		}
 		
 	}
 	
-	private void terminateThreadsModel() {
+	private void terminateThreadsModel() throws IOException,FileNotFoundException{
 		try {
 			for(ThreadModel threadModel : threadModels) {
 				threadModel.save();
@@ -131,19 +136,19 @@ public class ThreadAIManager{
 		this.startThreadsAgent(true);
 	}
 	
-	public void terminateTraining() {
+	public void terminateTraining() throws ThreadException,FileNotFoundException, IOException {
 		this.terminateThreadsAgent();
 		this.terminateThreadsModel();
 	}
 	
-	public void terminateExecution() {
+	public void terminateExecution() throws ThreadException{
 		this.terminateThreadsAgent();
 	}
 	
 	/**
 	 * terminate all threads
 	 */
-	public void terminate() {
+	public void terminate() throws ThreadException,FileNotFoundException,IOException{
 		if(threadAgents != null) {
 			this.terminateThreadsAgent();
 		}

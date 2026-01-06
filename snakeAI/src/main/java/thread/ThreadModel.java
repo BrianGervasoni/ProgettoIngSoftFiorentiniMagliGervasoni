@@ -1,5 +1,8 @@
 package thread;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import fileManager.JsonFileManager;
 import model.Model;
 import io.reactivex.rxjava3.core.Observable;
@@ -12,11 +15,16 @@ public class ThreadModel extends Thread{
 	private int nThreadsAgent;
 	private final BehaviorSubject<double[]> lossStat;
 
-	public ThreadModel(String dir, int nTA) {
+	public ThreadModel(String dir, int nTA) throws IOException {
 		this.dirFile = dir;
 		this.nThreadsAgent = nTA;
 		lossStat = BehaviorSubject.create();
-		this.load();
+		try {
+			this.load();
+		} catch (FileNotFoundException e) {
+			this.model = new Model();
+		}
+		
 	}
 	
 	@Override
@@ -41,7 +49,12 @@ public class ThreadModel extends Thread{
 			this.model.threadModelReportsThatItHasFinishedInizitOptimization() ;
 			
 			if(n == 5) {
-				this.save();
+				try {
+					this.save();
+				}catch(IOException e) {
+					throw new RuntimeException(e.getMessage(),e.getCause());
+				}
+				
 				n = 0;
 			}
 			
@@ -53,11 +66,11 @@ public class ThreadModel extends Thread{
         return lossStat.hide();
     }
 	
-	public void save() {
+	public void save() throws IOException,FileNotFoundException{
 		JsonFileManager.saveModel(model, dirFile);
 	}
 	
-	public void load() {
+	public void load() throws IOException{
 		this.model = JsonFileManager.loadModel(dirFile);
 	}
 	

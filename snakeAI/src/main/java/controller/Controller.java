@@ -1,5 +1,8 @@
 package controller;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import javax.swing.SwingUtilities;
 
 import errorHandler.ThreadException;
@@ -24,7 +27,7 @@ public class Controller {
 	}
 	
 	
-	public void startTraining(int threadNumber,String name) throws ThreadException{
+	public void startTraining(int threadNumber,String name) throws ThreadException,IOException{
 		
 		ai = new ThreadAIManager(threadNumber, 1);
 		ai.createIstance(name);
@@ -46,7 +49,7 @@ public class Controller {
 	}
 
 	
-	public void startExecution(String name) throws ThreadException{
+	public void startExecution(String name) throws ThreadException,IOException{
 		
 		ai = new ThreadAIManager(1, 1);
 		ai.createIstance(name);
@@ -60,7 +63,7 @@ public class Controller {
 	}
 	
 	
-	public void terminateTraining() {
+	public void terminateTraining() throws FileNotFoundException, ThreadException, IOException {
 		
 		ai.terminateTraining();
 		snakeObserver.dispose();		
@@ -68,7 +71,7 @@ public class Controller {
 	}
 	
 	
-	public void terminateExecution() {
+	public void terminateExecution() throws  ThreadException{
 		
 		ai.terminateExecution();
 		snakeObserver.dispose();		
@@ -82,14 +85,14 @@ public class Controller {
 	}
 	
 	
-	public void toggleFromTrainToExec() throws ThreadException{
+	public void toggleFromTrainToExec() throws ThreadException, FileNotFoundException, IOException{
 		
 		ai.terminateTraining();
 		ai.startExecution();
 	}
 	
 
-	public void exit() {
+	public void exit() throws FileNotFoundException, ThreadException, IOException {
 	
 		if(snakeObserver != null)
 			snakeObserver.dispose();
