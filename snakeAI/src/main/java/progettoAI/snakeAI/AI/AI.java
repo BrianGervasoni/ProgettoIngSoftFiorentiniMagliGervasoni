@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
-
+import errorHandler.ArithmeticException;
 import model.ActionRegister;
 import progettoAI.snakeAI.tools.Tools;
 
@@ -63,8 +63,9 @@ public abstract class AI {
 	 * return activation of the last layer in base of a date state, it dons't save the activation of all layers
 	 * @param input
 	 * @return activation of the last layer
+	 * @throws ArithmeticException 
 	 */
-	public double[] forwarding(double[] input) {
+	public double[] forwarding(double[] input) throws ArithmeticException {
 		return feedForwarding(Nd4j.create(input).reshape(input.length,1),0,false).toDoubleVector();
 	}
 	
@@ -75,8 +76,9 @@ public abstract class AI {
 	 * @param i
 	 * @param saveActivation
 	 * @return NXM [numberOfNeurons,minibatchSize]
+	 * @throws ArithmeticException 
 	 */
-	private INDArray feedForwarding(INDArray input,int i,boolean saveActivation) {
+	private INDArray feedForwarding(INDArray input,int i,boolean saveActivation) throws ArithmeticException {
 		if(i>=layers.size()) {//if we are at the last layer, return result
 			return input;
 		}
@@ -111,8 +113,9 @@ public abstract class AI {
 	 * perform a step in the backPropagation
 	 * @param r
 	 * @return mean loss [NX1]
+	 * @throws ArithmeticException 
 	 */
-	public INDArray backPropagation(ActionRegister[] r) {
+	public INDArray backPropagation(ActionRegister[] r) throws ArithmeticException {
 		INDArray tmpR = copyStateIntoINDArray(r,r.length);
 		
 		// perform the forwarding saving the intermediary state used for calculate the derivates

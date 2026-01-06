@@ -3,6 +3,7 @@ package thread;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import errorHandler.ArithmeticException;
 import fileManager.JsonFileManager;
 import model.Model;
 import io.reactivex.rxjava3.core.Observable;
@@ -40,7 +41,12 @@ public class ThreadModel extends Thread{
 			
 			this.model.threadModelReportsThatItHasFinishedInizitBackProp();
 			
-			this.backPropagation();
+			try {
+				this.backPropagation();
+			}catch(ArithmeticException e) {
+				throw new RuntimeException(e.getMessage(),e.getCause());
+			}
+			
 			
 			this.model.threadModelReportsThatItHasStartedOptimization();
 			
@@ -82,7 +88,7 @@ public class ThreadModel extends Thread{
 		this.model.optimization();
 	}
 	
-	public void backPropagation() {
+	public void backPropagation() throws ArithmeticException {
 		lossStat.onNext(this.model.backPropagation()); 
 	}
 	

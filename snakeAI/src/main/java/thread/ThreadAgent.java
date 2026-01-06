@@ -7,6 +7,7 @@ import model.*;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import errorHandler.ArithmeticException;
 
 public class ThreadAgent extends Thread implements Functions{
 
@@ -41,7 +42,12 @@ public class ThreadAgent extends Thread implements Functions{
 				
 				this.model.threadAgentReportThatItHasStarted();
 				
-				this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
+				try {
+					this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
+				}catch(ArithmeticException e) {
+					throw new RuntimeException(e.getMessage(),e.getCause());
+				}
+				
 				
 				this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
 				

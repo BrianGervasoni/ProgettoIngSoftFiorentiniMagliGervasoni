@@ -8,6 +8,7 @@ import org.nd4j.common.primitives.Pair;
 
 import progettoAI.snakeAI.tools.Tools;
 import progettoAI.snakeAI.hyperparameters.*;
+import errorHandler.ArithmeticException;
 
 
 public abstract class Layer {
@@ -151,25 +152,37 @@ public abstract class Layer {
 	 * @param backLayerActivation: INDArray with the back layer activation value
 	 * @param saveActivation: specificate if the layer save the intermediary values, usend during backPropagation
 	 * @return INDArray with this layer activation value
+	 * @throws ArithmeticException 
 	 */
-	public INDArray forwarding(INDArray backLayerActivation) {
+	public INDArray forwarding(INDArray backLayerActivation) throws ArithmeticException {
 		//((NXK) * (KX1)) + (NX1) = (NX1) but the activation function need (1XN) so we do the transpose
-		return this.getActivation().getActivation(this.getWeights().mmul(backLayerActivation).add(this.getBias()).transpose(), false).transpose();//sigma(W*A+B)
+		try {
+			return this.getActivation().getActivation(this.getWeights().mmul(backLayerActivation).add(this.getBias()).transpose(), false).transpose();//sigma(W*A+B)
+		}catch(Exception e) {
+			throw new ArithmeticException(e.getMessage(),e.getCause());
+		}
+		
 	}
 	
 	/**
 	 * Performs Forward Propagation for an input minibatch
 	 * @param backLayerActivation: The input minibatch [backLayerActivationSize, BatchSize]
 	 * @return activation of this layer for the entire minibatch
+	 * @throws ArithmeticException 
 	 */
-	public INDArray forwardPass(INDArray backLayerActivation) {
-		this.setBackLayerActivation_cache(backLayerActivation);//KXM
+	public INDArray forwardPass(INDArray backLayerActivation) throws ArithmeticException {
+		try {
+			this.setBackLayerActivation_cache(backLayerActivation);//KXM
 		
-		//((NXK) * (KXM)) + (NX1) = (NXM) use broadcasting for the bias
-		this.setPreActivation_cache(this.getWeights().mmul(backLayerActivation).add(this.getBias()));//W*A+B
+			//((NXK) * (KXM)) + (NX1) = (NXM) use broadcasting for the bias
+			this.setPreActivation_cache(this.getWeights().mmul(backLayerActivation).add(this.getBias()));//W*A+B
+			
+			//the activation need (MXN) so we do the transpose. Duplicate the array because we don't want it to change
+			return this.getActivation().getActivation(this.getPreActivation_cache().transpose().dup(), true).transpose();
+		}catch(Exception e) {
+			throw new ArithmeticException(e.getMessage(),e.getCause());
+		}
 		
-		//the activation need (MXN) so we do the transpose. Duplicate the array because we don't want it to change
-		return this.getActivation().getActivation(this.getPreActivation_cache().transpose().dup(), true).transpose();
 	}
 	
 	/**
@@ -177,23 +190,28 @@ public abstract class Layer {
 	 * @param dLdA
 	 * @param mode
 	 * @return dLdA
+	 * @throws ArithmeticException 
 	 */
-	public INDArray derivateCalculus(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize) {
-		 
-		 if (dLdA.isNaN().any()) {
+	public INDArray derivateCalculus(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize) throws ArithmeticException {
+		 try {
+			  if (dLdA.isNaN().any()) {
 		        System.err.println("INSTABILITA RILEVATA: alcune derivate sono NaN.");
-		 }
-		//first term dL/dZ, second term dL/dW in respect to the activation
-		 Pair<INDArray, INDArray> gradientPair = this.activation.backprop(this.getPreActivation_cache().transpose(), dLdA.transpose());
+			 }
+			//first term dL/dZ, second term dL/dW in respect to the activation
+			 Pair<INDArray, INDArray> gradientPair = this.activation.backprop(this.getPreActivation_cache().transpose(), dLdA.transpose());
+			
+			 INDArray dLdZ = gradientPair.getFirst().transpose();
+			 
+			 //(NXM) * (MXK) = (NXK)
+			 INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
+			 
+			this.tmpOptimization(dLdW,dLdZ.sum(1).reshape(dLdZ.rows(),1),mode,minibatchSize);//si prende solo una riga per il dLdB dal dLdZ (NX1)
+			 // (KXN) * (NXM) = (KXM) 
+			return this.getWeights().transpose().mmul(dLdZ);
+		 }catch(Exception e) {
+				throw new ArithmeticException(e.getMessage(),e.getCause());
+			}
 		
-		 INDArray dLdZ = gradientPair.getFirst().transpose();
-		 
-		 //(NXM) * (MXK) = (NXK)
-		 INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
-		 
-		this.tmpOptimization(dLdW,dLdZ.sum(1).reshape(dLdZ.rows(),1),mode,minibatchSize);//si prende solo una riga per il dLdB dal dLdZ (NX1)
-		 // (KXN) * (NXM) = (KXM) 
-		 return this.getWeights().transpose().mmul(dLdZ);
 	}
 	
 	/**
@@ -202,8 +220,9 @@ public abstract class Layer {
 	 * @param mode
 	 * @param minibatchSize
 	 * @return dLdA
+	 * @throws ArithmeticException 
 	 */
-	public INDArray backPropagation(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize) {
+	public INDArray backPropagation(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize) throws ArithmeticException {
 		return this.derivateCalculus(dLdA, mode,minibatchSize);
 	}
 	
@@ -220,20 +239,26 @@ public abstract class Layer {
 	 * @param dLdW
 	 * @param dLdB
 	 * @param mode
+	 * @throws ArithmeticException 
 	 */
-	public void tmpOptimization(INDArray dLdW,INDArray dLdB,TypeGradientUpdate mode,int minibatchSize) {
-		switch(mode){//add change to the tmpParameters
-		case ASCEND:
-			this.getTmpWeights().addi(dLdW.mul(Hyperparameters.alphaW * (1/(double) minibatchSize)));
-			this.getTmpBias().addi(dLdB.mul(Hyperparameters.alphaB * (1/(double) minibatchSize)));
-			break;
-		case DESCEND:
-			this.getTmpWeights().subi(dLdW.mul(Hyperparameters.alphaW * (1/(double) minibatchSize)));
-			this.getTmpBias().subi(dLdB.mul(Hyperparameters.alphaB * (1/(double) minibatchSize)));
-			break;
-			default:
+	public void tmpOptimization(INDArray dLdW,INDArray dLdB,TypeGradientUpdate mode,int minibatchSize) throws ArithmeticException {
+		try {
+			switch(mode){//add change to the tmpParameters
+			case ASCEND:
+				this.getTmpWeights().addi(dLdW.mul(Hyperparameters.alphaW * (1/(double) minibatchSize)));
+				this.getTmpBias().addi(dLdB.mul(Hyperparameters.alphaB * (1/(double) minibatchSize)));
 				break;
+			case DESCEND:
+				this.getTmpWeights().subi(dLdW.mul(Hyperparameters.alphaW * (1/(double) minibatchSize)));
+				this.getTmpBias().subi(dLdB.mul(Hyperparameters.alphaB * (1/(double) minibatchSize)));
+				break;
+				default:
+					break;
+			}
+		}catch(Exception e) {
+			throw new ArithmeticException(e.getMessage(),e.getCause());
 		}
+		
 	}
 	
 	/**
