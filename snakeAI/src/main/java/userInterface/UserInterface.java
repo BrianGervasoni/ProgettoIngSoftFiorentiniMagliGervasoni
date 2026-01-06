@@ -240,6 +240,7 @@ public class UserInterface {
 				GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'allenamento: " + e.getMessage());
 			}catch(IOException e) {
 				GUIStatic.sendWarning(myFrame, "C'è un problema di input output: " + e.getMessage());
+
 			}
 		
 		}
