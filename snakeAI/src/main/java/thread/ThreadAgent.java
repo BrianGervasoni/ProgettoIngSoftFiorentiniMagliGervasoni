@@ -31,15 +31,20 @@ public class ThreadAgent extends Thread implements Functions{
 	public void run() {
 		
 		while(!Thread.currentThread().isInterrupted()) {
-            coordinator.startingSendActions();
-            System.out.println("agente:"+Thread.currentThread().getName()+" inizio lavoro");
-            runAgentWork();
-            System.out.println("agente:"+Thread.currentThread().getName()+" fine lavoro");
-            coordinator.terminatingSendActions();
-            System.out.println("agente:"+Thread.currentThread().getName()+" inizio lavoro concorrente");
-            runAgentWork();
-            System.out.println("agente:"+Thread.currentThread().getName()+" fine lavoro concorrente");
-            coordinator.agentFinishedLoadingNext();
+			if(!this.isLockSpeed()) {
+				coordinator.startingSendActions();
+	            System.out.println("agente:"+Thread.currentThread().getName()+" inizio lavoro");
+	            runAgentWork();
+	            System.out.println("agente:"+Thread.currentThread().getName()+" fine lavoro");
+	            coordinator.terminatingSendActions();
+	            System.out.println("agente:"+Thread.currentThread().getName()+" inizio lavoro concorrente");
+	            runAgentWork();
+	            System.out.println("agente:"+Thread.currentThread().getName()+" fine lavoro concorrente");
+	            coordinator.agentFinishedLoadingNext();
+			}else {
+				runAgentWork();
+			}
+            
 		}
 			
 	}
