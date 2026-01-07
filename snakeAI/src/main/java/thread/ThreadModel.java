@@ -37,9 +37,9 @@ public class ThreadModel extends Thread{
 		while(!Thread.currentThread().isInterrupted()) {
 			
 			this.model.threadModelReportsThatItHasStartedInizitBackProp();
-			
+			System.out.println("model:"+Thread.currentThread().getName()+" inizio initBack");
 			this.initBackPropagation();
-			
+			System.out.println("model:"+Thread.currentThread().getName()+" fine initBack");
 			this.model.threadModelReportsThatItHasFinishedInizitBackProp();
 			
 			try {
@@ -50,9 +50,9 @@ public class ThreadModel extends Thread{
 			
 			
 			this.model.threadModelReportsThatItHasStartedOptimization();
-			
+			System.out.println("model:"+Thread.currentThread().getName()+" inizio optimization");
 			this.optimization();
-			
+			System.out.println("model:"+Thread.currentThread().getName()+" fine optimization");
 			this.model.threadModelReportsThatItHasFinishedInizitOptimization() ;
 			
 			if(n == 5) {

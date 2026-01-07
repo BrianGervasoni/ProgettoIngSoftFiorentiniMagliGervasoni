@@ -36,8 +36,6 @@ public class Intermediary implements Functions{
 		
 		rephase = (int) Math.round(180.0/n);
 		
-		System.out.println("n : " + n + " rephase : " + rephase + " nnondivisibile3 : " + nNonDivisibilePer3 + " delta : " + delta);
-		
 		Ray[] rays;
 		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n), arrayMerged = inizializeArray(n*3), result = inizializeArray(n*3 +  delta);
 					
@@ -67,9 +65,6 @@ public class Intermediary implements Functions{
 					rays = rays(startingDegree, rephase, n, snakeHead.getXcoordinate(), snakeHead.getYcoordinate());
 					setValuesArrays(map, food, walls, snake, rays);
 					
-					for(Ray r: rays) {
-						System.out.println(r.direction.toString());
-					}
 					
 					
 		if(nNonDivisibilePer3 != 0) {
@@ -88,10 +83,6 @@ public class Intermediary implements Functions{
 			result = mergeArrays(food, walls, snake);
 			
 		}
-		
-		for(int i=0; i<walls.length; i++) {
-			System.out.println("wall :"+ i + " valore " + walls[i]);
-			}
 		
 		return normalizeArray(result,map);
 		

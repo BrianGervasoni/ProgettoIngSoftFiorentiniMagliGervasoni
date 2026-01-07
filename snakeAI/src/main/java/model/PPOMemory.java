@@ -14,6 +14,12 @@ public class PPOMemory {
 		currR = new ArrayList<ActionRegister>();
 	}
 	
+	public boolean haveData() {
+		if(currR.isEmpty())
+			return false;
+		return true;
+	}
+	
 	public void addNewActions(ActionRegister []actions) {
 		processActions(actions);
 		Collections.addAll(currR,actions);

@@ -178,12 +178,12 @@ public interface Functions {
 	public default void setValuesArrays(Map map, double[] food, double[] walls, double[] snake, Ray[] rays) {
 		
 		for(int k = 0; k < rays.length; k++) {
-			System.out.println("origin a:"+rays[k].originX()+","+rays[k].originY()+")");
+			//System.out.println("origin a:"+rays[k].originX()+","+rays[k].originY()+")");
 			for(int i=0; i<map.X; i++) {
 				for(int j=0; j<map.Y; j++) {
 					
 					if(checkCollision(map.getBox(i, j),rays[k])) {
-						System.out.println("raggio("+k+")"+"collisione con:"+map.getBox(i,j).getElementType()+" a coordinate("+i+","+j+")");
+						//System.out.println("raggio("+k+")"+"collisione con:"+map.getBox(i,j).getElementType()+" a coordinate("+i+","+j+")");
 						
 						if(map.getBox(i, j).getElementType().equals(MapElem.WALL)) {
 							walls[k] = calculateRayDistance(map.getBox(i, j),rays[k]);

@@ -42,7 +42,7 @@ public class ThreadAgent extends Thread implements Functions{
 				this.mapStat.onNext(this.getGame().getMap());
 				
 				this.model.threadAgentReportThatItHasStarted();
-				
+				System.out.println("agente:"+Thread.currentThread().getName()+" inizio lavoro");
 				try {
 					this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
 					this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
@@ -84,6 +84,7 @@ public class ThreadAgent extends Thread implements Functions{
 			
 			if(game.finish() == true) {
 				this.game.reset(); 
+				System.out.println("agente:"+Thread.currentThread().getName()+" fine lavoro");
 				this.model.threadAgentReportThatItHasFinished();
 			}
 		}
