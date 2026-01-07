@@ -300,7 +300,7 @@ public class GUIStatic {
 		myFrame.add(training);
 		myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		myFrame.pack();		
-		myFrame.setSize(640,480);
+		myFrame.setSize(1240,720);
 		myFrame.setVisible(true);
 	}
 	
@@ -347,7 +347,7 @@ public class GUIStatic {
 		myFrame.add(exec);
 		myFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		myFrame.pack();		
-		myFrame.setSize(640,480);
+		myFrame.setSize(1240,720);
 		myFrame.setVisible(true);
 	}
 	

@@ -1,7 +1,7 @@
 {
   "alphaW": 0.3,
   "alphaB": 0.1,
-  "epoche": 10,
+  "epoche": 10000,
   "minibacthSize": 0.8,
   "discount": 0.99,
   "lambda": 0.95,

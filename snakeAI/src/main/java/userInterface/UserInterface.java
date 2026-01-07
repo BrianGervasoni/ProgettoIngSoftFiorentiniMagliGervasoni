@@ -1,6 +1,7 @@
 package userInterface;
 
 
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,6 +10,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
 import controller.Controller;
 import errorHandler.ThreadException;
 import gioco.snakeAI.Map;
@@ -106,13 +110,26 @@ public class UserInterface {
 		model.setRowCount(map.getRowLenght());
 		model.setColumnCount(map.getColumnLenght());
 		
+		renderedMap.setShowGrid(false);
+		
+		TableColumnModel columnModel = renderedMap.getColumnModel();
+        for (int i = 0; i < columnModel.getColumnCount(); i++) {
+            TableColumn column = columnModel.getColumn(i);
+            column.setMinWidth(15);
+            column.setMaxWidth(15);
+            column.setPreferredWidth(15);
+        }
+		
+		
+		
+		
 		for(int i = 0; i < map.getRowLenght(); i++) {
 			for(int y = 0; y < map.getColumnLenght(); y++) {
 				
 				if(((y==0) && (i==0))||((y==0) && (i==map.getRowLenght()-1))||((y==map.getColumnLenght()-1) && (i==0))||((i==map.getRowLenght()-1) && (y==map.getColumnLenght()-1)))
 					renderedMap.setValueAt("+", i, y);
 				else if((i==0)||(i==map.getRowLenght()-1))
-					renderedMap.setValueAt("-", i, y);
+					renderedMap.setValueAt("---", i, y);
 				else if((y==0)||(y==map.getColumnLenght()-1))
 					renderedMap.setValueAt("|", i, y);
 				else
