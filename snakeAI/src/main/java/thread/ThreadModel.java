@@ -25,7 +25,8 @@ public class ThreadModel extends Thread{
 		} catch (FileNotFoundException e) {
 			this.model = new Model();
 		}
-		
+		if(!checkModel())
+			this.model = new Model();
 	}
 	
 	@Override
@@ -66,6 +67,12 @@ public class ThreadModel extends Thread{
 			
 			n++;
 		}
+	}
+	
+	private boolean checkModel() {
+		if(this.model == null)
+			return false;
+		return this.model.checkCorrectFunction();
 	}
 	
 	public Observable<double[]> observableLoss() {

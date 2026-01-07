@@ -75,6 +75,12 @@ public class Model {
 		this.memory = memory;
 	}
 	
+	public boolean checkCorrectFunction() {
+		if(critic == null || actor == null || memory == null)
+			return false;
+		return true;
+	}
+	
 	/**
 	 * return how many input node the model have
 	 * @return

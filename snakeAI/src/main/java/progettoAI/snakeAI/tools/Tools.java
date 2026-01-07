@@ -95,13 +95,15 @@ public final class Tools {
 		return 1;
 	}
 	
-	 public static INDArray appendCol(INDArray existingMatrix, INDArray newCol) {
-	        if (existingMatrix == null) {
-	            // If it is the first row, return it directly as the initial array
-	            return newCol.reshape(newCol.length(),1);
-	        } else {
-	            // Concatenate along the 1-axis (column axis)
-	            return Nd4j.concat(1, existingMatrix, newCol);
-	        }
-	    }
+	public static INDArray appendCol(INDArray existingMatrix, INDArray newCol) {
+		 if(newCol == null)
+			 return null;
+        if (existingMatrix == null) {
+            // If it is the first row, return it directly as the initial array
+            return newCol.reshape(newCol.length(),1);
+        } else {
+            // Concatenate along the 1-axis (column axis)
+            return Nd4j.concat(1, existingMatrix, newCol);
+        }
+    }
 }
