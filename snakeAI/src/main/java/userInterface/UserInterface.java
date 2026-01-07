@@ -42,6 +42,7 @@ public class UserInterface {
 		modeIndicator = -1;
 		modelPath = null;
 		hyperparametersPath = null;
+		threadNumber = -1;
 	}
 	
 	public void start() {
@@ -88,12 +89,7 @@ public class UserInterface {
 	}
 	
 	public void insertDirFileModel() {
-		
-		
-		
-		
-		
-		
+	
 		GUIStatic.insertDirFileModel(this);
 	}
 	
@@ -165,9 +161,8 @@ public class UserInterface {
 	
 	public void toggleFromExecToTrain() {
 		modeIndicator = 1;
-
 		controller.terminateExecution();
-		this.trainWithoutMap();	
+		preTraining();	
 	}
 	
 	
@@ -178,7 +173,6 @@ public class UserInterface {
 			execution();
 		}catch(IOException e) {
 			GUIStatic.sendWarning(myFrame, "Si è verificato un problema di input output nel fare il toggle: " + e.getMessage());
-
 		}
 		
 	}
@@ -212,28 +206,28 @@ public class UserInterface {
 	}
 	
 	
-	public void trainWithoutMap() {
-
+	
+	public void preTraining() {
 		if(getModelPath() == null)
 			GUIStatic.sendWarning(myFrame, "Non è stato selezionato un file model, oppure non è leggibile");
-
-		else{
-			
+		else
 			GUIStatic.askThreadNumberBeforeTrain(myFrame, this);
-			try {
-				modeIndicator = 1;
-				controller.startTraining(threadNumber, modelPath);
-				GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
-			}catch(ThreadException e) {
-				GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'allenamento: " + e.getMessage());
-			}catch(IOException e) {
-				GUIStatic.sendWarning(myFrame, "C'è un problema di input output: " + e.getMessage());
+	}
+	
+	
+	
+	public void trainWithoutMap() {
 
-			}
-		
+		try {
+			modeIndicator = 1;
+			controller.startTraining(threadNumber, modelPath);
+			GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
+		}catch(ThreadException e) {
+				GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'allenamento: " + e.getMessage());
+		}catch(IOException e) {
+				GUIStatic.sendWarning(myFrame, "C'è un problema di input output: " + e.getMessage());	
 		}
-		
-		
+				
 	}
 	
 	

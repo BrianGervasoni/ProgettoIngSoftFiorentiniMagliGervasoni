@@ -82,7 +82,7 @@ public class GUIStatic {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				ui.trainWithoutMap();
+				ui.preTraining();
 			}});	
 		
 		
