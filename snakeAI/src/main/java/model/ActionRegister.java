@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class ActionRegister {
 
 	public double[] actionsProb;
@@ -33,4 +35,12 @@ public class ActionRegister {
 		this.reward = reward;
 	}
 	
+	public String toString() {
+		String a= "(";
+		for(double s : this.actionsProb) {
+			a+= ""+s+",";
+		}
+		a+= ")";
+		return "("+a+","+indexAction+","+vTarget+","+vEstimated+","+advantage+","+reward+")";
+	}
 }

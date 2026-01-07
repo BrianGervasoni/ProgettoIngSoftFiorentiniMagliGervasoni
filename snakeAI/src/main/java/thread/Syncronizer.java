@@ -49,7 +49,7 @@ public class Syncronizer {
     }
 
     /**
-     *  FASE 3: Sincronizzazione Fine BackProp / Fine Caricamento ---
+     *  FASE 3: Sincronizzazione Fine BackProp / Fine Caricamento
      */
     public synchronized void agentFinishedLoadingNext() {
         agentsFinishedPhase++;

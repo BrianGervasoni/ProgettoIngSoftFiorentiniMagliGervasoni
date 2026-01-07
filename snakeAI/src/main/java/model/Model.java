@@ -179,7 +179,8 @@ public class Model {
 			try {
 				INDArray mean = null;
 				for(int i=0; i<Hyperparameters.epoche; i++) {
-					mean = Tools.appendCol(mean,actor.backPropagation(memory.getMiniBatch()));
+					ActionRegister[] m = memory.getMiniBatch();
+					mean = Tools.appendCol(mean,actor.backPropagation(m));
 				}
 				if(mean != null)
 					return mean.sum(1).mul(1/(double)Hyperparameters.epoche).sum(0).toDoubleVector()[0];

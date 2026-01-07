@@ -29,10 +29,13 @@ public abstract class AI {
 			for(int i=1; i<lenLayer.length-1;i++) {//create layer with the corresponding weights and bias matrix dimension
 				layers.add(new LayerReLu(lenLayer[i],lenLayer[i-1]));
 			}
-			layers.add(new LayerSoftMax(lenLayer[lenLayer.length-1],lenLayer[lenLayer.length-2]));//the last layer use softMax
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void resetLayer() {
+		this.layers = null;
 	}
 
 	public ArrayList<Layer> getLayer() {
@@ -166,7 +169,7 @@ public abstract class AI {
 		INDArray l = null;
 		
 		for(int i=0; i<r.length; i++) {
-			l = Tools.appendCol(l, singleLossCalculation(r[i],newProb.getColumn(i)));
+			l = Tools.appendCol(l, singleLossCalculation(r[i],newProb.getColumn(i)).reshape(newProb.getColumn(i).length(),1));
 		}
 		
 		return l;
@@ -183,7 +186,7 @@ public abstract class AI {
 			return null;
 		INDArray l = null;
 		for(int i=0; i<r.length; i++) {
-			l = Tools.appendCol(l, singleDerivateLoss(r[i],newProb.getColumn(i)));
+			l = Tools.appendCol(l, singleDerivateLoss(r[i],newProb.getColumn(i)).reshape(newProb.getColumn(i).length(),1));
 		}
 		return l;
 	}

@@ -1,6 +1,7 @@
 package thread;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import boxes.Direction;
 import boxes.SnakeBody;
@@ -128,20 +129,24 @@ public class Intermediary implements Functions{
 	 * For example the probability can become : (0.8 , 0.1 , 0.1)
 	 */
 	public int moveSelection(double[] Output) {
-		
+		double[] sortedDesc = java.util.Arrays.stream(Output)
+			    .boxed() // Converte double in Double
+			    .sorted(java.util.Collections.reverseOrder())
+			    .mapToDouble(Double::doubleValue) // Riconverte in double
+			    .toArray();
 		double valore = Math.random(); //value from 0 to 1
 		double min = 0;
 		
-		for(int i=0; i<Output.length; i++) {
+		for(int i=0; i<sortedDesc.length; i++) {
 			
-			if(valore > min && valore <= Output[i]) {
+			min += sortedDesc[i];
+			
+			if(valore <= min) {
 				return i;
-			}
-			
-			min = Output[i];
+			}	
 		}
 		
-		return 0;
+		return -1;
 		
 	}
 	/**

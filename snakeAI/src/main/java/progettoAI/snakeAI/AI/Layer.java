@@ -159,6 +159,7 @@ public abstract class Layer {
 		try {
 			return this.getActivation().getActivation(this.getWeights().mmul(backLayerActivation).add(this.getBias()).transpose(), false).transpose();//sigma(W*A+B)
 		}catch(Exception e) {
+			e.printStackTrace();
 			throw new ArithmeticException(e.getMessage(),e.getCause());
 		}
 		

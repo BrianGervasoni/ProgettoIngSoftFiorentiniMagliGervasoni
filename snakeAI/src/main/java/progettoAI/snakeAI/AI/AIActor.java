@@ -1,5 +1,7 @@
 package progettoAI.snakeAI.AI;
 
+import java.util.ArrayList;
+
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -18,6 +20,11 @@ public class AIActor extends AI {
 
 	public AIActor(int[] lenLayer,TypeGradientUpdate mode) {
 		super(lenLayer);
+		try {
+			this.getLayer().add(new LayerSoftMax(lenLayer[lenLayer.length-1],lenLayer[lenLayer.length-2]));//the last layer use softMax
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		this.setMode(mode);
 	}
 	

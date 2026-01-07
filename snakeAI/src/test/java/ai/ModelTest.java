@@ -74,4 +74,27 @@ public class ModelTest {
 		
 		assertEquals(0.1,Hyperparameters.alphaB);
 	}
+	@Test
+	void testBackProp() {
+		Model ai = new Model();
+		try {
+			double[] e = new double[61*3];
+			for(double f: e) {
+				f = 1;
+			}
+			ActionRegister r = ai.forwarding(e);
+			r.indexAction = 0;
+			r.reward = 4;
+			ai.memorizeActions(new ActionRegister[] {r});
+			
+			ai.initBackPropagation();
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		
+		assertEquals(3,ai.getActor().getLayer().get(ai.getActor().getLayer().size()-1).getWeights().getColumn(0).length());
+		assertEquals(1,ai.getCritic().getLayer().get(ai.getCritic().getLayer().size()-1).getWeights().getColumn(0).length());
+		
+	}
 }

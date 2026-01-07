@@ -17,10 +17,6 @@ public class AICritic extends AI {
 	public AICritic(int[] lenLayer,TypeGradientUpdate mode) {
 		super(lenLayer);
 		try {
-			this.setLayer( new ArrayList<Layer>(lenLayer.length));
-			for(int i=1; i<lenLayer.length-1;i++) {//create layer with the corresponding weights and bias matrix dimension
-				this.getLayer().add(new LayerReLu(lenLayer[i],lenLayer[i-1]));
-			}
 			this.getLayer().add(new LayerIdentityFunction(lenLayer[lenLayer.length-1],lenLayer[lenLayer.length-2]));//the last layer use softMax
 		}catch(Exception e) {
 			e.printStackTrace();
