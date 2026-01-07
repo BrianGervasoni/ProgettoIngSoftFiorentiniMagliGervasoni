@@ -111,7 +111,6 @@ public class UserInterface {
 		model.setColumnCount(map.getColumnLenght());
 		
 		renderedMap.setShowGrid(false);
-		renderedMap.setIntercellSpacing(new Dimension(0, 0));
 		
 		TableColumnModel columnModel = renderedMap.getColumnModel();
         for (int i = 0; i < columnModel.getColumnCount(); i++) {
