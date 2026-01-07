@@ -128,8 +128,8 @@ public class Intermediary implements Functions{
 	 * More the AI will learn, more it will increase the probability of the correct action 
 	 * For example the probability can become : (0.8 , 0.1 , 0.1)
 	 */
-	public int moveSelection(double[] Output) {
-		double[] sortedDesc = java.util.Arrays.stream(Output)
+	public int moveSelection(double[] output) {
+		double[] sortedDesc = java.util.Arrays.stream(output)
 			    .boxed() // Converte double in Double
 			    .sorted(java.util.Collections.reverseOrder())
 			    .mapToDouble(Double::doubleValue) // Riconverte in double
