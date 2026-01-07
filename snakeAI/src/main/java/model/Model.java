@@ -86,22 +86,27 @@ public class Model {
 	/**
 	 * perform the forwarding for the critic and actor
 	 * @param input
-	 * @return
+	 * @return ActionRegister with forwarding data, null if input data where null
 	 * @throws ArithmeticException 
 	 */
 	public ActionRegister forwarding(double[] input) throws ArithmeticException {
 		try {
-				CompletableFuture<double[]> procCritic = forwardingCritic(input);
+			CompletableFuture<double[]> procCritic = forwardingCritic(input);
 			CompletableFuture<double[]> procActor = forwardingActor(input);
 			
 			double[] resCritic = procCritic.join();
 			double[] resActor = procActor.join();
 			
-			ActionRegister r = new ActionRegister();
-			r.actionsProb = resActor;
-			r.vEstimated = resCritic[0];
-			r.state = input;
-			return r;
+			if(resCritic != null && resActor != null) {
+				ActionRegister r = new ActionRegister();
+				r.actionsProb = resActor;
+				r.vEstimated = resCritic[0];
+				r.state = input;
+				return r;
+			}else {
+				return null;
+			}
+			
 		}catch (RuntimeException e) {
 			if (e.getCause() instanceof ArithmeticException) {
 	            
@@ -150,7 +155,6 @@ public class Model {
 		try {
 			CompletableFuture<Double> procCritic = backPropCritic();
 			CompletableFuture<Double> procActor = backPropActor();
-			
 			return new double[] {procActor.join(),procCritic.join()};
 		}catch (RuntimeException e) {
 			if (e.getCause() instanceof ArithmeticException) {
@@ -169,7 +173,9 @@ public class Model {
 				for(int i=0; i<Hyperparameters.epoche; i++) {
 					mean = Tools.appendCol(mean,critic.backPropagation(memory.getMiniBatch()));
 				}
-				return mean.sum(1).mul(1/(double)Hyperparameters.epoche).sum(0).toDoubleVector()[0];
+				if(mean != null)
+					return mean.sum(1).mul(1/(double)Hyperparameters.epoche).sum(0).toDoubleVector()[0];
+				return 0.0;
 			}catch (ArithmeticException e) {
 				 throw new RuntimeException(e);
 			}
@@ -183,7 +189,9 @@ public class Model {
 				for(int i=0; i<Hyperparameters.epoche; i++) {
 					mean = Tools.appendCol(mean,actor.backPropagation(memory.getMiniBatch()));
 				}
-				return mean.sum(1).mul(1/(double)Hyperparameters.epoche).sum(0).toDoubleVector()[0];
+				if(mean != null)
+					return mean.sum(1).mul(1/(double)Hyperparameters.epoche).sum(0).toDoubleVector()[0];
+				return 0.0;
 			}catch (ArithmeticException e) {
 				 throw new RuntimeException(e);
 			}

@@ -44,29 +44,29 @@ public class ThreadAgent extends Thread implements Functions{
 				
 				try {
 					this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
+					this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
+					
+					this.intermediary.addActionReward(this.calculateReward());
+					
+					if(this.isLockSpeed()) {
+						fine = System.currentTimeMillis();
+					    durataEffettiva = fine - inizio;
+					    attesaNecessaria = 1000 - durataEffettiva;// deve attendere almeno 1s
+					    if (attesaNecessaria > 0) {
+					        try {
+					            Thread.sleep(attesaNecessaria);
+					        } catch (InterruptedException e) {
+					            e.printStackTrace();
+					        }
+					    }
+					}
+					
+					t++;
 				}catch(ArithmeticException e) {
 					throw new RuntimeException(e.getMessage(),e.getCause());
-				}
-				
-				
-				this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
-				
-				this.intermediary.addActionReward(this.calculateReward());
-				
-				if(this.isLockSpeed()) {
-					fine = System.currentTimeMillis();
-				    durataEffettiva = fine - inizio;
-				    attesaNecessaria = 1000 - durataEffettiva;// deve attendere almeno 1s
-				    if (attesaNecessaria > 0) {
-				        try {
-				            Thread.sleep(attesaNecessaria);
-				        } catch (InterruptedException e) {
-				            e.printStackTrace();
-				        }
-				    }
-				}
-				
-				t++;
+				}catch(IllegalArgumentException e) {
+					System.err.println("WARNING! Si sta cercando di aggiungere un null all'intermediario: "+e.getMessage());
+				}	
 			}
 			
 			t = 0;

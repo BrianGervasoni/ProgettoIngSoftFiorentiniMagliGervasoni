@@ -66,6 +66,8 @@ public abstract class AI {
 	 * @throws ArithmeticException 
 	 */
 	public double[] forwarding(double[] input) throws ArithmeticException {
+		if(input == null)
+			return null;
 		return feedForwarding(Nd4j.create(input).reshape(input.length,1),0,false).toDoubleVector();
 	}
 	
@@ -116,6 +118,8 @@ public abstract class AI {
 	 * @throws ArithmeticException 
 	 */
 	public INDArray backPropagation(ActionRegister[] r) throws ArithmeticException {
+		if(r == null)
+			return null;
 		INDArray tmpR = copyStateIntoINDArray(r,r.length);
 		
 		// perform the forwarding saving the intermediary state used for calculate the derivates
@@ -136,6 +140,8 @@ public abstract class AI {
 	 * @return matrix (lengthState X minibatchSize)
 	 */
 	private INDArray copyStateIntoINDArray(ActionRegister[] r,int minibatchSize) {
+		if(r == null)
+			return null;
 		int stateLength = r[0].state.length;
 		double[] tmp = new double[stateLength * minibatchSize];
 		int offset = 0;
@@ -155,6 +161,8 @@ public abstract class AI {
 	 * @return NXM [numberOut X minibatchSize]
 	 */
 	public INDArray lossCalculation(ActionRegister[] r,INDArray newProb) {
+		if(r == null)
+			return null;
 		INDArray l = null;
 		
 		for(int i=0; i<r.length; i++) {
@@ -171,6 +179,8 @@ public abstract class AI {
 	 * @return NXM [numberOut X minibatchSize]
 	 */
 	public INDArray derivateLoss(ActionRegister[] r,INDArray newProb) {
+		if(r == null)
+			return null;
 		INDArray l = null;
 		for(int i=0; i<r.length; i++) {
 			l = Tools.appendCol(l, singleDerivateLoss(r[i],newProb.getColumn(i)));

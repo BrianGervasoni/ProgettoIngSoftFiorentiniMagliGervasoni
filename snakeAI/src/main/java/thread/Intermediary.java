@@ -162,7 +162,11 @@ public class Intermediary implements Functions{
 	}
 	
 	public void addActionRegister(ActionRegister actionRegister) {
-		this.actionRegister.add(actionRegister);
+		if(actionRegister != null) {
+			this.actionRegister.add(actionRegister);
+		}else {
+			throw new IllegalArgumentException();
+		}
 	}
 	
 	public ActionRegister selectLastActionRegister() {

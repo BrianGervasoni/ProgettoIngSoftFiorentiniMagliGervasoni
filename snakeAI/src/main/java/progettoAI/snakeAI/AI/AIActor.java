@@ -23,6 +23,8 @@ public class AIActor extends AI {
 	
 	@Override
 	public INDArray singleLossCalculation(ActionRegister r,INDArray newProb) {
+		if(r == null)
+			return null;
 		RealVector l = entropy(newProb.toDoubleVector()).mapMultiply(Hyperparameters.entropyContribution);
 		l.addToEntry(r.indexAction, lossClip(r,newProb.toDoubleVector()));
 		return Nd4j.create(l.toArray());
@@ -30,6 +32,8 @@ public class AIActor extends AI {
 	
 	@Override
 	public INDArray singleDerivateLoss(ActionRegister r,INDArray newProb) {
+		if(r == null)
+			return null;
 		RealVector l = derivateEntropy(newProb.toDoubleVector()).mapMultiply(Hyperparameters.entropyContribution);
 		l.addToEntry(r.indexAction, derivateLossClip(r,newProb.toDoubleVector()));
 		return Nd4j.create(l.toArray());
@@ -62,6 +66,8 @@ public class AIActor extends AI {
 	 * @return
 	 */
 	private RealVector entropy(double[] probs) {
+		if(probs == null)
+			return null;
 		RealVector x= new ArrayRealVector(probs.length);
 		for(int i=0; i < probs.length; i++) {
 			x.addToEntry(i, -probs[i]*Math.log(probs[i]));
@@ -74,6 +80,8 @@ public class AIActor extends AI {
 	 * @return
 	 */
 	private RealVector derivateEntropy(double[] probs) {
+		if(probs == null)
+			return null;
 		RealVector x= new ArrayRealVector(probs.length);
 		for(int i=0; i < probs.length; i++) {
 			x.addToEntry(i, -(Math.log(probs[i])+1));
@@ -88,6 +96,8 @@ public class AIActor extends AI {
 	 * @return
 	 */
 	private double lossClip(ActionRegister r, double[] newProb) {
+		if(r == null)
+			return 0;
 		return Math.min(policyRatio(newProb[r.indexAction],r.oldSelectAction()) * r.advantage,
 				Tools.clip(policyRatio(newProb[r.indexAction],r.oldSelectAction()),1-Hyperparameters.motivation,1+Hyperparameters.motivation) 
 				* r.advantage);
@@ -100,6 +110,8 @@ public class AIActor extends AI {
 	 * @return
 	 */
 	private double derivateLossClip(ActionRegister r, double[] newProb) {
+		if(newProb == null || r == null)
+			return 0;
 		if(r.advantage > 0) {
 			if(policyRatio(newProb[r.indexAction],r.oldSelectAction()) > 1+Hyperparameters.motivation) {
 				return 0;
