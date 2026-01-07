@@ -42,7 +42,7 @@ public class Main {
 		try {
 			manager.startTraining();
 		}catch(ThreadException e) {
-			//TODO
+			System.err.println(e.getMessage());
 		}
 		
 

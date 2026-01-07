@@ -43,6 +43,8 @@ public class UserInterface {
 		modelPath = null;
 		hyperparametersPath = null;
 		threadNumber = -1;
+		lossAgent = new JLabel("0");
+		lossModel = new JLabel("0");
 	}
 	
 	public void start() {

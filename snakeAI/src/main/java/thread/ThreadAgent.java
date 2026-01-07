@@ -22,6 +22,7 @@ public class ThreadAgent extends Thread implements Functions{
 		this.intermediary = new Intermediary();
 		this.game = new GameMain();
 		mapStat = BehaviorSubject.create();
+		lockSpeed = false;
 	}
 	
 	@Override
