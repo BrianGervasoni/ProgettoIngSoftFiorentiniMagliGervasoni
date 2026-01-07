@@ -18,11 +18,11 @@ public class Main {
 		
 		List<ThreadAgent> threadAgents = new ArrayList<>();
 		List<ThreadModel> threadModels = new ArrayList<>();
-		
+		Syncronizer coord = new Syncronizer(2);
 		for(int i = 0; i<1; i++) {
 			ThreadModel threadModel = null;
 			try {
-				threadModel = new ThreadModel("hello",2);
+				threadModel = new ThreadModel("hello",coord);
 			}catch(IOException e) {
 				e.printStackTrace();
 			}
@@ -31,7 +31,7 @@ public class Main {
 			threadModel.setModel(model);
 			
 			for(int j = 0; j<2; j++) {
-				ThreadAgent threadAgent = new ThreadAgent(threadModel.getModel());
+				ThreadAgent threadAgent = new ThreadAgent(threadModel.getModel(),coord);
 				threadAgents.add(threadAgent);
 				threadAgent.setModel(model);
 			}

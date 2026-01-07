@@ -12,13 +12,15 @@ import errorHandler.ArithmeticException;
 public class ThreadAgent extends Thread implements Functions{
 
 	private Model model;
+	private Syncronizer coordinator;
 	private Intermediary intermediary;
 	private GameMain game;
 	private final BehaviorSubject<Map> mapStat;
 	private boolean lockSpeed;
 	
-	public ThreadAgent(Model model) {
+	public ThreadAgent(Model model,Syncronizer coordinator) {
 		this.model = model;
+		this.coordinator = coordinator;
 		this.intermediary = new Intermediary();
 		this.game = new GameMain();
 		mapStat = BehaviorSubject.create();
@@ -28,65 +30,66 @@ public class ThreadAgent extends Thread implements Functions{
 	@Override
 	public void run() {
 		
+		while(!Thread.currentThread().isInterrupted()) {
+            coordinator.startingSendActions();
+            System.out.println("agente:"+Thread.currentThread().getName()+" inizio lavoro");
+            runAgentWork();
+            System.out.println("agente:"+Thread.currentThread().getName()+" fine lavoro");
+            coordinator.terminatingSendActions();
+            System.out.println("agente:"+Thread.currentThread().getName()+" inizio lavoro concorrente");
+            runAgentWork();
+            System.out.println("agente:"+Thread.currentThread().getName()+" fine lavoro concorrente");
+            coordinator.agentFinishedLoadingNext();
+		}
+			
+	}
+	
+	public void runAgentWork() {
 		int t = 0;
 		long inizio;
 		long fine;
 		long durataEffettiva;
 		long attesaNecessaria;
+		while(this.game.finish() == false && t < Hyperparameters.timeStep) {
+			inizio = System.currentTimeMillis();
+			
+			this.mapStat.onNext(this.getGame().getMap());
+			
+			try {
+				ActionRegister r = this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght()));
+				this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
+				this.intermediary.selectLastActionRegister().indexAction = this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb);
+				this.move(this.intermediary.moveConversion(this.intermediary.selectLastActionRegister().indexAction));
+				
+				this.intermediary.addActionReward(this.calculateReward());
+				
+				if(this.isLockSpeed()) {
+					fine = System.currentTimeMillis();
+				    durataEffettiva = fine - inizio;
+				    attesaNecessaria = 1000 - durataEffettiva;// deve attendere almeno 1s
+				    if (attesaNecessaria > 0) {
+				        try {
+				            Thread.sleep(attesaNecessaria);
+				        } catch (InterruptedException e) {
+				            e.printStackTrace();
+				        }
+				    }
+				}
+				
+				t++;
+			}catch(ArithmeticException e) {
+				throw new RuntimeException(e.getMessage(),e.getCause());
+			}catch(IllegalArgumentException e) {
+				System.err.println("WARNING! Si sta cercando di aggiungere un null all'intermediario: "+e.getMessage());
+			}	
+		}
 		
-		while(!Thread.currentThread().isInterrupted()) {
-			
-			while(this.game.finish() == false && t < Hyperparameters.timeStep) {
-				inizio = System.currentTimeMillis();
-				
-				this.mapStat.onNext(this.getGame().getMap());
-				
-				this.model.threadAgentReportThatItHasStarted();
-				System.out.println("agente:"+Thread.currentThread().getName()+" inizio lavoro");
-				try {
-					this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
-					this.move(this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb));
-					
-					this.intermediary.addActionReward(this.calculateReward());
-					
-					if(this.isLockSpeed()) {
-						fine = System.currentTimeMillis();
-					    durataEffettiva = fine - inizio;
-					    attesaNecessaria = 1000 - durataEffettiva;// deve attendere almeno 1s
-					    if (attesaNecessaria > 0) {
-					        try {
-					            Thread.sleep(attesaNecessaria);
-					        } catch (InterruptedException e) {
-					            e.printStackTrace();
-					        }
-					    }
-					}
-					
-					t++;
-				}catch(ArithmeticException e) {
-					throw new RuntimeException(e.getMessage(),e.getCause());
-				}catch(IllegalArgumentException e) {
-					System.err.println("WARNING! Si sta cercando di aggiungere un null all'intermediario: "+e.getMessage());
-				}	
-			}
-			
-			t = 0;
-			
-			if(!this.isLockSpeed()) {
-				this.model.startingSendActions();
-				this.sendActions(); 	
-				this.model.terminatingSendActions();
-			}
-			
-			this.resetActionRegister();
-			
-			
-			
-			if(game.finish() == true) {
-				this.game.reset(); 
-				System.out.println("agente:"+Thread.currentThread().getName()+" fine lavoro");
-				this.model.threadAgentReportThatItHasFinished();
-			}
+		if(!this.isLockSpeed()) {
+			this.sendActions(); 	
+		}		
+		this.resetActionRegister();
+		if(game.finish() == true) {
+			this.game.reset(); 
 		}
 	}
 	

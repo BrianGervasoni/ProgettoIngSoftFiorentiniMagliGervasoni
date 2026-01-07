@@ -45,13 +45,14 @@ public class ThreadAIManager{
 				relativePath = Paths.get(relPath + name + i + ".json");
 			}
 			Path absolutePath = relativePath.toAbsolutePath();
-			ThreadModel threadModel = new ThreadModel(absolutePath.toString(), this.threadsAgentNumber);
+			Syncronizer coord = new Syncronizer(this.threadsAgentNumber);
+			ThreadModel threadModel = new ThreadModel(absolutePath.toString(),coord);
 
 			
 			threadModels.add(threadModel);
 			
 			for(int j = 0; j<this.threadsAgentNumber; j++) {
-				ThreadAgent threadAgent = new ThreadAgent(threadModel.getModel());
+				ThreadAgent threadAgent = new ThreadAgent(threadModel.getModel(),coord);
 				threadAgents.add(threadAgent);
 			}
 		}

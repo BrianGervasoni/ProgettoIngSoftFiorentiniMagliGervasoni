@@ -12,13 +12,13 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 public class ThreadModel extends Thread{
 
 	private Model model;
+	private Syncronizer coordinator;
 	private String dirFile; 
-	private int nThreadsAgent;
 	private final BehaviorSubject<double[]> lossStat;
 
-	public ThreadModel(String dir, int nTA) throws IOException {
+	public ThreadModel(String dir,Syncronizer coordinator ) throws IOException {
 		this.dirFile = dir;
-		this.nThreadsAgent = nTA;
+		this.coordinator = coordinator;
 		lossStat = BehaviorSubject.create();
 		try {
 			this.load();
@@ -36,11 +36,13 @@ public class ThreadModel extends Thread{
 		
 		while(!Thread.currentThread().isInterrupted()) {
 			
-			this.model.threadModelReportsThatItHasStartedInizitBackProp();
+			// 1. Aspetta che gli agenti finiscano il primo caricamento
+            coordinator.waitForAgentsForInit();
 			System.out.println("model:"+Thread.currentThread().getName()+" inizio initBack");
 			this.initBackPropagation();
 			System.out.println("model:"+Thread.currentThread().getName()+" fine initBack");
-			this.model.threadModelReportsThatItHasFinishedInizitBackProp();
+			 // ...
+            coordinator.finishInitBack(); // SBLOCCA AGENTI
 			
 			try {
 				this.backPropagation();
@@ -49,11 +51,14 @@ public class ThreadModel extends Thread{
 			}
 			
 			
-			this.model.threadModelReportsThatItHasStartedOptimization();
+			// ...
+            coordinator.modelFinishedBackProp();
+            // 4. Sincronizzazione finale
+            coordinator.waitForAllBeforeOptimization();
 			System.out.println("model:"+Thread.currentThread().getName()+" inizio optimization");
 			this.optimization();
 			System.out.println("model:"+Thread.currentThread().getName()+" fine optimization");
-			this.model.threadModelReportsThatItHasFinishedInizitOptimization() ;
+			coordinator.finishOptimization();
 			
 			if(n == 5) {
 				try {
@@ -109,15 +114,6 @@ public class ThreadModel extends Thread{
 	public void setModel(Model model) {
 		this.model = model;
 	}
-	
-	public int getnThreadsAgent() {
-		return nThreadsAgent;
-	}
-
-	public void setnThreadsAgent(int nThreadsAgent) {
-		this.nThreadsAgent = nThreadsAgent;
-	}
-	
 }
 
 

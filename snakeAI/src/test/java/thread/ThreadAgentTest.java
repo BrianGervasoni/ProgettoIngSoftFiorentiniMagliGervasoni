@@ -20,7 +20,7 @@ class ThreadAgentTest {
 	void calculateReward() {
 
 		Model model = new Model();
-		ThreadAgent tA= new ThreadAgent(model);
+		ThreadAgent tA= new ThreadAgent(model,null);
 		
 		Map map = new Map();
 		Snake snake = new Snake();

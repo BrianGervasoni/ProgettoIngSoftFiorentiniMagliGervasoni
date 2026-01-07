@@ -96,7 +96,7 @@ public class Intermediary implements Functions{
 	 * 2 = right
 	 * @return the corresponding direction
 	 */
-	private Direction moveConversion(int index) {
+	public Direction moveConversion(int index) {
 		
 		switch(index) {
 		
@@ -127,7 +127,7 @@ public class Intermediary implements Functions{
 	 * More the AI will learn, more it will increase the probability of the correct action 
 	 * For example the probability can become : (0.8 , 0.1 , 0.1)
 	 */
-	public Direction moveSelection(double[] Output) {
+	public int moveSelection(double[] Output) {
 		
 		double valore = Math.random(); //value from 0 to 1
 		double min = 0;
@@ -135,13 +135,13 @@ public class Intermediary implements Functions{
 		for(int i=0; i<Output.length; i++) {
 			
 			if(valore > min && valore <= Output[i]) {
-				return moveConversion(i);
+				return i;
 			}
 			
 			min = Output[i];
 		}
 		
-		return null;
+		return 0;
 		
 	}
 	/**
