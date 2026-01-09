@@ -7,5 +7,5 @@
   "lambda": 0.95,
   "timeStep": 50,
   "motivation": 0.3,
-  "entropyContribution": 0.5
+  "entropyContribution": 0.2
 }

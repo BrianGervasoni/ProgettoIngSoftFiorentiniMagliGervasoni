@@ -199,7 +199,7 @@ public class ThreadAIManager{
 	 */
 	public void selectNextMap() {
 		
-		if(mapIndex == this.threadsAgentNumber) {
+		if(mapIndex == this.threadsAgentNumber-1) {
 			mapIndex = 0;
 		}else {
 			mapIndex ++;
@@ -213,7 +213,7 @@ public class ThreadAIManager{
 	public void selectPreviousMap() {
 		
 		if(mapIndex == 0) {
-			mapIndex = this.threadsAgentNumber;
+			mapIndex = this.threadsAgentNumber-1;
 		}else {
 			mapIndex --;
 		}
