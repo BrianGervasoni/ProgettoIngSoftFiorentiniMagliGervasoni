@@ -292,7 +292,6 @@ public class UserInterface {
 	}
 	
 	public void gestisciErroreModel(Throwable e) {
-		System.out.println(e.getMessage());
 		GUIStatic.sendWarning(myFrame, "Si è verificato un problema con i thread model:"+ e.getMessage());
 	}
 
