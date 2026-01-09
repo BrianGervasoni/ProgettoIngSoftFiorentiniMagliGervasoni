@@ -30,23 +30,25 @@ public class ThreadAgent extends Thread implements Functions{
 	
 	@Override
 	public void run() {
-		
-		while(!Thread.currentThread().isInterrupted()) {
-			if(!this.isLockSpeed()) {
-				coordinator.startingSendActions();
-	            runAgentWork();
-	            coordinator.terminatingSendActions();
-	            runAgentWork();
-	            coordinator.agentFinishedLoadingNext();
-			}else {
-				runAgentWork();
+		try {
+			while(!Thread.currentThread().isInterrupted()) {
+				if(!this.isLockSpeed()) {
+					coordinator.startingSendActions();
+		            runAgentWork();
+		            coordinator.terminatingSendActions();
+		            runAgentWork();
+		            coordinator.agentFinishedLoadingNext();
+				}else {
+					runAgentWork();
+				}
+	            
 			}
-            
-		}
-			
+		}catch (InterruptedException e) {
+	        Thread.currentThread().interrupt(); // Ripristina il flag
+	    }
 	}
 	
-	public void runAgentWork() {
+	public void runAgentWork() throws InterruptedException {
 		int t = 0;
 		long inizio;
 		long fine;

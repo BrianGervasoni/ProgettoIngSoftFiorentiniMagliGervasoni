@@ -13,15 +13,21 @@ public class Syncronizer {
 
     /**
      *  FASE 1: Caricamento Array (Agenti)
+     * @throws InterruptedException 
      */
-    public synchronized void startingSendActions() {
+    public synchronized void startingSendActions() throws InterruptedException {
         // Gli agenti aspettano che l'optimization precedente sia finita
-        while (!optimizationDone) {
-            try { wait(); } catch (InterruptedException e) {}
+        while (!optimizationDone){
+            try { 
+            	wait(); 
+            } 
+            catch (InterruptedException e){
+            	throw new InterruptedException(e.getMessage());
+            }
         }
     }
 
-    public synchronized void terminatingSendActions() {
+    public synchronized void terminatingSendActions() throws InterruptedException {
         agentsFinishedPhase++;
         if (agentsFinishedPhase == numAgents) {
             optimizationDone = false; // Inizia un nuovo ciclo
@@ -29,16 +35,27 @@ public class Syncronizer {
         }
         // Aspetta che il Model finisca l'inizializzazione per poter caricare il prossimo array
         while (!initBackDone) {
-            try { wait(); } catch (InterruptedException e) {}
+            try { 
+            	wait(); 
+            } 
+            catch (InterruptedException e){
+            	throw new InterruptedException(e.getMessage());
+            }
         }
     }
 
     /**
      *  FASE 2: Model Inizializza BackProp 
+     * @throws InterruptedException 
      */
-    public synchronized void waitForAgentsForInit() {
+    public synchronized void waitForAgentsForInit() throws InterruptedException {
         while (agentsFinishedPhase < numAgents) {
-            try { wait(); } catch (InterruptedException e) {}
+            try {
+            	wait(); 
+            } 
+            catch (InterruptedException e){
+            	throw new InterruptedException(e.getMessage());
+            }
         }
     }
 
@@ -50,13 +67,18 @@ public class Syncronizer {
 
     /**
      *  FASE 3: Sincronizzazione Fine BackProp / Fine Caricamento
+     * @throws InterruptedException 
      */
-    public synchronized void agentFinishedLoadingNext() {
+    public synchronized void agentFinishedLoadingNext() throws InterruptedException {
         agentsFinishedPhase++;
         if (agentsFinishedPhase == numAgents) notifyAll();
         // Aspetta che il model finisca l'optimization
         while (!optimizationDone) {
-            try { wait(); } catch (InterruptedException e) {}
+            try { 
+            	wait(); 
+            }catch (InterruptedException e){
+            	throw new InterruptedException(e.getMessage());
+            }
         }
     }
 
@@ -65,10 +87,15 @@ public class Syncronizer {
         notifyAll();
     }
 
-    public synchronized void waitForAllBeforeOptimization() {
+    public synchronized void waitForAllBeforeOptimization() throws InterruptedException {
         // Il model aspetta che gli agenti abbiano caricato l'array successivo
         while (agentsFinishedPhase < numAgents || !modelFinishedBackProp) {
-            try { wait(); } catch (InterruptedException e) {}
+            try { 
+            	wait(); 
+            } 
+            catch (InterruptedException e){
+            	throw new InterruptedException(e.getMessage());
+            }
         }
     }
 

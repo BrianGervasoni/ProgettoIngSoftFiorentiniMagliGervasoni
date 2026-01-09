@@ -130,7 +130,6 @@ public class ThreadAIManager{
 			return;
 		
 		for(ThreadModel threadModel : threadModels) {
-			threadModel.save();
 			threadModel.interrupt();
 		}
 		

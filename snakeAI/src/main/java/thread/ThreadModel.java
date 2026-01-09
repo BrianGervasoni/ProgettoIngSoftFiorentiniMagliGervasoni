@@ -31,41 +31,49 @@ public class ThreadModel extends Thread{
 	
 	@Override
 	public void run() {
-		
-		int n = 0;
-		
-		while(!Thread.currentThread().isInterrupted()) {
+		try {
+			int n = 0;
 			
-			//aspetta che gli agenti finiscano il primo caricamento
-            coordinator.waitForAgentsForInit();
-			this.initBackPropagation();
-            coordinator.finishInitBack(); // SBLOCCA AGENTI
-			
-			try {
-				this.backPropagation();
-			}catch(ArithmeticException e) {
-				throw new RuntimeException(e.getMessage(),e.getCause());
-			}
-			
-			
-            coordinator.modelFinishedBackProp();
-            //sincronizzazione finale
-            coordinator.waitForAllBeforeOptimization();
-			this.optimization();
-			coordinator.finishOptimization();
-			
-			if(n == 5) {
+			while(!Thread.currentThread().isInterrupted()) {
+				
+				//aspetta che gli agenti finiscano il primo caricamento
+	            coordinator.waitForAgentsForInit();
+				this.initBackPropagation();
+	            coordinator.finishInitBack(); // SBLOCCA AGENTI
+				
 				try {
-					this.save();
-				}catch(IOException e) {
+					this.backPropagation();
+				}catch(ArithmeticException e) {
 					throw new RuntimeException(e.getMessage(),e.getCause());
 				}
 				
-				n = 0;
+				
+	            coordinator.modelFinishedBackProp();
+	            //sincronizzazione finale
+	            coordinator.waitForAllBeforeOptimization();
+				this.optimization();
+				coordinator.finishOptimization();
+				
+				if(n == 5) {
+					try {
+						this.save();
+					}catch(IOException e) {
+						throw new RuntimeException(e.getMessage(),e.getCause());
+					}
+					
+					n = 0;
+				}
+				
+				n++;
 			}
-			
-			n++;
-		}
+		}catch (InterruptedException e){
+			try {
+				this.save();
+			} catch (IOException e1) {
+				throw new RuntimeException(e.getMessage(),e.getCause());
+			}
+			Thread.currentThread().interrupt(); // Ripristina il flag
+        }
 	}
 	
 	private boolean checkModel() {
