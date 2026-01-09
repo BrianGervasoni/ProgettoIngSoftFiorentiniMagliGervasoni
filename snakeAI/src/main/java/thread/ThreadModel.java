@@ -36,12 +36,9 @@ public class ThreadModel extends Thread{
 		
 		while(!Thread.currentThread().isInterrupted()) {
 			
-			// 1. Aspetta che gli agenti finiscano il primo caricamento
+			//aspetta che gli agenti finiscano il primo caricamento
             coordinator.waitForAgentsForInit();
-			System.out.println("model:"+Thread.currentThread().getName()+" inizio initBack");
 			this.initBackPropagation();
-			System.out.println("model:"+Thread.currentThread().getName()+" fine initBack");
-			 // ...
             coordinator.finishInitBack(); // SBLOCCA AGENTI
 			
 			try {
@@ -51,13 +48,10 @@ public class ThreadModel extends Thread{
 			}
 			
 			
-			// ...
             coordinator.modelFinishedBackProp();
-            // 4. Sincronizzazione finale
+            //sincronizzazione finale
             coordinator.waitForAllBeforeOptimization();
-			System.out.println("model:"+Thread.currentThread().getName()+" inizio optimization");
 			this.optimization();
-			System.out.println("model:"+Thread.currentThread().getName()+" fine optimization");
 			coordinator.finishOptimization();
 			
 			if(n == 5) {

@@ -22,7 +22,7 @@ import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 public class JsonFileManager {
 	// GsonBuilder is used to format JSON in a readable way (pretty printing)
     private static final Gson GSON = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
-    		.registerTypeAdapter(INDArray.class, new INDArrayAdapter())
+    		.registerTypeHierarchyAdapter(INDArray.class, new INDArrayAdapter())
     		.registerTypeAdapter(IActivation.class, new IActivationAdapter()).
     		registerTypeAdapter(Layer.class, new LayerAdapter()).setPrettyPrinting().create();
     

@@ -17,6 +17,7 @@ public class ThreadAgent extends Thread implements Functions{
 	private GameMain game;
 	private final BehaviorSubject<Map> mapStat;
 	private boolean lockSpeed;
+	private final int emptyTick = 50;
 	
 	public ThreadAgent(Model model,Syncronizer coordinator) {
 		this.model = model;
@@ -33,13 +34,9 @@ public class ThreadAgent extends Thread implements Functions{
 		while(!Thread.currentThread().isInterrupted()) {
 			if(!this.isLockSpeed()) {
 				coordinator.startingSendActions();
-	            System.out.println("agente:"+Thread.currentThread().getName()+" inizio lavoro");
 	            runAgentWork();
-	            System.out.println("agente:"+Thread.currentThread().getName()+" fine lavoro");
 	            coordinator.terminatingSendActions();
-	            System.out.println("agente:"+Thread.currentThread().getName()+" inizio lavoro concorrente");
 	            runAgentWork();
-	            System.out.println("agente:"+Thread.currentThread().getName()+" fine lavoro concorrente");
 	            coordinator.agentFinishedLoadingNext();
 			}else {
 				runAgentWork();
@@ -55,13 +52,12 @@ public class ThreadAgent extends Thread implements Functions{
 		long fine;
 		long durataEffettiva;
 		long attesaNecessaria;
-		while(this.game.finish() == false && t < Hyperparameters.timeStep) {
+		while(t < Hyperparameters.timeStep) {
 			inizio = System.currentTimeMillis();
 			
 			this.mapStat.onNext(this.getGame().getMap());
 			
 			try {
-				ActionRegister r = this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght()));
 				this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
 				this.intermediary.selectLastActionRegister().indexAction = this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb);
 				this.move(this.intermediary.moveConversion(this.intermediary.selectLastActionRegister().indexAction));
@@ -81,6 +77,15 @@ public class ThreadAgent extends Thread implements Functions{
 				    }
 				}
 				
+				if(game.finish() == true || game.getTickLastApple() >= emptyTick) {
+					this.game.reset(); 
+					this.intermediary.selectLastActionRegister().isTerminal = true;
+					
+					if(game.getTickLastApple() >= emptyTick) {
+						this.intermediary.selectLastActionRegister().reward += -50;
+					}
+				}
+				
 				t++;
 			}catch(ArithmeticException e) {
 				throw new RuntimeException(e.getMessage(),e.getCause());
@@ -93,9 +98,6 @@ public class ThreadAgent extends Thread implements Functions{
 			this.sendActions(); 	
 		}		
 		this.resetActionRegister();
-		if(game.finish() == true) {
-			this.game.reset(); 
-		}
 	}
 	
 	public Observable<Map> observableMap() {

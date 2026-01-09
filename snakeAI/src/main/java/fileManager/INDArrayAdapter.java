@@ -7,32 +7,52 @@ import java.lang.reflect.Type;
 
 public class INDArrayAdapter implements JsonSerializer<INDArray>, JsonDeserializer<INDArray> {
 
-    @Override
+	@Override
     public JsonElement serialize(INDArray src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
 
-        // 1. Save the raw data as an array of doubles
-        double[] data = src.data().asDouble();
-        jsonObject.add("data", context.serialize(data));
+        // 1. Estraiamo i dati grezzi in un array primitivo Java
+        // Usiamo toDoubleVector() se è 1D o un flatten per ND
+        double[] data = src.ravel().toDoubleVector(); 
+        
+        // Convertiamo manualmente in JsonArray per evitare riflessione su oggetti ND4J
+        JsonArray dataArray = new JsonArray();
+        for (double d : data) {
+            dataArray.add(new JsonPrimitive(d));
+        }
+        jsonObject.add("data", dataArray);
 
-        // 2. Save the shape of the matrix
+        // 2. Salviamo la shape
         long[] shape = src.shape();
-        jsonObject.add("shape", context.serialize(shape));
+        JsonArray shapeArray = new JsonArray();
+        for (long s : shape) {
+            shapeArray.add(new JsonPrimitive(s));
+        }
+        jsonObject.add("shape", shapeArray);
 
         return jsonObject;
     }
 
     @Override
     public INDArray deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject jsonObject = json.getAsJsonObject();
+        try {
+            JsonObject jsonObject = json.getAsJsonObject();
 
-        // 1. Retrieve raw data (array of doubles)
-        double[] data = context.deserialize(jsonObject.get("data"), double[].class);
+            JsonArray dataArray = jsonObject.getAsJsonArray("data");
+            double[] data = new double[dataArray.size()];
+            for (int i = 0; i < dataArray.size(); i++) {
+                data[i] = dataArray.get(i).getAsDouble();
+            }
 
-        // 2. Get the shape
-        long[] shape = context.deserialize(jsonObject.get("shape"), long[].class);
+            JsonArray shapeArray = jsonObject.getAsJsonArray("shape");
+            long[] shape = new long[shapeArray.size()];
+            for (int i = 0; i < shapeArray.size(); i++) {
+                shape[i] = shapeArray.get(i).getAsLong();
+            }
 
-        // 3. Rebuild the INDArray
-        return Nd4j.create(data, shape);
+            return Nd4j.create(data, shape, 'c');
+        } catch (Exception e) {
+            throw new JsonParseException("Errore deserializzazione INDArray: " + e.getMessage());
+        }
     }
 }

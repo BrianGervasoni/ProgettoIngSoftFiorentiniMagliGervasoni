@@ -11,6 +11,7 @@ public class ActionRegister {
 	public double vEstimated;
 	public double advantage;
 	public double reward;
+	public boolean isTerminal;
 
 	public ActionRegister() {
 		actionsProb = null;
@@ -20,7 +21,7 @@ public class ActionRegister {
 		vEstimated = 0;
 		advantage = 0;
 		reward = 0;
-		
+		isTerminal = false;
 	}
 	
 	public double oldSelectAction() {

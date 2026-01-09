@@ -54,7 +54,7 @@ public class GameMain {
 	 */
 	public boolean finish() {
 		
-		return map.checkDefeat() || map.checkVictory() || tLastApple >= Hyperparameters.timeStep;
+		return map.checkDefeat() || map.checkVictory();
 	}
 	
 	/**

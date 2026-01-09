@@ -3,6 +3,9 @@ package progettoAI.snakeAI.AI;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.activations.*;
 import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.indexing.BooleanIndexing;
+import org.nd4j.linalg.indexing.conditions.Conditions;
+import org.nd4j.linalg.ops.transforms.Transforms;
 import org.nd4j.common.primitives.Pair;
 
 
@@ -174,9 +177,24 @@ public abstract class Layer {
 	public INDArray forwardPass(INDArray backLayerActivation) throws ArithmeticException {
 		try {
 			this.setBackLayerActivation_cache(backLayerActivation);//KXM
+			// 1. Calcolo Pre-Attivazione Lineare (NXM)
+	        INDArray z = this.getWeights().mmul(backLayerActivation).add(this.getBias());
+
+	        // 2. LAYER NORMALIZATION STEP
+	        // Calcoliamo media e varianza lungo la dimensione delle feature (dim 0) per ogni esempio (colonna)
+	        INDArray mean = z.mean(0); // Media per ogni esempio nel batch
+	        INDArray var = z.var(0);   // Varianza per ogni esempio nel batch
+	        double epsilon = 1e-8;
+
+	        // Normalizzazione: (z - mean) / sqrt(var + eps)
+	        INDArray zCentered = z.subRowVector(mean);
+	        INDArray stdDev = Transforms.sqrt(var.add(epsilon));
+	        INDArray zNorm = zCentered.divRowVector(stdDev);
 		
-			//((NXK) * (KXM)) + (NX1) = (NXM) use broadcasting for the bias
-			this.setPreActivation_cache(this.getWeights().mmul(backLayerActivation).add(this.getBias()));//W*A+B
+	        //((NXK) * (KXM)) + (NX1) = (NXM) use broadcasting for the bias
+	        this.setPreActivation_cache(zNorm); 
+			
+			//this.setPreActivation_cache(this.getWeights().mmul(backLayerActivation).add(this.getBias()));//W*A+B
 			
 			//the activation need (MXN) so we do the transpose. Duplicate the array because we don't want it to change
 			return this.getActivation().getActivation(this.getPreActivation_cache().transpose().dup(), true).transpose();
@@ -198,13 +216,17 @@ public abstract class Layer {
 			  if (dLdA.isNaN().any()) {
 		        System.err.println("INSTABILITA RILEVATA: alcune derivate sono NaN.");
 			 }
-			//first term dL/dZ, second term dL/dW in respect to the activation
-			 Pair<INDArray, INDArray> gradientPair = this.activation.backprop(this.getPreActivation_cache().transpose(), dLdA.transpose());
-			
-			 INDArray dLdZ = gradientPair.getFirst().transpose();
+			Pair<INDArray, INDArray> gradientPair = this.activation.backprop(this.getPreActivation_cache().transpose(), dLdA.transpose());
+			INDArray dLdZnorm = gradientPair.getFirst().transpose(); // (NXM)
+				
+			// 2. BACKPROP DELLA LAYER NORM (Semplificato)
+			// In un'implementazione completa, qui dovresti trasformare dLdZnorm in dLdZ_lineare
+			// considerando la derivata della media e varianza. 
+			// Per semplicità e stabilità PPO, molti framework scalano dLdZnorm per la stdDev.
+			INDArray dLdZ = dLdZnorm.divRowVector(Transforms.sqrt(this.getPreActivation_cache().var(0).add(1e-8)));
 			 
 			 //(NXM) * (MXK) = (NXK)
-			 INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
+			INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
 			 
 			this.tmpOptimization(dLdW,dLdZ.sum(1).reshape(dLdZ.rows(),1),mode,minibatchSize);//si prende solo una riga per il dLdB dal dLdZ (NX1)
 			 // (KXN) * (NXM) = (KXM) 
@@ -244,22 +266,55 @@ public abstract class Layer {
 	 */
 	public void tmpOptimization(INDArray dLdW,INDArray dLdB,TypeGradientUpdate mode,int minibatchSize) throws ArithmeticException {
 		try {
-			switch(mode){//add change to the tmpParameters
-			case ASCEND:
-				this.getTmpWeights().addi(dLdW.mul(Hyperparameters.alphaW * (1/(double) minibatchSize)));
-				this.getTmpBias().addi(dLdB.mul(Hyperparameters.alphaB * (1/(double) minibatchSize)));
-				break;
-			case DESCEND:
-				this.getTmpWeights().subi(dLdW.mul(Hyperparameters.alphaW * (1/(double) minibatchSize)));
-				this.getTmpBias().subi(dLdB.mul(Hyperparameters.alphaB * (1/(double) minibatchSize)));
-				break;
-				default:
-					break;
-			}
-		}catch(Exception e) {
-			throw new ArithmeticException(e.getMessage(),e.getCause());
-		}
-		
+	        // 1. CONTROLLO PREVENTIVO: Se i gradienti in ingresso sono già NaN, non aggiornare
+	        if (dLdW.isNaN().any() || dLdB.isNaN().any()) {
+	            System.err.println("ATTENZIONE: Gradienti NaN ricevuti. Salto questo step di ottimizzazione.");
+	            return; 
+	        }
+
+	        // 2. GRADIENT CLIPPING (Norm-based o Global)
+	        // Nel 2026, il clipping della norma è preferito al clipping element-wise.
+	        // Impedisce che i gradienti del bias facciano "esplodere" l'offset dei neuroni.
+	        double maxGradNorm = 0.5;
+	        double gradNormW = dLdW.norm2Number().doubleValue();
+	        double gradNormB = dLdB.norm2Number().doubleValue();
+
+	        if (gradNormW > maxGradNorm) {
+	            dLdW.muli(maxGradNorm / (gradNormW + 1e-8));
+	        }
+	        if (gradNormB > maxGradNorm) {
+	            dLdB.muli(maxGradNorm / (gradNormB + 1e-8));
+	        }
+
+	        // 3. CALCOLO LEARNING RATE
+	        double lrW = Hyperparameters.alphaW / (double) minibatchSize;
+	        double lrB = Hyperparameters.alphaB / (double) minibatchSize;
+
+	        // 4. AGGIORNAMENTO
+	        switch(mode) {
+	            case ASCEND:
+	                this.getTmpWeights().addi(dLdW.mul(lrW));
+	                this.getTmpBias().addi(dLdB.mul(lrB));
+	                break;
+	            case DESCEND:
+	                this.getTmpWeights().subi(dLdW.mul(lrW));
+	                this.getTmpBias().subi(dLdB.mul(lrB));
+	                break;
+	        }
+
+	        // 5. POST-CHECK DI SICUREZZA
+	        if (this.getTmpBias().isNaN().any()) {
+	            // Se arrivi qui, il Learning Rate è troppo alto per la scala dei tuoi reward
+	            throw new Exception("Bias esplosi (NaN). Riduci il Learning Rate!");
+	        }
+	        
+	        if (this.getTmpWeights().isNaN().any()) {
+	            throw new Exception("Pesi esplosi (NaN) dopo l'ottimizzazione. Riduci il Learning Rate!");
+	        }
+
+	    } catch(Exception e) {
+	        throw new ArithmeticException("Errore in ottimizzazione: " + e.getMessage(), e.getCause());
+	    }
 	}
 	
 	/**
