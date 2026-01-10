@@ -160,7 +160,7 @@ public class UserInterface {
 	
 	public void setLossModel(double model) {
 		
-		lossAgent = new JLabel("Loss Model: " + String.valueOf(model));
+		lossModel = new JLabel("Loss Model: " + String.valueOf(model));
 		renderRightState();
 	}
 	
