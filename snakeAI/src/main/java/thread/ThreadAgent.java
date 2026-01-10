@@ -1,5 +1,12 @@
 package thread;
 
+import org.nd4j.linalg.api.memory.MemoryWorkspace;
+import org.nd4j.linalg.api.memory.conf.WorkspaceConfiguration;
+import org.nd4j.linalg.api.memory.enums.AllocationPolicy;
+import org.nd4j.linalg.api.memory.enums.LearningPolicy;
+import org.nd4j.linalg.api.memory.enums.SpillPolicy;
+import org.nd4j.linalg.factory.Nd4j;
+
 import boxes.Direction;
 import gioco.snakeAI.GameMain;
 import gioco.snakeAI.Map;
@@ -18,6 +25,12 @@ public class ThreadAgent extends Thread implements Functions{
 	private final BehaviorSubject<Map> mapStat;
 	private boolean lockSpeed;
 	private final int emptyTick = 50;
+	private static WorkspaceConfiguration CONFIG = WorkspaceConfiguration.builder()
+		    .policyLearning(LearningPolicy.OVER_TIME)
+		    .cyclesBeforeInitialization(10) // Monitora 10 iterazioni prima di stabilizzarsi
+		    .policyAllocation(AllocationPolicy.OVERALLOCATE) // Aggiunge un ~10% di margine extra
+		    .policySpill(SpillPolicy.REALLOCATE) // Se supera la dimensione, rialloca invece di crashare
+		    .build();
 	
 	public ThreadAgent(Model model,Syncronizer coordinator) {
 		this.model = model;
@@ -59,7 +72,7 @@ public class ThreadAgent extends Thread implements Functions{
 			
 			this.mapStat.onNext(this.getGame().getMap());
 			
-			try {
+			try(MemoryWorkspace ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(CONFIG, "AGENT_WORK_WS_" + Thread.currentThread().getName())) {
 				this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
 				this.intermediary.selectLastActionRegister().indexAction = this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb);
 				this.move(this.intermediary.moveConversion(this.intermediary.selectLastActionRegister().indexAction));

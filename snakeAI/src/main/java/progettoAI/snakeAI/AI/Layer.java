@@ -42,12 +42,7 @@ public abstract class Layer {
 	private transient INDArray cumulativeDLdB;
 	
 	private IActivation activation;
-	private transient static WorkspaceConfiguration CONFIG = WorkspaceConfiguration.builder()
-		    .policyLearning(LearningPolicy.OVER_TIME)
-		    .cyclesBeforeInitialization(10) // Monitora 10 iterazioni prima di stabilizzarsi
-		    .policyAllocation(AllocationPolicy.OVERALLOCATE) // Aggiunge un ~10% di margine extra
-		    .policySpill(SpillPolicy.REALLOCATE) // Se supera la dimensione, rialloca invece di crashare
-		    .build();
+
 	/**
 	 * W [output X input]
 	 * @param bias [numberOfNodeInThisLayer]
@@ -91,7 +86,7 @@ public abstract class Layer {
 	}
 
 	public void setBias(INDArray bias) {
-		this.bias = bias.dup();
+		this.bias = bias.detach();
 	}
 
 	public INDArray getWeights() {
@@ -99,7 +94,7 @@ public abstract class Layer {
 	}
 
 	public void setWeights(INDArray weights) {
-		this.weights = weights.dup();
+		this.weights = weights.detach();
 	}
 	
 	
@@ -109,7 +104,7 @@ public abstract class Layer {
 	}
 
 	public void setTmpBias(INDArray tmpBias) {
-		this.tmpBias = tmpBias.dup();
+		this.tmpBias = tmpBias.detach();
 	}
 
 	public INDArray getTmpWeights() {
@@ -117,7 +112,7 @@ public abstract class Layer {
 	}
 
 	public void setTmpWeights(INDArray tmpWeights) {
-		this.tmpWeights = tmpWeights.dup();
+		this.tmpWeights = tmpWeights.detach();
 	}
 
 	public INDArray getBackLayerActivation_cache() {
@@ -125,7 +120,7 @@ public abstract class Layer {
 	}
 
 	public void setBackLayerActivation_cache(INDArray backLayerActivation_cache) {
-		this.backLayerActivation_cache = backLayerActivation_cache.dup();
+		this.backLayerActivation_cache = backLayerActivation_cache.detach();
 	}
 
 	public INDArray getPreActivation_cache() {
@@ -133,7 +128,7 @@ public abstract class Layer {
 	}
 
 	public void setPreActivation_cache(INDArray preActivation_cache) {
-		this.preActivation_cache = preActivation_cache.dup();
+		this.preActivation_cache = preActivation_cache.detach();
 	}
 
 	public INDArray getCumulativeDLdW() {
@@ -141,7 +136,7 @@ public abstract class Layer {
 	}
 
 	public void setCumulativeDLdW(INDArray cumulativeDLdW) {
-		this.cumulativeDLdW = cumulativeDLdW.dup();
+		this.cumulativeDLdW = cumulativeDLdW.detach();
 	}
 
 	public INDArray getCumulativeDLdB() {
@@ -149,7 +144,7 @@ public abstract class Layer {
 	}
 
 	public void setCumulativeDLdB(INDArray cumulativeDLdB) {
-		this.cumulativeDLdB = cumulativeDLdB.dup();;
+		this.cumulativeDLdB = cumulativeDLdB.detach();
 	}
 
 	public IActivation getActivation() {
@@ -169,8 +164,8 @@ public abstract class Layer {
 	 */
 	public INDArray forwarding(INDArray backLayerActivation) throws ArithmeticException {
 		//((NXK) * (KX1)) + (NX1) = (NX1) but the activation function need (1XN) so we do the transpose
-		try(MemoryWorkspace ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(CONFIG, "LAYER_FORWARDING")) {
-			return this.getActivation().getActivation(this.getWeights().mmul(backLayerActivation).add(this.getBias()).transpose(), false).transpose().detach();//sigma(W*A+B)
+		try {
+			return this.getActivation().getActivation(this.getWeights().mmul(backLayerActivation).add(this.getBias()).transpose(), false).transpose();//sigma(W*A+B)
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new ArithmeticException(e.getMessage(),e.getCause());

@@ -3,6 +3,13 @@ package thread;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.nd4j.linalg.api.memory.MemoryWorkspace;
+import org.nd4j.linalg.api.memory.conf.WorkspaceConfiguration;
+import org.nd4j.linalg.api.memory.enums.AllocationPolicy;
+import org.nd4j.linalg.api.memory.enums.LearningPolicy;
+import org.nd4j.linalg.api.memory.enums.SpillPolicy;
+import org.nd4j.linalg.factory.Nd4j;
+
 import errorHandler.ArithmeticException;
 import fileManager.JsonFileManager;
 import model.Model;
@@ -15,6 +22,12 @@ public class ThreadModel extends Thread{
 	private Syncronizer coordinator;
 	private String dirFile; 
 	private final BehaviorSubject<double[]> lossStat;
+	private static WorkspaceConfiguration CONFIG = WorkspaceConfiguration.builder()
+		    .policyLearning(LearningPolicy.OVER_TIME)
+		    .cyclesBeforeInitialization(10) // Monitora 10 iterazioni prima di stabilizzarsi
+		    .policyAllocation(AllocationPolicy.OVERALLOCATE) // Aggiunge un ~10% di margine extra
+		    .policySpill(SpillPolicy.REALLOCATE) // Se supera la dimensione, rialloca invece di crashare
+		    .build();
 
 	public ThreadModel(String dir,Syncronizer coordinator ) throws IOException {
 		this.dirFile = dir;
@@ -31,7 +44,7 @@ public class ThreadModel extends Thread{
 	
 	@Override
 	public void run() {
-		try {
+		try(MemoryWorkspace ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(CONFIG, "MODEL_WORK_WS_" + Thread.currentThread().getName())) {
 			int n = 0;
 			
 			while(!Thread.currentThread().isInterrupted()) {
