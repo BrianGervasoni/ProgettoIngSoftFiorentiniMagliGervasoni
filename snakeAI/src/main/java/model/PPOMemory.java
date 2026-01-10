@@ -23,7 +23,6 @@ public class PPOMemory {
 	public void addNewActions(ActionRegister []actions) {
 		scaleRewards(actions);
 		processActions(actions);
-		normalizeAdvantages(actions);
 		Collections.addAll(currR,actions);
 	}
 	
@@ -69,10 +68,10 @@ public class PPOMemory {
 	    }
 	}
 	
-	private void normalizeAdvantages(ActionRegister[] batch) {
-	    if (batch == null || batch.length <= 1) return;
+	private void normalizeAdvantages(ArrayList<ActionRegister> batch) {
+	    if (batch == null || batch.size() <= 1) return;
 
-	    int n = batch.length;
+	    int n = batch.size();
 	    
 	    // Calculating the Average (mu) of the advantages in the batch
 	    double sum = 0;
@@ -123,6 +122,7 @@ public class PPOMemory {
 	 * prepare the data for the backPropagation
 	 */
 	public void prepareData() {
+		normalizeAdvantages(oldR);
 		oldR = (ArrayList<ActionRegister>) currR.clone();
 		currR = new ArrayList<ActionRegister>();
 	}
