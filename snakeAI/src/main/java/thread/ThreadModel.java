@@ -57,6 +57,7 @@ public class ThreadModel extends Thread{
 				if(n == 5) {
 					try {
 						this.save();
+						System.gc();
 					}catch(IOException e) {
 						throw new RuntimeException(e.getMessage(),e.getCause());
 					}
