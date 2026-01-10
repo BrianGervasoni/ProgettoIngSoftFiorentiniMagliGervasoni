@@ -1,5 +1,10 @@
 package progettoAI.snakeAI.AI;
 
+import org.nd4j.linalg.api.memory.MemoryWorkspace;
+import org.nd4j.linalg.api.memory.conf.WorkspaceConfiguration;
+import org.nd4j.linalg.api.memory.enums.AllocationPolicy;
+import org.nd4j.linalg.api.memory.enums.LearningPolicy;
+import org.nd4j.linalg.api.memory.enums.SpillPolicy;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.activations.*;
 import org.nd4j.linalg.factory.Nd4j;
@@ -37,7 +42,12 @@ public abstract class Layer {
 	private transient INDArray cumulativeDLdB;
 	
 	private IActivation activation;
-	
+	private transient static WorkspaceConfiguration CONFIG = WorkspaceConfiguration.builder()
+		    .policyLearning(LearningPolicy.OVER_TIME)
+		    .cyclesBeforeInitialization(10) // Monitora 10 iterazioni prima di stabilizzarsi
+		    .policyAllocation(AllocationPolicy.OVERALLOCATE) // Aggiunge un ~10% di margine extra
+		    .policySpill(SpillPolicy.REALLOCATE) // Se supera la dimensione, rialloca invece di crashare
+		    .build();
 	/**
 	 * W [output X input]
 	 * @param bias [numberOfNodeInThisLayer]
@@ -159,8 +169,8 @@ public abstract class Layer {
 	 */
 	public INDArray forwarding(INDArray backLayerActivation) throws ArithmeticException {
 		//((NXK) * (KX1)) + (NX1) = (NX1) but the activation function need (1XN) so we do the transpose
-		try {
-			return this.getActivation().getActivation(this.getWeights().mmul(backLayerActivation).add(this.getBias()).transpose(), false).transpose();//sigma(W*A+B)
+		try(MemoryWorkspace ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(CONFIG, "LAYER_FORWARDING")) {
+			return this.getActivation().getActivation(this.getWeights().mmul(backLayerActivation).add(this.getBias()).transpose(), false).transpose().detach();//sigma(W*A+B)
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new ArithmeticException(e.getMessage(),e.getCause());
