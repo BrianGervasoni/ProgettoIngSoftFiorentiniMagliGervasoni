@@ -128,26 +128,33 @@ public class Intermediary implements Functions{
 	 * More the AI will learn, more it will increase the probability of the correct action 
 	 * For example the probability can become : (0.8 , 0.1 , 0.1)
 	 */
-	public int moveSelection(double[] output) {
-		double[] sortedDesc = java.util.Arrays.stream(output)
-			    .boxed() // Converte double in Double
-			    .sorted(java.util.Collections.reverseOrder())
-			    .mapToDouble(Double::doubleValue) // Riconverte in double
-			    .toArray();
+	public int moveSelectionTraining(double[] output) {
 		double valore = Math.random(); //value from 0 to 1
 		double min = 0;
 		
-		for(int i=0; i<sortedDesc.length; i++) {
+		for(int i=0; i<output.length; i++) {
 			
-			min += sortedDesc[i];
+			min += output[i];
 			
 			if(valore <= min) {
 				return i;
 			}	
 		}
 		
-		return -1;
-		
+		return output.length-1;
+	}
+	
+	/**
+	 * select action whit higher probability
+	 * @param output
+	 * @return
+	 */
+	public int moveSelectionBest(double[] output) {
+	    int bestAction = 0;
+	    for(int i = 1; i < output.length; i++) {
+	        if(output[i] > output[bestAction]) bestAction = i;
+	    }
+	    return bestAction;
 	}
 	/**
 	 * for the last actionRegister added, set its reward value

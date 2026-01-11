@@ -1,11 +1,11 @@
 {
-  "alphaW": 0.01,
-  "alphaB": 0.01,
+  "alphaW": 0.001,
+  "alphaB": 0.001,
   "epoche": 10,
-  "minibacthSize": 0.8,
+  "minibacthSize": 0.15,
   "discount": 0.99,
   "lambda": 0.95,
-  "timeStep": 50,
+  "timeStep": 258,
   "motivation": 0.3,
-  "entropyContribution": 0.2
+  "entropyContribution": 0.01
 }

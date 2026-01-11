@@ -24,7 +24,7 @@ public class ThreadAgent extends Thread implements Functions{
 	private GameMain game;
 	private final BehaviorSubject<Map> mapStat;
 	private boolean lockSpeed;
-	private final int emptyTick = 50;
+	private final int emptyTick = 150;
 	private static WorkspaceConfiguration CONFIG = WorkspaceConfiguration.builder()
 		    .policyLearning(LearningPolicy.OVER_TIME)
 		    .cyclesBeforeInitialization(10) // Monitora 10 iterazioni prima di stabilizzarsi
@@ -47,12 +47,12 @@ public class ThreadAgent extends Thread implements Functions{
 			while(!Thread.currentThread().isInterrupted()) {
 				if(!this.isLockSpeed()) {
 					coordinator.startingSendActions();
-		            runAgentWork();
+		            runAgentTraining();
 		            coordinator.terminatingSendActions();
-		            runAgentWork();
+		            runAgentTraining();
 		            coordinator.agentFinishedLoadingNext();
 				}else {
-					runAgentWork();
+					runAgentExecution();
 				}
 	            
 			}
@@ -61,47 +61,22 @@ public class ThreadAgent extends Thread implements Functions{
 	    }
 	}
 	
-	public void runAgentWork() throws InterruptedException {
-		int t = 0;
-		long inizio;
-		long fine;
-		long durataEffettiva;
-		long attesaNecessaria;
-		while(t < Hyperparameters.timeStep) {
-			inizio = System.currentTimeMillis();
+	public void runAgentTraining() throws InterruptedException {
+		for(int t=0; t < Hyperparameters.timeStep; t++) {
 			
 			this.mapStat.onNext(this.getGame().getMap());
 			
 			try(MemoryWorkspace ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(CONFIG, "AGENT_WORK_WS_" + Thread.currentThread().getName())) {
 				this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
-				this.intermediary.selectLastActionRegister().indexAction = this.intermediary.moveSelection(this.intermediary.selectLastActionRegister().actionsProb);
+				this.intermediary.selectLastActionRegister().indexAction = this.intermediary.moveSelectionTraining(this.intermediary.selectLastActionRegister().actionsProb);
 				this.move(this.intermediary.moveConversion(this.intermediary.selectLastActionRegister().indexAction));
 				
 				this.intermediary.addActionReward(this.calculateReward());
 				
-				if(this.isLockSpeed()) {
-					fine = System.currentTimeMillis();
-				    durataEffettiva = fine - inizio;
-				    attesaNecessaria = 1000 - durataEffettiva;// deve attendere almeno 1s
-				    if (attesaNecessaria > 0) {
-				        try {
-				            Thread.sleep(attesaNecessaria);
-				        } catch (InterruptedException e) {
-				            e.printStackTrace();
-				        }
-				    }
-				}
-				
 				if(game.finish() == true || game.getTickLastApple() >= emptyTick) {
 					this.game.reset(); 
 					this.intermediary.selectLastActionRegister().isTerminal = true;
-					
-					if(game.getTickLastApple() >= emptyTick) {
-						this.intermediary.selectLastActionRegister().reward += -50;
-					}
 				}
-				
-				t++;
 			}catch(ArithmeticException e) {
 				throw new RuntimeException(e.getMessage(),e.getCause());
 			}catch(IllegalArgumentException e) {
@@ -109,10 +84,46 @@ public class ThreadAgent extends Thread implements Functions{
 			}	
 		}
 		
-		if(!this.isLockSpeed()) {
-			this.sendActions(); 	
-		}		
+		this.sendActions(); 	
+		
 		this.resetActionRegister();
+	}
+	
+	private void runAgentExecution()  throws InterruptedException{
+		long inizio;
+		long fine;
+		long durataEffettiva;
+		long attesaNecessaria;
+		for(int t=0; t < Hyperparameters.timeStep; t++) {
+			inizio = System.currentTimeMillis();
+			
+			this.mapStat.onNext(this.getGame().getMap());
+			
+			try(MemoryWorkspace ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(CONFIG, "AGENT_WORK_WS_" + Thread.currentThread().getName())) {
+				this.intermediary.addActionRegister(this.model.forwarding(this.intermediary.mapConversion(this.game.getMap(), this.model.getInputLenght())));
+				this.intermediary.selectLastActionRegister().indexAction = this.intermediary.moveSelectionBest(this.intermediary.selectLastActionRegister().actionsProb);
+				this.move(this.intermediary.moveConversion(this.intermediary.selectLastActionRegister().indexAction));
+				
+				this.resetActionRegister();
+				
+				fine = System.currentTimeMillis();
+			    durataEffettiva = fine - inizio;
+			    attesaNecessaria = 500 - durataEffettiva;// deve attendere almeno 0.5s
+			    if (attesaNecessaria > 0) {
+			    	Thread.sleep(attesaNecessaria);
+			    }
+				
+				if(game.finish() == true) {
+					this.game.reset(); 
+				}
+			}catch(ArithmeticException e) {
+				throw new RuntimeException(e.getMessage(),e.getCause());
+			}catch(IllegalArgumentException e) {
+				System.err.println("WARNING! Si sta cercando di aggiungere un null all'intermediario: "+e.getMessage());
+			}	
+		}
+		
+		
 	}
 	
 	public Observable<Map> observableMap() {
@@ -143,7 +154,8 @@ public class ThreadAgent extends Thread implements Functions{
 	 * - default reward = 4 
 	 * - reward based on the distance between the head and the apple which is a value between (-5 ; 5)
 	 * - reward if the snake got the apple = 50
-	 * - reward if the snake died or dosn't have eaten an apple for timeStep = -50
+	 * - reward if the snake died or dosn't have eaten an apple for timeStep = -25
+	 * - reward slight negative for every tick it hasn't take any apple (c = 0.05)
 	 * @return the sum of the reward values, which says if the AI is doing good or not
 	 */
 	public double calculateReward() { //TODO TESTARE
@@ -165,7 +177,7 @@ public class ThreadAgent extends Thread implements Functions{
 			rewardDefault = rewardDefault + rewardDead;
 		}
 		
-		return rewardDefault;
+		return rewardDefault - this.game.getTickLastApple() * 0.05;
 	}
 	
 	/**

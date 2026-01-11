@@ -77,7 +77,7 @@ public class AIActor extends AI {
 			return null;
 		RealVector x= new ArrayRealVector(probs.length);
 		for(int i=0; i < probs.length; i++) {
-			x.addToEntry(i, -probs[i]*Math.log(probs[i]));
+			x.addToEntry(i, -probs[i]*Math.log(probs[i]+ 1e-10));
 		}
 		return x;
 	}
@@ -91,7 +91,7 @@ public class AIActor extends AI {
 			return null;
 		RealVector x= new ArrayRealVector(probs.length);
 		for(int i=0; i < probs.length; i++) {
-			x.addToEntry(i, -(Math.log(probs[i])+1));
+			x.addToEntry(i, -(Math.log(probs[i]+ 1e-10)+1));
 		}
 		return x;
 	}
