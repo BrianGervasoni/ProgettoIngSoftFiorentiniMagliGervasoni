@@ -85,7 +85,7 @@ public class Intermediary implements Functions{
 			
 		}
 		
-		return normalizeArray(result,map);
+		return normalizeRay(result,map);
 		
 	}
 	

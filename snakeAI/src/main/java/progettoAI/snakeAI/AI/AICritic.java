@@ -32,7 +32,10 @@ public class AICritic extends AI {
 	
 	@Override
 	public INDArray singleDerivateLoss(ActionRegister r,INDArray newProb) {
-		double[] x = new double[] {2*(r.vEstimated-r.vTarget)};
+		double diff = r.vEstimated - r.vTarget;
+		if (diff > 1.0) diff = 1.0;
+		if (diff < -1.0) diff = -1.0;
+		double[] x = new double[] {2*diff};
 		return Nd4j.create(x);
 	}
 

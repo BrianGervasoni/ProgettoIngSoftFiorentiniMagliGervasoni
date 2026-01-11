@@ -225,28 +225,23 @@ public interface Functions {
 	 * @param array
 	 * @return linear normalization, set the value of array[i] at its new linear normalized value (a value in this interval [0;1])
 	 */
-	public default double[] normalizeArray(double[] array, Map map) {
+	public default double[] normalizeRay(double[] array, Map map) {
 		
 		double min = 0;
 		double max = Math.sqrt(map.X*map.X + map.Y*map.Y);
 		double xNormalizzato;
 		
-		//i get minimal value and maximal value
+		//set non found rays to max distance
 		for(int i = 0; i<array.length; i++) {
 			
-			if(array[i]<min) {
-				min = array[i];
+			if(array[i]<=min) {
+				array[i] = max;
 			}
-			
-			if(array[i]>max) {
-				max = array[i];
-			}
-	
 		}
 		
 		for(int i = 0; i<array.length; i++) {
 
-			xNormalizzato = (array[i] - min)/(max - min);
+			xNormalizzato = 1-(array[i]/max);
 			array[i] = xNormalizzato;
 			
 		}
@@ -259,12 +254,12 @@ public interface Functions {
 	 * @param value of the distance
 	 * @param best = 0 (the best option is that the apple is in the same spot as the head)
 	 * @param worst = the diagonal of the map (the worst is that the apple is in the opposite position of the head)
-	 * @return the normalization of the range (diagonal ; 0) into the range (-5 ; 5)
+	 * @return the normalization of the range (diagonal ; 0) into the range (-1 ; 2)
 	 */
 	public default double normalizeRewardDistanceHeadApple(double value, double best, double worst) {
 		
-        double newWorst = -5.0;
-        double newBest = 5.0;
+        double newWorst = -1.0;
+        double newBest = 2.0;
         
         return (((value - worst) * (newBest - newWorst) / (best - worst)) + newWorst);
     }

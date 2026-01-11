@@ -38,8 +38,6 @@ public abstract class Layer {
 	private transient INDArray backLayerActivation_cache;
 	private transient INDArray preActivation_cache;
 	
-	private transient INDArray cumulativeDLdW;
-	private transient INDArray cumulativeDLdB;
 	
 	private IActivation activation;
 
@@ -53,8 +51,6 @@ public abstract class Layer {
 		this.weights = MatrixUtils.createRealMatrix(weights);*/
 		this.bias = Nd4j.create(bias).reshape(bias.length,1);//NX1
 		this.weights = Nd4j.create(weights);//NXK
-		this.cumulativeDLdW = Nd4j.zerosLike(this.weights);
-        this.cumulativeDLdW = Nd4j.zerosLike(this.bias);
 	}
 	
 	/**
@@ -67,16 +63,14 @@ public abstract class Layer {
 		double [] tmpBias = new double[lenLayer];
 		double[][] tmpWeights = new double[lenLayer][lenBackLayer];
 		for(int i=0;i<lenLayer;i++) {
-			tmpBias[i] = Tools.pickRandom(-0.1, 0.1);
+			tmpBias[i] = Tools.pickRandom(-0.07, 0.07);
 			for(int j=0;j<lenBackLayer;j++) {
-				tmpWeights[i][j] = Tools.pickRandom(-0.1, 0.1);
+				tmpWeights[i][j] = Tools.pickRandom(-0.07, 0.07);
 			}
 		}
 		
 		this.bias = Nd4j.create(tmpBias).reshape(tmpBias.length,1);//NX1
 		this.weights = Nd4j.create(tmpWeights);//NXK
-		this.cumulativeDLdW = Nd4j.zerosLike(this.weights);
-        this.cumulativeDLdW = Nd4j.zerosLike(this.bias);
 	}
 	
 	
@@ -104,7 +98,7 @@ public abstract class Layer {
 	}
 
 	public void setTmpBias(INDArray tmpBias) {
-		this.tmpBias = tmpBias.detach();
+		this.tmpBias = tmpBias.dup();
 	}
 
 	public INDArray getTmpWeights() {
@@ -112,7 +106,7 @@ public abstract class Layer {
 	}
 
 	public void setTmpWeights(INDArray tmpWeights) {
-		this.tmpWeights = tmpWeights.detach();
+		this.tmpWeights = tmpWeights.dup();
 	}
 
 	public INDArray getBackLayerActivation_cache() {
@@ -129,22 +123,6 @@ public abstract class Layer {
 
 	public void setPreActivation_cache(INDArray preActivation_cache) {
 		this.preActivation_cache = preActivation_cache.detach();
-	}
-
-	public INDArray getCumulativeDLdW() {
-		return cumulativeDLdW;
-	}
-
-	public void setCumulativeDLdW(INDArray cumulativeDLdW) {
-		this.cumulativeDLdW = cumulativeDLdW.detach();
-	}
-
-	public INDArray getCumulativeDLdB() {
-		return cumulativeDLdB;
-	}
-
-	public void setCumulativeDLdB(INDArray cumulativeDLdB) {
-		this.cumulativeDLdB = cumulativeDLdB.detach();
 	}
 
 	public IActivation getActivation() {
@@ -184,20 +162,9 @@ public abstract class Layer {
 			this.setBackLayerActivation_cache(backLayerActivation);//KXM
 			// 1. Calcolo Pre-Attivazione Lineare (NXM)
 	        INDArray z = this.getWeights().mmul(backLayerActivation).add(this.getBias());
-
-	        // 2. LAYER NORMALIZATION STEP
-	        // Calcoliamo media e varianza lungo la dimensione delle feature (dim 0) per ogni esempio (colonna)
-	        INDArray mean = z.mean(0); // Media per ogni esempio nel batch
-	        INDArray var = z.var(0);   // Varianza per ogni esempio nel batch
-	        double epsilon = 1e-8;
-
-	        // Normalizzazione: (z - mean) / sqrt(var + eps)
-	        INDArray zCentered = z.subRowVector(mean);
-	        INDArray stdDev = Transforms.sqrt(var.add(epsilon));
-	        INDArray zNorm = zCentered.divRowVector(stdDev);
 		
 	        //((NXK) * (KXM)) + (NX1) = (NXM) use broadcasting for the bias
-	        this.setPreActivation_cache(zNorm); 
+	        this.setPreActivation_cache(z); 
 			
 			//this.setPreActivation_cache(this.getWeights().mmul(backLayerActivation).add(this.getBias()));//W*A+B
 			
@@ -222,13 +189,7 @@ public abstract class Layer {
 		        System.err.println("INSTABILITA RILEVATA: alcune derivate sono NaN.");
 			 }
 			Pair<INDArray, INDArray> gradientPair = this.activation.backprop(this.getPreActivation_cache().transpose(), dLdA.transpose());
-			INDArray dLdZnorm = gradientPair.getFirst().transpose(); // (NXM)
-				
-			// 2. BACKPROP DELLA LAYER NORM (Semplificato)
-			// In un'implementazione completa, qui dovresti trasformare dLdZnorm in dLdZ_lineare
-			// considerando la derivata della media e varianza. 
-			// Per semplicità e stabilità PPO, molti framework scalano dLdZnorm per la stdDev.
-			INDArray dLdZ = dLdZnorm.divRowVector(Transforms.sqrt(this.getPreActivation_cache().var(0).add(1e-8)));
+			INDArray dLdZ = gradientPair.getFirst().transpose(); // (NXM)
 			 
 			 //(NXM) * (MXK) = (NXK)
 			INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
@@ -239,7 +200,6 @@ public abstract class Layer {
 		 }catch(Exception e) {
 				throw new ArithmeticException(e.getMessage(),e.getCause());
 			}
-		
 	}
 	
 	/**
@@ -278,7 +238,7 @@ public abstract class Layer {
 	        }
 
 	        // 2. GRADIENT CLIPPING (Norm-based o Global)
-	        double maxGradNorm = 0.5;
+	        double maxGradNorm = 1.5;
 	        double gradNormW = dLdW.norm2Number().doubleValue();
 	        double gradNormB = dLdB.norm2Number().doubleValue();
 
@@ -290,8 +250,8 @@ public abstract class Layer {
 	        }
 
 	        // 3. CALCOLO LEARNING RATE
-	        double lrW = Hyperparameters.alphaW / (double) minibatchSize;
-	        double lrB = Hyperparameters.alphaB / (double) minibatchSize;
+	        double lrW = Hyperparameters.alphaW;
+	        double lrB = Hyperparameters.alphaB;
 
 	        // 4. AGGIORNAMENTO
 	        switch(mode) {

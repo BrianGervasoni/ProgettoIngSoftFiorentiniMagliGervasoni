@@ -151,16 +151,16 @@ public class ThreadAgent extends Thread implements Functions{
 	/**
 	 * 
 	 * there are 4 type of reward :
-	 * - default reward = 4 
-	 * - reward based on the difference of distance between the head and the apple whit the lastPosition which is a value between (-5 ; 5)
-	 * - reward if the snake got the apple = 50
+	 * - default reward = 0.1
+	 * - reward based on the difference of distance between the head and the apple whit the lastPosition which is a value between (-1 ; 2)
+	 * - reward if the snake got the apple = 100
 	 * - reward if the snake died or dosn't have eaten an apple for timeStep = -25
-	 * - reward slight negative for every tick it hasn't take any apple (r = -0.1, t=5)
+	 * - reward slight negative for every tick it hasn't take any apple (r = -0.2, t=5)
 	 * @return the sum of the reward values, which says if the AI is doing good or not
 	 */
 	public double calculateReward() {
 		
-		double rewardDefault = 0.1, rewardDistanceApple, rewardGetApple = 50, rewardDead = -25,rewardEmptyTick=-0.1;
+		double rewardDefault = 0.1, rewardDistanceApple, rewardGetApple = 100, rewardDead = -25,rewardEmptyTick=-0.2;
 		//double diagonal = Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
 		double distance;
 		double lastDistance;
