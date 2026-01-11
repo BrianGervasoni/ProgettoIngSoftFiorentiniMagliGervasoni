@@ -122,8 +122,11 @@ public class PPOMemory {
 	 * prepare the data for the backPropagation
 	 */
 	public void prepareData() {
-		normalizeAdvantages(oldR);
+		normalizeAdvantages(currR);
 		oldR = (ArrayList<ActionRegister>) currR.clone();
+		oldR.forEach(e ->{
+			System.out.println(e.toString());
+		});
 		currR = new ArrayList<ActionRegister>();
 	}
 	

@@ -37,11 +37,11 @@ public class ActionRegister {
 	}
 	
 	public String toString() {
-		String a= "(";
+		String a= "porb:(";
 		for(double s : this.actionsProb) {
 			a+= ""+s+",";
 		}
 		a+= ")";
-		return "("+a+","+indexAction+","+vTarget+","+vEstimated+","+advantage+","+reward+")";
+		return "("+a+", selected:"+indexAction+", vTarget:"+vTarget+", vEstimated:"+vEstimated+", advantage:"+advantage+", r:"+reward+")";
 	}
 }
