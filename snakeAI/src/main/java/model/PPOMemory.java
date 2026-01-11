@@ -23,6 +23,7 @@ public class PPOMemory {
 	public void addNewActions(ActionRegister []actions) {
 		scaleRewards(actions);
 		processActions(actions);
+		scaleVTarget(actions);
 		Collections.addAll(currR,actions);
 	}
 	
@@ -115,6 +116,28 @@ public class PPOMemory {
 
 	    for (ActionRegister reg : batch) {
 	        reg.reward /= stdDev;
+	    }
+	}
+	
+	private void scaleVTarget(ActionRegister[] batch) {
+	    if (batch == null || batch.length <= 1) return;
+	    
+	    double sum = 0;
+	    for (ActionRegister reg : batch) sum += reg.vTarget;
+	    double mean = sum / batch.length;
+
+	    double varSum = 0;
+	    for (ActionRegister reg : batch) {
+	        varSum += Math.pow(reg.vTarget - mean, 2);
+	    }
+	    
+	    double stdDev = Math.sqrt(varSum / batch.length) + 1e-8; 
+
+	    // If stdDev is still too small (e.g. almost zero), do not scale
+	    if (stdDev < 1e-9) return; 
+
+	    for (ActionRegister reg : batch) {
+	        reg.vTarget /= stdDev;
 	    }
 	}
 	

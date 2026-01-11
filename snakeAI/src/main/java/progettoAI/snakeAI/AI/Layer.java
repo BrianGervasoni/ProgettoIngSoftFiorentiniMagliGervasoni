@@ -278,8 +278,6 @@ public abstract class Layer {
 	        }
 
 	        // 2. GRADIENT CLIPPING (Norm-based o Global)
-	        // Nel 2026, il clipping della norma è preferito al clipping element-wise.
-	        // Impedisce che i gradienti del bias facciano "esplodere" l'offset dei neuroni.
 	        double maxGradNorm = 0.5;
 	        double gradNormW = dLdW.norm2Number().doubleValue();
 	        double gradNormB = dLdB.norm2Number().doubleValue();
@@ -309,7 +307,6 @@ public abstract class Layer {
 
 	        // 5. POST-CHECK DI SICUREZZA
 	        if (this.getTmpBias().isNaN().any()) {
-	            // Se arrivi qui, il Learning Rate è troppo alto per la scala dei tuoi reward
 	            throw new Exception("Bias esplosi (NaN). Riduci il Learning Rate!");
 	        }
 	        
