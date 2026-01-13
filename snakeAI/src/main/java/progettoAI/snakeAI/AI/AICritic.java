@@ -39,4 +39,5 @@ public class AICritic extends AI {
 		double[] x = new double[] {2*diff};
 		return Nd4j.create(x);
 	}
+
 }

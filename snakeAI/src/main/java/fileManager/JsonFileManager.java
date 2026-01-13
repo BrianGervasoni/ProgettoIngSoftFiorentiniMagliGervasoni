@@ -11,17 +11,20 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import errorHandler.ThreadException;
+
 import java.lang.reflect.Modifier;
 
 import model.Model;
-import progettoAI.snakeAI.AI.AI;
 import progettoAI.snakeAI.AI.Layer;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 
 public class JsonFileManager {
 	// GsonBuilder is used to format JSON in a readable way (pretty printing)
     private static final Gson GSON = new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
-    		.registerTypeHierarchyAdapter(AI.class, new AIAdapter()).setPrettyPrinting().create();
+    		.registerTypeHierarchyAdapter(INDArray.class, new INDArrayAdapter())
+    		.registerTypeAdapter(IActivation.class, new IActivationAdapter()).
+    		registerTypeAdapter(Layer.class, new LayerAdapter()).setPrettyPrinting().create();
     
 	public static void saveModel(Model m,String dirFile) throws IOException,FileNotFoundException {
 		try (FileWriter writer = new FileWriter(dirFile)) {

@@ -9,13 +9,12 @@ import org.nd4j.linalg.factory.Nd4j;
 
 import errorHandler.ArithmeticException;
 import model.ActionRegister;
-import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 import progettoAI.snakeAI.tools.Tools;
 
 public abstract class AI {
 	private ArrayList<Layer> layers;
 	private TypeGradientUpdate mode;
-	private transient double learningRate;
+	private double learningRate;
 	
 	public AI(Layer[] layers) {
 		this.layers = Arrays.stream(layers).collect(Collectors.toCollection(ArrayList::new));
