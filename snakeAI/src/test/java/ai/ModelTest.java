@@ -59,20 +59,20 @@ public class ModelTest {
 		String relPath = "iperparametri/iperparametriTest.json";
 		Path relativePath = Paths.get(relPath);
 		Path absolutePath = relativePath.toAbsolutePath();
-		Hyperparameters.alphaB = 0.1;
+		Hyperparameters.alphaCritic = 0.1;
 		try {
 			JsonFileManager.saveHyperparameters(absolutePath.toString());
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
-		Hyperparameters.alphaB = 0.3;
+		Hyperparameters.alphaCritic = 0.3;
 		try {
 			JsonFileManager.loadHyperparameters(absolutePath.toString());
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
 		
-		assertEquals(0.1,Hyperparameters.alphaB);
+		assertEquals(0.1,Hyperparameters.alphaCritic);
 	}
 	@Test
 	void testBackProp() {

@@ -371,13 +371,13 @@ public class GUIStatic {
 		}
 		
 		
-		JLabel l1 = new JLabel("alphaW");
+		JLabel l1 = new JLabel("alphaActor");
 		//qui bisogna fare un get del valore
-		JTextField jtf1 = new JTextField(String.valueOf(Hyperparameters.alphaW), 15);
+		JTextField jtf1 = new JTextField(String.valueOf(Hyperparameters.alphaActor), 15);
 		
-		JLabel l2 = new JLabel("alphaB");
+		JLabel l2 = new JLabel("alphaCritic");
 		//qui bisogna fare un get del valore
-		JTextField jtf2 = new JTextField(String.valueOf(Hyperparameters.alphaB), 15);
+		JTextField jtf2 = new JTextField(String.valueOf(Hyperparameters.alphaCritic), 15);
 		
 		JLabel l3 = new JLabel("epoche");
 		//qui bisogna fare un get del valore
@@ -424,8 +424,8 @@ public class GUIStatic {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				double alphaW = Double.parseDouble(jtf1.getText());
-				double alphaB = Double.parseDouble(jtf2.getText());
+				double alphaActor = Double.parseDouble(jtf1.getText());
+				double alphaCritic = Double.parseDouble(jtf2.getText());
 				double minibatchSize = Double.parseDouble(jtf4.getText());
 				double discount = Double.parseDouble(jtf5.getText());
 				double lambda = Double.parseDouble(jtf6.getText()); 
@@ -434,8 +434,8 @@ public class GUIStatic {
 				
 				boolean readyToSave = true;
 				
-				readyToSave = checkBetweenZeroOne(alphaW);
-				readyToSave = readyToSave && checkBetweenZeroOne(alphaB);
+				readyToSave = checkBetweenZeroOne(alphaActor);
+				readyToSave = readyToSave && checkBetweenZeroOne(alphaCritic);
 				readyToSave = readyToSave && checkBetweenZeroOne(minibatchSize);
 				readyToSave = readyToSave && checkBetweenZeroOne(discount);
 				readyToSave = readyToSave && checkBetweenZeroOne(lambda);
@@ -443,8 +443,8 @@ public class GUIStatic {
 				readyToSave = readyToSave && checkBetweenZeroOne(entropyContribution);
 				
 				if(readyToSave) {
-					Hyperparameters.alphaW = alphaW;
-					Hyperparameters.alphaB = alphaB;
+					Hyperparameters.alphaActor = alphaActor;
+					Hyperparameters.alphaCritic = alphaCritic;
 					Hyperparameters.discount = discount;
 					Hyperparameters.entropyContribution = entropyContribution;
 					Hyperparameters.epoche = Integer.parseInt(jtf3.getText());

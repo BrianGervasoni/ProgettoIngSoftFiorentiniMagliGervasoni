@@ -1,6 +1,6 @@
 {
-  "alphaW": 3.0E-4,
-  "alphaB": 3.0E-4,
+  "alphaActor": 3.0E-4,
+  "alphaCritic": 0.003,
   "epoche": 7,
   "minibacthSize": 0.25,
   "discount": 0.99,

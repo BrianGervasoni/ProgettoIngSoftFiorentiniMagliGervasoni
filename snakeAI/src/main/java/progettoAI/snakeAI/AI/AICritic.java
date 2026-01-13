@@ -1,16 +1,16 @@
 package progettoAI.snakeAI.AI;
 
-import java.util.ArrayList;
-
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
 import model.ActionRegister;
+import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 
 public class AICritic extends AI {
 
 	public AICritic(Layer[] layers,TypeGradientUpdate mode) {
 		super(layers);
+		this.setLearningRate(Hyperparameters.alphaCritic);
 		this.setMode(mode);
 	}
 
@@ -21,6 +21,7 @@ public class AICritic extends AI {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		this.setLearningRate(Hyperparameters.alphaCritic);
 		this.setMode(mode);
 	}
 	

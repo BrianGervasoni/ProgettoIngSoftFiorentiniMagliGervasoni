@@ -14,6 +14,7 @@ import progettoAI.snakeAI.tools.Tools;
 public abstract class AI {
 	private ArrayList<Layer> layers;
 	private TypeGradientUpdate mode;
+	private double learningRate;
 	
 	public AI(Layer[] layers) {
 		this.layers = Arrays.stream(layers).collect(Collectors.toCollection(ArrayList::new));
@@ -34,6 +35,14 @@ public abstract class AI {
 		}
 	}
 	
+	public double getLearningRate() {
+		return learningRate;
+	}
+
+	public void setLearningRate(double learningRate) {
+		this.learningRate = learningRate;
+	}
+
 	public void resetLayer() {
 		this.layers = null;
 	}
@@ -128,9 +137,9 @@ public abstract class AI {
 		// perform the forwarding saving the intermediary state used for calculate the derivates
 		INDArray newProb = this.feedForwarding(tmpR,0,true);
 		// set the starting derivate from loss to activation
-		INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb),this.getMode(),r.length);
+		INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb),this.getMode(),r.length,learningRate);
 		for(int i=layers.size()-2; i>-1; i--){//perform the backPropagation for every layer
-			dLdA = layers.get(i).backPropagation(dLdA,this.getMode(),r.length);
+			dLdA = layers.get(i).backPropagation(dLdA,this.getMode(),r.length,learningRate);
 		}
 		
 		return lossCalculation(r,newProb).sum(1).mul(1/r.length).reshape(newProb.rows(),1);

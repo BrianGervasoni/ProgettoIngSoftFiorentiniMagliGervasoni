@@ -1,7 +1,5 @@
 package progettoAI.snakeAI.AI;
 
-import java.util.ArrayList;
-
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -15,6 +13,7 @@ public class AIActor extends AI {
 
 	public AIActor(Layer[] layers,TypeGradientUpdate mode) {
 		super(layers);
+		this.setLearningRate(Hyperparameters.alphaActor);
 		this.setMode(mode);
 	}
 
@@ -25,6 +24,7 @@ public class AIActor extends AI {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		this.setLearningRate(Hyperparameters.alphaActor);
 		this.setMode(mode);
 	}
 	

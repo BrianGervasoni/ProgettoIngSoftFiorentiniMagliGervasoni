@@ -163,9 +163,9 @@ public class LayerTest {
 			relu.initBackProp();
 			softMax.initBackProp();
 			
-			double[][] resultIde = identity.backPropagation(Nd4j.create(loss),TypeGradientUpdate.DESCEND,2).toDoubleMatrix();
-			double[][] resultReLu = relu.backPropagation(Nd4j.create(loss),TypeGradientUpdate.DESCEND,2).toDoubleMatrix();
-			double[][] resultSoftMax = softMax.backPropagation(Nd4j.create(loss),TypeGradientUpdate.DESCEND,2).toDoubleMatrix();
+			double[][] resultIde = identity.backPropagation(Nd4j.create(loss),TypeGradientUpdate.DESCEND,2,0.1).toDoubleMatrix();
+			double[][] resultReLu = relu.backPropagation(Nd4j.create(loss),TypeGradientUpdate.DESCEND,2,0.1).toDoubleMatrix();
+			double[][] resultSoftMax = softMax.backPropagation(Nd4j.create(loss),TypeGradientUpdate.DESCEND,2,0.1).toDoubleMatrix();
 			
 			assertArrayEquals(trueResultIdent,resultIde);
 			assertArrayEquals(trueResultReLu,resultReLu);

@@ -38,7 +38,6 @@ public abstract class Layer {
 	private transient INDArray backLayerActivation_cache;
 	private transient INDArray preActivation_cache;
 	
-	
 	private IActivation activation;
 
 	/**
@@ -180,10 +179,11 @@ public abstract class Layer {
 	 * calculate derivates from loss to parameters, add the cumulative derivates for the next stochastic calculus
 	 * @param dLdA
 	 * @param mode
+	 * @param learningRate
 	 * @return dLdA
 	 * @throws ArithmeticException 
 	 */
-	public INDArray derivateCalculus(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize) throws ArithmeticException {
+	public INDArray derivateCalculus(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize,double learningRate) throws ArithmeticException {
 		 try {
 			  if (dLdA.isNaN().any()) {
 		        System.err.println("INSTABILITA RILEVATA: alcune derivate sono NaN.");
@@ -194,7 +194,7 @@ public abstract class Layer {
 			 //(NXM) * (MXK) = (NXK)
 			INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
 			 
-			this.tmpOptimization(dLdW,dLdZ.sum(1).reshape(dLdZ.rows(),1),mode,minibatchSize);//si prende solo una riga per il dLdB dal dLdZ (NX1)
+			this.tmpOptimization(dLdW,dLdZ.sum(1).reshape(dLdZ.rows(),1),mode,minibatchSize,learningRate);//si prende solo una riga per il dLdB dal dLdZ (NX1)
 			 // (KXN) * (NXM) = (KXM) 
 			return this.getWeights().transpose().mmul(dLdZ);
 		 }catch(Exception e) {
@@ -207,11 +207,12 @@ public abstract class Layer {
 	 * @param dLdA
 	 * @param mode
 	 * @param minibatchSize
+	 * @param learningRate
 	 * @return dLdA
 	 * @throws ArithmeticException 
 	 */
-	public INDArray backPropagation(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize) throws ArithmeticException {
-		return this.derivateCalculus(dLdA, mode,minibatchSize);
+	public INDArray backPropagation(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize,double learningRate) throws ArithmeticException {
+		return this.derivateCalculus(dLdA, mode,minibatchSize,learningRate);
 	}
 	
 	/**
@@ -227,9 +228,10 @@ public abstract class Layer {
 	 * @param dLdW
 	 * @param dLdB
 	 * @param mode
+	 * @param learningRate
 	 * @throws ArithmeticException 
 	 */
-	public void tmpOptimization(INDArray dLdW,INDArray dLdB,TypeGradientUpdate mode,int minibatchSize) throws ArithmeticException {
+	public void tmpOptimization(INDArray dLdW,INDArray dLdB,TypeGradientUpdate mode,int minibatchSize,double learningRate) throws ArithmeticException {
 		try {
 	        // 1. CONTROLLO PREVENTIVO: Se i gradienti in ingresso sono già NaN, non aggiornare
 	        if (dLdW.isNaN().any() || dLdB.isNaN().any()) {
@@ -249,25 +251,21 @@ public abstract class Layer {
 	            dLdB.muli(maxGradNorm / (gradNormB + 1e-8));
 	        }
 
-	        // 3. CALCOLO LEARNING RATE
-	        double lrW = Hyperparameters.alphaW;
-	        double lrB = Hyperparameters.alphaB;
-
 	        // 4. AGGIORNAMENTO
 	        switch(mode) {
 	            case ASCEND:
-	                this.getTmpWeights().addi(dLdW.mul(lrW));
-	                this.getTmpBias().addi(dLdB.mul(lrB));
+	                this.getTmpWeights().addi(dLdW.mul(learningRate));
+	                this.getTmpBias().addi(dLdB.mul(learningRate));
 	                break;
 	            case DESCEND:
-	                this.getTmpWeights().subi(dLdW.mul(lrW));
-	                this.getTmpBias().subi(dLdB.mul(lrB));
+	                this.getTmpWeights().subi(dLdW.mul(learningRate));
+	                this.getTmpBias().subi(dLdB.mul(learningRate));
 	                break;
 	        }
 
 	        // 5. POST-CHECK DI SICUREZZA
 	        if (this.getTmpBias().isNaN().any()) {
-	            throw new Exception("Bias esplosi (NaN). Riduci il Learning Rate!");
+	            throw new Exception("Bias esplosi (NaN) dopo l'ottimizzazione. Riduci il Learning Rate!");
 	        }
 	        
 	        if (this.getTmpWeights().isNaN().any()) {

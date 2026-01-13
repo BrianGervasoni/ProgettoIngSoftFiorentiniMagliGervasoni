@@ -3,8 +3,8 @@ package progettoAI.snakeAI.hyperparameters;
 
 
 public final class Hyperparameters {
-	public static double alphaW = 0.0003;
-	public static double alphaB = 0.0003;
+	public static double alphaActor = 0.0003;
+	public static double alphaCritic = 0.003;
 	public static int epoche = 7;
 	public static double minibacthSize = 0.25;
 	public static double discount = 0.99;
