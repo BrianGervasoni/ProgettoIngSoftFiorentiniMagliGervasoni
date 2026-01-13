@@ -14,7 +14,7 @@ import progettoAI.snakeAI.tools.Tools;
 public abstract class AI {
 	private ArrayList<Layer> layers;
 	private TypeGradientUpdate mode;
-	private double learningRate;
+	private transient double learningRate;
 	
 	public AI(Layer[] layers) {
 		this.layers = Arrays.stream(layers).collect(Collectors.toCollection(ArrayList::new));

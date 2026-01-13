@@ -2,6 +2,7 @@ package ai;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -21,9 +22,9 @@ public class ModelTest {
 	@Test
 	void testSaveAndLoad() {
 		try {
-			//AICritic critic = new AICritic(new int[] {4,4,4,1},TypeGradientUpdate.DESCEND);
-			//AIActor actor = new AIActor(new int[] {4,5,5,4},TypeGradientUpdate.ASCEND);
-			//Model mSave = new Model(critic,actor);
+			/*AICritic critic = new AICritic(new int[] {4,4,4,1},TypeGradientUpdate.DESCEND);
+			AIActor actor = new AIActor(new int[] {4,5,5,4},TypeGradientUpdate.ASCEND);
+			Model mSave = new Model(critic,actor);*/
 			Model m = null;
 			
 			String relPath = "modelli/modelloTest.json";
@@ -45,7 +46,7 @@ public class ModelTest {
 			
 			double[] test =  m.backPropagation();
 			
-			double[] trueLoss = new double[] {4.652735277428321,15.682484034489768};
+			double[] trueLoss = new double[] {4.027024050252193,15.994531083675913};
 			assertArrayEquals(trueLoss,test);
 			assertNotNull(m.getMemory());
 		}catch(ArithmeticException e) {
@@ -78,7 +79,7 @@ public class ModelTest {
 	void testBackProp() {
 		Model ai = new Model();
 		try {
-			double[] e = new double[61*3];
+			double[] e = new double[31*3];
 			for(double f: e) {
 				f = 1;
 			}
@@ -90,6 +91,7 @@ public class ModelTest {
 			ai.initBackPropagation();
 		}catch(Exception e) {
 			e.printStackTrace();
+			assertEquals(false,true);
 			System.out.println(e.getMessage());
 		}
 		
