@@ -37,16 +37,16 @@ public class ActionRegister {
 	}
 	
 	public String toString() {
-		/*String state= "state:(";
+		String state= "state:(";
 		for(double s : this.state) {
 			state+= ""+s+",";
 		}
-		state+= ")";*/
+		state+= ")";
 		String a= "porb:(";
 		for(double s : this.actionsProb) {
 			a+= ""+s+",";
 		}
 		a+= ")";
-		return "("/*+state*/+a+", selected:"+indexAction+", vTarget:"+vTarget+", vEstimated:"+vEstimated+", advantage:"+advantage+", r:"+reward+", isTerminal:"+isTerminal+")";
+		return "("+state+a+", selected:"+indexAction+", vTarget:"+vTarget+", vEstimated:"+vEstimated+", advantage:"+advantage+", r:"+reward+", isTerminal:"+isTerminal+")";
 	}
 }
