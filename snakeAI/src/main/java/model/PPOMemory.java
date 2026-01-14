@@ -21,7 +21,7 @@ public class PPOMemory {
 	}
 	
 	public void addNewActions(ActionRegister []actions) {
-		scaleRewards(actions);
+		//scaleRewards(actions);
 		processActions(actions);
 		Collections.addAll(currR,actions);
 	}
@@ -113,8 +113,11 @@ public class PPOMemory {
 	    // If stdDev is still too small (e.g. almost zero), do not scale
 	    if (stdDev < 1e-9) return; 
 
+	    // Limita quanto lo stdDev può essere piccolo per evitare "esplosioni" di reward minimi
+	    double effectiveStdDev = Math.max(stdDev, 1.0); 
+
 	    for (ActionRegister reg : batch) {
-	        reg.reward /= stdDev;
+	        reg.reward /= effectiveStdDev;
 	    }
 	}
 	
@@ -131,16 +134,22 @@ public class PPOMemory {
 	}
 	
 	/**
-	 * get a miniBatch from the old collected data
+	 * get the miniBatch from the old collected data
 	 * @return
 	 */
-	public ActionRegister[] getMiniBatch() {
+	public ArrayList<ActionRegister[]> getMiniBatch() {
 		if(oldR.isEmpty())
 			return null;
+		
+		ArrayList<ActionRegister[]> result = new ArrayList<ActionRegister[]>();
 		Collections.shuffle(oldR);
-		int lastIndex = (int) (oldR.size() * Hyperparameters.minibacthSize);
-		if(lastIndex > 0)
-			return oldR.subList(0,lastIndex).toArray(new ActionRegister[0]);
-		return oldR.subList(0,1).toArray(new ActionRegister[0]);
+		int batchSize = Math.max((int) (oldR.size() * Hyperparameters.minibacthSize),1);
+		for (int j = 0; j < oldR.size(); j += batchSize) {
+            int end = Math.min(j + batchSize, oldR.size());
+            ActionRegister[] miniBatch = oldR.subList(j, end).toArray(new ActionRegister[0]);
+            
+            result.add(miniBatch);
+        }
+		return result;
 	}
 }

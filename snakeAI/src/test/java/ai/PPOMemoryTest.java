@@ -23,9 +23,11 @@ public class PPOMemoryTest {
 		
 		test.addNewActions(r);
 		test.prepareData();
-		for(ActionRegister s : test.getMiniBatch()) {
-			assertEquals(true,(s.vTarget == 5.98 && s.advantage == -3.128999999999998) ||
-					(s.vTarget == 2.0 && s.advantage == -18.0));
+		for(ActionRegister[] z : test.getMiniBatch()) {
+			for(ActionRegister s: z) {
+				assertEquals(true,(s.vTarget == 25.492900000000002 && s.advantage == 0.9999999998933308) ||
+						(s.vTarget == 21.8 && s.advantage == -0.9999999998933308));
+			}
 		}
 	}
 }

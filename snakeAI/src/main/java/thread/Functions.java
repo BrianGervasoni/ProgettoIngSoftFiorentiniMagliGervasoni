@@ -252,14 +252,14 @@ public interface Functions {
 	/**
 	 * 
 	 * @param value of the distance
-	 * @param best = 0 (the best option is that the apple is in the same spot as the head)
-	 * @param worst = the diagonal of the map (the worst is that the apple is in the opposite position of the head)
-	 * @return the normalization of the range (diagonal ; 0) into the range (-1 ; 2)
+	 * @param best = min value
+	 * @param worst = max value
+	 * @return the normalization of the range (best ; worst) into the range (-0.1 ; 0.1)
 	 */
 	public default double normalizeRewardDistanceHeadApple(double value, double best, double worst) {
 		
-        double newWorst = -1.0;
-        double newBest = 2.0;
+        double newWorst = -0.1;
+        double newBest = 0.1;
         
         return (((value - worst) * (newBest - newWorst) / (best - worst)) + newWorst);
     }

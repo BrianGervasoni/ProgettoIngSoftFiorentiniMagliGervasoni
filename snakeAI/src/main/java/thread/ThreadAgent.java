@@ -151,16 +151,16 @@ public class ThreadAgent extends Thread implements Functions{
 	/**
 	 * 
 	 * there are 4 type of reward :
-	 * - default reward = 0.1
-	 * - reward based on the difference of distance between the head and the apple whit the lastPosition which is a value between (-1 ; 2)
-	 * - reward if the snake got the apple = 100
-	 * - reward if the snake died or dosn't have eaten an apple for timeStep = -25
-	 * - reward slight negative for every tick it hasn't take any apple (r = -0.2, t=5)
+	 * - default reward = 0.0
+	 * - reward based on the difference of distance between the head and the apple whit the lastPosition which is a value between (-0.1 ; 0.1)
+	 * - reward if the snake got the apple = 1
+	 * - reward if the snake died or dosn't have eaten an apple for timeStep = -1
+	 * - reward slight negative for every tick it hasn't take any apple (r = -0.05, t=5)
 	 * @return the sum of the reward values, which says if the AI is doing good or not
 	 */
 	public double calculateReward() {
 		
-		double rewardDefault = 0.1, rewardDistanceApple, rewardGetApple = 100, rewardDead = -25,rewardEmptyTick=-0.2;
+		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 1, rewardDead = -1,rewardEmptyTick=-0.05;
 		//double diagonal = Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
 		double distance;
 		double lastDistance;
@@ -168,11 +168,13 @@ public class ThreadAgent extends Thread implements Functions{
 		distance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple());
 		lastDistance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(1), this.game.getMap().getApple());
 		rewardDistanceApple = this.normalizeRewardDistanceHeadApple(lastDistance-distance, -1, 1); 
-		rewardDefault = rewardDefault + rewardDistanceApple;
+		
 								
 		
 		if(this.game.getMap().getAppleCollision()) {
 			rewardDefault = rewardDefault + rewardGetApple;
+		}else {
+			rewardDefault = rewardDefault + rewardDistanceApple;
 		}
 		
 		if(this.game.finish()) {

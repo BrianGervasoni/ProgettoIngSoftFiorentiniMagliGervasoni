@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.locks.Condition;
@@ -145,8 +147,9 @@ public class Model {
 	 */
 	public double[] backPropagation() throws ArithmeticException {
 		try {
-			CompletableFuture<Double> procCritic = backPropCritic();
-			CompletableFuture<Double> procActor = backPropActor();
+			ArrayList<ActionRegister[]> miniBatches = memory.getMiniBatch();
+			CompletableFuture<Double> procCritic = backPropCritic(miniBatches);
+			CompletableFuture<Double> procActor = backPropActor(miniBatches);
 			return new double[] {procActor.join(),procCritic.join()};
 		}catch (RuntimeException e) {
 			if (e.getCause() instanceof ArithmeticException) {
@@ -158,33 +161,40 @@ public class Model {
 		
 	}
 	
-	private  CompletableFuture<Double> backPropCritic(){
+	private  CompletableFuture<Double> backPropCritic(ArrayList<ActionRegister[]> miniBatches){
 		return CompletableFuture.supplyAsync(()->{
 			try {
-				INDArray mean = null;
+				INDArray meanB = null;
+				double meanE = 0;
+				if (miniBatches == null || miniBatches.isEmpty()) return 0.0;
 				for(int i=0; i<Hyperparameters.epoche; i++) {
-					mean = Tools.appendCol(mean,critic.backPropagation(memory.getMiniBatch()));
+					for(ActionRegister[] mb : miniBatches) {
+						meanB = Tools.appendCol(meanB,critic.backPropagation(mb));
+					}
+					meanE += meanB.meanNumber().doubleValue();
+					meanB = null;
 				}
-				if(mean != null)
-					return mean.sum(1).mul(1/(double)Hyperparameters.epoche).sum(0).toDoubleVector()[0];
-				return 0.0;
+				return meanE/Hyperparameters.epoche;
 			}catch (ArithmeticException e) {
 				 throw new RuntimeException(e);
 			}
 		});
 	}
 	
-	private  CompletableFuture<Double> backPropActor(){
+	private  CompletableFuture<Double> backPropActor(ArrayList<ActionRegister[]> miniBatches){
 		return CompletableFuture.supplyAsync(()->{
 			try {
-				INDArray mean = null;
+				INDArray meanB = null;
+				double meanE = 0;
+				if (miniBatches == null || miniBatches.isEmpty()) return 0.0;
 				for(int i=0; i<Hyperparameters.epoche; i++) {
-					ActionRegister[] m = memory.getMiniBatch();
-					mean = Tools.appendCol(mean,actor.backPropagation(m));
+					for(ActionRegister[] mb : miniBatches) {
+						meanB = Tools.appendCol(meanB,actor.backPropagation(mb));
+					}
+					meanE += meanB.meanNumber().doubleValue();
+					meanB = null;
 				}
-				if(mean != null)
-					return mean.sum(1).mul(1/(double)Hyperparameters.epoche).sum(0).toDoubleVector()[0];
-				return 0.0;
+				return meanE/Hyperparameters.epoche;
 			}catch (ArithmeticException e) {
 				 throw new RuntimeException(e);
 			}
