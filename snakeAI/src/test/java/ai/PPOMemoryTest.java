@@ -21,12 +21,12 @@ public class PPOMemoryTest {
 		r[0].vEstimated = 10;
 		r[1].vEstimated = 20;
 		
-		test.addNewActions(r);
+		test.addNewActions(r,0);
 		test.prepareData();
 		for(ActionRegister[] z : test.getMiniBatch()) {
 			for(ActionRegister s: z) {
-				assertEquals(true,(s.vTarget == 25.492900000000002 && s.advantage == 0.9999999998933308) ||
-						(s.vTarget == 21.8 && s.advantage == -0.9999999998933308));
+				assertEquals(true,(s.vTarget == 6.871000000000002 && s.advantage == 0.9999999999095622) ||
+						(s.vTarget == 2.0 && s.advantage == -0.9999999999095622));
 			}
 		}
 	}

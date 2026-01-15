@@ -78,13 +78,17 @@ public class ThreadAgent extends Thread implements Functions{
 					this.intermediary.selectLastActionRegister().isTerminal = true;
 				}
 			}catch(ArithmeticException e) {
-				throw new RuntimeException(e.getMessage(),e.getCause());
+				
 			}catch(IllegalArgumentException e) {
 				System.err.println("WARNING! Si sta cercando di aggiungere un null all'intermediario: "+e.getMessage());
 			}	
 		}
 		
-		this.sendActions(); 	
+		try {
+			this.sendActions();
+		} catch (ArithmeticException e) {
+			throw new RuntimeException(e.getMessage(),e.getCause());
+		} 	
 		
 		this.resetActionRegister();
 	}
@@ -201,7 +205,7 @@ public class ThreadAgent extends Thread implements Functions{
 		this.intermediary.reset();
 	}
 	
-	public void sendActions () {
+	public void sendActions () throws ArithmeticException {
 		ActionRegister[] a = this.intermediary.actionRegister.toArray(new ActionRegister[0]);
 		this.model.memorizeActions(a);
 	}

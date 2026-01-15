@@ -167,7 +167,7 @@ public class Model {
 				INDArray meanB = null;
 				double meanE = 0;
 				if (miniBatches == null || miniBatches.isEmpty()) return 0.0;
-				for(int i=0; i<Hyperparameters.epoche; i++) {
+				for(int i=0; i<Hyperparameters.epoche+5; i++) {
 					for(ActionRegister[] mb : miniBatches) {
 						meanB = Tools.appendCol(meanB,critic.backPropagation(mb));
 					}
@@ -209,7 +209,16 @@ public class Model {
 		actor.optimization();
 	}
 	
-	public synchronized void memorizeActions(ActionRegister[] r) {
-		memory.addNewActions(r);
+	/**
+	 * memorize actions to use for training session
+	 * @param r
+	 * @throws ArithmeticException
+	 */
+	public synchronized void memorizeActions(ActionRegister[] r) throws ArithmeticException {
+		if(r == null) return;
+		
+		ActionRegister[] trainingData = new ActionRegister[r.length - 1];
+		System.arraycopy(r, 0, trainingData, 0, r.length - 1);
+		memory.addNewActions(trainingData,r[r.length-1].vEstimated);
 	}
 }

@@ -20,9 +20,9 @@ public class PPOMemory {
 		return true;
 	}
 	
-	public void addNewActions(ActionRegister []actions) {
+	public void addNewActions(ActionRegister []actions,double lastEstimated) {
 		//scaleRewards(actions);
-		processActions(actions);
+		processActions(actions,lastEstimated);
 		Collections.addAll(currR,actions);
 	}
 	
@@ -30,7 +30,7 @@ public class PPOMemory {
 	 * process the actions to obtain the vTarget and advantage of the batch data
 	 * @param actions
 	 */
-	private void processActions(ActionRegister[] actions) {
+	private void processActions(ActionRegister[] actions,double lastEstimated) {
 	    double gae = 0;
 	    double discount = Hyperparameters.discount;
 	    double lambda = Hyperparameters.lambda;
@@ -42,16 +42,19 @@ public class PPOMemory {
 	        double nextValue;
 	        double nextNonTerminal; // Mask for the GAE
 
+	        if (i + 1 < actions.length) {
+	        	// Normal case: we get the value of the next action in the batch
+	            nextValue = actions[i + 1].vEstimated;
+	            nextNonTerminal = (actions[i].isTerminal) ? 0 : 1; 
+	        } else {
+	        	// Last element of the batch: we use the bootstrap passed from outside
+	            nextValue = lastEstimated;
+	            nextNonTerminal = (actions[i].isTerminal) ? 0 : 1;
+	        }
+
+	        // If the current action is terminal, the future value is forced to 0
 	        if (actions[i].isTerminal) {
 	            nextValue = 0;
-	            nextNonTerminal = 0; // Reset GAE accumulation
-	        } else if (i + 1 < actions.length) {
-	            nextValue = actions[i + 1].vEstimated;
-	            nextNonTerminal = 1; // The accumulation continues
-	        } else {
-	            // Edge case: batch ends but not dead
-	            nextValue = actions[i].vEstimated; // Or the value of the last state if available
-	            nextNonTerminal = 0;
 	        }
 
 	        // Calculating Delta (Differential Time Error)

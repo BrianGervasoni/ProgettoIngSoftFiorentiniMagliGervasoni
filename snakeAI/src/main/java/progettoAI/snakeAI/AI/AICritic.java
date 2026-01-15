@@ -33,11 +33,17 @@ public class AICritic extends AI {
 	
 	@Override
 	public INDArray singleDerivateLoss(ActionRegister r,INDArray newProb) {
-		double diff = r.vEstimated - r.vTarget;
-		if (diff > 1.0) diff = 1.0;
-		if (diff < -1.0) diff = -1.0;
-		double[] x = new double[] {2*diff};
-		return Nd4j.create(x);
+		 double diff = r.vEstimated - r.vTarget;
+		    
+		    double delta = 1.0; // Huber threshold
+		    double derivative;
+		    
+		    if (Math.abs(diff) <= delta) {
+		        derivative = 2 * diff; // MSE Behavior
+		    } else {
+		        derivative = 2 * delta * Math.signum(diff); // Linear behavior for large errors
+		    }
+		return Nd4j.create(new double[] {derivative});
 	}
 
 }
