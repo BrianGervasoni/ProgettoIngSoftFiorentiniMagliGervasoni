@@ -81,7 +81,7 @@ public class PPOMemory {
 	        sum += reg.advantage;
 	    }
 	    double mean = sum / n;
-
+	    //System.out.println("mean Advantage:"+mean);
 	    // Calculating Variance (sigma^2)
 	    double varianceSum = 0;
 	    for (ActionRegister reg : batch) {

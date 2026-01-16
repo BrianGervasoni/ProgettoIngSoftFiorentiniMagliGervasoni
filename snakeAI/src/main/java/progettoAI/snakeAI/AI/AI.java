@@ -129,9 +129,9 @@ public abstract class AI {
 	 * @return mean loss [NX1]
 	 * @throws ArithmeticException 
 	 */
-	public INDArray backPropagation(ActionRegister[] r,long episode) throws ArithmeticException {
+	public double backPropagation(ActionRegister[] r,long episode) throws ArithmeticException {
 		if(r == null)
-			return null;
+			return 0.0;
 		INDArray tmpR = copyStateIntoINDArray(r,r.length);
 		
 		// perform the forwarding saving the intermediary state used for calculate the derivates
@@ -142,7 +142,7 @@ public abstract class AI {
 			dLdA = layers.get(i).backPropagation(dLdA,this.getMode(),r.length,learningRate);
 		}
 		
-		return lossCalculation(r,newProb,episode).sum(1).mul(1/r.length).reshape(newProb.rows(),1);
+		return lossCalculation(r,newProb,episode).meanNumber().doubleValue();
 	}
 	
 	/**

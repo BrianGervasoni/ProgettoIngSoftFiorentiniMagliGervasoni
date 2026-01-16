@@ -21,6 +21,7 @@ public class Model {
 	private AICritic critic;
 	private AIActor actor;
 	private transient PPOMemory memory;
+	private transient final int  ratioLoss = 1000;
 	
 	/**
 	 * setup the default configuration (critic: 3X126 actor: 3X256)
@@ -164,17 +165,17 @@ public class Model {
 	private  CompletableFuture<Double> backPropCritic(ArrayList<ActionRegister[]> miniBatches, long episode){
 		return CompletableFuture.supplyAsync(()->{
 			try {
-				INDArray meanB = null;
+				double meanB = 0;
 				double meanE = 0;
 				if (miniBatches == null || miniBatches.isEmpty()) return 0.0;
 				for(int i=0; i<Hyperparameters.epoche+5; i++) {
 					for(ActionRegister[] mb : miniBatches) {
-						meanB = Tools.appendCol(meanB,critic.backPropagation(mb,episode));
+						meanB += critic.backPropagation(mb,episode);
 					}
-					meanE += meanB.meanNumber().doubleValue();
-					meanB = null;
+					meanE += meanB/miniBatches.size();
+					meanB = 0.0;
 				}
-				return meanE/Hyperparameters.epoche;
+				return ratioLoss * meanE/(Hyperparameters.epoche+5);
 			}catch (ArithmeticException e) {
 				 throw new RuntimeException(e);
 			}
@@ -184,17 +185,17 @@ public class Model {
 	private  CompletableFuture<Double> backPropActor(ArrayList<ActionRegister[]> miniBatches, long episode){
 		return CompletableFuture.supplyAsync(()->{
 			try {
-				INDArray meanB = null;
+				double meanB = 0;
 				double meanE = 0;
 				if (miniBatches == null || miniBatches.isEmpty()) return 0.0;
 				for(int i=0; i<Hyperparameters.epoche; i++) {
 					for(ActionRegister[] mb : miniBatches) {
-						meanB = Tools.appendCol(meanB,actor.backPropagation(mb,episode));
+						meanB += actor.backPropagation(mb,episode);
 					}
-					meanE += meanB.meanNumber().doubleValue();
-					meanB = null;
+					meanE += meanB/miniBatches.size();
+					meanB = 0.0;
 				}
-				return meanE/Hyperparameters.epoche;
+				return ratioLoss * meanE/Hyperparameters.epoche;
 			}catch (ArithmeticException e) {
 				 throw new RuntimeException(e);
 			}

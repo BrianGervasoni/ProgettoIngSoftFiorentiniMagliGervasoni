@@ -159,7 +159,6 @@ public class UserInterface {
 	*/
 	
 	public void setLossAgent(double ar) {
-		
 		lossAgent.setText("Loss Agent: " + String.valueOf(ar));		
 	}
 	

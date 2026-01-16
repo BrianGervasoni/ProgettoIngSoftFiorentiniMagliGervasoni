@@ -227,7 +227,7 @@ public class ThreadAIManager{
 		
 		if(mapIndex == 0) {
 			return this.selectFirstMap();
-		}else if(mapIndex == this.threadsAgentNumber) {
+		}else if(mapIndex ==  this.threadAgents.size() - 1) {
 			return this.selectLastMap();
 		}
 		else {
