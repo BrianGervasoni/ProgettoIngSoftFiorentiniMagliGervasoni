@@ -21,7 +21,7 @@ public class PPOMemory {
 	}
 	
 	public void addNewActions(ActionRegister []actions,double lastEstimated) {
-		//scaleRewards(actions);
+		scaleRewards(actions);
 		processActions(actions,lastEstimated);
 		Collections.addAll(currR,actions);
 	}
