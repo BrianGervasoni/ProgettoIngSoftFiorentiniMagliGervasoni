@@ -1,8 +1,8 @@
 {
   "alphaActor": 3.0E-4,
   "alphaCritic": 0.003,
-  "epoche": 7,
-  "minibacthSize": 0.25,
+  "epoche": 5,
+  "minibacthSize": 0.15,
   "discount": 0.99,
   "lambda": 0.95,
   "timeStep": 512,

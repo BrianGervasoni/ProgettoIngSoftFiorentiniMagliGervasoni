@@ -156,22 +156,22 @@ public class ThreadAgent extends Thread implements Functions{
 	 * 
 	 * there are 4 type of reward :
 	 * - default reward = 0.0
-	 * - reward based on the difference of distance between the head and the apple whit the lastPosition which is a value between (-0.1 ; 0.1)
-	 * - reward if the snake got the apple = 1
+	 * - reward based on the difference of distance between the head and the apple whit the lastPosition which is a value between (-0.2 ; 0.2)
+	 * - reward if the snake got the apple = 2
 	 * - reward if the snake died = -1.5
 	 * - reward slight negative for every tick it hasn't take any apple (r = -0.05, t=5)
 	 * @return the sum of the reward values, which says if the AI is doing good or not
 	 */
 	public double calculateReward() {
 		
-		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 1, rewardDead = -1.5,rewardEmptyTick=-0.05;
+		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 2, rewardDead = -1.5,rewardEmptyTick=-0.05;
 		//double diagonal = Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
 		double distance;
 		double lastDistance;
 		
 		distance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple());
 		lastDistance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(1), this.game.getMap().getApple());
-		rewardDistanceApple = this.normalizeRewardDistanceHeadApple(lastDistance-distance, -1, 1); 
+		rewardDistanceApple = 0.2*this.normalizeRewardDistanceHeadApple(lastDistance-distance, 1, -1);//0.2 * range(-1,1)
 		
 								
 		
@@ -181,12 +181,12 @@ public class ThreadAgent extends Thread implements Functions{
 			rewardDefault = rewardDefault + rewardDistanceApple;
 		}
 		
-		if(this.game.finish()) {
-			rewardDefault = rewardDefault + rewardDead;
+		if(this.game.getTickLastApple() > 20) {
+			rewardDefault += rewardEmptyTick;
 		}
 		
-		if(this.game.getTickLastApple() > 5) {
-			rewardDefault += rewardEmptyTick;
+		if(this.game.finish()) {
+			rewardDefault = rewardDead;
 		}
 		
 		return rewardDefault;
