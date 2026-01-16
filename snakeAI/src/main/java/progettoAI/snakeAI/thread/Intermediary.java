@@ -38,7 +38,7 @@ public class Intermediary implements Functions{
 		rephase = (int) Math.round(180.0/n);
 		
 		Ray[] rays;
-		double[] food = inizializeArray(n), walls = inizializeArray(n), snake = inizializeArray(n), arrayMerged = inizializeArray(n*3), result = inizializeArray(n*3 +  delta);
+		double[] food = initializeArray(n), walls = initializeArray(n), snake = initializeArray(n), arrayMerged = initializeArray(n*3), result = initializeArray(n*3 +  delta);
 					
 					SnakeBox snakeHead = map.getSnake().getBodyPiece(0);
 					
