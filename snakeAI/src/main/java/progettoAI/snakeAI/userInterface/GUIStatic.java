@@ -168,14 +168,11 @@ public class GUIStatic {
 
 
 
-	public static void printTrainNoMap(JFrame myFrame, JLabel lossAgent, JLabel lossModel, UserInterface ui) {
+	public static void printTrainNoMap(JFrame myFrame, JLabel lossAgent, JLabel lossModel, JLabel matchDur, JLabel snakeLen, UserInterface ui) {
 		
 		GUIStatic.resetFrame(myFrame);
 		
 		JPanel training = new JPanel();
-
-		JLabel duration = new JLabel("Durata partita: " + String.valueOf(ui.getMatchDuration()));
-		JLabel snakeLength = new JLabel("Lunghezza snake: " + String.valueOf(ui.getSnakeLength()));
 		
 		JButton buttonShowRandomMap = new JButton("Mostra una mappa casuale");
 		buttonShowRandomMap.addActionListener(new ActionListener() {
@@ -208,8 +205,8 @@ public class GUIStatic {
 		
 		training.add(lossAgent);
 		training.add(lossModel);
-		training.add(duration);
-		training.add(snakeLength);
+		training.add(matchDur);
+		training.add(snakeLen);
 		training.add(buttonShowRandomMap);
 		training.add(buttonStopTraining);
 		training.add(buttonToggle);
@@ -226,15 +223,11 @@ public class GUIStatic {
 	
 	
 	
-	public static void printTrainWithMap(JFrame myFrame, JLabel lossAgent, JLabel lossModel, JTable renderedMap, UserInterface ui) {
+	public static void printTrainWithMap(JFrame myFrame, JLabel lossAgent, JLabel lossModel, JLabel matchDur, JLabel snakeLen, JTable renderedMap, UserInterface ui) {
 		
 		GUIStatic.resetFrame(myFrame);
 		
 		JPanel training = new JPanel();
-		
-		JLabel duration = new JLabel("Durata partita: " + String.valueOf(ui.getMatchDuration()));
-		JLabel snakeLength = new JLabel("Lunghezza snake: " + String.valueOf(ui.getSnakeLength()));
-		
 		
 		JButton buttonHideMap = new JButton("Nascondi mappa");
 		buttonHideMap.addActionListener(new ActionListener() {
@@ -288,8 +281,8 @@ public class GUIStatic {
 		training.add(renderedMap);
 		training.add(lossAgent);
 		training.add(lossModel);
-		training.add(duration);
-		training.add(snakeLength);
+		training.add(matchDur);
+		training.add(snakeLen);
 		training.add(buttonHideMap);
 		training.add(buttonToggle);
 		training.add(buttonStopTraining);
@@ -305,16 +298,12 @@ public class GUIStatic {
 	
 	
 	
-	public static void printExecution(JFrame myFrame, JLabel lossAgent, JLabel lossModel, UserInterface ui, JTable renderedMap) {
+	public static void printExecution(JFrame myFrame, JLabel lossAgent, JLabel lossModel, JLabel matchDur, JLabel snakeLen, UserInterface ui, JTable renderedMap) {
 		
 		GUIStatic.resetFrame(myFrame);
 		
 		JPanel exec = new JPanel();
-		
-		JLabel duration = new JLabel("Durata partita: " + String.valueOf(ui.getMatchDuration()));
-		JLabel snakeLength = new JLabel("Lunghezza snake: " + String.valueOf(ui.getSnakeLength()));
-		
-		
+			
 		JButton buttonStopExecution = new JButton("Termina esecuzione");
 		buttonStopExecution.addActionListener(new ActionListener() {
 
@@ -338,8 +327,8 @@ public class GUIStatic {
 		exec.add(renderedMap);
 		exec.add(lossAgent);
 		exec.add(lossModel);
-		exec.add(duration);
-		exec.add(snakeLength);
+		exec.add(matchDur);
+		exec.add(snakeLen);
 		exec.add(buttonStopExecution);
 		exec.add(buttonToggle);
 		

@@ -28,6 +28,11 @@ public class UserInterface {
 	private String modelPath;
 	private String hyperparametersPath;
 	private int threadNumber;
+	private DefaultTableModel model;
+	
+	private JLabel matchDuration;
+	private JLabel snakeLength;
+	
 	
 	
 	/**
@@ -47,15 +52,36 @@ public class UserInterface {
 		threadNumber = -1;
 		lossAgent = new JLabel("Start lossAgent: 0");
 		lossModel = new JLabel("Start lossModel: 0");
+		
+		snakeLength = new JLabel("null");
+		matchDuration = new JLabel("null");
+		
+		
+		renderedMap = new JTable();
+		renderedMap.setEnabled(false);
+		model = (DefaultTableModel) renderedMap.getModel();
+		model.setRowCount(12);
+		model.setColumnCount(12);
+		renderedMap.setShowGrid(false);
+		TableColumnModel columnModel = renderedMap.getColumnModel();
+        for (int i = 0; i < columnModel.getColumnCount(); i++) {
+            TableColumn column = columnModel.getColumn(i);
+            column.setMinWidth(15);
+            column.setMaxWidth(15);
+            column.setPreferredWidth(15);
+        }
+		
 	}
 	
 	public void start() {
 		GUIStatic.printMenu(myFrame, this);
 	}
-	
+
 
 	public void viewMap(Map map) {
 		renderMap(map);
+		matchDuration.setText("Durata partita: " + String.valueOf(map.getMatchDuration()));
+		snakeLength.setText("Lunghezza: " + String.valueOf(map.getSnakeLength()));
 	}
 	
 	
@@ -66,7 +92,7 @@ public class UserInterface {
 	
 	public void hideMap() {
 		modeIndicator = 1;
-		GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
+		GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, matchDuration, snakeLength, this);
 	}
 	
 	
@@ -102,42 +128,25 @@ public class UserInterface {
 	}
 	
 	public void renderMap(Map map) {
-		
-		DefaultTableModel model = new DefaultTableModel();
-		renderedMap = new JTable(model);
-		model.setRowCount(map.getRowLenght());
-		model.setColumnCount(map.getColumnLenght());
-		
-		renderedMap.setShowGrid(false);
-		
-		TableColumnModel columnModel = renderedMap.getColumnModel();
-        for (int i = 0; i < columnModel.getColumnCount(); i++) {
-            TableColumn column = columnModel.getColumn(i);
-            column.setMinWidth(15);
-            column.setMaxWidth(15);
-            column.setPreferredWidth(15);
-        }
-		
-		
-		
+
 		
 		for(int i = 0; i < map.getRowLenght(); i++) {
 			for(int y = 0; y < map.getColumnLenght(); y++) {
 				
 				if(((y==0) && (i==0))||((y==0) && (i==map.getRowLenght()-1))||((y==map.getColumnLenght()-1) && (i==0))||((i==map.getRowLenght()-1) && (y==map.getColumnLenght()-1)))
-					renderedMap.setValueAt("+", i, y);
+					model.setValueAt("+", i, y);
 				else if((i==0)||(i==map.getRowLenght()-1))
-					renderedMap.setValueAt("---", i, y);
+					model.setValueAt("---", i, y);
 				else if((y==0)||(y==map.getColumnLenght()-1))
-					renderedMap.setValueAt("|", i, y);
+					model.setValueAt("|", i, y);
 				else
-					renderedMap.setValueAt(map.getBox(i, y).visual(), i, y);	
+					model.setValueAt(map.getBox(i, y).visual(), i, y);	
 			}
 		}
-		renderRightState();
+//		renderRightState();
 	}
 	
-	
+	/*
 	public void renderRightState() {
 		
 		if(modeIndicator == 0) 
@@ -147,19 +156,17 @@ public class UserInterface {
 		else if(modeIndicator == 2) 
 			GUIStatic.printTrainWithMap(myFrame, lossAgent, lossModel, renderedMap, this);	
 	}
-	
+	*/
 	
 	public void setLossAgent(double ar) {
 		
-		lossAgent = new JLabel("Loss Agent: " + String.valueOf(ar));
-		renderRightState();		
+		lossAgent.setText("Loss Agent: " + String.valueOf(ar));		
 	}
 	
 	
 	public void setLossModel(double model) {
 		
-		lossModel = new JLabel("Loss Model: " + String.valueOf(model));
-		renderRightState();
+		lossModel.setText("Loss Model: " + String.valueOf(model));
 	}
 	
 	
@@ -210,7 +217,7 @@ public class UserInterface {
 			try {
 				modeIndicator = 0;
 				controller.startExecution(modelPath);
-				GUIStatic.printExecution(myFrame, lossAgent, lossModel, this, renderedMap);
+				GUIStatic.printExecution(myFrame, lossAgent, lossModel, matchDuration, snakeLength, this, renderedMap);
 			}catch(ThreadException e) {
 				GUIStatic.sendWarning(myFrame, "C'è un problema di thread a far partire l'esecuzione: " + e.getMessage());
 			}catch(IOException e) {
@@ -238,7 +245,7 @@ public class UserInterface {
 		try {
 			modeIndicator = 1;
 			controller.startTraining(threadNumber, modelPath);
-			GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, this);
+			GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, matchDuration, snakeLength, this);
 		}catch(ThreadException e) {
 				GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'allenamento: " + e.getMessage());
 		}catch(IOException e) {
@@ -250,7 +257,7 @@ public class UserInterface {
 	
 	public void trainWithMap() {
 		modeIndicator = 2;
-		GUIStatic.printTrainWithMap(myFrame, lossAgent, lossModel, renderedMap, this);
+		GUIStatic.printTrainWithMap(myFrame, lossAgent, lossModel, matchDuration, snakeLength, renderedMap, this);
 	}
 
 	
@@ -331,7 +338,6 @@ public class UserInterface {
         
         setModelpath(text);
         mainMenu();
-		
 	}
 
 	
@@ -344,7 +350,7 @@ public class UserInterface {
 
 	public void showMap() {
 		modeIndicator = 2;
-		GUIStatic.printTrainWithMap(myFrame, lossAgent, lossModel, renderedMap, this);	
+		GUIStatic.printTrainWithMap(myFrame, lossAgent, lossModel, matchDuration, snakeLength, renderedMap, this);	
 	}
 	
 }
