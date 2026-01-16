@@ -21,7 +21,6 @@ public class PPOMemory {
 	}
 	
 	public void addNewActions(ActionRegister []actions,double lastEstimated) {
-		scaleRewards(actions);
 		processActions(actions,lastEstimated);
 		Collections.addAll(currR,actions);
 	}
@@ -96,31 +95,6 @@ public class PPOMemory {
 
 	    for (ActionRegister reg : batch) {
 	        reg.advantage = (reg.advantage - mean) / stdDev;
-	    }
-	}
-	
-	private void scaleRewards(ActionRegister[] batch) {
-	    if (batch == null || batch.length <= 1) return;
-	    
-	    double sum = 0;
-	    for (ActionRegister reg : batch) sum += reg.reward;
-	    double mean = sum / batch.length;
-
-	    double varSum = 0;
-	    for (ActionRegister reg : batch) {
-	        varSum += Math.pow(reg.reward - mean, 2);
-	    }
-	    
-	    double stdDev = Math.sqrt(varSum / batch.length) + 1e-8; 
-
-	    // If stdDev is still too small (e.g. almost zero), do not scale
-	    if (stdDev < 1e-9) return; 
-
-	    // Limita quanto lo stdDev può essere piccolo per evitare "esplosioni" di reward minimi
-	    double effectiveStdDev = Math.max(stdDev, 1.0); 
-
-	    for (ActionRegister reg : batch) {
-	        reg.reward /= effectiveStdDev;
 	    }
 	}
 	

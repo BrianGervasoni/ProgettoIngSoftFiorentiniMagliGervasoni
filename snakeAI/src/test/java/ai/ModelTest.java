@@ -44,7 +44,7 @@ public class ModelTest {
 			m.memorizeActions(new ActionRegister[] {r});
 			m.initBackPropagation();
 			
-			double[] test =  m.backPropagation();
+			double[] test =  m.backPropagation(0);
 			
 			double[] trueLoss = new double[] {4.027024050252193,15.994531083675913};
 			assertArrayEquals(trueLoss,test);

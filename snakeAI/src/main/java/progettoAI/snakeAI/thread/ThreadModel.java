@@ -121,7 +121,7 @@ public class ThreadModel extends Thread{
 	}
 	
 	public void backPropagation() throws ArithmeticException {
-		lossStat.onNext(this.model.backPropagation()); 
+		lossStat.onNext(this.model.backPropagation(episode)); 
 		episode++;
 		System.out.println("numero di episodi:"+episode);
 	}

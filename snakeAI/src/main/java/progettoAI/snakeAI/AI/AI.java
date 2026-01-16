@@ -129,7 +129,7 @@ public abstract class AI {
 	 * @return mean loss [NX1]
 	 * @throws ArithmeticException 
 	 */
-	public INDArray backPropagation(ActionRegister[] r) throws ArithmeticException {
+	public INDArray backPropagation(ActionRegister[] r,long episode) throws ArithmeticException {
 		if(r == null)
 			return null;
 		INDArray tmpR = copyStateIntoINDArray(r,r.length);
@@ -137,12 +137,12 @@ public abstract class AI {
 		// perform the forwarding saving the intermediary state used for calculate the derivates
 		INDArray newProb = this.feedForwarding(tmpR,0,true);
 		// set the starting derivate from loss to activation
-		INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb),this.getMode(),r.length,learningRate);
+		INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb,episode),this.getMode(),r.length,learningRate);
 		for(int i=layers.size()-2; i>-1; i--){//perform the backPropagation for every layer
 			dLdA = layers.get(i).backPropagation(dLdA,this.getMode(),r.length,learningRate);
 		}
 		
-		return lossCalculation(r,newProb).sum(1).mul(1/r.length).reshape(newProb.rows(),1);
+		return lossCalculation(r,newProb,episode).sum(1).mul(1/r.length).reshape(newProb.rows(),1);
 	}
 	
 	/**
@@ -172,13 +172,13 @@ public abstract class AI {
 	 * @param newProb [numberOut X minibatchSize]
 	 * @return NXM [numberOut X minibatchSize]
 	 */
-	public INDArray lossCalculation(ActionRegister[] r,INDArray newProb) {
+	public INDArray lossCalculation(ActionRegister[] r,INDArray newProb,long episode) {
 		if(r == null)
 			return null;
 		INDArray l = null;
 		
 		for(int i=0; i<r.length; i++) {
-			l = Tools.appendCol(l, singleLossCalculation(r[i],newProb.getColumn(i)).reshape(newProb.getColumn(i).length(),1));
+			l = Tools.appendCol(l, singleLossCalculation(r[i],newProb.getColumn(i),episode).reshape(newProb.getColumn(i).length(),1));
 		}
 		
 		return l;
@@ -190,12 +190,12 @@ public abstract class AI {
 	 * @param newProb [numberOut X minibatchSize]
 	 * @return NXM [numberOut X minibatchSize]
 	 */
-	public INDArray derivateLoss(ActionRegister[] r,INDArray newProb) {
+	public INDArray derivateLoss(ActionRegister[] r,INDArray newProb,long episode) {
 		if(r == null)
 			return null;
 		INDArray l = null;
 		for(int i=0; i<r.length; i++) {
-			l = Tools.appendCol(l, singleDerivateLoss(r[i],newProb.getColumn(i)).reshape(newProb.getColumn(i).length(),1));
+			l = Tools.appendCol(l, singleDerivateLoss(r[i],newProb.getColumn(i),episode).reshape(newProb.getColumn(i).length(),1));
 		}
 		return l;
 	}
@@ -206,7 +206,7 @@ public abstract class AI {
 	 * @param newProb
 	 * @return
 	 */
-	public abstract INDArray singleLossCalculation(ActionRegister r,INDArray newProb);
+	public abstract INDArray singleLossCalculation(ActionRegister r,INDArray newProb,long episode);
 	
 	/**
 	 * perform a single derivate loss
@@ -214,6 +214,6 @@ public abstract class AI {
 	 * @param newProb
 	 * @return
 	 */
-	public abstract INDArray singleDerivateLoss(ActionRegister r,INDArray newProb);
+	public abstract INDArray singleDerivateLoss(ActionRegister r,INDArray newProb,long episode);
 	
 }

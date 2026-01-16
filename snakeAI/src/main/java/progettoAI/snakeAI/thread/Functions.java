@@ -184,23 +184,20 @@ public interface Functions {
 					
 					if(checkCollision(map.getBox(i, j),rays[k])) {
 						//System.out.println("raggio("+k+")"+"collisione con:"+map.getBox(i,j).getElementType()+" a coordinate("+i+","+j+")");
-						
+						double dist = calculateRayDistance(map.getBox(i,j), rays[k]);
 						if(map.getBox(i, j).getElementType().equals(MapElem.WALL)) {
-							walls[k] = calculateRayDistance(map.getBox(i, j),rays[k]);
+							if (dist != -1 && (walls[k] == -1 || dist < walls[k])) walls[k] = dist;
 						}
 						if(map.getBox(i, j).getElementType().equals(SnakeBody.BODY) || map.getBox(i, j).getElementType().equals(SnakeBody.TAIL)) {
-							snake[k] = calculateRayDistance(map.getBox(i, j),rays[k]);
+							if (dist != -1 && (snake[k] == -1 || dist < snake[k])) snake[k] = dist;
 						}
 						if(map.getBox(i, j).getElementType().equals(Food.APPLE)) {
-							food[k] = calculateRayDistance(map.getBox(i, j),rays[k]);
+							if (dist != -1 && (food[k] == -1 || dist < food[k])) food[k] = dist;
 						}
-						
 					}
-					
 				}
 			}
 		}
-		
 	}
 	
 	/**
