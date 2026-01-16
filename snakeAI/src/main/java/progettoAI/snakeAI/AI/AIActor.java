@@ -75,8 +75,12 @@ public class AIActor extends AI {
 	 * @param oldProb
 	 * @return
 	 */
-	private double policyRatio(double newProb, double oldLogProb) {
-	    return Math.exp(Math.log(newProb + 1e-8) - oldLogProb);
+	private double policyRatio(double newProb, double oldProb) {
+		return (newProb + 1e-8) / (oldProb + 1e-8);
+	}
+	
+	private double derivatePolicyRatio(double newProb) {
+		return 1 / (newProb + 1e-8);
 	}
 	
 	/**
@@ -101,7 +105,7 @@ public class AIActor extends AI {
 			return null;
 		RealVector x= new ArrayRealVector(probs.length);
 		for(int i=0; i < probs.length; i++) {
-			x.setEntry(i, -probs[i] * entropyDecay(episode));
+			x.setEntry(i, -(Math.log(probs[i] + 1e-8) + 1) * entropyDecay(episode));
 		}
 		return x;
 	}
@@ -114,7 +118,7 @@ public class AIActor extends AI {
 	 */
 	private double lossClip(ActionRegister r, double[] newProb) {
 
-	    double ratio = policyRatio(newProb[r.indexAction], Math.log(r.oldSelectAction()+ 1e-8));
+	    double ratio = policyRatio(newProb[r.indexAction], r.oldSelectAction());
 	    double clipped = Tools.clip(
 	        ratio,
 	        1 - Hyperparameters.motivation,
@@ -133,18 +137,13 @@ public class AIActor extends AI {
 	private double derivateLossClip(ActionRegister r, double[] newProb) {
 		if(newProb == null || r == null)
 			return 0;
-		if(r.advantage > 0) {
-			if(policyRatio(newProb[r.indexAction],r.oldSelectAction()) > 1+Hyperparameters.motivation) {
-				return 0;
-			}
-				
-		}else {
-			if(policyRatio(newProb[r.indexAction],r.oldSelectAction()) < 1-Hyperparameters.motivation) {
-				return 0;
-			}
-		}
+		double ratio = policyRatio(newProb[r.indexAction], r.oldSelectAction());
+		double clipped = Tools.clip(ratio, 1-Hyperparameters.motivation, 1+Hyperparameters.motivation);
+
+		if (r.advantage > 0 && ratio > clipped) return 0;
+	    if (r.advantage < 0 && ratio < clipped) return 0;
 		
-		return r.advantage * policyRatio(newProb[r.indexAction],r.oldSelectAction());
+		return r.advantage * derivatePolicyRatio(newProb[r.indexAction]);
 	}
 		
 }
