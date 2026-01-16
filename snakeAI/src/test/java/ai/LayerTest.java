@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.factory.Nd4j;
 
-import errorHandler.ArithmeticException;
 import progettoAI.snakeAI.AI.*;
+import progettoAI.snakeAI.errorHandler.ArithmeticException;
 import progettoAI.snakeAI.tools.Tools;
 
 public class LayerTest {

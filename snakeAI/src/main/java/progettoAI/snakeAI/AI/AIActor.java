@@ -5,9 +5,9 @@ import org.apache.commons.math3.linear.RealVector;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
-import model.ActionRegister;
 import progettoAI.snakeAI.tools.Tools;
 import progettoAI.snakeAI.hyperparameters.*;
+import progettoAI.snakeAI.model.ActionRegister;
 
 public class AIActor extends AI {
 

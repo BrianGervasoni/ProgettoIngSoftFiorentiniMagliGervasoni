@@ -6,12 +6,13 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import boxes.AppleBox;
-import boxes.Direction;
-import boxes.EmptyBox;
-import boxes.MapElem;
-import boxes.SnakeBody;
-import boxes.SnakeBox;
+import progettoAI.snakeAI.boxes.AppleBox;
+import progettoAI.snakeAI.boxes.Direction;
+import progettoAI.snakeAI.boxes.EmptyBox;
+import progettoAI.snakeAI.boxes.MapElem;
+import progettoAI.snakeAI.boxes.SnakeBody;
+import progettoAI.snakeAI.boxes.SnakeBox;
+import progettoAI.snakeAI.gioco.Map;
 
 class TestMap {
 

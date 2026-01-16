@@ -11,12 +11,12 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.factory.Nd4j;
 
-import errorHandler.ArithmeticException;
-import fileManager.JsonFileManager;
-import model.ActionRegister;
-import model.Model;
 import progettoAI.snakeAI.AI.*;
+import progettoAI.snakeAI.errorHandler.ArithmeticException;
+import progettoAI.snakeAI.fileManager.JsonFileManager;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
+import progettoAI.snakeAI.model.ActionRegister;
+import progettoAI.snakeAI.model.Model;
 public class ModelTest {
 
 	@Test

@@ -3,9 +3,10 @@ package thread;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import boxes.*;
-import gioco.snakeAI.Map;
-import gioco.snakeAI.Snake;
+import progettoAI.snakeAI.boxes.*;
+import progettoAI.snakeAI.gioco.Map;
+import progettoAI.snakeAI.gioco.Snake;
+import progettoAI.snakeAI.thread.Intermediary;
 
 class IntermediaryTest {
 

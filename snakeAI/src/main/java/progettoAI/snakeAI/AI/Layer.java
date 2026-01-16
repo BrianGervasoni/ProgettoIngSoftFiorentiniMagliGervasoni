@@ -15,8 +15,8 @@ import org.nd4j.common.primitives.Pair;
 
 
 import progettoAI.snakeAI.tools.Tools;
+import progettoAI.snakeAI.errorHandler.ArithmeticException;
 import progettoAI.snakeAI.hyperparameters.*;
-import errorHandler.ArithmeticException;
 
 
 public abstract class Layer {

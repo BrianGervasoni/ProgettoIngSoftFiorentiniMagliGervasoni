@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.factory.Nd4j;
 
-import errorHandler.ArithmeticException;
-import model.ActionRegister;
 import progettoAI.snakeAI.AI.*;
+import progettoAI.snakeAI.errorHandler.ArithmeticException;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
+import progettoAI.snakeAI.model.ActionRegister;
 
 public class AITest {
 
