@@ -145,11 +145,11 @@ public class Model {
 	 * @return [mean loss actor, mean loss critic]
 	 * @throws ArithmeticException 
 	 */
-	public double[] backPropagation() throws ArithmeticException {
+	public double[] backPropagation(long episode) throws ArithmeticException {
 		try {
 			ArrayList<ActionRegister[]> miniBatches = memory.getMiniBatch();
-			CompletableFuture<Double> procCritic = backPropCritic(miniBatches);
-			CompletableFuture<Double> procActor = backPropActor(miniBatches);
+			CompletableFuture<Double> procCritic = backPropCritic(miniBatches,episode);
+			CompletableFuture<Double> procActor = backPropActor(miniBatches,episode);
 			return new double[] {procActor.join(),procCritic.join()};
 		}catch (RuntimeException e) {
 			if (e.getCause() instanceof ArithmeticException) {
@@ -161,7 +161,7 @@ public class Model {
 		
 	}
 	
-	private  CompletableFuture<Double> backPropCritic(ArrayList<ActionRegister[]> miniBatches){
+	private  CompletableFuture<Double> backPropCritic(ArrayList<ActionRegister[]> miniBatches, long episode){
 		return CompletableFuture.supplyAsync(()->{
 			try {
 				INDArray meanB = null;
@@ -169,7 +169,7 @@ public class Model {
 				if (miniBatches == null || miniBatches.isEmpty()) return 0.0;
 				for(int i=0; i<Hyperparameters.epoche+5; i++) {
 					for(ActionRegister[] mb : miniBatches) {
-						meanB = Tools.appendCol(meanB,critic.backPropagation(mb));
+						meanB = Tools.appendCol(meanB,critic.backPropagation(mb,episode));
 					}
 					meanE += meanB.meanNumber().doubleValue();
 					meanB = null;
@@ -181,7 +181,7 @@ public class Model {
 		});
 	}
 	
-	private  CompletableFuture<Double> backPropActor(ArrayList<ActionRegister[]> miniBatches){
+	private  CompletableFuture<Double> backPropActor(ArrayList<ActionRegister[]> miniBatches, long episode){
 		return CompletableFuture.supplyAsync(()->{
 			try {
 				INDArray meanB = null;
@@ -189,7 +189,7 @@ public class Model {
 				if (miniBatches == null || miniBatches.isEmpty()) return 0.0;
 				for(int i=0; i<Hyperparameters.epoche; i++) {
 					for(ActionRegister[] mb : miniBatches) {
-						meanB = Tools.appendCol(meanB,actor.backPropagation(mb));
+						meanB = Tools.appendCol(meanB,actor.backPropagation(mb,episode));
 					}
 					meanE += meanB.meanNumber().doubleValue();
 					meanB = null;

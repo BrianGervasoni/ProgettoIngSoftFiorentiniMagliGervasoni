@@ -45,8 +45,8 @@ public class AITest {
 			
 			ai.initBackPropagation();
 			crit.initBackPropagation();
-			ai.backPropagation(new ActionRegister[] {r});
-			crit.backPropagation(new ActionRegister[] {r});
+			ai.backPropagation(new ActionRegister[] {r},0);
+			crit.backPropagation(new ActionRegister[] {r},0);
 			
 			ai.optimization();
 			crit.optimization();

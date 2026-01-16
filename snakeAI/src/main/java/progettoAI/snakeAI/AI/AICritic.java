@@ -26,13 +26,13 @@ public class AICritic extends AI {
 	}
 	
 	@Override
-	public INDArray singleLossCalculation(ActionRegister r,INDArray newProb) {
+	public INDArray singleLossCalculation(ActionRegister r,INDArray newProb,long episode) {
 		double[] x = new double[] {Math.pow(r.vEstimated-r.vTarget, 2)};
 		return Nd4j.create(x);
 	}
 	
 	@Override
-	public INDArray singleDerivateLoss(ActionRegister r,INDArray newProb) {
+	public INDArray singleDerivateLoss(ActionRegister r,INDArray newProb,long episode) {
 		 double diff = r.vEstimated - r.vTarget;
 		    
 		    double delta = 1.0; // Huber threshold
