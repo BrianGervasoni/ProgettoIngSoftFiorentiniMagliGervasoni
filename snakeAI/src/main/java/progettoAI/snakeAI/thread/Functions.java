@@ -15,7 +15,7 @@ public interface Functions {
 	 * @param array
 	 * @param n
 	 */
-	public default double[] inizializeArray(int n) {
+	public default double[] initializeArray(int n) {
 		
 		double[] array = new double[n];
 		
