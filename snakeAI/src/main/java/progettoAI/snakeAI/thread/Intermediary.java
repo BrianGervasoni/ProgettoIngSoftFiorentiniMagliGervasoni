@@ -6,7 +6,7 @@ import java.util.Collections;
 import progettoAI.snakeAI.boxes.Direction;
 import progettoAI.snakeAI.boxes.SnakeBody;
 import progettoAI.snakeAI.boxes.SnakeBox;
-import progettoAI.snakeAI.gioco.*;
+import progettoAI.snakeAI.game.*;
 import progettoAI.snakeAI.model.ActionRegister;
 
 public class Intermediary implements Functions{

@@ -1,4 +1,4 @@
-package progettoAI.snakeAI.gioco;
+package progettoAI.snakeAI.game;
 import java.util.ArrayList;
 import java.util.List;
 

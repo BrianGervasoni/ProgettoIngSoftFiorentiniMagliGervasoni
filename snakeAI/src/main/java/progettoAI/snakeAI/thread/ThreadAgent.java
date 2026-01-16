@@ -9,8 +9,8 @@ import org.nd4j.linalg.factory.Nd4j;
 
 import progettoAI.snakeAI.boxes.Direction;
 import progettoAI.snakeAI.errorHandler.ArithmeticException;
-import progettoAI.snakeAI.gioco.GameMain;
-import progettoAI.snakeAI.gioco.Map;
+import progettoAI.snakeAI.game.GameMain;
+import progettoAI.snakeAI.game.Map;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 import progettoAI.snakeAI.model.*;
 import io.reactivex.rxjava3.core.Observable;

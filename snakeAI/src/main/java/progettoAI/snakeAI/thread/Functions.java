@@ -6,7 +6,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
 import progettoAI.snakeAI.boxes.*;
-import progettoAI.snakeAI.gioco.Map;
+import progettoAI.snakeAI.game.Map;
 
 public interface Functions {
 	

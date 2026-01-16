@@ -1,4 +1,4 @@
-package progettoAI.snakeAI.gioco;
+package progettoAI.snakeAI.game;
 
 import progettoAI.snakeAI.boxes.*;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;

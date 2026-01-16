@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 import io.reactivex.rxjava3.core.Observable;
 import progettoAI.snakeAI.errorHandler.ThreadException;
-import progettoAI.snakeAI.gioco.Map;
+import progettoAI.snakeAI.game.Map;
 
 public class ThreadAIManager{
 

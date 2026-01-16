@@ -9,7 +9,7 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import progettoAI.snakeAI.boxes.*;
-import progettoAI.snakeAI.gioco.Snake;
+import progettoAI.snakeAI.game.Snake;
 
 
 class TestSnake {

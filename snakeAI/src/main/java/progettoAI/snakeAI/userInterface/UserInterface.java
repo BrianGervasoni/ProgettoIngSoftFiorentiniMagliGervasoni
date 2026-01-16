@@ -14,7 +14,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import progettoAI.snakeAI.errorHandler.ThreadException;
-import progettoAI.snakeAI.gioco.Map;
+import progettoAI.snakeAI.game.Map;
 
 public class UserInterface {
 

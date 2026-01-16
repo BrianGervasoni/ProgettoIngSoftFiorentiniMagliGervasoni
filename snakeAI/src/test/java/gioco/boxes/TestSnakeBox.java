@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import progettoAI.snakeAI.boxes.Box;
 import progettoAI.snakeAI.boxes.SnakeBody;
 import progettoAI.snakeAI.boxes.SnakeBox;
-import progettoAI.snakeAI.gioco.Map;
-import progettoAI.snakeAI.gioco.Snake;
+import progettoAI.snakeAI.game.Map;
+import progettoAI.snakeAI.game.Snake;
 
 
 public class TestSnakeBox {

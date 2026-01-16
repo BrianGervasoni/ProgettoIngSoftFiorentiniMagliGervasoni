@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import progettoAI.snakeAI.boxes.*;
-import progettoAI.snakeAI.gioco.Map;
-import progettoAI.snakeAI.gioco.Snake;
+import progettoAI.snakeAI.game.Map;
+import progettoAI.snakeAI.game.Snake;
 import progettoAI.snakeAI.thread.Intermediary;
 
 class IntermediaryTest {

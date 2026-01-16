@@ -7,7 +7,7 @@ import javax.swing.SwingUtilities;
 
 import io.reactivex.rxjava3.disposables.Disposable;
 import progettoAI.snakeAI.errorHandler.ThreadException;
-import progettoAI.snakeAI.gioco.Map;
+import progettoAI.snakeAI.game.Map;
 import progettoAI.snakeAI.thread.ThreadAIManager;
 
 public class Controller {

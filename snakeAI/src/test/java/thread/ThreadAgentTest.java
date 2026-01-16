@@ -10,8 +10,8 @@ import progettoAI.snakeAI.boxes.Food;
 import progettoAI.snakeAI.boxes.MapElem;
 import progettoAI.snakeAI.boxes.SnakeBody;
 import progettoAI.snakeAI.boxes.SnakeBox;
-import progettoAI.snakeAI.gioco.Map;
-import progettoAI.snakeAI.gioco.Snake;
+import progettoAI.snakeAI.game.Map;
+import progettoAI.snakeAI.game.Snake;
 import progettoAI.snakeAI.model.Model;
 import progettoAI.snakeAI.thread.ThreadAgent;
 

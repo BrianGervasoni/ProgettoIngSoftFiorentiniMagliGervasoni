@@ -12,7 +12,7 @@ import progettoAI.snakeAI.boxes.EmptyBox;
 import progettoAI.snakeAI.boxes.MapElem;
 import progettoAI.snakeAI.boxes.SnakeBody;
 import progettoAI.snakeAI.boxes.SnakeBox;
-import progettoAI.snakeAI.gioco.Map;
+import progettoAI.snakeAI.game.Map;
 
 class TestMap {
 
