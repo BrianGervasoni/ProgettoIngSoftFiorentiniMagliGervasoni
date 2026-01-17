@@ -21,7 +21,6 @@ public class ThreadModel extends Thread{
 	private Model model;
 	private Syncronizer coordinator;
 	private String dirFile; 
-	private long episode = 0;
 	private final BehaviorSubject<double[]> lossStat;
 	private static WorkspaceConfiguration CONFIG = WorkspaceConfiguration.builder()
 		    .policyLearning(LearningPolicy.OVER_TIME)
@@ -121,9 +120,7 @@ public class ThreadModel extends Thread{
 	}
 	
 	public void backPropagation() throws ArithmeticException {
-		lossStat.onNext(this.model.backPropagation(episode)); 
-		episode++;
-		System.out.println("numero di episodi:"+episode);
+		lossStat.onNext(this.model.backPropagation()); 
 	}
 	
 	public Model getModel() {

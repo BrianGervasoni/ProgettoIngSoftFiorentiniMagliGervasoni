@@ -20,6 +20,7 @@ import progettoAI.snakeAI.tools.Tools;
 public class Model {
 	private AICritic critic;
 	private AIActor actor;
+	private long episode = 0;
 	private transient PPOMemory memory;
 	private transient final int  ratioLoss = 1000;
 	
@@ -139,6 +140,7 @@ public class Model {
 		memory.prepareData();
 		critic.initBackPropagation();
 		actor.initBackPropagation();
+		System.out.println("episodi:"+episode);
 	}
 	
 	/**
@@ -146,11 +148,12 @@ public class Model {
 	 * @return [mean loss actor, mean loss critic]
 	 * @throws ArithmeticException 
 	 */
-	public double[] backPropagation(long episode) throws ArithmeticException {
+	public double[] backPropagation() throws ArithmeticException {
 		try {
 			ArrayList<ActionRegister[]> miniBatches = memory.getMiniBatch();
 			CompletableFuture<Double> procCritic = backPropCritic(miniBatches,episode);
 			CompletableFuture<Double> procActor = backPropActor(miniBatches,episode);
+			this.episode++;
 			return new double[] {procActor.join(),procCritic.join()};
 		}catch (RuntimeException e) {
 			if (e.getCause() instanceof ArithmeticException) {
