@@ -247,7 +247,7 @@ public class ThreadAIManager{
 	 * get the observable from the first model to start get a stream of data
 	 * @return
 	 */
-	public Observable<double[]> getObserverFromModel(){
+	public Observable<Statistic> getObserverFromModel(){
 		return this.threadModels.get(0).observableLoss();
 	}
 }

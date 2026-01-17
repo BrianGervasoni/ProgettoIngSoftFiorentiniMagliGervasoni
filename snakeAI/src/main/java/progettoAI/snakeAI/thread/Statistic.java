@@ -1,0 +1,25 @@
+package progettoAI.snakeAI.thread;
+
+public class Statistic {
+	public double meanReward = 0;
+	public double meanLength = 0;
+	public int episode = 0;
+	public double meanLossEntropy = 0;
+	public double meanDominance = 0;
+	public double meanLossActor = 0;
+	public double meanLossCritic = 0;
+	
+	public Statistic() {
+		
+	}
+	
+	public Statistic(double meanReward,double meanLength,int episode,double meanLossEntropy,double meanDominance,double meanLossActor,double meanLossCritic) {
+		this.meanReward = meanReward;
+		this.meanLength = meanLength;
+		this.episode = episode;
+		this.meanLossEntropy = meanLossEntropy;
+		this.meanDominance = meanDominance;
+		this.meanLossActor = meanLossActor;
+		this.meanLossCritic = meanLossCritic;
+	}
+}

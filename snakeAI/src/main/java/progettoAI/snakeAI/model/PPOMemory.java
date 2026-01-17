@@ -20,6 +20,71 @@ public class PPOMemory {
 		return true;
 	}
 	
+	/**
+	 * calcola il reward medio per ogni episodio (debug)
+	 * @return
+	 */
+	public double calculateMeanReward() {
+		if (oldR == null || oldR.isEmpty()) return 0.0;
+		
+		double episode=0;
+		double meanEpisode=0;
+		int nEpisode = 0;
+		
+		for(ActionRegister r:oldR) {
+			episode += r.reward;
+			if(r.isTerminal) {
+				meanEpisode += episode;
+				episode = 0;
+				nEpisode++;
+			}
+		}
+		if (nEpisode == 0) return 0.0;
+		
+		return meanEpisode/nEpisode;
+	}
+	
+	/**
+	 * calcola la media della lunghezza delle partite
+	 * @return
+	 */
+	public double calculateMeanlength() {
+		if (oldR == null || oldR.isEmpty()) return 0.0;
+		
+		int nEpisode = 0;
+		
+		for(ActionRegister r:oldR) {
+			if(r.isTerminal) {
+				nEpisode++;
+			}
+		}
+		if (nEpisode == 0) return oldR.size();
+		
+		return oldR.size()/(double)nEpisode;
+	}
+	
+	/**
+	 * statistica che indica se la policy è collassata
+	 * @return
+	 */
+	public double policyDominance() {
+		if(oldR == null || oldR.size() <= 0) return 0.0;
+		
+		double sumDominance = 0.0;
+
+        for (ActionRegister r : oldR) {
+            double dominance = 0.0;
+
+            for (double p : r.actionsProb) {
+                dominance = Math.max(dominance, p);
+            }
+
+            sumDominance += dominance;
+        }
+
+	    return sumDominance / oldR.size();
+	}
+	
 	public void addNewActions(ActionRegister []actions,double lastEstimated) {
 		processActions(actions,lastEstimated);
 		Collections.addAll(currR,actions);
@@ -102,11 +167,13 @@ public class PPOMemory {
 	 * prepare the data for the backPropagation
 	 */
 	public void prepareData() {
+		
 		normalizeAdvantages(currR);
 		oldR = (ArrayList<ActionRegister>) currR.clone();
 		oldR.forEach(e ->{
 			System.out.println(e.toString());
 		});
+		System.out.println("meanReward:"+calculateMeanReward() +" | meanLength:"+calculateMeanlength());
 		currR = new ArrayList<ActionRegister>();
 	}
 	

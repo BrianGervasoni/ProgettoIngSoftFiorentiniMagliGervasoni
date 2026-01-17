@@ -164,29 +164,34 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double calculateReward() {
 		
-		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 5, rewardDead = -5,rewardEmptyTick=-0.01;
+		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 5, rewardDead = -1,rewardEmptyTick=-0.001;
 		//double diagonal = Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
 		double distance;
 		double lastDistance;
 		
 		distance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple());
 		lastDistance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(1), this.game.getMap().getApple());
-		rewardDistanceApple = 0.5*(lastDistance-distance);//0.5 * range(-1,1)
+		rewardDistanceApple = 0.3*(lastDistance-distance);//0.5 * range(-1,1)
 		
-								
+		double coefBody = Math.tanh(((double) this.game.getMap().getSnake().getLenght()/(Map.X*Map.Y)) * 5);
 		
 		if(this.game.getMap().getAppleCollision()) {
-			rewardDefault = rewardDefault + rewardGetApple;
+			rewardDefault = rewardDefault + (rewardGetApple *(1+coefBody));
 		}else {
-			rewardDefault = rewardDefault + rewardDistanceApple;
+			if(this.game.getTickLastApple() > 1)
+				rewardDefault = rewardDefault + rewardDistanceApple;
 		}
 		
-		if(this.game.getTickLastApple() > 0) {
-			rewardDefault += rewardEmptyTick;
+		if(this.game.getTickLastApple() > 1) {
+			if(this.game.getTickLastApple() >= this.emptyTick) {
+				rewardDefault += rewardDead/2;
+			}else {
+				rewardDefault += rewardEmptyTick;
+			}
 		}
 		
 		if(this.game.finish()) {
-			rewardDefault += rewardDead;
+			rewardDefault += (rewardDead * (1+coefBody));
 		}
 		
 		return rewardDefault;

@@ -21,7 +21,7 @@ public class ThreadModel extends Thread{
 	private Model model;
 	private Syncronizer coordinator;
 	private String dirFile; 
-	private final BehaviorSubject<double[]> lossStat;
+	private final BehaviorSubject<Statistic> lossStat;
 	private static WorkspaceConfiguration CONFIG = WorkspaceConfiguration.builder()
 		    .policyLearning(LearningPolicy.OVER_TIME)
 		    .cyclesBeforeInitialization(10) // Monitora 10 iterazioni prima di stabilizzarsi
@@ -96,7 +96,7 @@ public class ThreadModel extends Thread{
 		return this.model.checkCorrectFunction();
 	}
 	
-	public Observable<double[]> observableLoss() {
+	public Observable<Statistic> observableLoss() {
         return lossStat.hide();
     }
 	
@@ -120,7 +120,16 @@ public class ThreadModel extends Thread{
 	}
 	
 	public void backPropagation() throws ArithmeticException {
-		lossStat.onNext(this.model.backPropagation()); 
+		Statistic s = new Statistic();
+		double [] a = this.model.backPropagation();
+		s.meanLossActor = a[0];
+		s.meanLossCritic = a[1];
+		s.episode = (int) this.model.getEpisode();
+		s.meanDominance = this.model.policyDominance();
+		s.meanLength = this.model.calculateMeanlength();
+		s.meanReward = this.model.calculateMeanReward();
+		s.meanLossEntropy = this.model.meanEntropy;
+		lossStat.onNext(s); 
 	}
 	
 	public Model getModel() {

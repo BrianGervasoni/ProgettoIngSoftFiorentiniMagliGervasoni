@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 import io.reactivex.rxjava3.disposables.Disposable;
 import progettoAI.snakeAI.errorHandler.ThreadException;
 import progettoAI.snakeAI.game.Map;
+import progettoAI.snakeAI.thread.Statistic;
 import progettoAI.snakeAI.thread.ThreadAIManager;
 
 public class Controller {
@@ -44,7 +45,7 @@ public class Controller {
 		
 		ai.startTraining();
 		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
-		lossObserver = ai.getObserverFromModel().subscribe(this::gestioneStreamLoss);
+		lossObserver = ai.getObserverFromModel().subscribe(this::gestioneStreamStatistic);
 	}
 
 	
@@ -107,10 +108,11 @@ public class Controller {
 	}
 	
 	
-	public void gestioneStreamLoss(double[] array) {
-		
+	public void gestioneStreamStatistic(Statistic s) {
+		/*
 		this.view.setLossAgent(array[0]);
-		this.view.setLossModel(array[1]);
+		this.view.setLossModel(array[1]);*/
+		//TODO show statistic
 	}
 	
 	

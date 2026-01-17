@@ -11,6 +11,8 @@ import progettoAI.snakeAI.model.ActionRegister;
 
 public class AIActor extends AI {
 
+	private transient double entropyLoss=0;
+	
 	public AIActor(Layer[] layers,TypeGradientUpdate mode) {
 		super(layers);
 		this.setLearningRate(Hyperparameters.alphaActor);
@@ -40,8 +42,9 @@ public class AIActor extends AI {
 
 	    // Entropy bonus
 	    double h = entropy(probs) * entropyDecay(episode);
+	    entropyLoss = h;
 	    for (int i = 0; i < probs.length; i++) {
-	        loss.addToEntry(i, Hyperparameters.entropyContribution * h / probs.length);
+	        loss.addToEntry(i,h);
 	    }
 		return Nd4j.create(loss.toArray());
 	}
@@ -57,16 +60,24 @@ public class AIActor extends AI {
 	    grad.addToEntry(r.indexAction, derivateLossClip(r, probs));
 
 	    // Gradiente entropy (all actions)
-	    RealVector entropyGrad = derivateEntropy(probs,episode)
-	        .mapMultiply(Hyperparameters.entropyContribution);
+	    RealVector entropyGrad = derivateEntropy(probs)
+	        .mapMultiply(entropyDecay(episode));
 
 	    grad = grad.add(entropyGrad);
 
 		return Nd4j.create(grad.toArray());
 	}
 	
+	public double getEntropyLoss() {
+		return entropyLoss;
+	}
+
+	public void setEntropyLoss(double entropyLoss) {
+		this.entropyLoss = entropyLoss;
+	}
+
 	private double entropyDecay(long episode) {
-		return Math.max(0.002, 0.01 * Math.exp(-episode / 3000.0));
+		return Math.max(0.005, Hyperparameters.entropyContribution * Math.max(0.5,Math.exp(-episode / 1500.0)));
 	}
 	
 	/**
@@ -79,8 +90,8 @@ public class AIActor extends AI {
 		return (newProb + 1e-8) / (oldProb + 1e-8);
 	}
 	
-	private double derivatePolicyRatio(double newProb) {
-		return 1 / (newProb + 1e-8);
+	private double derivatePolicyRatio(double oldProb) {
+		return 1 / (oldProb + 1e-8);
 	}
 	
 	/**
@@ -100,12 +111,12 @@ public class AIActor extends AI {
 	 * @param probs
 	 * @return
 	 */
-	private RealVector derivateEntropy(double[] probs,long episode) {
+	private RealVector derivateEntropy(double[] probs) {
 		if(probs == null)
 			return null;
 		RealVector x= new ArrayRealVector(probs.length);
 		for(int i=0; i < probs.length; i++) {
-			x.setEntry(i, -(Math.log(probs[i] + 1e-8) + 1) * entropyDecay(episode));
+			x.setEntry(i, -(Math.log(probs[i] + 1e-8) + 1));
 		}
 		return x;
 	}
@@ -143,7 +154,7 @@ public class AIActor extends AI {
 		if (r.advantage > 0 && ratio > clipped) return 0;
 	    if (r.advantage < 0 && ratio < clipped) return 0;
 		
-		return r.advantage * derivatePolicyRatio(newProb[r.indexAction]);
+		return r.advantage * derivatePolicyRatio(r.oldSelectAction());
 	}
 		
 }

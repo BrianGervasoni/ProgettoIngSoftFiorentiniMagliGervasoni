@@ -23,6 +23,7 @@ public class Model {
 	private long episode = 0;
 	private transient PPOMemory memory;
 	private transient final int  ratioLoss = 1000;
+	public transient double meanEntropy = 0;
 	
 	/**
 	 * setup the default configuration (critic: 3X126 actor: 3X256)
@@ -77,6 +78,34 @@ public class Model {
 	 */
 	public int getInputLenght() {
 		return actor.getInputLenght();
+	}
+
+	public long getEpisode() {
+		return episode;
+	}
+	
+	/**
+	 * statistica che indica se la policy è collassata
+	 * @return
+	 */
+	public double policyDominance() {
+		return this.memory.policyDominance();
+	}
+	
+	/**
+	 * calcola il reward medio per ogni episodio (debug)
+	 * @return
+	 */
+	public double calculateMeanReward() {
+		return this.memory.calculateMeanReward();
+	}
+	
+	/**
+	 * calcola la media della lunghezza delle partite
+	 * @return
+	 */
+	public double calculateMeanlength() {
+		return this.memory.calculateMeanlength();
 	}
 
 	/**
@@ -171,14 +200,14 @@ public class Model {
 				double meanB = 0;
 				double meanE = 0;
 				if (miniBatches == null || miniBatches.isEmpty()) return 0.0;
-				for(int i=0; i<Hyperparameters.epoche+5; i++) {
+				for(int i=0; i<Hyperparameters.epoche+2; i++) {
 					for(ActionRegister[] mb : miniBatches) {
 						meanB += critic.backPropagation(mb,episode);
 					}
 					meanE += meanB/miniBatches.size();
 					meanB = 0.0;
 				}
-				return ratioLoss * meanE/(Hyperparameters.epoche+5);
+				return ratioLoss * meanE/(Hyperparameters.epoche+2);
 			}catch (ArithmeticException e) {
 				 throw new RuntimeException(e);
 			}
@@ -190,14 +219,25 @@ public class Model {
 			try {
 				double meanB = 0;
 				double meanE = 0;
+				double meanEntropy = 0;
+				int entropyCount = 0;
+				
 				if (miniBatches == null || miniBatches.isEmpty()) return 0.0;
 				for(int i=0; i<Hyperparameters.epoche; i++) {
 					for(ActionRegister[] mb : miniBatches) {
 						meanB += actor.backPropagation(mb,episode);
+						meanEntropy += actor.getEntropyLoss();
+						entropyCount++;
 					}
+					actor.setEntropyLoss(0);
 					meanE += meanB/miniBatches.size();
 					meanB = 0.0;
 				}
+				if(entropyCount > 0) {
+					System.out.println("media loss entropia:" + meanEntropy/(Hyperparameters.epoche+miniBatches.size()));
+					this.meanEntropy = meanEntropy/(Hyperparameters.epoche+miniBatches.size());
+				}
+					
 				return ratioLoss * meanE/Hyperparameters.epoche;
 			}catch (ArithmeticException e) {
 				 throw new RuntimeException(e);
