@@ -8,12 +8,13 @@ public class Statistic {
 	public double meanDominance = 0;
 	public double meanLossActor = 0;
 	public double meanLossCritic = 0;
+	public double sma;
 	
 	public Statistic() {
 		
 	}
 	
-	public Statistic(double meanReward,double meanLength,int episode,double meanLossEntropy,double meanDominance,double meanLossActor,double meanLossCritic) {
+	public Statistic(double meanReward,double meanLength,int episode,double meanLossEntropy,double meanDominance,double meanLossActor,double meanLossCritic,double sma) {
 		this.meanReward = meanReward;
 		this.meanLength = meanLength;
 		this.episode = episode;
@@ -21,5 +22,13 @@ public class Statistic {
 		this.meanDominance = meanDominance;
 		this.meanLossActor = meanLossActor;
 		this.meanLossCritic = meanLossCritic;
+		this.sma = sma;
+	}
+	
+	@Override
+	public String toString() {
+		return "episode:"+this.episode+" | "+"smaReward:"+sma+" | "+"meanReward:"+this.meanReward+" | "+"meanLength:"+this.meanLength+" | "+
+				"meanDominance:"+this.meanDominance+" | "+"meanLossEntropy:"+this.meanLossEntropy+" | "+
+				"meanLossActor:"+this.meanLossActor+" | "+"meanLossCritic:"+this.meanLossCritic;
 	}
 }

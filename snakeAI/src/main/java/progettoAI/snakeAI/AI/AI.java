@@ -195,7 +195,7 @@ public abstract class AI {
 			return null;
 		INDArray l = null;
 		for(int i=0; i<r.length; i++) {
-			l = Tools.appendCol(l, singleDerivateLoss(r[i],newProb.getColumn(i),episode).reshape(newProb.getColumn(i).length(),1));
+			l = Tools.appendCol(l, singleDerivateLoss(r[i],newProb.getColumn(i),episode).mul(1.0/(double)r.length).reshape(newProb.getColumn(i).length(),1));
 		}
 		return l;
 	}

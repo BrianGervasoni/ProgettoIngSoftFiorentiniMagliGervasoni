@@ -164,7 +164,7 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double calculateReward() {
 		
-		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 5, rewardDead = -0.3,rewardEmptyTick=-0.0005;
+		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 3, rewardDead = -0.3,rewardEmptyTick=-0.0005;
 		//double diagonal = Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
 		double distance;
 		double lastDistance;

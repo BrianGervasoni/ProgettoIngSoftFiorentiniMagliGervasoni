@@ -8,6 +8,7 @@ import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 public class PPOMemory {
 	private ArrayList<ActionRegister> oldR;
 	private ArrayList<ActionRegister> currR;
+	private double sma = 0;
 	
 	public PPOMemory() {
 		oldR = new ArrayList<ActionRegister>();
@@ -42,6 +43,16 @@ public class PPOMemory {
 		if (nEpisode == 0) return 0.0;
 		
 		return meanEpisode/nEpisode;
+	}
+	
+	/**
+	 * calcola meadi mobile dei reward
+	 * @param newMeanR
+	 * @return
+	 */
+	public double calculateSMA(double newMeanR) {
+		sma = sma != 0 ? sma + 0.01 * (newMeanR - sma) : newMeanR;
+		return sma;
 	}
 	
 	/**

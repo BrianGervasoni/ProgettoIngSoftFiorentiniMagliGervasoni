@@ -121,14 +121,19 @@ public class ThreadModel extends Thread{
 	
 	public void backPropagation() throws ArithmeticException {
 		Statistic s = new Statistic();
-		double [] a = this.model.backPropagation();
-		s.meanLossActor = a[0];
-		s.meanLossCritic = a[1];
+		
+		
 		s.episode = (int) this.model.getEpisode();
 		s.meanDominance = this.model.policyDominance();
 		s.meanLength = this.model.calculateMeanlength();
 		s.meanReward = this.model.calculateMeanReward();
+		s.sma = this.model.calculateSMA(s.meanReward);
+		System.out.println(s.toString());
+		double [] a = this.model.backPropagation();
+		s.meanLossActor = a[0];
+		s.meanLossCritic = a[1];
 		s.meanLossEntropy = this.model.meanEntropy;
+		System.out.println(s.toString());
 		lossStat.onNext(s); 
 	}
 	

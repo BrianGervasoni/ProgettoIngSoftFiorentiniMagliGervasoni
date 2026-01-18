@@ -100,6 +100,10 @@ public class Model {
 		return this.memory.calculateMeanReward();
 	}
 	
+	public double calculateSMA(double meanReward) {
+		return memory.calculateSMA(meanReward);
+	}
+	
 	/**
 	 * calcola la media della lunghezza delle partite
 	 * @return
