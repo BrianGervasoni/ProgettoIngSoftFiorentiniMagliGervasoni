@@ -128,6 +128,7 @@ public class ThreadModel extends Thread{
 		s.meanLength = this.model.calculateMeanlength();
 		s.meanReward = this.model.calculateMeanReward();
 		s.sma = this.model.calculateSMA(s.meanReward);
+		System.out.println(this.model.getMemory().toString());
 		System.out.println(s.toString());
 		double [] a = this.model.backPropagation();
 		s.meanLossActor = a[0];

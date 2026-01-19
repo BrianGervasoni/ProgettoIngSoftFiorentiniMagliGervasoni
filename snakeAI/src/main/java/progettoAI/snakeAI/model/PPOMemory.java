@@ -117,16 +117,15 @@ public class PPOMemory {
 	        double nextValue;
 	        double nextNonTerminal; // Mask for the GAE
 
-	        if (i + 1 < actions.length) {
+	        if (i + 1 < actions.length ) {
 	        	// Normal case: we get the value of the next action in the batch
 	            nextValue = actions[i + 1].vEstimated;
-	            nextNonTerminal = (actions[i].isTerminal) ? 0 : 1; 
 	        } else {
 	        	// Last element of the batch: we use the bootstrap passed from outside
 	            nextValue = lastEstimated;
-	            nextNonTerminal = (actions[i].isTerminal) ? 0 : 1;
 	        }
 
+	        nextNonTerminal = (actions[i].isTerminal) ? 0 : 1;
 	        // If the current action is terminal, the future value is forced to 0
 	        if (actions[i].isTerminal) {
 	            nextValue = 0;
@@ -171,6 +170,7 @@ public class PPOMemory {
 
 	    for (ActionRegister reg : batch) {
 	        reg.advantage = (reg.advantage - mean) / stdDev;
+	        reg.advantage = Math.max(-5.0, Math.min(5.0, reg.advantage));
 	    }
 	}
 	
@@ -179,13 +179,19 @@ public class PPOMemory {
 	 */
 	public void prepareData() {
 		
-		normalizeAdvantages(currR);
 		oldR = (ArrayList<ActionRegister>) currR.clone();
-		oldR.forEach(e ->{
-			System.out.println(e.toString());
-		});
 		System.out.println("meanReward:"+calculateMeanReward() +" | meanLength:"+calculateMeanlength());
 		currR = new ArrayList<ActionRegister>();
+	}
+	
+	@Override
+	public String toString() {
+		if(oldR == null || oldR.isEmpty()) return "";
+		String tot = "";
+		for(ActionRegister r:oldR) {
+			tot += r.toString() +"\n";
+		}
+		return tot;
 	}
 	
 	/**
@@ -201,7 +207,10 @@ public class PPOMemory {
 		int batchSize = Math.max((int) (oldR.size() * Hyperparameters.minibacthSize),1);
 		for (int j = 0; j < oldR.size(); j += batchSize) {
             int end = Math.min(j + batchSize, oldR.size());
-            ActionRegister[] miniBatch = oldR.subList(j, end).toArray(new ActionRegister[0]);
+            ArrayList<ActionRegister> mini = new ArrayList<>(oldR.subList(j, end));
+            normalizeAdvantages(mini);
+            
+            ActionRegister[] miniBatch = mini.toArray(new ActionRegister[0]);
             
             result.add(miniBatch);
         }

@@ -238,8 +238,7 @@ public class Model {
 					meanB = 0.0;
 				}
 				if(entropyCount > 0) {
-					System.out.println("media loss entropia:" + meanEntropy/(Hyperparameters.epoche+miniBatches.size()));
-					this.meanEntropy = meanEntropy/(Hyperparameters.epoche+miniBatches.size());
+					this.meanEntropy = meanEntropy/(entropyCount);
 				}
 					
 				return ratioLoss * meanE/Hyperparameters.epoche;
