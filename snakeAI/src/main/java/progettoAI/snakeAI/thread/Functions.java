@@ -238,8 +238,7 @@ public interface Functions {
 		
 		for(int i = 0; i<array.length; i++) {
 
-			xNormalizzato = 1-(array[i]/max);
-			array[i] = xNormalizzato;
+			array[i] = 1.0 / (1.0 + array[i]);
 			
 		}
 		

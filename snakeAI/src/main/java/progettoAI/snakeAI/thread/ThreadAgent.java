@@ -164,14 +164,18 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double calculateReward() {
 		
-		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 3, rewardDead = -0.3,rewardEmptyTick=-0.0005;
+		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 2, rewardDead = -1,rewardEmptyTick=-0.0005;
 		//double diagonal = Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
 		double distance;
 		double lastDistance;
 		
 		distance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple());
 		lastDistance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(1), this.game.getMap().getApple());
-		rewardDistanceApple = 0.1 * (lastDistance-distance);
+		if((lastDistance-distance) > 0) {
+			rewardDistanceApple = 0.5;
+		}else {
+			rewardDistanceApple = -0.25;
+		}
 		
 		if(this.game.finish()) {
 			rewardDefault += rewardDead;
@@ -180,7 +184,7 @@ public class ThreadAgent extends Thread implements Functions{
 		if(this.game.getMap().getAppleCollision()) {
 			rewardDefault = rewardDefault + rewardGetApple;
 		}else {
-			if(this.game.getTickLastApple() > 1)
+			if(this.game.getTickLastApple() > 0)
 				rewardDefault = rewardDefault + rewardDistanceApple;
 		}
 		
