@@ -109,10 +109,8 @@ public class Controller {
 	
 	
 	public void gestioneStreamStatistic(Statistic s) {
-		/*
-		this.view.setLossAgent(array[0]);
-		this.view.setLossModel(array[1]);*/
-		//TODO show statistic
+		
+		view.updateStats(s.toString());
 	}
 	
 	

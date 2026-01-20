@@ -170,7 +170,7 @@ public class GUIStatic {
 
 
 
-	public static void printTrainNoMap(JFrame myFrame, JLabel lossAgent, JLabel lossModel, JLabel matchDur, JLabel snakeLen, UserInterface ui) {
+	public static void printTrainNoMap(JFrame myFrame, JLabel stats, JLabel matchDur, JLabel snakeLen, UserInterface ui) {
 		
 		GUIStatic.resetFrame(myFrame);
 		
@@ -212,8 +212,7 @@ public class GUIStatic {
 			}});
 		
 		
-		tr1.add(lossAgent);
-		tr1.add(lossModel);
+		tr1.add(stats);
 		tr2.add(matchDur);
 		tr2.add(snakeLen);
 		tr3.add(buttonShowRandomMap);
@@ -236,7 +235,7 @@ public class GUIStatic {
 	
 	
 	
-	public static void printTrainWithMap(JFrame myFrame, JLabel lossAgent, JLabel lossModel, JLabel matchDur, JLabel snakeLen, JTable renderedMap, UserInterface ui) {
+	public static void printTrainWithMap(JFrame myFrame, JLabel stats, JLabel matchDur, JLabel snakeLen, JTable renderedMap, UserInterface ui) {
 		
 		GUIStatic.resetFrame(myFrame);
 		
@@ -303,8 +302,7 @@ public class GUIStatic {
 		tr1.add(buttonPreviousThread);
 		tr1.add(buttonNextThread);
 		
-		tr2.add(lossAgent);
-		tr2.add(lossModel);
+		tr2.add(stats);
 		tr2.add(matchDur);
 		tr2.add(snakeLen);
 		tr3.add(buttonHideMap);
@@ -325,7 +323,7 @@ public class GUIStatic {
 	
 	
 	
-	public static void printExecution(JFrame myFrame, JLabel lossAgent, JLabel lossModel, JLabel matchDur, JLabel snakeLen, UserInterface ui, JTable renderedMap) {
+	public static void printExecution(JFrame myFrame, JLabel stats, JLabel matchDur, JLabel snakeLen, UserInterface ui, JTable renderedMap) {
 		
 		GUIStatic.resetFrame(myFrame);
 		
@@ -358,8 +356,7 @@ public class GUIStatic {
 		
 		
 		ex1.add(renderedMap);
-		ex2.add(lossAgent);
-		ex2.add(lossModel);
+		ex2.add(stats);
 		ex2.add(matchDur);
 		ex2.add(snakeLen);
 		ex3.add(buttonToggle);

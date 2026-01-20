@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -20,9 +21,12 @@ public class UserInterface {
 
 	private JFrame myFrame;
 	private Controller controller;
-	
+/*	
 	private JLabel lossAgent;
 	private JLabel lossModel;
+*/
+	
+	private JLabel stats;
 	private JTable renderedMap;
 
 	private String modelPath;
@@ -50,8 +54,8 @@ public class UserInterface {
 		modelPath = null;
 		hyperparametersPath = null;
 		threadNumber = -1;
-		lossAgent = new JLabel("Start lossAgent: 0");
-		lossModel = new JLabel("Start lossModel: 0");
+		
+		stats = new JLabel("Statistiche non ancora pronte", SwingConstants.CENTER);
 		
 		snakeLength = new JLabel("null");
 		matchDuration = new JLabel("null");
@@ -92,7 +96,7 @@ public class UserInterface {
 	
 	public void hideMap() {
 		modeIndicator = 1;
-		GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, matchDuration, snakeLength, this);
+		GUIStatic.printTrainNoMap(myFrame, stats, matchDuration, snakeLength, this);
 	}
 	
 	
@@ -158,17 +162,6 @@ public class UserInterface {
 	}
 	*/
 	
-	public void setLossAgent(double ar) {
-		lossAgent.setText("Loss Agent: " + String.valueOf(ar));		
-	}
-	
-	
-	public void setLossModel(double model) {
-		
-		lossModel.setText("Loss Model: " + String.valueOf(model));
-	}
-	
-	
 	public void exit() {
 		try {
 			controller.exit();
@@ -216,7 +209,7 @@ public class UserInterface {
 			try {
 				modeIndicator = 0;
 				controller.startExecution(modelPath);
-				GUIStatic.printExecution(myFrame, lossAgent, lossModel, matchDuration, snakeLength, this, renderedMap);
+				GUIStatic.printExecution(myFrame, stats, matchDuration, snakeLength, this, renderedMap);
 			}catch(ThreadException e) {
 				GUIStatic.sendWarning(myFrame, "C'è un problema di thread a far partire l'esecuzione: " + e.getMessage());
 			}catch(IOException e) {
@@ -244,7 +237,7 @@ public class UserInterface {
 		try {
 			modeIndicator = 1;
 			controller.startTraining(threadNumber, modelPath);
-			GUIStatic.printTrainNoMap(myFrame, lossAgent, lossModel, matchDuration, snakeLength, this);
+			GUIStatic.printTrainNoMap(myFrame, stats, matchDuration, snakeLength, this);
 		}catch(ThreadException e) {
 				GUIStatic.sendWarning(myFrame, "C'è un problema a far partire l'allenamento: " + e.getMessage());
 		}catch(IOException e) {
@@ -256,7 +249,7 @@ public class UserInterface {
 	
 	public void trainWithMap() {
 		modeIndicator = 2;
-		GUIStatic.printTrainWithMap(myFrame, lossAgent, lossModel, matchDuration, snakeLength, renderedMap, this);
+		GUIStatic.printTrainWithMap(myFrame, stats, matchDuration, snakeLength, renderedMap, this);
 	}
 
 	
@@ -349,7 +342,11 @@ public class UserInterface {
 
 	public void showMap() {
 		modeIndicator = 2;
-		GUIStatic.printTrainWithMap(myFrame, lossAgent, lossModel, matchDuration, snakeLength, renderedMap, this);	
+		GUIStatic.printTrainWithMap(myFrame, stats, matchDuration, snakeLength, renderedMap, this);	
+	}
+	
+	public void updateStats(String st) {
+		stats.setText(st);
 	}
 	
 }

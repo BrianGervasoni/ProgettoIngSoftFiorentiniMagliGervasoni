@@ -27,8 +27,14 @@ public class Statistic {
 	
 	@Override
 	public String toString() {
-		return "episode:"+this.episode+" | "+"smaReward:"+sma+" | "+"meanReward:"+this.meanReward+" | "+"meanLength:"+this.meanLength+" | "+
-				"meanDominance:"+this.meanDominance+" | "+"meanLossEntropy:"+this.meanLossEntropy+" | "+
-				"meanLossActor:"+this.meanLossActor+" | "+"meanLossCritic:"+this.meanLossCritic;
+		return  "<html>"	+
+				
+				"episode: " 		+ this.episode 			+ " | " + "smaReward: " 		+ this.sma 				+ "<br>" + 
+				"meanReward: " 		+ this.meanReward 		+ " | " +" meanLength: "		+ this.meanLength		+ "<br>" +
+				"meanDominance: " 	+ this.meanDominance 	+ " | " + "meanLossEntropy: " 	+ this.meanLossEntropy 	+ "<br>" +
+				"meanLossActor: " 	+ this.meanLossActor 	+ " | " + "meanLossCritic: " 	+ this.meanLossCritic	+
+				
+				"</html>";
+				
 	}
 }
