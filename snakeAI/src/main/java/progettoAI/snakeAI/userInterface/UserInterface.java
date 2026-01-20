@@ -120,6 +120,7 @@ public class UserInterface {
 	public void stopExecution() {
 		modeIndicator = -1;
 		controller.terminateExecution();
+		mainMenu();
 	}
 	
 	public void insertDirFileModel() {
@@ -261,7 +262,7 @@ public class UserInterface {
 			GUIStatic.sendWarning(myFrame, "C'è un problema di input output con l'interruzione dell'allenamento: " + e.getMessage());
 		}
 		
-		GUIStatic.printMenu(myFrame, this);
+		mainMenu();
 	}
 	
 	
