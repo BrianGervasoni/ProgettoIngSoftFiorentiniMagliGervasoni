@@ -1,6 +1,9 @@
 package progettoAI.snakeAI.game;
 
+import javax.swing.JOptionPane;
+
 import progettoAI.snakeAI.boxes.*;
+import progettoAI.snakeAI.errorHandler.VoidBodyException;
 import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 
 public class GameMain {
@@ -37,7 +40,13 @@ public class GameMain {
 	 * @param dir direzione da assegnare
 	 */
 	public void giveDirections(Direction dir) {
-		map.makeSnakeMove(dir);
+		
+		try {
+			map.makeSnakeMove(dir);
+		}catch(VoidBodyException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		
 		if(map.getAppleCollision()) {
 			tLastApple = 0;
 		}else {

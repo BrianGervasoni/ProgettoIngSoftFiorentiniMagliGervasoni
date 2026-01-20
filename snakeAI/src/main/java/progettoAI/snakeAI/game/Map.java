@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import progettoAI.snakeAI.boxes.*;
+import progettoAI.snakeAI.errorHandler.VoidBodyException;
+import progettoAI.snakeAI.userInterface.GUIStatic;
 
 public class Map {
 	
@@ -116,6 +118,7 @@ public class Map {
 	 */
 	public int getColumnLenght() {
 		
+
 		return Y;
 	}
 	
@@ -195,6 +198,7 @@ public class Map {
 		
 		ArrayList<EmptyBox> ar = allEmptyBoxes();
 		
+		//TODO lanciare eccezione
 		if(ar.isEmpty()) {
 			return;
 		}
@@ -302,9 +306,10 @@ public class Map {
 	
 	/**
 	 * metodo di goco che si ripete  fino alla collisione del serpente con se stesso o i muri
+	 * @throws Exception 
 	 * 
 	 */
-	public void makeSnakeMove(Direction dir) {
+	public void makeSnakeMove(Direction dir) throws VoidBodyException {
 		
 		
 		/** 
@@ -319,9 +324,8 @@ public class Map {
 				appleCollision = true;
 				setApple();
 			}else{
-				appleCollision = false;
+				appleCollision = false;	
 				snake.removeTail();
-				
 			}
 			
 			checkDefeat();

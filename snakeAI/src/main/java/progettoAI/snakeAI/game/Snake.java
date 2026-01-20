@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import progettoAI.snakeAI.boxes.*;
+import progettoAI.snakeAI.errorHandler.VoidBodyException;
 
 
 public class Snake {
@@ -107,86 +108,59 @@ public class Snake {
 		//si stava muovendo verso il basso
 		if(X - this.body.get(1).getXcoordinate() == 1) {
 			
-			if(dir == Direction.RIGHT) {
-			
+			if(dir == Direction.RIGHT)
 				NCoordY = this.body.get(0).getYcoordinate() - 1;
 	
-			
-			}else if(dir == Direction.LEFT) {
-				
+			else if(dir == Direction.LEFT) 
 				NCoordY = this.body.get(0).getYcoordinate() + 1;
 
-				
-			}else {
-				
+			else 
 				NCoordX = this.body.get(0).getXcoordinate() + 1;			//le X sono le righe
-
-				
-			}
 			
 		}
 		
 		//si stava muovendo verso l'alto
 		if(X - this.body.get(1).getXcoordinate() == -1) {
 			
-			if(dir == Direction.RIGHT) {
-			
+			if(dir == Direction.RIGHT) 
 				NCoordY = this.body.get(0).getYcoordinate() + 1;
 
-			
-			}else if(dir == Direction.LEFT) {
-				
+			else if(dir == Direction.LEFT) 
 				NCoordY = this.body.get(0).getYcoordinate() - 1;
 
-			}else {
-				
+			else 
 				NCoordX = this.body.get(0).getXcoordinate() - 1;
 
-				
-			}
 			
 		}
 		
 		//si stava muovendo verso la destra
 		if(Y - this.body.get(1).getYcoordinate() == 1) {
 			
-			if(dir == Direction.RIGHT) {
-			
+			if(dir == Direction.RIGHT)
 				NCoordX = this.body.get(0).getXcoordinate() + 1;
 			
-			}else if(dir == Direction.LEFT) {
-				
+			else if(dir == Direction.LEFT) 
 				NCoordX = this.body.get(0).getXcoordinate() - 1;
 
-				
-			}else {
-				
+			else
 				NCoordY = this.body.get(0).getYcoordinate() + 1;
 
-				
-			}
 			
 		}
 		
 		//si stava muovendo verso la sinistra
 		if(Y - this.body.get(1).getYcoordinate() == -1) {
 			
-			if(dir == Direction.RIGHT) {
-			
+			if(dir == Direction.RIGHT) 
 				NCoordX = this.body.get(0).getXcoordinate() - 1;
 			
-			}else if(dir == Direction.LEFT) {
-				
+			else if(dir == Direction.LEFT) 
 				NCoordX = this.body.get(0).getXcoordinate() + 1;
 
-				
-			}else {
-				
+			else 
 				NCoordY = this.body.get(0).getYcoordinate() - 1;
 
-				
-			}
-			
 		}
 		
 					
@@ -200,8 +174,13 @@ public class Snake {
 	
 	/**
 	 * metodo per la rimozione della coda dalla lista body
+	 * @throws Exception 
 	 */
-	public void removeTail() {
+	public void removeTail() throws VoidBodyException {
+		
+		if(body.size() == 0){
+			throw new VoidBodyException("La lunghezza del corpo è nulla", null);
+		}
 		
 		body.remove(body.size()-1);
 		body.get(body.size()-1).setBodyType(SnakeBody.TAIL);
