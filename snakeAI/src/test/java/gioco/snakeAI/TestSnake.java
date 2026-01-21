@@ -9,6 +9,7 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import progettoAI.snakeAI.boxes.*;
+import progettoAI.snakeAI.errorHandler.VoidBodyException;
 import progettoAI.snakeAI.game.Snake;
 
 
@@ -32,7 +33,7 @@ class TestSnake {
 
 	
 	@Test
-	void testSnakeMove() {
+	void testSnakeMove() throws VoidBodyException {
 		
 		Snake ss = new Snake();
 		ss.getBodyPiece(0).setXcoordinate(5);
@@ -81,7 +82,7 @@ class TestSnake {
 	
 	
 	@Test
-	void testRemoveTail() {
+	void testRemoveTail() throws VoidBodyException {
 		
 		Snake ss = new Snake();
 		SnakeBox head = new SnakeBox(SnakeBody.HEAD, 5, 5);

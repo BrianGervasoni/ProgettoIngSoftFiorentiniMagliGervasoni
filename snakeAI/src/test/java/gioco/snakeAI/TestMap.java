@@ -12,13 +12,14 @@ import progettoAI.snakeAI.boxes.EmptyBox;
 import progettoAI.snakeAI.boxes.MapElem;
 import progettoAI.snakeAI.boxes.SnakeBody;
 import progettoAI.snakeAI.boxes.SnakeBox;
+import progettoAI.snakeAI.errorHandler.VoidBodyException;
 import progettoAI.snakeAI.game.Map;
 
 class TestMap {
 
 	
 	@Test
-	void testMakeSnakeMoveOnlyMovement() {
+	void testMakeSnakeMoveOnlyMovement() throws VoidBodyException {
 		
 		Map mm = new Map();
 		mm.getSnake().getBodyPiece(0).setXcoordinate(5);
@@ -117,7 +118,7 @@ class TestMap {
 	
 	
 	@Test
-	void testMakeSnakeMoveWithEaten() {
+	void testMakeSnakeMoveWithEaten() throws VoidBodyException {
 		
 		Map mm = new Map();
 		mm.getSnake().getBodyPiece(0).setXcoordinate(9);
@@ -192,7 +193,7 @@ class TestMap {
 	
 	
 	@Test
-	void testSnakeComplexMovement() {
+	void testSnakeComplexMovement() throws VoidBodyException {
 		
 		Map mm = new Map();
 		mm.getSnake().getBodyPiece(0).setXcoordinate(2);
@@ -255,7 +256,7 @@ class TestMap {
 	
 	
 	@Test
-	void testCheckDefeatWallCollision() {
+	void testCheckDefeatWallCollision() throws VoidBodyException {
 		
 		
 		Map mm = new Map();
@@ -279,7 +280,7 @@ class TestMap {
 	
 	
 	@Test
-	void testCheckDefeatAutoCollision() {
+	void testCheckDefeatAutoCollision() throws VoidBodyException {
 		
 		
 		Map mm = new Map();
@@ -375,7 +376,7 @@ class TestMap {
 	
 	
 	@Test
-	void testCheckVictoryAfterEatingApple() {
+	void testCheckVictoryAfterEatingApple() throws VoidBodyException {
 		Map mm = new Map();
 		
 		mm.getSnake().getBody().remove(0);
