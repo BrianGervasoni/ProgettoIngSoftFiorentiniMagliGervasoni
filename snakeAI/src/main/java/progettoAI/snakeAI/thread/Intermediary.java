@@ -26,14 +26,14 @@ public class Intermediary implements Functions{
 	public double[] mapConversion(Map map, int inputLenght) { 
 		//outputLenght it's given by threadAgent.getModel.getAiActor.getLenght (it's the length of the array output 61 *3 ))
 		int startingDegree, rephase, n, nNonDivisibilePer3 = 0, delta = 0;	
-		if(inputLenght%3 != 0) {
+		if((inputLenght-2)%3 != 0) {
 			
-			nNonDivisibilePer3 = 3 * (int)(inputLenght/3);
-			delta = inputLenght - nNonDivisibilePer3;
+			nNonDivisibilePer3 = 3 * (int)((inputLenght-2)/3);
+			delta = (inputLenght-2) - nNonDivisibilePer3;
 			
 		}
 		
-		n = (int)inputLenght/3;
+		n = (int)(inputLenght-2)/3;
 		
 		rephase = (int) Math.round(180.0/n);
 		
@@ -63,6 +63,10 @@ public class Intermediary implements Functions{
 						
 					}
 					
+					double rad = Math.toRadians(startingDegree);
+					double headingSin = Math.sin(rad);
+					double headingCos = Math.cos(rad);
+					
 					rays = rays(startingDegree, rephase, n, snakeHead.getXcoordinate(), snakeHead.getYcoordinate());
 					setValuesArrays(map, food, walls, snake, rays);
 					
@@ -84,9 +88,13 @@ public class Intermediary implements Functions{
 			result = mergeArrays(food, walls, snake);
 			
 		}
-		
-		return normalizeRay(result,map);
-		
+		result = normalizeRay(result,map);
+		double[] finalState = new double[result.length + 2];
+		System.arraycopy(result, 0, finalState, 0, result.length);
+		finalState[result.length] = headingSin;
+		finalState[result.length + 1] = headingCos;
+
+		return finalState;
 	}
 	
 	/**

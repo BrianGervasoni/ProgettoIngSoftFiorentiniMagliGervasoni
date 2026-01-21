@@ -95,5 +95,16 @@ public class GameMain {
 		
 	}
 	
+	public double getMinDistanceToWall() {
+	    int x = this.getMap().getSnake().getBodyPiece(0).getXcoordinate();
+	    int y = this.getMap().getSnake().getBodyPiece(0).getYcoordinate();
+
+	    int distLeft   = x;
+	    int distRight  = this.getMap().X - 1 - x;
+	    int distTop    = y;
+	    int distBottom = this.getMap().Y - 1 - y;
+
+	    return Math.min(Math.min(distLeft, distRight), Math.min(distTop, distBottom));
+	}
 
 }
