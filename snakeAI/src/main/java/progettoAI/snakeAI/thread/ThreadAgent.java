@@ -62,6 +62,7 @@ public class ThreadAgent extends Thread implements Functions{
 	}
 	
 	public void runAgentTraining() throws InterruptedException {
+		int nEpisode = 0;
 		for(int t=0; t < Hyperparameters.timeStep; t++) {
 			
 			this.mapStat.onNext(this.getGame().getMap());
@@ -76,6 +77,10 @@ public class ThreadAgent extends Thread implements Functions{
 				if(game.finish() == true || game.getTickLastApple() >= emptyTick) {
 					this.game.reset(); 
 					this.intermediary.selectLastActionRegister().isTerminal = true;
+					nEpisode++;
+					if(nEpisode >= 8) {
+						break;
+					}
 				}
 			}catch(ArithmeticException e) {
 				
@@ -164,18 +169,14 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double calculateReward() {
 		
-		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 2, rewardDead = -1,rewardEmptyTick=-0.0005;
+		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 3, rewardDead = -3,rewardEmptyTick=-0.0005, rewardNearWall = -0.3;
 		//double diagonal = Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
 		double distance;
 		double lastDistance;
 		
 		distance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple());
 		lastDistance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(1), this.game.getMap().getApple());
-		if((lastDistance-distance) > 0) {
-			rewardDistanceApple = 0.5;
-		}else {
-			rewardDistanceApple = -0.25;
-		}
+		rewardDistanceApple = 2 * (lastDistance - 0.95* distance);
 		
 		if(this.game.finish()) {
 			rewardDefault += rewardDead;
@@ -184,17 +185,14 @@ public class ThreadAgent extends Thread implements Functions{
 		if(this.game.getMap().getAppleCollision()) {
 			rewardDefault = rewardDefault + rewardGetApple;
 		}else {
-			if(this.game.getTickLastApple() > 0)
-				rewardDefault = rewardDefault + rewardDistanceApple;
+			rewardDefault = rewardDefault + rewardDistanceApple;
 		}
 		
-		if(this.game.getTickLastApple() > 1) {
-			if(this.game.getTickLastApple() >= this.emptyTick) {
-				rewardDefault += rewardDead/10;
-			}else {
-				rewardDefault += rewardEmptyTick;
-			}
+		if(this.game.getMinDistanceToWall() <= 2) {
+			rewardDefault += rewardNearWall;
 		}
+		
+		rewardDefault += rewardEmptyTick;
 		
 		return rewardDefault;
 	}
