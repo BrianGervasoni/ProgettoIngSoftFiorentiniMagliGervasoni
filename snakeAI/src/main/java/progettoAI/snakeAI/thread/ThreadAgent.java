@@ -25,6 +25,7 @@ public class ThreadAgent extends Thread implements Functions{
 	private final BehaviorSubject<Map> mapStat;
 	private boolean lockSpeed;
 	private final int emptyTick = 150;
+	private double lastDistanceApple = 0;
 	private static WorkspaceConfiguration CONFIG = WorkspaceConfiguration.builder()
 		    .policyLearning(LearningPolicy.OVER_TIME)
 		    .cyclesBeforeInitialization(10) // Monitora 10 iterazioni prima di stabilizzarsi
@@ -75,7 +76,9 @@ public class ThreadAgent extends Thread implements Functions{
 				this.intermediary.addActionReward(this.calculateReward());
 				
 				if(game.finish() == true || game.getTickLastApple() >= emptyTick) {
-					this.game.reset(); 
+					this.game.reset();
+					lastDistanceApple = -calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple()
+							) /  Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
 					this.intermediary.selectLastActionRegister().isTerminal = true;
 					nEpisode++;
 					if(nEpisode >= 8) {
@@ -169,27 +172,31 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double calculateReward() {
 		
-		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 3, rewardDead = -3,rewardEmptyTick=-0.0005, rewardNearWall = -0.3;
-		//double diagonal = Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
-		double distance;
-		double lastDistance;
+		double rewardDefault = 0.0, rewardDistanceApple, rewardGetApple = 5, rewardDead = -10,rewardEmptyTick=-0.02, rewardNearWall = -0.2;
+		double diagonal = Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
 		
-		distance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple());
-		lastDistance = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(1), this.game.getMap().getApple());
-		rewardDistanceApple = 2 * (lastDistance - 0.95* distance);
+		double distanceApple = -this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple())/diagonal;
+		if(this.game.getMap().getAppleCollision()) {
+			distanceApple = 0;
+		}
+		rewardDistanceApple = Hyperparameters.discount * distanceApple - this.lastDistanceApple ;
+		this.lastDistanceApple = distanceApple;
+		
+		rewardDefault = rewardDefault + rewardDistanceApple;
 		
 		if(this.game.finish()) {
+			this.lastDistanceApple = 0;
 			rewardDefault += rewardDead;
+			return rewardDefault;
 		}
 		
 		if(this.game.getMap().getAppleCollision()) {
 			rewardDefault = rewardDefault + rewardGetApple;
-		}else {
-			rewardDefault = rewardDefault + rewardDistanceApple;
 		}
 		
-		if(this.game.getMinDistanceToWall() <= 2) {
-			rewardDefault += rewardNearWall;
+		double d = this.game.getMinDistanceToWall();
+		if(d <= 3) {
+			rewardDefault += rewardNearWall * (3 - d);
 		}
 		
 		rewardDefault += rewardEmptyTick;

@@ -238,7 +238,7 @@ public interface Functions {
 		
 		for(int i = 0; i<array.length; i++) {
 
-			array[i] = 1.0 / (1.0 + array[i]);
+			array[i] = 1.0  - (array[i]/max);
 			
 		}
 		

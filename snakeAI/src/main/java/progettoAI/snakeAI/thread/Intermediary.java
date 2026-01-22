@@ -26,14 +26,14 @@ public class Intermediary implements Functions{
 	public double[] mapConversion(Map map, int inputLenght) { 
 		//outputLenght it's given by threadAgent.getModel.getAiActor.getLenght (it's the length of the array output 61 *3 ))
 		int startingDegree, rephase, n, nNonDivisibilePer3 = 0, delta = 0;	
-		if((inputLenght-2)%3 != 0) {
+		if((inputLenght-4)%3 != 0) {
 			
-			nNonDivisibilePer3 = 3 * (int)((inputLenght-2)/3);
-			delta = (inputLenght-2) - nNonDivisibilePer3;
+			nNonDivisibilePer3 = 3 * (int)((inputLenght-4)/3);
+			delta = (inputLenght-4) - nNonDivisibilePer3;
 			
 		}
 		
-		n = (int)(inputLenght-2)/3;
+		n = (int)(inputLenght-4)/3;
 		
 		rephase = (int) Math.round(180.0/n);
 		
@@ -89,10 +89,12 @@ public class Intermediary implements Functions{
 			
 		}
 		result = normalizeRay(result,map);
-		double[] finalState = new double[result.length + 2];
+		double[] finalState = new double[result.length + 4];
 		System.arraycopy(result, 0, finalState, 0, result.length);
 		finalState[result.length] = headingSin;
 		finalState[result.length + 1] = headingCos;
+		finalState[result.length + 2] = (map.getXapple() - map.getSnake().getBodyPiece(0).getXcoordinate()) /(double) (map.X-2) ;
+		finalState[result.length + 3] = (map.getYapple() - map.getSnake().getBodyPiece(0).getYcoordinate()) / (double) (map.Y-2) ;
 
 		return finalState;
 	}
