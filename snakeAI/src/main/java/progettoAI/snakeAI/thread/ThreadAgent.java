@@ -76,7 +76,7 @@ public class ThreadAgent extends Thread implements Functions{
 				if(game.finish() == true || game.getTickLastApple() >= emptyTick) {
 					this.game.reset();
 					lastDistanceApple = calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple()
-							) /  Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
+							) /  this.game.getMap().getMaxLenght();
 					this.intermediary.selectLastActionRegister().isTerminal = true;
 				}
 			}catch(ArithmeticException e) {
@@ -166,41 +166,35 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double calculateReward() {
 		
-		double rewardDefault = 0.0, rewardDistanceApple=0, rewardGetApple = 20, rewardDead = -20,rewardEmptyTick=-0.02, rewardNearWall = -0.2;
-		double diagonal = Math.sqrt((this.game.getMap().X*this.game.getMap().X) + (this.game.getMap().Y*this.game.getMap().Y));
+		double rewardDefault = 0.0, rewardDistanceApple=0, rewardGetApple = 20, rewardDead = -20,rewardTick=-0.02, rewardNearWall = -0.2;
+		double diagonal = this.game.getMap().getMaxLenght();
 		
 		double distanceApple = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple())/diagonal;
-		double delta = (this.lastDistanceApple - distanceApple) ;
+		double delta = this.lastDistanceApple - distanceApple;
 		
 		//test 1
-		rewardDistanceApple = delta >0  || this.game.getMap().getAppleCollision() == true ? 1 : -1;
+		rewardDistanceApple = delta >0 ? 1 : -1;
 		this.lastDistanceApple = distanceApple;
 		
 		if(this.game.finish()) {
 			this.lastDistanceApple = 0;
-			 rewardDistanceApple = -1;
+			rewardDefault += rewardDead;
+			return rewardDefault;
+		}
+		
+		if(this.game.getMap().getAppleCollision()) {
+			rewardDefault += rewardGetApple;
+			return rewardDefault;
 		}
 		
 		rewardDefault += rewardDistanceApple;
 		
-		/*double d = this.game.getMinDistanceToWall();
+		double d = this.game.getMinDistanceToWall();
 		if(d <= 2) {
 			rewardDefault += rewardNearWall * (2 - d);
 		}
-		rewardDefault += rewardEmptyTick;
-		*/
+		rewardDefault += rewardTick;
 		
-		
-		/*double d = this.game.getMinDistanceToWall();
-		if(d <= 2) {
-			rewardDefault += rewardNearWall * (2 - d);
-		}*/
-		
-		//rewardDefault += rewardEmptyTick;
-		//Test 3:
-		/*rewardDefault += this.game.getMap().getAppleCollision() == true ? this.getGame().getMap().getSnakeLength() : 0;
-		rewardDefault += this.game.finish() == true ? -10 : 0;
-		rewardDefault += this.game.getTickLastApple() >= this.emptyTick ? -5 : 0;*/
 		return rewardDefault;
 	}
 	

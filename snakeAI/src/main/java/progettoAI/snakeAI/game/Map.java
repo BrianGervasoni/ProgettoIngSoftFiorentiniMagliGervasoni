@@ -461,5 +461,8 @@ public class Map {
 		return snake.getLenght();
 	}
 	
+	public double getMaxLenght() {
+		return  Math.sqrt(((X-2)*(X-2)) + ((Y-2)*(Y-2)));
+	}
 	
 }

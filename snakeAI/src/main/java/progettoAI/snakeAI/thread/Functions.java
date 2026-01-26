@@ -220,14 +220,22 @@ public interface Functions {
 	/**
 	 * 
 	 * @param array
+	 * @param map
+	 * @param cap
 	 * @return linear normalization, set the value of array[i] at its new linear normalized value (a value in this interval [0;1])
 	 */
-	public default double[] normalizeRay(double[] array, Map map) {
+	public default double[] normalizeRay(double[] array, Map map,double cap) {
+		if(cap > 1) {
+			cap = 1;
+		}
+		
+		if(cap < 0) {
+			cap = 0;
+		}
 		
 		double min = 0;
-		double max = Math.sqrt(map.X*map.X + map.Y*map.Y);
+		double max = map.getMaxLenght();;
 		double xNormalizzato;
-		double cap = 0.8;
 		
 		//set non found rays to max distance
 		for(int i = 0; i<array.length; i++) {

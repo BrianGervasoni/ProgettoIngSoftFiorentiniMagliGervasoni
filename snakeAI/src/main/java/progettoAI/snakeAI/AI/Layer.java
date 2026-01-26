@@ -62,9 +62,9 @@ public abstract class Layer {
 		double [] tmpBias = new double[lenLayer];
 		double[][] tmpWeights = new double[lenLayer][lenBackLayer];
 		for(int i=0;i<lenLayer;i++) {
-			tmpBias[i] = Tools.pickRandom(-0.07, 0.07);
+			tmpBias[i] = Tools.pickRandom(0-xavier(lenBackLayer,lenLayer), 0+xavier(lenBackLayer,lenLayer));
 			for(int j=0;j<lenBackLayer;j++) {
-				tmpWeights[i][j] = Tools.pickRandom(-0.07, 0.07);
+				tmpWeights[i][j] = Tools.pickRandom(0-xavier(lenBackLayer,lenLayer), 0+xavier(lenBackLayer,lenLayer));
 			}
 		}
 		
@@ -72,7 +72,9 @@ public abstract class Layer {
 		this.weights = Nd4j.create(tmpWeights);//NXK
 	}
 	
-	
+	private double xavier(int input, int output) {
+		return (2/(input+output));
+	}
 
 	public INDArray getBias() {
 		return bias;

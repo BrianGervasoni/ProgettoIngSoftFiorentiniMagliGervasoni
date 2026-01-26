@@ -11,5 +11,5 @@ public final class Hyperparameters {
 	public static double lambda = 0.90; 
 	public static int timeStep = 5000;
 	public static double motivation = 0.2;
-	public static double entropyContribution = 0.1;	
+	public static double entropyContribution = 0.01;	
 }

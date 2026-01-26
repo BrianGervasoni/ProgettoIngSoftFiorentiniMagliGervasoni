@@ -40,37 +40,39 @@ public class Intermediary implements Functions{
 		Ray[] rays;
 		double[] food = initializeArray(n), walls = initializeArray(n), snake = initializeArray(n), arrayMerged = initializeArray(n*3), result = initializeArray(n*3 +  delta);
 					
-					SnakeBox snakeHead = map.getSnake().getBodyPiece(0);
+		SnakeBox snakeHead = map.getSnake().getBodyPiece(0);
+		
+		SnakeBox snakeFirstBodyBox = map.getSnake().getBodyPiece(1);
+		
+		//i calculate the direction of the snake
+		if(snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() < 0) {
+			//head left and body right
+			startingDegree = 90;
+			
+		} else if(snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() > 0) {
+			//head right and body left
+			startingDegree = -90;
+			
+		} else if(snakeHead.getXcoordinate()- snakeFirstBodyBox.getXcoordinate() > 0) {
+			//head down and body up
+			startingDegree = 180;
+			
+		} else {
+			//head up and body down
+			startingDegree = 0;
+			
+		}
+		
+		double rad = Math.toRadians(startingDegree);
+		double headingSin = Math.sin(rad);
+		double headingCos = Math.cos(rad);
+		
+		rays = rays(startingDegree, rephase, n, snakeHead.getXcoordinate(), snakeHead.getYcoordinate());
+		setValuesArrays(map, food, walls, snake, rays);
 					
-					SnakeBox snakeFirstBodyBox = map.getSnake().getBodyPiece(1);
-					
-					//i calculate the direction of the snake
-					if(snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() < 0) {
-						//head left and body right
-						startingDegree = 90;
-						
-					} else if(snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() > 0) {
-						//head right and body left
-						startingDegree = -90;
-						
-					} else if(snakeHead.getXcoordinate()- snakeFirstBodyBox.getXcoordinate() > 0) {
-						//head down and body up
-						startingDegree = 180;
-						
-					} else {
-						//head up and body down
-						startingDegree = 0;
-						
-					}
-					
-					double rad = Math.toRadians(startingDegree);
-					double headingSin = Math.sin(rad);
-					double headingCos = Math.cos(rad);
-					
-					rays = rays(startingDegree, rephase, n, snakeHead.getXcoordinate(), snakeHead.getYcoordinate());
-					setValuesArrays(map, food, walls, snake, rays);
-					
-					
+		food = normalizeRay(food,map,0.0);
+		walls = normalizeRay(walls,map,0.8);
+		snake = normalizeRay(snake,map,0.0);
 					
 		if(nNonDivisibilePer3 != 0) {
 			
@@ -88,7 +90,6 @@ public class Intermediary implements Functions{
 			result = mergeArrays(food, walls, snake);
 			
 		}
-		result = normalizeRay(result,map);
 		double[] finalState = new double[result.length + 4];
 		System.arraycopy(result, 0, finalState, 0, result.length);
 		finalState[result.length] = headingSin;
