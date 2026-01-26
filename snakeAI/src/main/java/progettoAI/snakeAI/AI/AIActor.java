@@ -77,7 +77,7 @@ public class AIActor extends AI {
 	}
 
 	private double entropyDecay(long episode) {
-		return Math.max(0.005, Hyperparameters.entropyContribution * Math.max(0.5,Math.exp(-episode / 3000.0)));
+		return Math.max(0.005, Hyperparameters.entropyContribution * Math.max(0.5,Math.exp(-episode / 1500.0)));
 	}
 	
 	/**

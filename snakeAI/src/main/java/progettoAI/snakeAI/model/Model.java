@@ -31,8 +31,8 @@ public class Model {
 	public Model() {
 		memory = new PPOMemory();
 		if(critic == null || actor == null) {
-			critic = new AICritic(new int[] {(21*3)+4,128,128,1},TypeGradientUpdate.DESCEND);
-			actor = new AIActor(new int[] {(21*3)+4 ,128,128,3},TypeGradientUpdate.ASCEND);
+			critic = new AICritic(new int[] {(8*3)+4,60,30,1},TypeGradientUpdate.DESCEND);
+			actor = new AIActor(new int[] {(8*3)+4,60,30,3},TypeGradientUpdate.ASCEND);
 		}
 	}
 	

@@ -11,7 +11,11 @@ public class Syncronizer {
         this.numAgents = numAgents;
     }
 
-    /**
+    public int getNumAgents() {
+		return numAgents;
+	}
+
+	/**
      *  FASE 1: Caricamento Array (Agenti)
      * @throws InterruptedException 
      */

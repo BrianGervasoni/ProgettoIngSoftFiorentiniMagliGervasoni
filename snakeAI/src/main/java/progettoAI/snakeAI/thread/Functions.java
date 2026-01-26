@@ -227,6 +227,7 @@ public interface Functions {
 		double min = 0;
 		double max = Math.sqrt(map.X*map.X + map.Y*map.Y);
 		double xNormalizzato;
+		double cap = 0.8;
 		
 		//set non found rays to max distance
 		for(int i = 0; i<array.length; i++) {
@@ -239,7 +240,7 @@ public interface Functions {
 		for(int i = 0; i<array.length; i++) {
 
 			array[i] = 1.0  - (array[i]/max);
-			
+			array[i] = array[i] <= cap ? 0 : (array[i]-cap)/(1-cap);
 		}
 		
 		return array;

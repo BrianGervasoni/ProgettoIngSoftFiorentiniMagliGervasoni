@@ -88,6 +88,12 @@ public class ThreadModel extends Thread{
 			}
 			Thread.currentThread().interrupt(); // Ripristina il flag
         }
+		
+		try {
+			this.save();
+		}catch(IOException e) {
+			throw new RuntimeException(e.getMessage(),e.getCause());
+		}
 	}
 	
 	private boolean checkModel() {

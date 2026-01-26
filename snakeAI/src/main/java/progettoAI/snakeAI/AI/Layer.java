@@ -240,7 +240,7 @@ public abstract class Layer {
 	        }
 
 	        // 2. GRADIENT CLIPPING (Norm-based o Global)
-	        double maxGradNorm = 1.5;
+	        double maxGradNorm = 0.5;
 	        double gradNormW = dLdW.norm2Number().doubleValue();
 	        double gradNormB = dLdB.norm2Number().doubleValue();
 
