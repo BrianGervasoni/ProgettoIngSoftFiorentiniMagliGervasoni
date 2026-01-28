@@ -130,26 +130,20 @@ public abstract class AI {
 	 * @throws ArithmeticException 
 	 */
 	public double backPropagation(ActionRegister[] r,long episode) throws ArithmeticException {
-		try {
-			if(r == null)
-			return 0.0;
-			INDArray tmpR = copyStateIntoINDArray(r,r.length);
-			
-			// perform the forwarding saving the intermediary state used for calculate the derivates
-			INDArray newProb = this.feedForwarding(tmpR,0,true);
-			// set the starting derivate from loss to activation
-			
-			INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb,episode),this.getMode(),r.length,learningRate);
-			for(int i=layers.size()-2; i>-1; i--){//perform the backPropagation for every layer
-				dLdA = layers.get(i).backPropagation(dLdA,this.getMode(),r.length,learningRate);
-			}
-			
-			return lossCalculation(r,newProb,episode).meanNumber().doubleValue();
-		}catch(Exception e) {
-			e.printStackTrace(System.out);
-			return 0;
+		if(r == null)
+		return 0.0;
+		INDArray tmpR = copyStateIntoINDArray(r,r.length);
+		
+		// perform the forwarding saving the intermediary state used for calculate the derivates
+		INDArray newProb = this.feedForwarding(tmpR,0,true);
+		// set the starting derivate from loss to activation
+		
+		INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb,episode),this.getMode(),r.length,learningRate);
+		for(int i=layers.size()-2; i>-1; i--){//perform the backPropagation for every layer
+			dLdA = layers.get(i).backPropagation(dLdA,this.getMode(),r.length,learningRate);
 		}
 		
+		return lossCalculation(r,newProb,episode).meanNumber().doubleValue();
 	}
 	
 	/**
