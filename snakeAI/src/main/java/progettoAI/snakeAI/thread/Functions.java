@@ -57,43 +57,25 @@ public interface Functions {
 	    // Converte in radianti
 	    double radians = Math.toRadians(degrees);
 
-	    // Calcola le componenti (assumendo 0 gradi = Est, senso antiorario) con attenznione alla conversione con il sistema di coordinate ella mappa
+	    // Calcola le componenti con attenznione alla conversione con il sistema di coordinate ella mappa
 	    double x = -1*Math.sin(radians);
 	    double y = Math.cos(radians);
 
 	    return Nd4j.create(new double[] {x,y});
 	}
 	
-	public default Ray[] rays(int startingDegree, int rePhasing, int n, int x, int y) {
-		
-		int[] angles = new int[n]; 
+	public default Ray[] rays(int startingDegree, double fov, int n, int x, int y) {
 		Ray[] rays = new Ray[n];
-		int alpha = startingDegree;
-		int rePhase = 0;
-		
-		for(int i=0; i<n; i++) {
-			
-			alpha = startingDegree + rePhase;
-			
-			if(alpha < 0) { //when the snake it's in the range >270 and <90 i've used the convention [-180; 180] so i have to switch back to [0; 360]
-				//System.out.println("alpha : " + alpha);
-				angles[i] = alpha + 360;
-				//System.out.println("ray : " + rays[i]);
-			}else {
-				angles[i] = alpha;
-				//System.out.println("ray AHHH: " + rays[i]);
-			}
-			
-			rePhase = rePhase + rePhasing; 
-			
-		}
-		
-		for(int i=0; i<n; i++) {
-			rays[i] = new Ray(Nd4j.create(new double[] {x,y}), degreesToVector(angles[i]));
-		}
-		
-		return rays;
-			
+	    double start = startingDegree - fov / 2.0;
+
+	    for (int i = 0; i < n; i++) {
+	        double angle = start + i * (fov / (n - 1));
+	        rays[i] = new Ray(
+	            Nd4j.create(new double[]{x, y}),
+	            degreesToVector(angle)
+	        );
+	    }
+	    return rays;	
 	}
 	
 	/**
@@ -145,7 +127,7 @@ public interface Functions {
         // 3. tNear > 0: Il punto di entrata deve essere davanti (questo rimuove le collisioni che coincidono con l'origine)
         
         if( tFar >= tNear && tFar > 0 && tNear > 0 ) {
-        	return Math.abs(tFar);
+        	return Math.abs(tNear);
         }else{
         	return -1;
         }
@@ -189,6 +171,7 @@ public interface Functions {
 							if (dist != -1 && (walls[k] == -1 || dist < walls[k])) walls[k] = dist;
 						}
 						if(map.getBox(i, j).getElementType().equals(SnakeBody.BODY) || map.getBox(i, j).getElementType().equals(SnakeBody.TAIL)) {
+							if(i == map.getSnake().getBodyPiece(1).getXcoordinate() && j == map.getSnake().getBodyPiece(1).getYcoordinate()) continue; // ignora primo body
 							if (dist != -1 && (snake[k] == -1 || dist < snake[k])) snake[k] = dist;
 						}
 						if(map.getBox(i, j).getElementType().equals(Food.APPLE)) {
@@ -234,8 +217,8 @@ public interface Functions {
 		}
 		
 		double min = 0;
-		double max = map.getMaxLenght();;
-		double xNormalizzato;
+		double max = map.getMaxLenght();
+
 		
 		//set non found rays to max distance
 		for(int i = 0; i<array.length; i++) {

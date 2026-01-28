@@ -40,13 +40,15 @@ public class ActionRegister {
 		String state= "state:(";
 		if(this.state !=null)
 			for(double s : this.state) {
-				state+= ""+s+",";
+				state+= String.format("%.4f",s);
+				state+="|";
 			}
 		state+= ")";
 		String a= "porb:(";
 		if(this.actionsProb !=null)
 			for(double s : this.actionsProb) {
-				a+= ""+s+",";
+				a+= String.format("%.4f",s);
+				a+="|";
 			}
 		a+= ")";
 		return "("+state+","+a+", selected:"+indexAction+", vTarget:"+vTarget+", vEstimated:"+vEstimated+", advantage:"+advantage+", r:"+reward+", isTerminal:"+isTerminal+")";

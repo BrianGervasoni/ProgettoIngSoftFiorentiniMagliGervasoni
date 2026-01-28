@@ -80,7 +80,8 @@ public class ThreadAgent extends Thread implements Functions{
 					this.intermediary.selectLastActionRegister().isTerminal = true;
 				}
 			}catch(ArithmeticException e) {
-				
+				System.out.println(e.getStackTrace());
+				throw new RuntimeException(e.getMessage(),e.getCause());
 			}catch(IllegalArgumentException e) {
 				System.err.println("WARNING! Si sta cercando di aggiungere un null all'intermediario: "+e.getMessage());
 			}	
@@ -89,6 +90,7 @@ public class ThreadAgent extends Thread implements Functions{
 		try {
 			this.sendActions();
 		} catch (ArithmeticException e) {
+			System.out.println(e.getStackTrace());
 			throw new RuntimeException(e.getMessage(),e.getCause());
 		} 	
 		
@@ -166,14 +168,14 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double calculateReward() {
 		
-		double rewardDefault = 0.0, rewardDistanceApple=0, rewardGetApple = 20, rewardDead = -20,rewardTick=-0.02, rewardNearWall = -0.2;
+		double rewardDefault = 0.0, rewardDistanceApple=0, rewardGetApple = 15, rewardDead = -5,rewardTick=-0.02, rewardNearWall = -0.2;
 		double diagonal = this.game.getMap().getMaxLenght();
 		
 		double distanceApple = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple())/diagonal;
 		double delta = this.lastDistanceApple - distanceApple;
 		
 		//test 1
-		rewardDistanceApple = delta >0 ? 1 : -1;
+		rewardDistanceApple = 0;
 		this.lastDistanceApple = distanceApple;
 		
 		if(this.game.finish()) {

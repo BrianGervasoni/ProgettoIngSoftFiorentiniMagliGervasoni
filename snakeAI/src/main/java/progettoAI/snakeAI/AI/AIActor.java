@@ -54,18 +54,17 @@ public class AIActor extends AI {
 		if(r == null)
 			return null;
 		double[] probs = newProb.toDoubleVector();
-	    RealVector grad = new ArrayRealVector(probs.length);
 
 	    // Gradiente PPO (choose action)
-	    grad.addToEntry(r.indexAction, derivateLossClip(r, probs));
+	    INDArray grad = derivateLossClip(r, newProb.toDoubleVector());
 
 	    // Gradiente entropy (all actions)
-	    RealVector entropyGrad = derivateEntropy(probs)
-	        .mapMultiply(entropyDecay(episode));
+	   INDArray entropyGrad = derivateEntropy(probs)
+	        .mul(entropyDecay(episode));
 
 	    grad = grad.add(entropyGrad);
 
-		return Nd4j.create(grad.toArray());
+		return grad;
 	}
 	
 	public double getEntropyLoss() {
@@ -77,7 +76,7 @@ public class AIActor extends AI {
 	}
 
 	private double entropyDecay(long episode) {
-		return Math.max(0.005, Hyperparameters.entropyContribution * Math.exp(-episode / 1500.0));
+		return Hyperparameters.entropyContribution * Math.exp(-episode / 1500.0);
 	}
 	
 	/**
@@ -111,14 +110,14 @@ public class AIActor extends AI {
 	 * @param probs
 	 * @return
 	 */
-	private RealVector derivateEntropy(double[] probs) {
+	private INDArray derivateEntropy(double[] probs) {
 		if(probs == null)
 			return null;
-		RealVector x= new ArrayRealVector(probs.length);
+		double[] x= new double[probs.length];
 		for(int i=0; i < probs.length; i++) {
-			x.setEntry(i, -(Math.log(probs[i] + 1e-8) + 1));
+			x[i] =   -(Math.log(probs[i] + 1e-8) + 1);
 		}
-		return x;
+		return Nd4j.create(x);
 	}
 	
 	/**
@@ -145,16 +144,18 @@ public class AIActor extends AI {
 	 * @param newProb
 	 * @return
 	 */
-	private double derivateLossClip(ActionRegister r, double[] newProb) {
+	private INDArray derivateLossClip(ActionRegister r, double[] newProb) {
 		if(newProb == null || r == null)
-			return 0;
+			return null;
+		INDArray grad = Nd4j.zeros(newProb.length);
 		double ratio = policyRatio(newProb[r.indexAction], r.oldSelectAction());
 		double clipped = Tools.clip(ratio, 1-Hyperparameters.motivation, 1+Hyperparameters.motivation);
 
-		if (r.advantage > 0 && ratio > clipped) return 0;
-	    if (r.advantage < 0 && ratio < clipped) return 0;
+		if (r.advantage > 0 && ratio > clipped) return grad;
+	    if (r.advantage < 0 && ratio < clipped) return grad;
 		
-		return r.advantage * derivatePolicyRatio(r.oldSelectAction());
+	    grad.putScalar(r.indexAction, r.advantage * derivatePolicyRatio(r.oldSelectAction()));
+	    return grad;
 	}
 		
 }

@@ -35,7 +35,6 @@ public class Intermediary implements Functions{
 		
 		n = (int)(inputLenght-4)/3;
 		
-		rephase = (int) Math.round(180.0/(n-1));
 		
 		Ray[] rays;
 		double[] food = initializeArray(n), walls = initializeArray(n), snake = initializeArray(n), arrayMerged = initializeArray(n*3), result = initializeArray(n*3 +  delta);
@@ -45,34 +44,44 @@ public class Intermediary implements Functions{
 		SnakeBox snakeFirstBodyBox = map.getSnake().getBodyPiece(1);
 		
 		//i calculate the direction of the snake
-		if(snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() < 0) {
-			//head left and body right
-			startingDegree = 90;
-			
-		} else if(snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() > 0) {
-			//head right and body left
-			startingDegree = -90;
-			
-		} else if(snakeHead.getXcoordinate()- snakeFirstBodyBox.getXcoordinate() > 0) {
-			//head down and body up
-			startingDegree = 180;
-			
-		} else {
-			//head up and body down
-			startingDegree = 0;
-			
+		if (snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() > 0) {
+		    // head RIGHT, body LEFT
+		    startingDegree = 270; // DESTRA
+		} 
+		else if (snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() < 0) {
+		    // head LEFT, body RIGHT
+		    startingDegree = 90;  // SINISTRA
+		} 
+		else if (snakeHead.getXcoordinate() - snakeFirstBodyBox.getXcoordinate() > 0) {
+		    // head DOWN, body UP
+		    startingDegree = 180; // GIÙ
+		} 
+		else {
+		    // head UP, body DOWN
+		    startingDegree = 0;   // SU
 		}
 		
-		double rad = Math.toRadians(startingDegree);
-		double headingSin = Math.sin(rad);
-		double headingCos = Math.cos(rad);
+		double [] directionVector = degreesToVector(startingDegree).toDoubleVector();
+		double headingSin = directionVector[0];
+		double headingCos = directionVector[1];
+		double dx = map.getXapple() - snakeHead.getXcoordinate();
+		double dy = map.getYapple() - snakeHead.getYcoordinate();
+
+		// rotate in base alla direzione della testa (headingSin, headingCos)
+		double appleRelX = dx * headingCos + dy * headingSin;
+		double appleRelY = -dx * headingSin + dy * headingCos;
 		
-		rays = rays(startingDegree, rephase, n, snakeHead.getXcoordinate(), snakeHead.getYcoordinate());
+		rays = rays(startingDegree, 180 , n, snakeHead.getXcoordinate(), snakeHead.getYcoordinate());
 		setValuesArrays(map, food, walls, snake, rays);
 					
 		food = normalizeRay(food,map,0.0);
-		walls = normalizeRay(walls,map,0.8);
+		walls = normalizeRay(walls,map,0.0);
 		snake = normalizeRay(snake,map,0.0);
+		
+		/*// pericolo = ostacolo più vicino in quella direzione
+		double dangerForward = Math.max(walls[walls.length/2], snake[snake.length/2]);
+		double dangerLeft    = Math.max(walls[walls.length-1],   snake[snake.length-1]);
+		double dangerRight   = Math.max(walls[0],  snake[0]);*/
 					
 		if(nNonDivisibilePer3 != 0) {
 			
@@ -94,8 +103,8 @@ public class Intermediary implements Functions{
 		System.arraycopy(result, 0, finalState, 0, result.length);
 		finalState[result.length] = headingSin;
 		finalState[result.length + 1] = headingCos;
-		finalState[result.length + 2] = (map.getXapple() - map.getSnake().getBodyPiece(0).getXcoordinate()) /(double) (map.X-2) ;
-		finalState[result.length + 3] = (map.getYapple() - map.getSnake().getBodyPiece(0).getYcoordinate()) / (double) (map.Y-2) ;
+		finalState[result.length + 2] = appleRelX /(double) (map.X-2) ;
+		finalState[result.length + 3] = appleRelY / (double) (map.Y-2) ;
 
 		return finalState;
 	}

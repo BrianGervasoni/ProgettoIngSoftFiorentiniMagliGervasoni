@@ -1,5 +1,6 @@
 package progettoAI.snakeAI.AI;
 
+import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.memory.MemoryWorkspace;
 import org.nd4j.linalg.api.memory.conf.WorkspaceConfiguration;
 import org.nd4j.linalg.api.memory.enums.AllocationPolicy;
@@ -62,9 +63,9 @@ public abstract class Layer {
 		double [] tmpBias = new double[lenLayer];
 		double[][] tmpWeights = new double[lenLayer][lenBackLayer];
 		for(int i=0;i<lenLayer;i++) {
-			tmpBias[i] = Tools.pickRandom(0-xavier(lenBackLayer,lenLayer), 0+xavier(lenBackLayer,lenLayer));
+			tmpBias[i] = 0.01;
 			for(int j=0;j<lenBackLayer;j++) {
-				tmpWeights[i][j] = Tools.pickRandom(0-xavier(lenBackLayer,lenLayer), 0+xavier(lenBackLayer,lenLayer));
+				tmpWeights[i][j] = Tools.pickRandom(-he(lenBackLayer), he(lenBackLayer));
 			}
 		}
 		
@@ -72,8 +73,8 @@ public abstract class Layer {
 		this.weights = Nd4j.create(tmpWeights);//NXK
 	}
 	
-	private double xavier(int input, int output) {
-		return (2/(input+output));
+	private double he(int input) {
+		 return Math.sqrt(6.0 / input);
 	}
 
 	public INDArray getBias() {
@@ -81,7 +82,11 @@ public abstract class Layer {
 	}
 
 	public void setBias(INDArray bias) {
-		this.bias = bias.detach();
+		if (!this.bias.shapeInfoToString().equals(bias.shapeInfoToString())) {
+	        this.bias = bias.dup();
+	    } else {
+	        this.bias.assign(bias);
+	    }
 	}
 
 	public INDArray getWeights() {
@@ -89,7 +94,11 @@ public abstract class Layer {
 	}
 
 	public void setWeights(INDArray weights) {
-		this.weights = weights.detach();
+		if (!this.weights.shapeInfoToString().equals(weights.shapeInfoToString())) {
+	        this.weights = weights.dup();
+	    } else {
+	        this.weights.assign(weights);
+	    }
 	}
 	
 	
@@ -99,7 +108,9 @@ public abstract class Layer {
 	}
 
 	public void setTmpBias(INDArray tmpBias) {
-		this.tmpBias = tmpBias.dup();
+		try (MemoryWorkspace ws = Nd4j.getMemoryManager().scopeOutOfWorkspaces()) {
+	        this.tmpBias = tmpBias.dup();
+	    }
 	}
 
 	public INDArray getTmpWeights() {
@@ -107,7 +118,9 @@ public abstract class Layer {
 	}
 
 	public void setTmpWeights(INDArray tmpWeights) {
-		this.tmpWeights = tmpWeights.dup();
+		 try (MemoryWorkspace ws = Nd4j.getMemoryManager().scopeOutOfWorkspaces()) {
+		        this.tmpWeights = tmpWeights.dup();
+		 }
 	}
 
 	public INDArray getBackLayerActivation_cache() {
@@ -115,7 +128,9 @@ public abstract class Layer {
 	}
 
 	public void setBackLayerActivation_cache(INDArray backLayerActivation_cache) {
-		this.backLayerActivation_cache = backLayerActivation_cache.detach();
+		 try (MemoryWorkspace ws = Nd4j.getMemoryManager().scopeOutOfWorkspaces()) {
+		        this.backLayerActivation_cache = backLayerActivation_cache.dup();
+		 }
 	}
 
 	public INDArray getPreActivation_cache() {
@@ -123,7 +138,9 @@ public abstract class Layer {
 	}
 
 	public void setPreActivation_cache(INDArray preActivation_cache) {
-		this.preActivation_cache = preActivation_cache.detach();
+		 try (MemoryWorkspace ws = Nd4j.getMemoryManager().scopeOutOfWorkspaces()) {
+		        this.preActivation_cache = preActivation_cache.dup();
+		 }
 	}
 
 	public IActivation getActivation() {
@@ -165,12 +182,12 @@ public abstract class Layer {
 	        INDArray z = this.getWeights().mmul(backLayerActivation).add(this.getBias());
 		
 	        //((NXK) * (KXM)) + (NX1) = (NXM) use broadcasting for the bias
-	        this.setPreActivation_cache(z); 
-			
-			//this.setPreActivation_cache(this.getWeights().mmul(backLayerActivation).add(this.getBias()));//W*A+B
-			
-			//the activation need (MXN) so we do the transpose. Duplicate the array because we don't want it to change
-			return this.getActivation().getActivation(this.getPreActivation_cache().transpose().dup(), true).transpose();
+	        INDArray z_nd4j = z.transpose();// [batch, features]
+	        this.setPreActivation_cache(z_nd4j);
+	        //the activation need (MXN) so we do the transpose	
+	        INDArray a_nd4j = this.getActivation().getActivation(z_nd4j, true);
+
+	        return a_nd4j.transpose();
 		}catch(Exception e) {
 			throw new ArithmeticException(e.getMessage(),e.getCause());
 		}
@@ -187,18 +204,20 @@ public abstract class Layer {
 	 */
 	public INDArray derivateCalculus(INDArray dLdA,TypeGradientUpdate mode,int minibatchSize,double learningRate) throws ArithmeticException {
 		 try {
-			  if (dLdA.isNaN().any()) {
-		        System.err.println("INSTABILITA RILEVATA: alcune derivate sono NaN.");
-			 }
-			Pair<INDArray, INDArray> gradientPair = this.activation.backprop(this.getPreActivation_cache().transpose(), dLdA.transpose());
-			INDArray dLdZ = gradientPair.getFirst().transpose(); // (NXM)
-			 
-			 //(NXM) * (MXK) = (NXK)
-			INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
-			 
-			this.tmpOptimization(dLdW,dLdZ.sum(1).reshape(dLdZ.rows(),1),mode,minibatchSize,learningRate);//si prende solo una riga per il dLdB dal dLdZ (NX1)
-			 // (KXN) * (NXM) = (KXM) 
-			return this.getWeights().transpose().mmul(dLdZ);
+				if (dLdA.isNaN().any()) {
+			        System.err.println("INSTABILITA RILEVATA: alcune derivate sono NaN.");
+				}
+				INDArray dLdA_nd4j = dLdA.transpose().dup().castTo(DataType.DOUBLE);// [batch × features]
+				INDArray preZ = preActivation_cache.castTo(DataType.DOUBLE);
+				Pair<INDArray, INDArray> gradientPair = this.activation.backprop(preZ, dLdA_nd4j);
+				INDArray dLdZ = gradientPair.getFirst().transpose(); // (NXM)
+				 
+				 //(NXM) * (MXK) = (NXK)
+				INDArray dLdW = dLdZ.mmul(this.getBackLayerActivation_cache().transpose());
+				 
+				this.tmpOptimization(dLdW,dLdZ.sum(1).reshape(dLdZ.rows(),1),mode,minibatchSize,learningRate);//si prende solo una riga per il dLdB dal dLdZ (NX1)
+				 // (KXN) * (NXM) = (KXM) 
+				return this.getWeights().transpose().mmul(dLdZ);
 		 }catch(Exception e) {
 				throw new ArithmeticException(e.getMessage(),e.getCause());
 			}
@@ -243,15 +262,16 @@ public abstract class Layer {
 
 	        // 2. GRADIENT CLIPPING (Norm-based o Global)
 	        double maxGradNorm = 0.5;
-	        double gradNormW = dLdW.norm2Number().doubleValue();
-	        double gradNormB = dLdB.norm2Number().doubleValue();
+	        double globalNorm = Math.sqrt(
+	        	    Math.pow(dLdW.norm2Number().doubleValue(), 2) +
+	        	    Math.pow(dLdB.norm2Number().doubleValue(), 2)
+    		);
 
-	        if (gradNormW > maxGradNorm) {
-	            dLdW.muli(maxGradNorm / (gradNormW + 1e-8));
-	        }
-	        if (gradNormB > maxGradNorm) {
-	            dLdB.muli(maxGradNorm / (gradNormB + 1e-8));
-	        }
+        	if (globalNorm > maxGradNorm) {
+        	    double scale = maxGradNorm / (globalNorm + 1e-8);
+        	    dLdW.muli(scale);
+        	    dLdB.muli(scale);
+        	}
 
 	        // 4. AGGIORNAMENTO
 	        switch(mode) {

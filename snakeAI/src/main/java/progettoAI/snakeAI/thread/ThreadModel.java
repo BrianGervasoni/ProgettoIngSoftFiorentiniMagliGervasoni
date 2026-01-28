@@ -3,6 +3,7 @@ package progettoAI.snakeAI.thread;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.nd4j.linalg.api.buffer.DataType;
 import org.nd4j.linalg.api.memory.MemoryWorkspace;
 import org.nd4j.linalg.api.memory.conf.WorkspaceConfiguration;
 import org.nd4j.linalg.api.memory.enums.AllocationPolicy;
@@ -44,6 +45,7 @@ public class ThreadModel extends Thread{
 	
 	@Override
 	public void run() {
+		Nd4j.setDefaultDataTypes(DataType.DOUBLE, DataType.DOUBLE);
 		try(MemoryWorkspace ws = Nd4j.getWorkspaceManager().getAndActivateWorkspace(CONFIG, "MODEL_WORK_WS_" + Thread.currentThread().getName())) {
 			int n = 0;
 			
@@ -57,6 +59,7 @@ public class ThreadModel extends Thread{
 				try {
 					this.backPropagation();
 				}catch(ArithmeticException e) {
+					System.out.println(e.getCause());
 					throw new RuntimeException(e.getMessage(),e.getCause());
 				}
 				
@@ -72,6 +75,7 @@ public class ThreadModel extends Thread{
 						this.save();
 						System.gc();
 					}catch(IOException e) {
+						System.out.println(e.getStackTrace());
 						throw new RuntimeException(e.getMessage(),e.getCause());
 					}
 					
@@ -84,6 +88,7 @@ public class ThreadModel extends Thread{
 			try {
 				this.save();
 			} catch (IOException e1) {
+				System.out.println(e.getStackTrace());
 				throw new RuntimeException(e.getMessage(),e.getCause());
 			}
 			Thread.currentThread().interrupt(); // Ripristina il flag
@@ -92,6 +97,7 @@ public class ThreadModel extends Thread{
 		try {
 			this.save();
 		}catch(IOException e) {
+			System.out.println(e.getStackTrace());
 			throw new RuntimeException(e.getMessage(),e.getCause());
 		}
 	}

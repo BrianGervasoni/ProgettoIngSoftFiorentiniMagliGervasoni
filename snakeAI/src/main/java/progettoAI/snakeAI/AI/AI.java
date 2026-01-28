@@ -130,19 +130,26 @@ public abstract class AI {
 	 * @throws ArithmeticException 
 	 */
 	public double backPropagation(ActionRegister[] r,long episode) throws ArithmeticException {
-		if(r == null)
+		try {
+			if(r == null)
 			return 0.0;
-		INDArray tmpR = copyStateIntoINDArray(r,r.length);
-		
-		// perform the forwarding saving the intermediary state used for calculate the derivates
-		INDArray newProb = this.feedForwarding(tmpR,0,true);
-		// set the starting derivate from loss to activation
-		INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb,episode),this.getMode(),r.length,learningRate);
-		for(int i=layers.size()-2; i>-1; i--){//perform the backPropagation for every layer
-			dLdA = layers.get(i).backPropagation(dLdA,this.getMode(),r.length,learningRate);
+			INDArray tmpR = copyStateIntoINDArray(r,r.length);
+			
+			// perform the forwarding saving the intermediary state used for calculate the derivates
+			INDArray newProb = this.feedForwarding(tmpR,0,true);
+			// set the starting derivate from loss to activation
+			
+			INDArray dLdA = layers.get(layers.size()-1).backPropagation(this.derivateLoss(r,newProb,episode),this.getMode(),r.length,learningRate);
+			for(int i=layers.size()-2; i>-1; i--){//perform the backPropagation for every layer
+				dLdA = layers.get(i).backPropagation(dLdA,this.getMode(),r.length,learningRate);
+			}
+			
+			return lossCalculation(r,newProb,episode).meanNumber().doubleValue();
+		}catch(Exception e) {
+			e.printStackTrace(System.out);
+			return 0;
 		}
 		
-		return lossCalculation(r,newProb,episode).meanNumber().doubleValue();
 	}
 	
 	/**
@@ -193,10 +200,17 @@ public abstract class AI {
 	public INDArray derivateLoss(ActionRegister[] r,INDArray newProb,long episode) {
 		if(r == null)
 			return null;
-		INDArray l = null;
-		for(int i=0; i<r.length; i++) {
-			l = Tools.appendCol(l, singleDerivateLoss(r[i],newProb.getColumn(i),episode).mul(1.0/(double)r.length).reshape(newProb.getColumn(i).length(),1));
-		}
+		int out = newProb.rows(); 
+		int batch = newProb.columns();
+		INDArray l = Nd4j.create(out, batch);
+
+	    for (int i = 0; i < batch; i++) {
+	        INDArray grad = singleDerivateLoss(r[i], newProb.getColumn(i), episode)
+	                .mul(1.0 / (double) batch)
+	                .reshape(out, 1);
+
+	        l.putColumn(i, grad);
+	    }
 		return l;
 	}
 	
