@@ -74,7 +74,7 @@ public abstract class Layer {
 	}
 	
 	private double he(int input) {
-		 return Math.sqrt(6.0 / input);
+		 return Math.sqrt(2.0 / input);
 	}
 
 	public INDArray getBias() {
