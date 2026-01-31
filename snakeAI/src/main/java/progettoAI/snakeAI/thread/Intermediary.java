@@ -1,6 +1,7 @@
 package progettoAI.snakeAI.thread;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 import progettoAI.snakeAI.boxes.Direction;
@@ -73,7 +74,7 @@ public class Intermediary implements Functions{
 		
 		rays = rays(startingDegree, 180 , n, snakeHead.getXcoordinate(), snakeHead.getYcoordinate());
 		setValuesArrays(map, food, walls, snake, rays);
-					
+		
 		food = normalizeRay(food,map,0.0);
 		walls = normalizeRay(walls,map,0.0);
 		snake = normalizeRay(snake,map,0.0);

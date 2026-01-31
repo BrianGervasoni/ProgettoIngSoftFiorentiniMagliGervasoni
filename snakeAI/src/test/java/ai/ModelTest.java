@@ -22,6 +22,7 @@ public class ModelTest {
 	@Test
 	void testSaveAndLoad() {
 		try {
+			Hyperparameters.minibacthSize = 1;
 			/*AICritic critic = new AICritic(new int[] {4,4,4,1},TypeGradientUpdate.DESCEND);
 			AIActor actor = new AIActor(new int[] {4,5,5,4},TypeGradientUpdate.ASCEND);
 			Model mSave = new Model(critic,actor);*/
@@ -40,13 +41,16 @@ public class ModelTest {
 			ActionRegister r= m.forwarding(new double[] {1,2,3,4});
 			r.reward = 4;
 			r.indexAction = 2;
+			ActionRegister r2= m.forwarding(new double[] {2,4,2,4});
+			r2.reward = 4;
+			r2.indexAction = 2;
 			
-			m.memorizeActions(new ActionRegister[] {r});
+			m.memorizeActions(new ActionRegister[] {r,r2});
 			m.initBackPropagation();
 			
 			double[] test =  m.backPropagation();
 			
-			double[] trueLoss = new double[] {4.027024050252193,15.994531083675913};
+			double[] trueLoss = new double[] {1.1260077518408034,17.888690683106898};
 			assertArrayEquals(trueLoss,test);
 			assertNotNull(m.getMemory());
 		}catch(ArithmeticException e) {
@@ -79,7 +83,7 @@ public class ModelTest {
 	void testBackProp() {
 		Model ai = new Model();
 		try {
-			double[] e = new double[31*3];
+			double[] e = new double[ai.getInputLenght()];
 			for(double f: e) {
 				f = 1;
 			}

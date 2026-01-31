@@ -1,11 +1,11 @@
 {
-  "alphaActor": 3.0E-4,
+  "alphaActor": 1.0E-4,
   "alphaCritic": 0.1,
-  "epoche": 7,
-  "minibacthSize": 0.25,
-  "discount": 0.99,
-  "lambda": 0.95,
-  "timeStep": 512,
+  "epoche": 3,
+  "minibacthSize": 0.02,
+  "discount": 0.9,
+  "lambda": 0.9,
+  "timeStep": 5000,
   "motivation": 0.2,
-  "entropyContribution": 0.02
+  "entropyContribution": 0.05
 }

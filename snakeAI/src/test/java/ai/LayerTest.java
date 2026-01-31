@@ -6,6 +6,7 @@ import org.nd4j.linalg.factory.Nd4j;
 
 import progettoAI.snakeAI.AI.*;
 import progettoAI.snakeAI.errorHandler.ArithmeticException;
+import progettoAI.snakeAI.hyperparameters.Hyperparameters;
 import progettoAI.snakeAI.tools.Tools;
 
 public class LayerTest {
@@ -85,9 +86,9 @@ public class LayerTest {
 			assertArrayEquals(trueResultReLu,resultReLu);
 			assertArrayEquals(trueResultSoftMax,resultSoftMax);
 			
-			assertArrayEquals(trueResultIdent, identity.getPreActivation_cache().toDoubleMatrix());
-			assertArrayEquals(trueResultIdent, relu.getPreActivation_cache().toDoubleMatrix());
-			assertArrayEquals(trueResultIdent, softMax.getPreActivation_cache().toDoubleMatrix());
+			assertArrayEquals(trueResultIdent, identity.getPreActivation_cache().transpose().toDoubleMatrix());
+			assertArrayEquals(trueResultIdent, relu.getPreActivation_cache().transpose().toDoubleMatrix());
+			assertArrayEquals(trueResultIdent, softMax.getPreActivation_cache().transpose().toDoubleMatrix());
 		}catch(ArithmeticException e) {
 			e.printStackTrace();
 		}
@@ -97,6 +98,8 @@ public class LayerTest {
 	@Test
 	void testBackPropagation() {//minibatch = 2, node=2, inputNode=3
 		try {
+			Hyperparameters.alphaActor = 0.0001;
+			Hyperparameters.alphaCritic = 0.0001;
 			double[] b = new double[] {1,2};
 			double[][] w = new double[2][3];
 			for(int i=0; i< w.length;i++) {
@@ -130,25 +133,25 @@ public class LayerTest {
 			double[][] trueResultSoftMax = {
 					{0.0,-9.10221180121784E-4},
 					{0.0,   -9.102211801217415E-4},
-					{0.0,   -9.10221180121699E-4}
+					{0.0,   -9.102211801216991E-4}
 			};
 			
-			double[] trueTmpBiasIde = new double[] {0.55 ,1.7};
+			double[] trueTmpBiasIde = new double[] {0.9934905544537836 ,1.9956603696358557};
 			double[][] trueTmpWeightsIde = {
-					{-1.05,-0.5,0.050000000000000044},
-					{0.10000000000000009,0.8,1.5}
+					{-0.01518870627450478,0.9783018481792789,1.9717924026330627},
+					{0.9869811089075673,1.9826414785434232,2.978301848179279}
 			};
 			
-			double[] trueTmpBiasReLu = new double[] {0.55 ,1.7};
+			double[] trueTmpBiasReLu = new double[] {0.9934905544537836 ,1.9956603696358557};
 			double[][] trueTmpWeightsReLu = {
-					{-1.05,-0.5,0.050000000000000044},
-					{0.10000000000000009,0.8,1.5}
+					{-0.01518870627450478,0.9783018481792789,1.9717924026330627},
+					{0.9869811089075673,1.9826414785434232,2.978301848179279}
 			};
 			
-			double[] trueTmpBiasSoftMax = new double[] {0.9998634668229818,2.0001365331770184};
+			double[] trueTmpBiasSoftMax = new double[] {0.9999089778819878,2.000091022118012};
 			double[][] trueTmpWeightsSoftMax = {
-					{-1.3653317701827397E-4,0.9997269336459634,1.999590400468945},
-					{1.0001365331770182,2.0002730663540365,3.000409599531055}
+					{-9.102211801218266E-5,0.9998179557639756,1.9997269336459635},
+					{1.0000910221180122,2.0001820442360243,3.0002730663540365}
 			};
 			
 			

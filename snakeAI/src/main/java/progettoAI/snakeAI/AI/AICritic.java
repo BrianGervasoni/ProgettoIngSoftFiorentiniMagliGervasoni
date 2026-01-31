@@ -27,7 +27,7 @@ public class AICritic extends AI {
 	
 	@Override
 	public INDArray singleLossCalculation(ActionRegister r,INDArray newProb,long episode) {
-		double[] x = new double[] {Math.pow(r.vEstimated-r.vTarget, 2)};
+		double[] x = new double[] {Math.pow(r.vTarget - r.vEstimated, 2)};
 		return Nd4j.create(x);
 	}
 	

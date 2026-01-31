@@ -14,6 +14,8 @@ public class AITest {
 	@Test
 	void testBackProp() {
 		try {
+			Hyperparameters.alphaActor = 0.0001;
+			Hyperparameters.alphaCritic = 0.0001;
 			double[] b = new double[] {1,2};
 			double[][] w = new double[2][3];
 			for(int i=0; i< w.length;i++) {//minibatch = 1, node=2, inputNode=3
@@ -51,15 +53,15 @@ public class AITest {
 			ai.optimization();
 			crit.optimization();
 			
-			double[] trueBias = new double[] {1.0081260267289072,1.9918739732710928};
+			double[] trueBias = new double[] {1.000008807524228,1.999991192475772};
 			double[][] trueWeights = new double[][] {
-				{ 0.0081260267289072,1.0000,2.0081260267289074},
-				{0.9918739732710928,2.0000,2.991873973271093},
+				{ 8.807524227921549E-6,1.0000,2.0000088075242277},
+				{0.9999911924757721,2.0000,2.9999911924757723},
 			};
 			
-			double[] trueBiasCrit = new double [] {-0.19999999999999996};
+			double[] trueBiasCrit = new double [] {0.9999711324866238};
 			double[][] trueWeightsCrit = new double [][] {
-					{-1.2,0.0,-1.2}
+					{-2.886751337614795E-5,0.0,-2.886751337614795E-5}
 			};
 			
 			assertArrayEquals(trueBiasCrit,crit.getLayer().get(0).getBias().toDoubleVector());
