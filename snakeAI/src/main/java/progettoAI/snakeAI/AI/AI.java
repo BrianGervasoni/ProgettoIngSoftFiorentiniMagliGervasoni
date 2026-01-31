@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
+import progettoAI.snakeAI.AI.model.ActionRegister;
+import progettoAI.snakeAI.AI.tools.Tools;
 import progettoAI.snakeAI.errorHandler.ArithmeticException;
-import progettoAI.snakeAI.model.ActionRegister;
-import progettoAI.snakeAI.tools.Tools;
 
 public abstract class AI {
 	private ArrayList<Layer> layers;

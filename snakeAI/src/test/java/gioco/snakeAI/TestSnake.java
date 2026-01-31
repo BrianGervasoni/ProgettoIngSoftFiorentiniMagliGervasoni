@@ -8,9 +8,9 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import progettoAI.snakeAI.boxes.*;
+import progettoAI.snakeAI.SnakeLogic.boxes.*;
+import progettoAI.snakeAI.SnakeLogic.game.Snake;
 import progettoAI.snakeAI.errorHandler.VoidBodyException;
-import progettoAI.snakeAI.game.Snake;
 
 
 class TestSnake {

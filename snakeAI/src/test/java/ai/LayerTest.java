@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.nd4j.linalg.factory.Nd4j;
 
 import progettoAI.snakeAI.AI.*;
+import progettoAI.snakeAI.AI.hyperparameters.Hyperparameters;
+import progettoAI.snakeAI.AI.tools.Tools;
 import progettoAI.snakeAI.errorHandler.ArithmeticException;
-import progettoAI.snakeAI.hyperparameters.Hyperparameters;
-import progettoAI.snakeAI.tools.Tools;
 
 public class LayerTest {
 

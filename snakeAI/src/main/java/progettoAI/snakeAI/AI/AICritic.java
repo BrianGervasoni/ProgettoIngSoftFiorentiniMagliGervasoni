@@ -3,8 +3,8 @@ package progettoAI.snakeAI.AI;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
-import progettoAI.snakeAI.hyperparameters.Hyperparameters;
-import progettoAI.snakeAI.model.ActionRegister;
+import progettoAI.snakeAI.AI.hyperparameters.Hyperparameters;
+import progettoAI.snakeAI.AI.model.ActionRegister;
 
 public class AICritic extends AI {
 

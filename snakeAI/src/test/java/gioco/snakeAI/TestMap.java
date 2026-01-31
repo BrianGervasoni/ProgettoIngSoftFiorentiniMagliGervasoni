@@ -6,14 +6,14 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import progettoAI.snakeAI.boxes.AppleBox;
-import progettoAI.snakeAI.boxes.Direction;
-import progettoAI.snakeAI.boxes.EmptyBox;
-import progettoAI.snakeAI.boxes.MapElem;
-import progettoAI.snakeAI.boxes.SnakeBody;
-import progettoAI.snakeAI.boxes.SnakeBox;
+import progettoAI.snakeAI.SnakeLogic.boxes.AppleBox;
+import progettoAI.snakeAI.SnakeLogic.boxes.Direction;
+import progettoAI.snakeAI.SnakeLogic.boxes.EmptyBox;
+import progettoAI.snakeAI.SnakeLogic.boxes.MapElem;
+import progettoAI.snakeAI.SnakeLogic.boxes.SnakeBody;
+import progettoAI.snakeAI.SnakeLogic.boxes.SnakeBox;
+import progettoAI.snakeAI.SnakeLogic.game.Map;
 import progettoAI.snakeAI.errorHandler.VoidBodyException;
-import progettoAI.snakeAI.game.Map;
 
 class TestMap {
 

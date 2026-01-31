@@ -1,0 +1,140 @@
+package progettoAI.snakeAI.GUI.userInterface;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import javax.swing.SwingUtilities;
+
+import io.reactivex.rxjava3.disposables.Disposable;
+import progettoAI.snakeAI.AI.thread.Statistic;
+import progettoAI.snakeAI.AI.thread.ThreadAIManager;
+import progettoAI.snakeAI.SnakeLogic.game.Map;
+import progettoAI.snakeAI.errorHandler.ThreadException;
+
+public class Controller {
+
+	private ThreadAIManager ai;
+	private UserInterface view;
+	private Disposable snakeObserver;
+	private Disposable lossObserver;
+	
+	
+	public Controller(UserInterface newUi) {
+		
+		view = newUi;
+		snakeObserver = null;
+		lossObserver = null;
+	}
+	
+	
+	public void startTraining(int threadNumber,String name) throws ThreadException,IOException{
+		
+		ai = new ThreadAIManager(threadNumber, 1);
+		ai.createIstance(name);
+		ai.setAgentExceptionHandler(errore -> {
+		    SwingUtilities.invokeLater(() -> {
+		       view.gestisciErroreAgent(errore);
+		    });
+		});
+		
+		ai.setModelExceptionHandler(errore -> {
+		    SwingUtilities.invokeLater(() -> {
+		    	view.gestisciErroreModel(errore);
+		    });
+		});
+		
+		ai.startTraining();
+		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
+		lossObserver = ai.getObserverFromModel().subscribe(this::gestioneStreamStatistic);
+	}
+
+	
+	public void startExecution(String name) throws ThreadException,IOException{
+		
+		ai = new ThreadAIManager(1, 1);
+		ai.createIstance(name);
+		
+		ai.setAgentExceptionHandler(errore -> {
+		    SwingUtilities.invokeLater(() -> {
+		    	view.gestisciErroreAgent(errore);
+		    });
+		});
+		
+		ai.startExecution();
+		
+		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
+	}
+	
+	
+	public void terminateTraining() throws FileNotFoundException, IOException {
+		
+		ai.terminateTraining();
+		snakeObserver.dispose();		
+		lossObserver.dispose();
+	}
+	
+	
+	public void terminateExecution(){
+		
+		ai.terminateExecution();
+		snakeObserver.dispose();		
+	}
+
+	
+
+	public void exit() throws FileNotFoundException, ThreadException, IOException {
+	
+		if(snakeObserver != null)
+			snakeObserver.dispose();
+			
+		
+		if(lossObserver != null)
+			lossObserver.dispose();
+		
+		if(ai != null)
+			ai.terminate();
+		
+	}
+	
+	
+	/**
+	 * 
+	 * metodo che processa lo streaming di dati delle mappe
+	 * 
+	 */
+	public void gestioneStreamMap(Map map){
+		
+		this.view.viewMap(map);
+	}
+	
+	
+	public void gestioneStreamStatistic(Statistic s) {
+		
+		view.updateStats(s.toString());
+	}
+	
+	
+	
+	public void nextMap() {
+		
+		snakeObserver.dispose();		
+		ai.selectNextMap();
+		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
+	}
+	
+	
+	public void previousMap() {
+		
+		snakeObserver.dispose();
+		ai.selectPreviousMap();
+		snakeObserver = ai.getObserverFromIndexAgent().subscribe(this::gestioneStreamMap);
+	}
+	
+	
+	public Map getMap() {
+		
+		return ai.selectMap();
+	}
+
+	
+}

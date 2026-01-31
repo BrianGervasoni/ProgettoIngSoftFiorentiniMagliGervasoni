@@ -15,8 +15,8 @@ import java.lang.reflect.Modifier;
 
 import progettoAI.snakeAI.AI.AI;
 import progettoAI.snakeAI.AI.Layer;
-import progettoAI.snakeAI.hyperparameters.Hyperparameters;
-import progettoAI.snakeAI.model.Model;
+import progettoAI.snakeAI.AI.hyperparameters.Hyperparameters;
+import progettoAI.snakeAI.AI.model.Model;
 
 public class JsonFileManager {
 	// GsonBuilder is used to format JSON in a readable way (pretty printing)

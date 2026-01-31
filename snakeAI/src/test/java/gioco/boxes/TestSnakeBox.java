@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import progettoAI.snakeAI.boxes.Box;
-import progettoAI.snakeAI.boxes.SnakeBody;
-import progettoAI.snakeAI.boxes.SnakeBox;
-import progettoAI.snakeAI.game.Map;
-import progettoAI.snakeAI.game.Snake;
+import progettoAI.snakeAI.SnakeLogic.boxes.Box;
+import progettoAI.snakeAI.SnakeLogic.boxes.SnakeBody;
+import progettoAI.snakeAI.SnakeLogic.boxes.SnakeBox;
+import progettoAI.snakeAI.SnakeLogic.game.Map;
+import progettoAI.snakeAI.SnakeLogic.game.Snake;
 
 
 public class TestSnakeBox {

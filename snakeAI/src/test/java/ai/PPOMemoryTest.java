@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import progettoAI.snakeAI.model.ActionRegister;
-import progettoAI.snakeAI.model.PPOMemory;
+import progettoAI.snakeAI.AI.model.ActionRegister;
+import progettoAI.snakeAI.AI.model.PPOMemory;
 
 public class PPOMemoryTest {
 

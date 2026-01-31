@@ -1,6 +1,6 @@
 package main;
 
-import progettoAI.snakeAI.userInterface.UserInterface;
+import progettoAI.snakeAI.GUI.userInterface.UserInterface;
 
 public class Main {
 

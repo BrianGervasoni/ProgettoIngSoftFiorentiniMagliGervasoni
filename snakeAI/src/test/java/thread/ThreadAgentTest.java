@@ -4,16 +4,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import progettoAI.snakeAI.boxes.AppleBox;
-import progettoAI.snakeAI.boxes.EmptyBox;
-import progettoAI.snakeAI.boxes.Food;
-import progettoAI.snakeAI.boxes.MapElem;
-import progettoAI.snakeAI.boxes.SnakeBody;
-import progettoAI.snakeAI.boxes.SnakeBox;
-import progettoAI.snakeAI.game.Map;
-import progettoAI.snakeAI.game.Snake;
-import progettoAI.snakeAI.model.Model;
-import progettoAI.snakeAI.thread.ThreadAgent;
+import progettoAI.snakeAI.AI.model.Model;
+import progettoAI.snakeAI.AI.thread.ThreadAgent;
+import progettoAI.snakeAI.SnakeLogic.boxes.AppleBox;
+import progettoAI.snakeAI.SnakeLogic.boxes.EmptyBox;
+import progettoAI.snakeAI.SnakeLogic.boxes.Food;
+import progettoAI.snakeAI.SnakeLogic.boxes.MapElem;
+import progettoAI.snakeAI.SnakeLogic.boxes.SnakeBody;
+import progettoAI.snakeAI.SnakeLogic.boxes.SnakeBox;
+import progettoAI.snakeAI.SnakeLogic.game.Map;
+import progettoAI.snakeAI.SnakeLogic.game.Snake;
 
 class ThreadAgentTest {
 

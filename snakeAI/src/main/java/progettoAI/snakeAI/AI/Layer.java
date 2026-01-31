@@ -14,10 +14,9 @@ import org.nd4j.linalg.indexing.conditions.Conditions;
 import org.nd4j.linalg.ops.transforms.Transforms;
 import org.nd4j.common.primitives.Pair;
 
-
-import progettoAI.snakeAI.tools.Tools;
+import progettoAI.snakeAI.AI.hyperparameters.*;
+import progettoAI.snakeAI.AI.tools.Tools;
 import progettoAI.snakeAI.errorHandler.ArithmeticException;
-import progettoAI.snakeAI.hyperparameters.*;
 
 
 public abstract class Layer {

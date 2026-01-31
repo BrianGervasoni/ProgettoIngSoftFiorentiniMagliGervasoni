@@ -5,7 +5,7 @@ import progettoAI.snakeAI.AI.AI;
 import progettoAI.snakeAI.AI.AIActor;
 import progettoAI.snakeAI.AI.AICritic;
 import progettoAI.snakeAI.AI.Layer;
-import progettoAI.snakeAI.hyperparameters.Hyperparameters;
+import progettoAI.snakeAI.AI.hyperparameters.Hyperparameters;
 
 import java.lang.reflect.Type;
 

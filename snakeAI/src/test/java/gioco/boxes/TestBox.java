@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import progettoAI.snakeAI.boxes.*;
+import progettoAI.snakeAI.SnakeLogic.boxes.*;
 
 public class TestBox {
 

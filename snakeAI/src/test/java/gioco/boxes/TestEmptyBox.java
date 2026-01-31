@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import progettoAI.snakeAI.boxes.*;
-import progettoAI.snakeAI.game.Map;
-import progettoAI.snakeAI.game.Snake;
+import progettoAI.snakeAI.SnakeLogic.boxes.*;
+import progettoAI.snakeAI.SnakeLogic.game.Map;
+import progettoAI.snakeAI.SnakeLogic.game.Snake;
 
 
 public class TestEmptyBox {
