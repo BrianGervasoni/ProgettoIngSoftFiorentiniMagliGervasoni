@@ -173,7 +173,6 @@ public class Model {
 		memory.prepareData();
 		critic.initBackPropagation();
 		actor.initBackPropagation();
-		System.out.println("episodi:"+episode);
 	}
 	
 	/**
@@ -208,6 +207,7 @@ public class Model {
 					for(ActionRegister[] mb : miniBatches) {
 						meanB += critic.backPropagation(mb,episode);
 					}
+					critic.optimization();
 					meanE += meanB/miniBatches.size();
 					meanB = 0.0;
 				}
@@ -233,6 +233,7 @@ public class Model {
 						meanEntropy += actor.getEntropyLoss();
 						entropyCount++;
 					}
+					actor.optimization();
 					actor.setEntropyLoss(0);
 					meanE += meanB/miniBatches.size();
 					meanB = 0.0;

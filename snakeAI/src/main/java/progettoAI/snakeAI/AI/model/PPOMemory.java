@@ -180,7 +180,6 @@ public class PPOMemory {
 	public void prepareData() {
 		
 		oldR = (ArrayList<ActionRegister>) currR.clone();
-		System.out.println("meanReward:"+calculateMeanReward() +" | meanLength:"+calculateMeanlength());
 		currR = new ArrayList<ActionRegister>();
 	}
 	

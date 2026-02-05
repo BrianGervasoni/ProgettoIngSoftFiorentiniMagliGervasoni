@@ -67,7 +67,7 @@ public class ThreadModel extends Thread{
 	            coordinator.modelFinishedBackProp();
 	            //sincronizzazione finale
 	            coordinator.waitForAllBeforeOptimization();
-				this.optimization();
+				//this.optimization();
 				coordinator.finishOptimization();
 				
 				if(n == 5) {
@@ -146,6 +146,7 @@ public class ThreadModel extends Thread{
 		s.meanLossActor = a[0];
 		s.meanLossCritic = a[1];
 		s.meanLossEntropy = this.model.meanEntropy;
+		//System.out.println(this.model.getMemory().toString());
 		System.out.println(s.toString());
 		lossStat.onNext(s); 
 	}

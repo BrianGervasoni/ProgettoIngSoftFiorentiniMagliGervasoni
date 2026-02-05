@@ -198,7 +198,7 @@ Map map = new Map();
 		
 		map.forceSetApple(2, 5);
 		
-		int inputLenght = 10*3; //ho fatto vari test ma sembra NON funzionare con 9*3 mi da i raggi = NaN, mentre 10*3 e 61*3 non da problemi
+		int inputLenght = (10*3) +4; //ho fatto vari test ma sembra NON funzionare con 9*3 mi da i raggi = NaN, mentre 10*3 e 61*3 non da problemi
 		
 		double[] result;
 		

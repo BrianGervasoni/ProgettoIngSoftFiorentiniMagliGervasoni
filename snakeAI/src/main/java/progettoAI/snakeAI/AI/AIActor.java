@@ -76,7 +76,7 @@ public class AIActor extends AI {
 	}
 
 	private double entropyDecay(long episode) {
-		return Hyperparameters.entropyContribution * Math.exp(-episode / 1500.0);
+		return Math.max(0.001, Hyperparameters.entropyContribution * Math.exp(-episode / 500.0));
 	}
 	
 	/**
@@ -153,8 +153,16 @@ public class AIActor extends AI {
 
 		if (r.advantage > 0 && ratio > clipped) return grad;
 	    if (r.advantage < 0 && ratio < clipped) return grad;
-		
-	    grad.putScalar(r.indexAction, r.advantage * derivatePolicyRatio(r.oldSelectAction()));
+	    
+	    for (int i = 0; i < newProb.length; i++) {
+	        double g = -newProb[i];
+	        if (i == r.indexAction) {
+	            g += 1.0;
+	        }
+	        grad.putScalar(i, g);
+	    }
+
+	    grad.muli(r.advantage);
 	    return grad;
 	}
 		

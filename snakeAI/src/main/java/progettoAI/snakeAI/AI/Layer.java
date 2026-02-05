@@ -62,7 +62,7 @@ public abstract class Layer {
 		double [] tmpBias = new double[lenLayer];
 		double[][] tmpWeights = new double[lenLayer][lenBackLayer];
 		for(int i=0;i<lenLayer;i++) {
-			tmpBias[i] = 0.01;
+			tmpBias[i] = 0;
 			for(int j=0;j<lenBackLayer;j++) {
 				tmpWeights[i][j] = Tools.pickRandom(-he(lenBackLayer), he(lenBackLayer));
 			}

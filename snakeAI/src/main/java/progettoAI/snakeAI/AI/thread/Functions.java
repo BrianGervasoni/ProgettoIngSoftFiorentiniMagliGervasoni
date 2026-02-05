@@ -126,7 +126,7 @@ public interface Functions {
         // 2. tFar > 0: La box non deve essere completamente dietro il raggio
         // 3. tNear > 0: Il punto di entrata deve essere davanti (questo rimuove le collisioni che coincidono con l'origine)
         
-        if( tFar >= tNear && tFar > 0 && tNear > 0 ) {
+        if( tFar  >= tNear && tFar > 0 && tNear > 0 ) {
         	return Math.abs(tNear);
         }else{
         	return -1;
@@ -171,7 +171,7 @@ public interface Functions {
 							if (dist != -1 && (walls[k] == -1 || dist < walls[k])) walls[k] = dist;
 						}
 						if(map.getBox(i, j).getElementType().equals(SnakeBody.BODY) || map.getBox(i, j).getElementType().equals(SnakeBody.TAIL)) {
-							if(i == map.getSnake().getBodyPiece(1).getXcoordinate() && j == map.getSnake().getBodyPiece(1).getYcoordinate()) continue; // ignora primo body
+							//if(i == map.getSnake().getBodyPiece(1).getXcoordinate() && j == map.getSnake().getBodyPiece(1).getYcoordinate()) continue; // ignora primo body
 							if (dist != -1 && (snake[k] == -1 || dist < snake[k])) snake[k] = dist;
 						}
 						if(map.getBox(i, j).getElementType().equals(Food.APPLE)) {
@@ -216,22 +216,24 @@ public interface Functions {
 			cap = 0;
 		}
 		
-		double min = 0;
+		double min = 0.5;
 		double max = map.getMaxLenght();
 
 		
 		//set non found rays to max distance
 		for(int i = 0; i<array.length; i++) {
 			
-			if(array[i]<=min) {
+			if(array[i]<min) {
 				array[i] = max;
 			}
 		}
 		
 		for(int i = 0; i<array.length; i++) {
 
-			array[i] = 1.0  - (array[i]/max);
-			array[i] = array[i] <= cap ? 0 : (array[i]-cap)/(1-cap);
+			array[i] = 1-((array[i] - min)/(max - min));
+			array[i] = array[i] == 0 ? 0.05 : array[i];
+			array[i] = (array[i] - cap) / (1 - cap);
+			//array[i] =  0.01 + Math.exp(-1.5 * Math.max(0.0, (array[i] - cap)) / (1 - cap));
 		}
 		
 		return array;

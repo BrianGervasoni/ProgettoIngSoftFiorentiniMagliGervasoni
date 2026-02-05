@@ -3,6 +3,7 @@ package progettoAI.snakeAI.AI.thread;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Random;
 
 import progettoAI.snakeAI.AI.model.ActionRegister;
 import progettoAI.snakeAI.SnakeLogic.boxes.Direction;
@@ -47,19 +48,19 @@ public class Intermediary implements Functions{
 		//i calculate the direction of the snake
 		if (snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() > 0) {
 		    // head RIGHT, body LEFT
-		    startingDegree = 270; // DESTRA
+		    startingDegree = 0; // DESTRA
 		} 
 		else if (snakeHead.getYcoordinate() - snakeFirstBodyBox.getYcoordinate() < 0) {
 		    // head LEFT, body RIGHT
-		    startingDegree = 90;  // SINISTRA
+		    startingDegree = 180;  // SINISTRA
 		} 
 		else if (snakeHead.getXcoordinate() - snakeFirstBodyBox.getXcoordinate() > 0) {
 		    // head DOWN, body UP
-		    startingDegree = 180; // GIÙ
+		    startingDegree = 270; // GIÙ
 		} 
 		else {
 		    // head UP, body DOWN
-		    startingDegree = 0;   // SU
+		    startingDegree = 90;   // SU
 		}
 		
 		double [] directionVector = degreesToVector(startingDegree).toDoubleVector();
@@ -152,6 +153,11 @@ public class Intermediary implements Functions{
 	public int moveSelectionTraining(double[] output) {
 		double valore = Math.random(); //value from 0 to 1
 		double min = 0;
+		
+		
+		/*if(Math.random() < 0.1) {
+			return (int) (Math.random() * output.length);
+		}*/
 		
 		for(int i=0; i<output.length; i++) {
 			
