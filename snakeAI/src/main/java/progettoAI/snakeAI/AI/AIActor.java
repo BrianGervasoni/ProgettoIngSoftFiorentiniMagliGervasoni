@@ -64,6 +64,7 @@ public class AIActor extends AI {
 
 	    grad = grad.add(entropyGrad);
 
+	    r.actionsProb = newProb.toDoubleVector();
 		return grad;
 	}
 	
@@ -162,7 +163,7 @@ public class AIActor extends AI {
 	        grad.putScalar(i, g);
 	    }
 
-	    grad.muli(r.advantage);
+	    grad.muli(r.advantage * ratio);
 	    return grad;
 	}
 		

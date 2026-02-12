@@ -24,7 +24,7 @@ public class ThreadAgent extends Thread implements Functions{
 	private GameMain game;
 	private final BehaviorSubject<Map> mapStat;
 	private boolean lockSpeed;
-	private final int emptyTick = 150;
+	private int emptyTick = 150;
 	private double lastDistanceApple = 0;
 	private static WorkspaceConfiguration CONFIG = WorkspaceConfiguration.builder()
 		    .policyLearning(LearningPolicy.OVER_TIME)
@@ -47,6 +47,7 @@ public class ThreadAgent extends Thread implements Functions{
 		try {
 			while(!Thread.currentThread().isInterrupted()) {
 				if(!this.isLockSpeed()) {
+					this.emptyTick = (int) (2.5 * this.game.getMap().getMaxLenght() + this.game.getMap().getSnakeLength() * 3)+1;
 					coordinator.startingSendActions();
 		            runAgentTraining();
 		            coordinator.terminatingSendActions();
@@ -168,14 +169,20 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double calculateReward() {
 		
-		double rewardDefault = 0.0, rewardDistanceApple=0, rewardGetApple = 1, rewardDead = -0.5,rewardTick=-0.005, rewardNearWall = 0;
+		double rewardDefault = 0.0, rewardDistanceApple=0, rewardGetApple = 1, rewardDead = -0.1,rewardReset = -0.15,rewardTick=-0.001, rewardNearWall = 0;
 		double diagonal = this.game.getMap().getMaxLenght();
 		
 		double distanceApple = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple())/diagonal;
 		
-		if(this.game.getMap().checkDefeat()) {
+		if(this.game.getMap().checkDefeat() ) {
 			this.lastDistanceApple = 0;
-			rewardDefault += rewardDead;
+			rewardDefault += rewardDead ;
+			return rewardDefault;
+		}
+		
+		if(game.getTickLastApple() >= emptyTick) {
+			this.lastDistanceApple = 0;
+			rewardDefault += rewardReset;
 			return rewardDefault;
 		}
 		
@@ -185,8 +192,10 @@ public class ThreadAgent extends Thread implements Functions{
 			return rewardDefault;
 		}
 		
+		double clip = 0.25;
 		double delta = this.lastDistanceApple - distanceApple;
-		rewardDistanceApple = Math.max(-0.03, Math.min(0.03, delta));;
+		rewardDistanceApple = Math.max(-clip, Math.min(clip, delta));
+		rewardDistanceApple -= 0.002 * (1.0 - Math.abs(delta) / clip);
 		this.lastDistanceApple = distanceApple;
 		rewardDefault += rewardDistanceApple;
 		
@@ -196,7 +205,7 @@ public class ThreadAgent extends Thread implements Functions{
 		}
 		rewardDefault += rewardTick;
 		
-		return rewardDefault;
+		return Math.tanh(rewardDefault);
 	}
 	
 	/**
