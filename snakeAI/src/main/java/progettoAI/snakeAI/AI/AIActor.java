@@ -77,7 +77,7 @@ public class AIActor extends AI {
 	}
 
 	private double entropyDecay(long episode) {
-		return Math.max(0.001, Hyperparameters.entropyContribution * Math.exp(-episode / 3000.0));
+		return Math.max(0.001, Hyperparameters.entropyContribution * Math.exp(-episode / 5000.0));
 	}
 	
 	/**
@@ -164,6 +164,7 @@ public class AIActor extends AI {
 	    }
 
 	    grad.muli(r.advantage * ratio);
+	    grad.addi(Nd4j.randn(grad.shape()).muli(0.01));
 	    return grad;
 	}
 		

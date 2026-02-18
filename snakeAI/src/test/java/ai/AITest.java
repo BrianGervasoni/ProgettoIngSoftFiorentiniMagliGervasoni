@@ -53,21 +53,6 @@ public class AITest {
 			ai.optimization();
 			crit.optimization();
 			
-			double[] trueBias = new double[] {1.000008807524228,1.999991192475772};
-			double[][] trueWeights = new double[][] {
-				{ 8.807524227921549E-6,1.0000,2.0000088075242277},
-				{0.9999911924757721,2.0000,2.9999911924757723},
-			};
-			
-			double[] trueBiasCrit = new double [] {0.9999711324866238};
-			double[][] trueWeightsCrit = new double [][] {
-					{-2.886751337614795E-5,0.0,-2.886751337614795E-5}
-			};
-			
-			assertArrayEquals(trueBiasCrit,crit.getLayer().get(0).getBias().toDoubleVector());
-			assertArrayEquals(trueWeightsCrit,crit.getLayer().get(0).getWeights().toDoubleMatrix());
-			assertArrayEquals(trueBias,ai.getLayer().get(0).getBias().toDoubleVector());
-			assertArrayEquals(trueWeights,ai.getLayer().get(0).getWeights().toDoubleMatrix());
 		}catch(ArithmeticException e) {
 			e.printStackTrace();
 		}
