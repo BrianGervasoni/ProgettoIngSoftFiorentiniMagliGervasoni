@@ -76,8 +76,7 @@ public class ThreadAgent extends Thread implements Functions{
 				
 				if(game.finish() == true || game.getTickLastApple() >= emptyTick) {
 					this.game.reset();
-					lastDistanceApple = calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple()
-							) /  this.game.getMap().getMaxLenght();
+					lastDistanceApple = calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple());
 					this.intermediary.selectLastActionRegister().isTerminal = true;
 				}
 			}catch(ArithmeticException e) {
@@ -169,10 +168,10 @@ public class ThreadAgent extends Thread implements Functions{
 	 */
 	public double calculateReward() {
 		
-		double rewardDefault = 0.0, rewardDistanceApple=0, rewardGetApple = 1, rewardDead = -0.1,rewardReset = -0.15,rewardTick=-0.001, rewardNearWall = 0;
+		double rewardDefault = 0.0, rewardDistanceApple=0, rewardGetApple = 1, rewardDead = -1,rewardReset = -0.5,rewardTick=-0.002, rewardNearWall = -0.02;
 		double diagonal = this.game.getMap().getMaxLenght();
 		
-		double distanceApple = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple())/diagonal;
+		double distanceApple = this.calculateDistance(this.game.getMap().getSnake().getBodyPiece(0), this.game.getMap().getApple());
 		
 		if(this.game.getMap().checkDefeat() ) {
 			this.lastDistanceApple = 0;
@@ -193,9 +192,8 @@ public class ThreadAgent extends Thread implements Functions{
 		}
 		
 		double clip = 0.25;
-		double delta = this.lastDistanceApple - distanceApple;
+		double delta = (this.lastDistanceApple - distanceApple);
 		rewardDistanceApple = Math.max(-clip, Math.min(clip, delta));
-		rewardDistanceApple -= 0.002 * (1.0 - Math.abs(delta) / clip);
 		this.lastDistanceApple = distanceApple;
 		rewardDefault += rewardDistanceApple;
 		
@@ -205,7 +203,7 @@ public class ThreadAgent extends Thread implements Functions{
 		}
 		rewardDefault += rewardTick;
 		
-		return Math.tanh(rewardDefault);
+		return rewardDefault;
 	}
 	
 	/**
@@ -221,7 +219,7 @@ public class ThreadAgent extends Thread implements Functions{
 		this.intermediary.reset();
 	}
 	
-	public void sendActions () throws ArithmeticException {
+	public void sendActions() throws ArithmeticException {
 		ActionRegister[] a = this.intermediary.actionRegister.toArray(new ActionRegister[0]);
 		this.model.memorizeActions(a);
 	}
