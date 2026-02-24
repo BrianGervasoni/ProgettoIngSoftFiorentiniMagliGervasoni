@@ -201,6 +201,42 @@ Map map = new Map();
 		int inputLenght = (10*3) +4; //ho fatto vari test ma sembra NON funzionare con 9*3 mi da i raggi = NaN, mentre 10*3 e 61*3 non da problemi
 		
 		double[] result;
+		double[] expected = new double[34];
+		expected[0] = 0.05;
+		expected[1] = 0.05;
+		expected[2] = 0.05;
+		expected[3] = 0.05;
+		expected[4] = 0.05;
+		expected[5] = 0.05;
+		expected[6] = 0.05;
+		expected[7] = 0.8931171061324163;
+		expected[8] = 0.919641125924091;
+		expected[9] = 0.05;
+		expected[10] = 0.5601861639930628;
+		expected[11] = 0.5296077023358006;
+		expected[12] = 0.4146702832385437;
+		expected[13] = 0.4864767736747361;
+		expected[14] = 0.552835923530498;
+		expected[15] = 0.552835923530498;
+		expected[16] = 0.5235350109924847;
+		expected[17] = 0.7017383769748673;
+		expected[18] = 0.7636277564887748;
+		expected[19] = 0.7800930819965314;
+		expected[20] = 0.05;
+		expected[21] = 0.05;
+		expected[22] = 0.05;
+		expected[23] = 0.05;
+		expected[24] = 0.05;
+		expected[25] = 0.05;
+		expected[26] = 0.05;
+		expected[27] = 0.05;
+		expected[28] = 0.05;
+		expected[29] = 0.05;
+		expected[30] = -0.0;
+		expected[31] = 1.0;
+		expected[32] = -0.2;
+		expected[33] = 0.1;
+		
 		
 		Intermediary intermediary = new Intermediary();
 		result = intermediary.mapConversion(map,inputLenght);
@@ -217,6 +253,8 @@ Map map = new Map();
 			}
 			System.out.println();
 		}
+		
+		assertArrayEquals(expected, result);
 		
 	}
 }

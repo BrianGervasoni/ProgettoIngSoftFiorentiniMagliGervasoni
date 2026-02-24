@@ -6,12 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import progettoAI.snakeAI.AI.model.Model;
 import progettoAI.snakeAI.AI.thread.ThreadAgent;
-import progettoAI.snakeAI.SnakeLogic.boxes.AppleBox;
 import progettoAI.snakeAI.SnakeLogic.boxes.EmptyBox;
-import progettoAI.snakeAI.SnakeLogic.boxes.Food;
 import progettoAI.snakeAI.SnakeLogic.boxes.MapElem;
-import progettoAI.snakeAI.SnakeLogic.boxes.SnakeBody;
-import progettoAI.snakeAI.SnakeLogic.boxes.SnakeBox;
 import progettoAI.snakeAI.SnakeLogic.game.Map;
 import progettoAI.snakeAI.SnakeLogic.game.Snake;
 
@@ -62,5 +58,7 @@ class ThreadAgentTest {
 				System.out.println(map.getBox(i, j).getElementType() + " " + i + " " + j);
 			}
 		}
+		
+		assertEquals(-0.252,reward);
 	}
 }
